@@ -1,0 +1,37 @@
+@model postit.Models.PostitViewContainer
+
+<div class="blog-main">
+	<div class="blog-post">
+		<h2 class="blog-post-title">@Model.Postit.Title</h2>
+		<p class="blog-post-meta">
+			<a href="/user/admin">@Model.Postit.User</a> &bull; @Model.Postit.Age
+		</p>
+		<p>@Model.Postit.Content</p>
+	</div>
+</div>
+
+<div class="well">
+	<h4>Leave a Comment:</h4>
+	<form role="form">
+		<div class="form-group">
+			<textarea class="form-control" rows="3"></textarea>
+		</div>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+</div>
+
+<hr>
+
+@foreach(var comment in Model.Comments) {
+<div class="media">
+	<a class="pull-left" href="#">
+		<img class="media-object" src="http://placehold.it/64x64" alt="">
+	</a>
+	<div class="media-body">
+		<h4 class="media-heading">Start Bootstrap
+			<small>@comment.Age</small>
+		</h4>
+		@comment.Content
+	</div>
+</div>
+}

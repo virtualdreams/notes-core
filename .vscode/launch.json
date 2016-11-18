@@ -1,0 +1,22 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": ".NET Core Launch (web)",
+			"type": "coreclr",
+			"request": "launch",
+			"preLaunchTask": "build",
+			"program": "${workspaceRoot}/bin/Debug/netcoreapp1.1/postit.dll",
+			"args": [],
+			"cwd": "${workspaceRoot}",
+			"stopAtEntry": false,
+			"env": {
+				"ASPNETCORE_ENVIRONMENT": "Development",
+				"ASPNETCORE_URLS": "http://*:5002"
+			},
+			"sourceFileMap": {
+				"/Views": "${workspaceRoot}/Views"
+			}
+		}
+	]
+}

@@ -1,0 +1,31 @@
+@model postit.Models.PostitListContainer
+@using postit.Helper
+
+@*
+@foreach(var postit in Model) {
+<div>
+	<h2>@postit.Title</h2>
+	<p>@postit.Content</p>
+	<p><a class="btn btn-default" href="@Url.Action("view", "postit", new { id = postit.Id })" role="button">View details &raquo;</a></p>
+</div>
+}
+*@
+
+@foreach(var postit in Model.Postits) {
+<div class="blog-main">
+	<div class="blog-post">
+		<h2 class="blog-post-title">@postit.Title</h2>
+		<p class="blog-post-meta">
+			<a href="/user/admin">@postit.User</a> &bull; @postit.Age
+		</p>
+		<p><a class="btn btn-default" href="@Url.Action("view", "postit", new { id = postit.Id, slug = postit.Title.ToSlug() })" role="button">View details &raquo;</a></p>
+	</div>
+</div>
+}
+
+<nav>
+	<ul class="pager">
+		<li><a href="#">Previous</a></li>
+		<li><a href="#">Next</a></li>
+	</ul>
+</nav>
