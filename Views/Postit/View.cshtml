@@ -1,37 +1,73 @@
 @model postit.Models.PostitViewContainer
 
-<div class="blog-main">
-	<div class="blog-post">
-		<h2 class="blog-post-title">@Model.Postit.Title</h2>
-		<p class="blog-post-meta">
-			<a href="/user/admin">@Model.Postit.User</a> &bull; @Model.Postit.Age
-		</p>
-		<p>@Model.Postit.Content</p>
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			@Model.Postit.Title
+			<small>@Model.Postit.Age</small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><i class="fa fa-pencil"></i> <a href="@Url.Action("edit", "postit", new { id = Model.Postit.Id })">Edit</a></li>
+			<li><i class="fa fa-trash-o"></i> <a href="@Url.Action("delete", "postit", new { id = Model.Postit.Id })" data-toggle="modal" data-target="#delete">Delete</a></li>
+			<li><i class="fa fa-share-alt"></i> <a href="@Url.Action("share", "postit", new { id = Model.Postit.Id })" data-toggle="modal" data-target="#share">Share</a></li>
+		</ol>
 	</div>
 </div>
 
-<div class="well">
-	<h4>Leave a Comment:</h4>
-	<form role="form">
-		<div class="form-group">
-			<textarea class="form-control" rows="3"></textarea>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+            <div class="panel-body">
+				<!-- Content -->
+				<markdown>@Html.Raw(Model.Postit.Content)</markdown>
+			</div>
 		</div>
-		<button type="submit" class="btn btn-primary">Submit</button>
-	</form>
-</div>
-
-<hr>
-
-@foreach(var comment in Model.Comments) {
-<div class="media">
-	<a class="pull-left" href="#">
-		<img class="media-object" src="http://placehold.it/64x64" alt="">
-	</a>
-	<div class="media-body">
-		<h4 class="media-heading">Start Bootstrap
-			<small>@comment.Age</small>
-		</h4>
-		@comment.Content
 	</div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="deleteLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="deleteLabel">Delete postit</h4>
+			</div>
+			<div class="modal-body">
+				The note &quot;@Model.Postit.Title&quot; is moved to trash.
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary" id="okButton">Ok</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="share" tabindex="-1" role="dialog" aria-labelledby="shareLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="shareLabel">Share postit</h4>
+			</div>
+			<div class="modal-body">
+				Share &quot;@Model.Postit.Title&quot;?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary" id="okButton">Ok</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section script {
+<script>
+	$('[data-toggle=popover]').popover()
+
+	$('#okButton').click(function(e) {
+		alert("fjskdlffgds");
+	});
+</script>	
 }

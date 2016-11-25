@@ -1,6 +1,6 @@
 namespace postit.Models
 {
-    public class PostitViewContainer
+	public class PostitEditContainer
 	{
 		public PostitModel Postit { get; set; }
 	}

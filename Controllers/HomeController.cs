@@ -17,15 +17,17 @@ namespace postit.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Index()
+		public IActionResult Index(int? ofs)
 		{
-			var _postits = Postit.Get().ToArray();
+			var _postits = Postit.Get(ofs ?? 0, 10);
+			var _pager = new PageOffset(ofs ?? 0, 10, 100);
 			
 			var postits = Mapper.Map<IEnumerable<PostitModel>>(_postits);
 			
 			var view = new PostitListContainer
 			{
-				Postits = postits 
+				Postits = postits,
+				Offset = _pager
 			};
 
 			return View(view);

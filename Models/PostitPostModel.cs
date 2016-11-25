@@ -1,14 +1,15 @@
+using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson;
 
 namespace postit.Models
 {
-	public class CommentModel
+	public class PostitPostModel
 	{
+		
 		public ObjectId Id { get; set; }
 
-		public string Age { get; set; }
-
-		public string User { get; set; }
+		[Required]
+		public string Title { get; set; }
 
 		public string Content { get; set; }
 	}

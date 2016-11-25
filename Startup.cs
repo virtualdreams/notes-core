@@ -35,7 +35,6 @@ namespace postit
 
 			services.AddScoped<MongoContext>(options => new MongoContext(new MongoClient(), "postit"));
 			services.AddTransient<PostitService>();
-			services.AddTransient<CommentService>();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
@@ -49,6 +48,13 @@ namespace postit
 
 			app.UseStaticFiles();
 			app.UseMvc(routes => {
+
+				routes.MapRoute(
+					name: "create",
+					template: "create",
+					defaults: new { controller = "Postit", action = "Create" }
+				);
+
 				routes.MapRoute(
 					name: "postit",
 					template: "p/{id?}/{slug?}",
@@ -70,11 +76,7 @@ namespace postit
 			Mapper.Initialize(config => {
 				config.CreateMap<Postit, PostitModel>()
 					.ForMember(d => d.User, map => map.MapFrom(s => "admin"))
-					.ForMember(d => d.Age, map => map.MapFrom(s => s.Id.CreationTime.AgeInMinutes().AgeInWords()));
-
-				config.CreateMap<Comment, CommentModel>()
-					.ForMember(d => d.User, map => map.MapFrom(s => "admin"))
-					.ForMember(d => d.Age, map => map.MapFrom(s => s.Id.CreationTime.AgeInMinutes().AgeInWords()));
+					.ForMember(d => d.Age, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime().AgeInMinutes().AgeInWords()));
 			});
 
 			Mapper.AssertConfigurationIsValid();

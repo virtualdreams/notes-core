@@ -37,23 +37,23 @@ namespace postit.Helper
 		static public int AgeInMinutes(this DateTime dt)
 		{
 			var _diff = DateTime.Now - dt;
-			var _minutes = (_diff.Days * 24 * 60) + (_diff.Seconds / 60);
+			//var _minutes = (_diff.Days * 24 * 60) + ((int)_diff.TotalMinutes .TotalSeconds / 60);
 
-			return _minutes;
+			return (int)_diff.TotalMinutes;
 		}
 
 		static public string AgeInWords(this int minutes)
 		{
 			if(minutes < 60)
-				return String.Format("vor {0} Minuten", minutes);
+				return String.Format("{0} minutes ago", minutes);
 			
 			if((minutes / 60) < 24)
-				return String.Format("vor {0} Std.", (minutes / 60));
+				return String.Format("{0} hours ago", (minutes / 60));
 			
 			if((minutes / 60) >= 24 && (minutes / 60) < 48)
 				return "gestern";
 			
-			return String.Format("vor {0} Tagen", ((minutes / 60) / 24));
+			return String.Format("{0} days ago", ((minutes / 60) / 24));
 		}
 	}
 }
