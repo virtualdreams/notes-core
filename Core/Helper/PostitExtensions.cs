@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 
 namespace postit.Helper
@@ -54,6 +55,14 @@ namespace postit.Helper
 				return "gestern";
 			
 			return String.Format("{0} days ago", ((minutes / 60) / 24));
+		}
+
+		public static string GetUserName(this ClaimsPrincipal principal)
+		{
+			if (principal == null)
+				throw new ArgumentNullException(nameof(principal));
+
+			return principal.FindFirst(ClaimTypes.Name)?.Value;
 		}
 	}
 }

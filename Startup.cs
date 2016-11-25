@@ -10,6 +10,7 @@ using postit.ModelBinders;
 using postit.Models;
 using postit.Helper;
 using postit.Core.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace postit
 {
@@ -34,8 +35,12 @@ namespace postit
 				options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
 			});
 
+			services.AddAuthorization(options => {
+			});
+
 			services.AddScoped<MongoContext>(options => new MongoContext(new MongoClient(), "postit"));
 			services.AddTransient<PostitService>();
+			services.AddTransient<UserService>();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
@@ -48,6 +53,16 @@ namespace postit
 			}
 
 			app.UseStaticFiles();
+
+			app.UseCookieAuthentication(new CookieAuthenticationOptions(){
+				AuthenticationScheme = "postit",
+				CookieName = "postit",
+				LoginPath = new PathString("/login"),
+				AccessDeniedPath = new PathString("/login"),
+				AutomaticAuthenticate = true,
+				AutomaticChallenge = true
+			});
+
 			app.UseMvc(routes => {
 
 				routes.MapRoute(
@@ -61,6 +76,18 @@ namespace postit
 					template: "p/{id?}/{slug?}",
 					defaults: new { controller = "Postit", action = "View"},
 					constraints: new { id = @"^[a-f0-9]{24}$" } 
+				);
+
+				routes.MapRoute(
+					name: "Login",
+					template: "login",
+					defaults: new { controller = "account", action = "login"}
+				);
+
+				routes.MapRoute(
+					name: "Logout",
+					template: "logout",
+					defaults: new { controller = "account", action = "logout"}
 				);
 
 				routes.MapRoute(
