@@ -1,11 +1,9 @@
-using System;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using postit.Core.Models;
 
 namespace postit.Core.Services
 {
-	public class MongoContext
+    public class MongoContext
 	{
 		private readonly IMongoClient _client;
 		private readonly IMongoDatabase _database;
@@ -20,20 +18,4 @@ namespace postit.Core.Services
 			User = _database.GetCollection<User>("user");
 		}
 	}
-
-	[BsonIgnoreExtraElements]
-	public class Postit
-	{
-		[BsonIdAttribute]
-		public ObjectId Id { get; set; }
-
-		[BsonElement("title")]
-		public string Title { get; set; }
-
-		[BsonElement("content")]
-		public string Content { get; set; }
-	}
-
-	public class User
-	{ }
 }

@@ -9,6 +9,7 @@ using postit.Core.Services;
 using postit.ModelBinders;
 using postit.Models;
 using postit.Helper;
+using postit.Core.Models;
 
 namespace postit
 {

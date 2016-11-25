@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using postit.Core.Models;
 
 namespace postit.Core.Services
 {

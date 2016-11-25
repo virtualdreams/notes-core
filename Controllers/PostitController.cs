@@ -66,16 +66,32 @@ namespace postit.Controllers
 		[HttpPost]
 		public IActionResult Edit(PostitPostModel model)
 		{
+			if(!ModelState.IsValid)
+			{
+				var view = new PostitEditContainer
+				{
+					Postit = new PostitModel
+					{
+						Id = model.Id,
+						Title = model.Title,
+						Content = model.Content
+					}
+				};
+
+				return View(view);
+			}
+			
+			var _id = ObjectId.Empty;
 			if(model.Id == ObjectId.Empty)
 			{
-				var _result = PostitService.Create(ObjectId.Empty, model.Title, model.Content);
+				_id = PostitService.Create(ObjectId.Empty, model.Title, model.Content);
 			}
 			else
 			{
-				var _result = PostitService.Update(model.Id, model.Title, model.Content);
+				_id = PostitService.Update(model.Id, model.Title, model.Content);
 			}
 
-			return RedirectToAction("index", "home");
+			return RedirectToAction("view", "postit", new { id = _id, slug = model.Title.ToSlug() });
 		}
 	}
 }
