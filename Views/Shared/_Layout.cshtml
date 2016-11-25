@@ -24,7 +24,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="index.html">Postit!</a>
+					<a class="navbar-brand" href="/">Postit!</a>
 				</div>
 				<!-- Top Menu Items -->
 				<ul class="nav navbar-top-links navbar-right">
@@ -43,7 +43,7 @@
 				
 				<div class="navbar-default sidebar" role="navigation">
 					<div class="sidebar-nav navbar-collapse">
-						<ul class="nav" id="side-bar">
+						<ul class="nav" id="side-menu">
 							<li class="sidebar-search">
 								<div class="input-group custom-search-form">
 									<input type="text" class="form-control" placeholder="Search...">
@@ -55,7 +55,14 @@
 								</div>
 							</li>
 							<li><a href="/"><i class="fa fa-fw fa-home"></i> Notes</a></li>
-							<li><a href="/notebooks"><i class="fa fa-fw fa-book"></i> Notebooks</a></li>
+							<li>
+								<a href="#"><i class="fa fa-fw fa-book"></i> Notebooks<span class="fa arrow"></span></a>
+								<ul class="nav nav-second-level">
+									<li><a href="index.html">Server</a></li>
+									<li><a href="index.html">Backup</a></li>
+									<li><a href="index.html">Sonstiges</a></li>
+								</ul>
+							</li>
 							<li><a href="/tags"><i class="fa fa-fw fa-tags"></i> Tags</a></li>
 							<li><a href="/trash"><i class="fa fa-fw fa-trash-o"></i> Trash</a></li>
 							<li><a href="/create"><i class="fa fa-fw fa-file"></i> Create</a></li>

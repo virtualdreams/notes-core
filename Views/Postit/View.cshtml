@@ -8,8 +8,8 @@
 		</h1>
 		<ol class="breadcrumb">
 			<li><i class="fa fa-pencil"></i> <a href="@Url.Action("edit", "postit", new { id = Model.Postit.Id })">Edit</a></li>
-			<li><i class="fa fa-trash-o"></i> <a href="@Url.Action("trash", "postit", new { id = Model.Postit.Id })" data-toggle="modal" data-target="#delete">Delete</a></li>
-			<li><i class="fa fa-share-alt"></i> <a href="@Url.Action("share", "postit", new { id = Model.Postit.Id })" data-toggle="modal" data-target="#share">Share</a></li>
+			<li><i class="fa fa-trash-o"></i> <a href="#" data-toggle="modal" data-target="#delete">Delete</a></li>
+			<li><i class="fa fa-share-alt"></i> <a href="#" data-toggle="modal" data-target="#share">Share</a></li>
 		</ol>
 	</div>
 </div>
@@ -25,8 +25,8 @@
 	</div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="deleteLabel" aria-hidden="true">
+<!-- Modal delete -->
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="deleteLabel" aria-hidden="true" data-id="@Model.Postit.Id">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -44,7 +44,8 @@
 	</div>
 </div>
 
-<div class="modal fade" id="share" tabindex="-1" role="dialog" aria-labelledby="shareLabel" aria-hidden="true">
+<!-- Model share -->
+<div class="modal fade" id="share" tabindex="-1" role="dialog" aria-labelledby="shareLabel" aria-hidden="true" data-id="@Model.Postit.Id">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -67,6 +68,24 @@
 	$('[data-toggle=popover]').popover()
 
 	$('#trash').click(function(e) {
+		var id = $('#delete').data('id')
+		$.ajax({
+			type: "POST",
+			url: '/postit/trash/' + id,
+			statusCode: {
+				403: function () {
+					location.href = '/account/login?ReturnUrl=' + encodeURIComponent(location.pathname);
+				},
+				404: function () {
+					alert('Resource not found.');
+				}
+			},
+			success: function (data) {
+				if (data.Success) {
+					location.href = '/';
+				}
+			}
+		})
 	});
 
 	$('#share').click(function(e) {

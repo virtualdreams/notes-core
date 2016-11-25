@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using Newtonsoft.Json;
 using postit.Core.Services;
 using postit.Helper;
 using postit.Models;
@@ -40,6 +41,17 @@ namespace postit.Controllers
 		}
 
 		[HttpGet]
+		public IActionResult Create()
+		{
+			var view = new PostitEditContainer
+			{
+				Postit = new PostitModel()
+			};
+
+			return View("Edit", view);
+		}
+
+		[HttpGet]
 		public IActionResult Edit(ObjectId id)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
@@ -53,17 +65,6 @@ namespace postit.Controllers
 			var view = new PostitEditContainer
 			{
 				Postit = postit
-			};
-
-			return View("Edit", view);
-		}
-
-		[HttpGet]
-		public IActionResult Create()
-		{
-			var view = new PostitEditContainer
-			{
-				Postit = new PostitModel()
 			};
 
 			return View("Edit", view);
@@ -112,7 +113,7 @@ namespace postit.Controllers
 
 			PostitService.Trash(id, _user.Id);
 
-			return RedirectToAction("index", "home");
+			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
 		}
 
 		public IActionResult Restore(ObjectId id)
@@ -125,7 +126,7 @@ namespace postit.Controllers
 
 			PostitService.Restore(id, _user.Id);
 
-			return RedirectToAction("index", "home");
+			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
 		}
 	}
 }
