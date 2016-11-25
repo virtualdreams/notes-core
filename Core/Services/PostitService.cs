@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -38,7 +39,11 @@ namespace postit.Core.Services
 			{
 				Owner = user,
 				Title = title,
-				Content = content
+				Content = content,
+				Tags = new string[] { },
+				Notebook = String.Empty,
+				Trash = false,
+				Shared = false,
 			};
 
 			Context.Postit.InsertOne(_insert);
@@ -78,11 +83,12 @@ namespace postit.Core.Services
 
 		public void Delete(ObjectId postit, ObjectId user)
 		{
-			var _update = Builders<Postit>.Update;
-			var _set = _update
-				.Set(f => f.Trash, false);
+			var _filter = Builders<Postit>.Filter;
+			var _id = _filter.Eq(f => f.Id, postit);
+			var _user = _filter.Eq(f => f.Owner, user);
+			var _trash = _filter.Eq(f => f.Trash, false);
 
-			Context.Postit.DeleteOne(f => f.Id == postit);
+			Context.Postit.DeleteOne(_id & _user & _trash);
 		}
 	}
 }
