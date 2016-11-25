@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using postit.Core.Models;
@@ -31,6 +32,11 @@ namespace postit.Core.Services
 			var _user = _filter.Eq(f => f.Owner, user);
 
 			return Context.Postit.Find(_id & _user).SingleOrDefault();
+		}
+
+		public IEnumerable<string> Notebooks()
+		{
+			return Context.Postit.Distinct<string>("Notebook", new ExpressionFilterDefinition<Postit>(_ => true)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s));
 		}
 
 		public ObjectId Create(ObjectId user, string title, string content)
