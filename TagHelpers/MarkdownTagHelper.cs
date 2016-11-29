@@ -1,4 +1,6 @@
+using System;
 using CommonMark;
+using HeyRed.MarkdownSharp;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace postit
@@ -16,11 +18,11 @@ namespace postit
 
 			var _content = output.GetChildContentAsync().Result.GetContent();
 
+#if MARKDOWN
+			var _markdown = new Markdown().Transform(_content);
+#else
 			var _markdown = CommonMarkConverter.Convert(_content);
-
-			//var _repl = Regex.Replace(_c1, @"/(p|u)/([a-zA-Z0-9]+)", @"<a href=""/$1/$2"">/$1/$2</a>");
-			//_repl = Regex.Replace(_repl, @"(((https?|ftp)://|www.)[^\s<]+[^\s<\.)])", @"<a href=""$1"">$1</a>");
-			//_repl = _repl.Replace(@"\n", "<br />");
+#endif
 
 			output.Content.SetHtmlContent(_markdown ?? string.Empty);
 		}

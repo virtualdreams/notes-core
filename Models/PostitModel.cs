@@ -13,5 +13,9 @@ namespace postit.Models
 		public string Title { get; set; }
 
 		public string Content { get; set; }
+
+		public string Notebook { get; set; }
+
+		public bool Trash { get; set; }
 	}
 }

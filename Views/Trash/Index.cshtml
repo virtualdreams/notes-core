@@ -1,0 +1,54 @@
+@model postit.Models.PostitListContainer
+@using postit.Helper
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			Trash
+		</h1>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Trashed notes
+			</div>
+			 <div class="panel-body">
+				 <div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th style="width: 20px;"><input type="checkbox" value="" /></th>
+									<th>Title</th>
+									<th style="text-align: right;">Age</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach(var postit in Model.Postits) {
+								<tr>
+									<td><input type="checkbox" value="" /></td>
+									<td><a href="@Url.Action("view", "postit", new { id = postit.Id, slug = postit.Title.ToSlug() })">@postit.Title</a></td>
+									<td><span class="pull-right text-muted small"><em>@postit.Age</em></td>
+								</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<nav>
+					<ul class="pager">
+						@if(Model.Offset.HasPrevious) {
+						<li><a href="@Url.Action("index", "trash", new { ofs = Model.Offset.PreviousOffset })">Newer</a></li>
+						}
+						@if(Model.Offset.HasNext) {
+						<li><a href="@Url.Action("index", "trash", new { ofs = Model.Offset.NextOffset })">Older</a></li>
+						}
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>

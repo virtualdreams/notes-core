@@ -1,10 +1,10 @@
-@model postit.Models.PostitListContainer
+@model postit.Models.PostitNotebookContainer
 @using postit.Helper
 
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">
-			Notes
+			Notebook @Model.Notebook
 		</h1>
 	</div>
 </div>
@@ -25,13 +25,13 @@
 		<nav>
 			<ul class="pager">
 				@if(Model.Offset.HasPrevious) {
-				<li><a href="@Url.Action("index", "home", new { ofs = Model.Offset.PreviousOffset })">Newer</a></li>
+				<li><a href="@Url.Action("view", "notebook", new { id = Model.Notebook, ofs = Model.Offset.PreviousOffset })">Newer</a></li>
 				}
 				@if(Model.Offset.HasNext) {
-				<li><a href="@Url.Action("index", "home", new { ofs = Model.Offset.NextOffset })">Older</a></li>
+				<li><a href="@Url.Action("view", "notebook", new { id = Model.Notebook, ofs = Model.Offset.NextOffset })">Older</a></li>
 				}
 			</ul>
 		</nav>
-
+			
 	</div>
 </div>

@@ -28,6 +28,7 @@
     "MongoDB.Driver": "2.3.0",
     "AutoMapper": "5.1.1",
     "CommonMark.NET": "0.14.0",
+    "Markdown": "2.2.0",
     "System.Diagnostics.FileVersionInfo": "4.0.0"
   },
   "frameworks": {

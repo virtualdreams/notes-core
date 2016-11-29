@@ -7,38 +7,65 @@
 			<small>@Model.Postit.Age</small>
 		</h1>
 		<ol class="breadcrumb">
-			<li><i class="fa fa-pencil"></i> <a href="@Url.Action("edit", "postit", new { id = Model.Postit.Id })">Edit</a></li>
-			<li><i class="fa fa-trash-o"></i> <a href="#" data-toggle="modal" data-target="#delete">Delete</a></li>
-			<li><i class="fa fa-share-alt"></i> <a href="#" data-toggle="modal" data-target="#share">Share</a></li>
+			<li><i class="fa fa-home"></i> <a href="@Url.Action("index", "home")">Home</a></li>
+			@if(!String.IsNullOrEmpty(@Model.Postit.Notebook)) {
+			<li><i class="fa fa-book"></i> <a href="@Url.Action("view", "notebook", new { id = Model.Postit.Notebook })">@Model.Postit.Notebook</a></li>
+			}
 		</ol>
 	</div>
 </div>
 
 <div class="row">
 	<div class="col-lg-12">
-		<div class="panel panel-default">
-            <div class="panel-body">
+		<p>
+			<button type="button" class="btn btn-primary" data-href="@Url.Action("edit", "postit", new { id = Model.Postit.Id })"><i class="fa fa-pencil"></i> Edit</button>
+			@if(Model.Postit.Trash) {
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#trash"><i class="fa fa-undo"></i> Restore</button>
+			} else {
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#trash"><i class="fa fa-trash-o"></i> Delete</button>
+			@*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#share"><i class="fa fa-share-alt"></i></button>*@
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#notebook"><i class="fa fa-book"></i> Notebook</button>
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tags"><i class="fa fa-tags"></i> Tags</button>
+			}
+		</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		@*<div class="panel panel-default">
+            <div class="panel-body">*@
 				<!-- Content -->
-				<markdown>@Html.Raw(Model.Postit.Content)</markdown>
-			</div>
-		</div>
+		<markdown>@Html.Raw(Model.Postit.Content)</markdown>
+			@*</div>
+		</div>*@
 	</div>
 </div>
 
 <!-- Modal delete -->
-<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="deleteLabel" aria-hidden="true" data-id="@Model.Postit.Id">
+<div class="modal fade" id="trash" tabindex="-1" role="dialog" aria-labelledby="trashLabel" aria-hidden="true" data-id="@Model.Postit.Id">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="deleteLabel">Delete postit</h4>
+				<h4 class="modal-title" id="trashLabel">
+					@if(Model.Postit.Trash) {
+					@:Restore postit
+					} else {
+					@:Delete postit
+					}
+				</h4>
 			</div>
 			<div class="modal-body">
-				The note &quot;@Model.Postit.Title&quot; is moved to trash.
+				@if(Model.Postit.Trash) {
+				@:Restore note &quot;@Model.Postit.Title&quot;?
+				} else {
+				@:Delete note &quot;@Model.Postit.Title&quot;?
+				}
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary" id="trash">Ok</button>
+				<button type="button" class="btn btn-primary" id="trashSubmit">Ok</button>
 			</div>
 		</div>
 	</div>
@@ -57,7 +84,51 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary" id="share">Ok</button>
+				<button type="button" class="btn btn-primary" id="shareSubmit">Ok</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Model notebook -->
+<div class="modal fade" id="notebook" tabindex="-1" role="dialog" aria-labelledby="notebookLabel" aria-hidden="true" data-id="@Model.Postit.Id">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="notebookLabel">Notebook</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					Set a notebook name, to add it to a notebook collection.
+					<input class="form-control" name="notebook" id="notebook-name" value="@Model.Postit.Notebook" />
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary" id="notebookSubmit">Ok</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Model notebook -->
+<div class="modal fade" id="tags" tabindex="-1" role="dialog" aria-labelledby="tagsLabel" aria-hidden="true" data-id="@Model.Postit.Id">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="tagsLabel">Tags</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					Set tags for this note.
+					<input class="form-control" name="tags" id="tag-name" value="" />
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-primary" id="tagsSubmit">Ok</button>
 			</div>
 		</div>
 	</div>
@@ -65,10 +136,15 @@
 
 @section script {
 <script>
-	$('[data-toggle=popover]').popover()
+	$('[data-toggle=popover]').popover();
 
-	$('#trash').click(function(e) {
-		var id = $('#delete').data('id')
+	$('[data-href]').click(function() {
+		var href = $(this).data('href');
+		location.href = href;
+	});
+
+	$('#trashSubmit').click(function() {
+		var id = $('#trash').data('id');
 		$.ajax({
 			type: "POST",
 			url: '/postit/trash/' + id,
@@ -85,10 +161,40 @@
 					location.href = '/';
 				}
 			}
-		})
+		});
 	});
 
-	$('#share').click(function(e) {
+	$('#shareSubmit').click(function() {
+
+	});
+
+	$('#notebookSubmit').click(function() {
+		var id = $('#notebook').data('id');
+
+		var d = {
+			id: id,
+			name: $('#notebook-name').val()
+		};
+
+		$.ajax({
+			type: "POST",
+			url: '/postit/notebook/',
+			dataType: 'json',
+			data: d,
+			statusCode: {
+				403: function () {
+					location.href = '/account/login?ReturnUrl=' + encodeURIComponent(location.pathname);
+				},
+				404: function () {
+					alert('Resource not found.');
+				}
+			},
+			success: function (data) {
+				if (data.Success) {
+					location.reload();
+				}
+			}
+		});
 	});
 </script>	
 }

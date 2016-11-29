@@ -66,6 +66,18 @@ namespace postit
 			app.UseMvc(routes => {
 
 				routes.MapRoute(
+					name: "search",
+					template: "search/{q?}",
+					defaults: new { controller = "Home", action = "Search" }
+				);
+
+				routes.MapRoute(
+					name: "notebook",
+					template: "notebook/{id}",
+					defaults: new { controller = "Notebook", action = "View" }
+				);
+
+				routes.MapRoute(
 					name: "create",
 					template: "create",
 					defaults: new { controller = "Postit", action = "Create" }
@@ -79,13 +91,13 @@ namespace postit
 				);
 
 				routes.MapRoute(
-					name: "Login",
+					name: "login",
 					template: "login",
 					defaults: new { controller = "account", action = "login"}
 				);
 
 				routes.MapRoute(
-					name: "Logout",
+					name: "logout",
 					template: "logout",
 					defaults: new { controller = "account", action = "logout"}
 				);

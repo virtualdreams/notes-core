@@ -1,10 +1,11 @@
-@model postit.Models.PostitListContainer
+@model postit.Models.PostitSearchContainer
 @using postit.Helper
 
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">
-			Notes
+			Search
+			<small>for @Model.Term, @Model.Offset.Items hits</small>
 		</h1>
 	</div>
 </div>
@@ -25,13 +26,13 @@
 		<nav>
 			<ul class="pager">
 				@if(Model.Offset.HasPrevious) {
-				<li><a href="@Url.Action("index", "home", new { ofs = Model.Offset.PreviousOffset })">Newer</a></li>
+				<li><a href="@Url.Action("search", "home", new { q = Model.Term, ofs = Model.Offset.PreviousOffset })">Newer</a></li>
 				}
 				@if(Model.Offset.HasNext) {
-				<li><a href="@Url.Action("index", "home", new { ofs = Model.Offset.NextOffset })">Older</a></li>
+				<li><a href="@Url.Action("search", "home", new { q = Model.Term, ofs = Model.Offset.NextOffset })">Older</a></li>
 				}
 			</ul>
 		</nav>
-
+	
 	</div>
 </div>

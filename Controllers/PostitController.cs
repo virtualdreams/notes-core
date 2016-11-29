@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -96,6 +97,11 @@ namespace postit.Controllers
 			}
 			else
 			{
+				var _user = UserService.GetByName(User.GetUserName());
+				var _postit = PostitService.GetById(model.Id, _user.Id);
+				if(_postit == null)
+					return new StatusCodeResult(404);
+
 				_id = PostitService.Update(model.Id, model.Title, model.Content);
 			}
 
@@ -103,28 +109,40 @@ namespace postit.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Trash(ObjectId id)
+		public IActionResult Notebook(ObjectId id, string name)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-
 			var _postit = PostitService.GetById(id, _user.Id);
 			if(_postit == null)
 				return new StatusCodeResult(404);
 
-			PostitService.Trash(id, _user.Id);
+			PostitService.SetNotebook(id, name);
 
 			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
 		}
 
-		public IActionResult Restore(ObjectId id)
+		[HttpPost]
+		public IActionResult Trash(ObjectId id)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-
 			var _postit = PostitService.GetById(id, _user.Id);
 			if(_postit == null)
 				return new StatusCodeResult(404);
 
-			PostitService.Restore(id, _user.Id);
+			PostitService.Trash(id, !_postit.Trash);
+
+			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
+		}
+
+		[HttpPost]
+		public IActionResult Delete(ObjectId id)
+		{
+			var _user = UserService.GetByName(User.GetUserName());
+			var _postit = PostitService.GetById(id, _user.Id);
+			if(_postit == null)
+				return new StatusCodeResult(404);
+
+			PostitService.Delete(id);
 
 			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
 		}
