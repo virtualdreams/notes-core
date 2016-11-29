@@ -153,12 +153,15 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="note">The note id.</param>
 		/// <param name="user">The user who own this note.</param>
-		public void Delete(ObjectId note)
+		public bool Delete(ObjectId note, ObjectId user)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Id, note);
+			var _user = _filter.Eq(f => f.Owner, user);
 
-			Context.Note.DeleteOne(_id);
+			Context.Note.DeleteOne(_id & _user);
+
+			return GetById(note, user) == null;
 		}
 
 		public IEnumerable<Note> Search(ObjectId user, string term, bool trashed, int? offset, int? limit)

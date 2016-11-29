@@ -39,5 +39,20 @@ namespace notes.Controllers
 
 			return View(view);
 		}
+
+		[HttpPost]
+		public IActionResult Delete(NoteDeleteModel model)
+		{
+			if(model.Id != null)
+			{
+				var _user = UserService.GetByName(User.GetUserName());
+				foreach(var note in model?.Id)
+				{
+					NoteService.Delete(note, _user.Id);
+				}
+			}
+
+			return RedirectToAction("index");
+		}
 	}
 }

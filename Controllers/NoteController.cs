@@ -1,4 +1,3 @@
-using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -130,19 +129,6 @@ namespace notes.Controllers
 				return new StatusCodeResult(404);
 
 			NoteService.Trash(id, !_note.Trash);
-
-			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
-		}
-
-		[HttpPost]
-		public IActionResult Delete(ObjectId id)
-		{
-			var _user = UserService.GetByName(User.GetUserName());
-			var _note = NoteService.GetById(id, _user.Id);
-			if(_note == null)
-				return new StatusCodeResult(404);
-
-			NoteService.Delete(id);
 
 			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
 		}

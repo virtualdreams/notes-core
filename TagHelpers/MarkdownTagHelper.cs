@@ -1,4 +1,3 @@
-using System;
 using CommonMark;
 using HeyRed.MarkdownSharp;
 using Microsoft.AspNetCore.Razor.TagHelpers;
