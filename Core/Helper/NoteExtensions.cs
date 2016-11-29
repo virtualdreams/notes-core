@@ -52,7 +52,7 @@ namespace notes.Helper
 				return String.Format("{0} hours ago", (minutes / 60));
 			
 			if((minutes / 60) >= 24 && (minutes / 60) < 48)
-				return "gestern";
+				return "yesterday";
 			
 			return String.Format("{0} days ago", ((minutes / 60) / 24));
 		}
