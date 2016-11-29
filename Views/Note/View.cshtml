@@ -1,15 +1,15 @@
-@model postit.Models.PostitViewContainer
+@model notes.Models.NoteViewContainer
 
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">
-			@Model.Postit.Title
-			<small>@Model.Postit.Age</small>
+			@Model.Note.Title
+			<small>@Model.Note.Age</small>
 		</h1>
 		<ol class="breadcrumb">
 			<li><i class="fa fa-home"></i> <a href="@Url.Action("index", "home")">Home</a></li>
-			@if(!String.IsNullOrEmpty(@Model.Postit.Notebook)) {
-			<li><i class="fa fa-book"></i> <a href="@Url.Action("view", "notebook", new { id = Model.Postit.Notebook })">@Model.Postit.Notebook</a></li>
+			@if(!String.IsNullOrEmpty(@Model.Note.Notebook)) {
+			<li><i class="fa fa-book"></i> <a href="@Url.Action("view", "notebook", new { id = Model.Note.Notebook })">@Model.Note.Notebook</a></li>
 			}
 		</ol>
 	</div>
@@ -18,8 +18,8 @@
 <div class="row">
 	<div class="col-lg-12">
 		<p>
-			<button type="button" class="btn btn-primary" data-href="@Url.Action("edit", "postit", new { id = Model.Postit.Id })"><i class="fa fa-pencil"></i> Edit</button>
-			@if(Model.Postit.Trash) {
+			<button type="button" class="btn btn-primary" data-href="@Url.Action("edit", "note", new { id = Model.Note.Id })"><i class="fa fa-pencil"></i> Edit</button>
+			@if(Model.Note.Trash) {
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#trash"><i class="fa fa-undo"></i> Restore</button>
 			} else {
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#trash"><i class="fa fa-trash-o"></i> Delete</button>
@@ -36,31 +36,31 @@
 		@*<div class="panel panel-default">
             <div class="panel-body">*@
 				<!-- Content -->
-		<markdown>@Html.Raw(Model.Postit.Content)</markdown>
+		<markdown>@Html.Raw(Model.Note.Content)</markdown>
 			@*</div>
 		</div>*@
 	</div>
 </div>
 
 <!-- Modal delete -->
-<div class="modal fade" id="trash" tabindex="-1" role="dialog" aria-labelledby="trashLabel" aria-hidden="true" data-id="@Model.Postit.Id">
+<div class="modal fade" id="trash" tabindex="-1" role="dialog" aria-labelledby="trashLabel" aria-hidden="true" data-id="@Model.Note.Id">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h4 class="modal-title" id="trashLabel">
-					@if(Model.Postit.Trash) {
-					@:Restore postit
+					@if(Model.Note.Trash) {
+					@:Restore note
 					} else {
-					@:Delete postit
+					@:Delete note
 					}
 				</h4>
 			</div>
 			<div class="modal-body">
-				@if(Model.Postit.Trash) {
-				@:Restore note &quot;@Model.Postit.Title&quot;?
+				@if(Model.Note.Trash) {
+				@:Restore note &quot;@Model.Note.Title&quot;?
 				} else {
-				@:Delete note &quot;@Model.Postit.Title&quot;?
+				@:Delete note &quot;@Model.Note.Title&quot;?
 				}
 			</div>
 			<div class="modal-footer">
@@ -72,15 +72,15 @@
 </div>
 
 <!-- Model share -->
-<div class="modal fade" id="share" tabindex="-1" role="dialog" aria-labelledby="shareLabel" aria-hidden="true" data-id="@Model.Postit.Id">
+<div class="modal fade" id="share" tabindex="-1" role="dialog" aria-labelledby="shareLabel" aria-hidden="true" data-id="@Model.Note.Id">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="shareLabel">Share postit</h4>
+				<h4 class="modal-title" id="shareLabel">Share note</h4>
 			</div>
 			<div class="modal-body">
-				Share &quot;@Model.Postit.Title&quot;?
+				Share &quot;@Model.Note.Title&quot;?
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -91,7 +91,7 @@
 </div>
 
 <!-- Model notebook -->
-<div class="modal fade" id="notebook" tabindex="-1" role="dialog" aria-labelledby="notebookLabel" aria-hidden="true" data-id="@Model.Postit.Id">
+<div class="modal fade" id="notebook" tabindex="-1" role="dialog" aria-labelledby="notebookLabel" aria-hidden="true" data-id="@Model.Note.Id">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -101,7 +101,7 @@
 			<div class="modal-body">
 				<div class="form-group">
 					Set a notebook name, to add it to a notebook collection.
-					<input class="form-control" name="notebook" id="notebook-name" value="@Model.Postit.Notebook" />
+					<input class="form-control" name="notebook" id="notebook-name" value="@Model.Note.Notebook" />
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -113,7 +113,7 @@
 </div>
 
 <!-- Model notebook -->
-<div class="modal fade" id="tags" tabindex="-1" role="dialog" aria-labelledby="tagsLabel" aria-hidden="true" data-id="@Model.Postit.Id">
+<div class="modal fade" id="tags" tabindex="-1" role="dialog" aria-labelledby="tagsLabel" aria-hidden="true" data-id="@Model.Note.Id">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -147,7 +147,7 @@
 		var id = $('#trash').data('id');
 		$.ajax({
 			type: "POST",
-			url: '/postit/trash/' + id,
+			url: '/note/trash/' + id,
 			statusCode: {
 				403: function () {
 					location.href = '/account/login?ReturnUrl=' + encodeURIComponent(location.pathname);
@@ -178,7 +178,7 @@
 
 		$.ajax({
 			type: "POST",
-			url: '/postit/notebook/',
+			url: '/note/notebook/',
 			dataType: 'json',
 			data: d,
 			statusCode: {

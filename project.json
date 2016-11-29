@@ -1,9 +1,9 @@
 {
-  "title": "postit",
-  "description": "postit",
+  "title": "notes",
+  "description": "notes",
   "version": "1.0.0-*",
   "buildOptions": {
-    "outputName": "postit",
+    "outputName": "notes",
     "preserveCompilationContext": true,
     "debugType": "portable",
     "emitEntryPoint": true

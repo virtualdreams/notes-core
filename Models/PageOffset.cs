@@ -1,4 +1,4 @@
-﻿namespace postit.Models
+﻿namespace notes.Models
 {
     public class PageOffset
 	{

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MongoDB.Bson;
 
-namespace postit.ModelBinders
+namespace notes.ModelBinders
 {
     public class ObjectIdModelBinder : IModelBinder
     {

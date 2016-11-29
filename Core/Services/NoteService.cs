@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using postit.Core.Models;
+using notes.Core.Models;
 
-namespace postit.Core.Services
+namespace notes.Core.Services
 {
-    public class PostitService
+    public class NoteService
 	{
 		private readonly MongoContext Context;
 
-		public PostitService(MongoContext context)
+		public NoteService(MongoContext context)
 		{
 			Context = context;
 		}
@@ -23,43 +23,43 @@ namespace postit.Core.Services
 		/// <param name="offset">The page offset.</param>
 		/// <param name="limit">The page limit.</param>
 		/// <returns></returns>
-		public IEnumerable<Postit> Get(ObjectId user, bool trashed, int? offset, int? limit)
+		public IEnumerable<Note> Get(ObjectId user, bool trashed, int? offset, int? limit)
 		{
-			var _filter = Builders<Postit>.Filter;
+			var _filter = Builders<Note>.Filter;
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _active = _filter.Eq(f => f.Trash, trashed);
 
-			return Context.Postit.Find(_user & _active).SortByDescending(f => f.Id).Skip(offset).Limit(limit).ToEnumerable();
+			return Context.Note.Find(_user & _active).SortByDescending(f => f.Id).Skip(offset).Limit(limit).ToEnumerable();
 		}
 
-		public IEnumerable<Postit> GetByNotebook(ObjectId user, string notebook, int? offset, int? limit)
+		public IEnumerable<Note> GetByNotebook(ObjectId user, string notebook, int? offset, int? limit)
 		{
 			notebook = notebook?.Trim();
 
 			if(notebook == null)
-				return Enumerable.Empty<Postit>();
+				return Enumerable.Empty<Note>();
 
-			var _filter = Builders<Postit>.Filter;
+			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Notebook, notebook);
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _trash = _filter.Eq(f => f.Trash, false);
 
-			return Context.Postit.Find(_id & _user & _trash).Skip(offset).Limit(limit).ToEnumerable();
+			return Context.Note.Find(_id & _user & _trash).Skip(offset).Limit(limit).ToEnumerable();
 		}
 
 		/// <summary>
 		/// Get a note by id.
 		/// </summary>
-		/// <param name="postit">The note id.</param>
+		/// <param name="note">The note id.</param>
 		/// <param name="user">The user id.</param>
 		/// <returns></returns>
-		public Postit GetById(ObjectId postit, ObjectId user)
+		public Note GetById(ObjectId note, ObjectId user)
 		{
-			var _filter = Builders<Postit>.Filter;
-			var _id = _filter.Eq(f => f.Id, postit);
+			var _filter = Builders<Note>.Filter;
+			var _id = _filter.Eq(f => f.Id, note);
 			var _user = _filter.Eq(f => f.Owner, user);
 
-			return Context.Postit.Find(_id & _user).SingleOrDefault();
+			return Context.Note.Find(_id & _user).SingleOrDefault();
 		}
 
 		/// <summary>
@@ -69,27 +69,27 @@ namespace postit.Core.Services
 		/// <returns></returns>
 		public IEnumerable<string> Notebooks(ObjectId user)
 		{
-			return Context.Postit.Distinct<string>("Notebook", new ExpressionFilterDefinition<Postit>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s));
+			return Context.Note.Distinct<string>("Notebook", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s));
 		}
 
 		/// <summary>
 		/// Set the notebook name for a note.
 		/// </summary>
-		/// <param name="postit">The note.</param>
+		/// <param name="note">The note.</param>
 		/// <param name="user">The user who owns the note.</param>
 		/// <param name="notebook">The notebook name.</param>
-		public void SetNotebook(ObjectId postit, string notebook)
+		public void SetNotebook(ObjectId note, string notebook)
 		{
 			notebook = notebook?.Trim();
 
-			var _filter = Builders<Postit>.Filter;
-			var _id = _filter.Eq(f => f.Id, postit);
+			var _filter = Builders<Note>.Filter;
+			var _id = _filter.Eq(f => f.Id, note);
 
-			var _update = Builders<Postit>.Update;
+			var _update = Builders<Note>.Update;
 			var _set = _update
 						.Set(f => f.Notebook, notebook);
 
-			Context.Postit.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
+			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
 
 		/// <summary>
@@ -101,7 +101,7 @@ namespace postit.Core.Services
 		/// <returns></returns>
 		public ObjectId Create(ObjectId user, string title, string content)
 		{
-			var _insert = new Postit
+			var _insert = new Note
 			{
 				Owner = user,
 				Title = title,
@@ -112,65 +112,65 @@ namespace postit.Core.Services
 				Shared = false,
 			};
 
-			Context.Postit.InsertOne(_insert);
+			Context.Note.InsertOne(_insert);
 
 			return _insert.Id;
 		}
 
-		public ObjectId Update(ObjectId postit, string title, string content)
+		public ObjectId Update(ObjectId note, string title, string content)
 		{
-			var _update = Builders<Postit>.Update;
+			var _update = Builders<Note>.Update;
 			var _set = _update
 						.Set(f => f.Title, title)
 						.Set(f => f.Content, content);
 
-			Context.Postit.UpdateOne(f => f.Id == postit, _set, new UpdateOptions { IsUpsert = true });
+			Context.Note.UpdateOne(f => f.Id == note, _set, new UpdateOptions { IsUpsert = true });
 
-			return postit;
+			return note;
 		}
 
 		/// <summary>
 		/// Toogle trash status flag.
 		/// </summary>
-		/// <param name="postit"></param>
+		/// <param name="note"></param>
 		/// <param name="user"></param>
-		public void Trash(ObjectId postit, bool trash)
+		public void Trash(ObjectId note, bool trash)
 		{
 			// update filter
-			var _filter = Builders<Postit>.Filter;
-			var _id = _filter.Eq(f => f.Id, postit);
+			var _filter = Builders<Note>.Filter;
+			var _id = _filter.Eq(f => f.Id, note);
 
 			// update values
-			var _update = Builders<Postit>.Update;
+			var _update = Builders<Note>.Update;
 			var _set = _update
 				.Set(f => f.Trash, trash);
 			
-			Context.Postit.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
+			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
 
 		/// <summary>
 		/// Remove the note.
 		/// </summary>
-		/// <param name="postit">The note id.</param>
+		/// <param name="note">The note id.</param>
 		/// <param name="user">The user who own this note.</param>
-		public void Delete(ObjectId postit)
+		public void Delete(ObjectId note)
 		{
-			var _filter = Builders<Postit>.Filter;
-			var _id = _filter.Eq(f => f.Id, postit);
+			var _filter = Builders<Note>.Filter;
+			var _id = _filter.Eq(f => f.Id, note);
 
-			Context.Postit.DeleteOne(_id);
+			Context.Note.DeleteOne(_id);
 		}
 
-		public IEnumerable<Postit> Search(ObjectId user, string term, bool trashed, int? offset, int? limit)
+		public IEnumerable<Note> Search(ObjectId user, string term, bool trashed, int? offset, int? limit)
 		{
 			term = term?.Trim();
 
-			var _filter = Builders<Postit>.Filter;
+			var _filter = Builders<Note>.Filter;
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _text = _filter.Text(term, "none");
 			var _trash = _filter.Eq(f => f.Trash, trashed);
 
-			return Context.Postit.Find(_user & _text & _trash).Skip(offset).Limit(limit).ToEnumerable();
+			return Context.Note.Find(_user & _text & _trash).Skip(offset).Limit(limit).ToEnumerable();
 		}
 	}
 }

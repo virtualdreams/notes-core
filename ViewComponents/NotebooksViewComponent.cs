@@ -1,25 +1,25 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using postit.Core.Services;
-using postit.Helper;
+using notes.Core.Services;
+using notes.Helper;
 
-namespace postit.ViewComponents
+namespace notes.ViewComponents
 {
     public class NotebooksViewComponent : ViewComponent
     {
-        public readonly PostitService PostitService;
+        public readonly NoteService NoteService;
         private readonly UserService UserService;
 
-        public NotebooksViewComponent(PostitService postit, UserService user)
+        public NotebooksViewComponent(NoteService note, UserService user)
         {
-            PostitService = postit;
+            NoteService = note;
             UserService = user;
         }
 
         public IViewComponentResult Invoke()
         {
             var _user = UserService.GetByName((User as ClaimsPrincipal).GetUserName());
-            var _notebooks = PostitService.Notebooks(_user.Id);
+            var _notebooks = NoteService.Notebooks(_user.Id);
 
             return View(_notebooks);
         }

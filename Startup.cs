@@ -5,14 +5,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
-using postit.Core.Services;
-using postit.ModelBinders;
-using postit.Models;
-using postit.Helper;
-using postit.Core.Models;
+using notes.Core.Services;
+using notes.ModelBinders;
+using notes.Models;
+using notes.Helper;
+using notes.Core.Models;
 using Microsoft.AspNetCore.Http;
 
-namespace postit
+namespace notes
 {
 	public class Startup
 	{
@@ -41,8 +41,8 @@ namespace postit
 				});
 			});
 
-			services.AddScoped<MongoContext>(options => new MongoContext(new MongoClient(), "postit"));
-			services.AddTransient<PostitService>();
+			services.AddScoped<MongoContext>(options => new MongoContext(new MongoClient(), "notes"));
+			services.AddTransient<NoteService>();
 			services.AddTransient<UserService>();
 		}
 
@@ -58,8 +58,8 @@ namespace postit
 			app.UseStaticFiles();
 
 			app.UseCookieAuthentication(new CookieAuthenticationOptions(){
-				AuthenticationScheme = "postit",
-				CookieName = "postit",
+				AuthenticationScheme = "notes",
+				CookieName = "notes",
 				LoginPath = new PathString("/login"),
 				AccessDeniedPath = new PathString("/login"),
 				AutomaticAuthenticate = true,
@@ -83,13 +83,13 @@ namespace postit
 				routes.MapRoute(
 					name: "create",
 					template: "create",
-					defaults: new { controller = "Postit", action = "Create" }
+					defaults: new { controller = "Note", action = "Create" }
 				);
 
 				routes.MapRoute(
-					name: "postit",
-					template: "p/{id?}/{slug?}",
-					defaults: new { controller = "Postit", action = "View"},
+					name: "note",
+					template: "note/{id?}/{slug?}",
+					defaults: new { controller = "Note", action = "View"},
 					constraints: new { id = @"^[a-f0-9]{24}$" } 
 				);
 
@@ -117,7 +117,7 @@ namespace postit
 		private void InitializeAutoMapper()
 		{
 			Mapper.Initialize(config => {
-				config.CreateMap<Postit, PostitModel>()
+				config.CreateMap<Note, NoteModel>()
 					.ForMember(d => d.Age, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime().AgeInMinutes().AgeInWords()));
 
 				config.CreateMap<User, UserModel>();

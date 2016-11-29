@@ -3,21 +3,21 @@ using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using postit.Core.Services;
-using postit.Helper;
-using postit.Models;
+using notes.Core.Services;
+using notes.Helper;
+using notes.Models;
 
-namespace postit.Controllers
+namespace notes.Controllers
 {
 	[Authorize]
 	public class TrashController : Controller
 	{
-		private readonly PostitService PostitService;
+		private readonly NoteService NoteService;
 		private readonly UserService UserService;
 
-		public TrashController(PostitService postit, UserService user)
+		public TrashController(NoteService note, UserService user)
 		{
-			PostitService = postit;
+			NoteService = note;
 			UserService = user;
 		}
 
@@ -25,15 +25,15 @@ namespace postit.Controllers
 		public IActionResult Index(int? ofs)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-			var _count = PostitService.Get(_user.Id, true, null, null).Count();
-			var _postits = PostitService.Get(_user.Id, true, ofs ?? 0, 10);
+			var _count = NoteService.Get(_user.Id, true, null, null).Count();
+			var _notes = NoteService.Get(_user.Id, true, ofs ?? 0, 10);
 			var _pager = new PageOffset(ofs ?? 0, 10, _count);
 			
-			var postits = Mapper.Map<IEnumerable<PostitModel>>(_postits);
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 			
-			var view = new PostitListContainer
+			var view = new NoteListContainer
 			{
-				Postits = postits,
+				Notes = notes,
 				Offset = _pager
 			};
 

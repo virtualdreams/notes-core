@@ -6,7 +6,7 @@
 			"type": "coreclr",
 			"request": "launch",
 			"preLaunchTask": "build",
-			"program": "${workspaceRoot}/bin/Debug/netcoreapp1.1/postit.dll",
+			"program": "${workspaceRoot}/bin/Debug/netcoreapp1.1/notes.dll",
 			"args": [],
 			"cwd": "${workspaceRoot}",
 			"stopAtEntry": false,

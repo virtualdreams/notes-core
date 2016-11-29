@@ -3,36 +3,36 @@ using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using postit.Core.Services;
-using postit.Helper;
-using postit.Models;
+using notes.Core.Services;
+using notes.Helper;
+using notes.Models;
 
-namespace postit.Controllers
+namespace notes.Controllers
 {
 	[Authorize]
 	public class NotebookController : Controller
 	{
-		private readonly PostitService PostitService;
+		private readonly NoteService NoteService;
 		private readonly UserService UserService;
 
-		public NotebookController(PostitService postit, UserService user)
+		public NotebookController(NoteService note, UserService user)
 		{
-			PostitService = postit;
+			NoteService = note;
 			UserService = user;
 		}
 
 		public IActionResult View(string id, int? ofs)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-			var _count = PostitService.GetByNotebook(_user.Id, id, null, null).Count();
-			var _postits = PostitService.GetByNotebook(_user.Id, id, ofs ?? 0, 10);
+			var _count = NoteService.GetByNotebook(_user.Id, id, null, null).Count();
+			var _notes = NoteService.GetByNotebook(_user.Id, id, ofs ?? 0, 10);
 			var _pager = new PageOffset(ofs ?? 0, 10, _count);
 			
-			var postits = Mapper.Map<IEnumerable<PostitModel>>(_postits);
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 			
-			var view = new PostitNotebookContainer
+			var view = new NoteNotebookContainer
 			{
-				Postits = postits,
+				Notes = notes,
 				Offset = _pager,
 				Notebook = id?.Trim()
 			};

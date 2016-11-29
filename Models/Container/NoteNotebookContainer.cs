@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-namespace postit.Models
+namespace notes.Models
 {
-	public class PostitNotebookContainer
+	public class NoteNotebookContainer
 	{
-		public IEnumerable<PostitModel> Postits { get; set; }
+		public IEnumerable<NoteModel> Notes { get; set; }
 
 		public PageOffset Offset { get; set; }
 

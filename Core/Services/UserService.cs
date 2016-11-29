@@ -3,10 +3,10 @@ using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using postit.Core.Helper;
-using postit.Core.Models;
+using notes.Core.Helper;
+using notes.Core.Models;
 
-namespace postit.Core.Services
+namespace notes.Core.Services
 {
 	public class UserService
 	{

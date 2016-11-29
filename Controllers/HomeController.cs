@@ -1,24 +1,24 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using postit.Core.Services;
-using postit.Models;
-using Microsoft.AspNetCore.Authorization;
-using postit.Helper;
 using System.Linq;
 using System;
+using notes.Core.Services;
+using notes.Helper;
+using notes.Models;
 
-namespace postit.Controllers
+namespace notes.Controllers
 {
 	[Authorize]
     public class HomeController: Controller
 	{
-		private readonly PostitService PostitService;
+		private readonly NoteService NoteService;
 		private readonly UserService UserService;
 
-		public HomeController(PostitService postit, UserService user)
+		public HomeController(NoteService note, UserService user)
 		{
-			PostitService = postit;
+			NoteService = note;
 			UserService = user;
 		}
 
@@ -26,15 +26,15 @@ namespace postit.Controllers
 		public IActionResult Index(int? ofs)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-			var _count = PostitService.Get(_user.Id, false, null, null).Count();
-			var _postits = PostitService.Get(_user.Id, false, ofs ?? 0, 10);
+			var _count = NoteService.Get(_user.Id, false, null, null).Count();
+			var _notes = NoteService.Get(_user.Id, false, ofs ?? 0, 10);
 			var _pager = new PageOffset(ofs ?? 0, 10, _count);
 			
-			var postits = Mapper.Map<IEnumerable<PostitModel>>(_postits);
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 			
-			var view = new PostitListContainer
+			var view = new NoteListContainer
 			{
-				Postits = postits,
+				Notes = notes,
 				Offset = _pager
 			};
 
@@ -45,15 +45,15 @@ namespace postit.Controllers
 		public IActionResult Search(string q, int? ofs)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-			var _count = PostitService.Search(_user.Id, q ?? String.Empty, false, null, null).Count();
-			var _postits = PostitService.Search(_user.Id, q ?? String.Empty, false, ofs, 10);
+			var _count = NoteService.Search(_user.Id, q ?? String.Empty, false, null, null).Count();
+			var _notes = NoteService.Search(_user.Id, q ?? String.Empty, false, ofs, 10);
 			var _pager = new PageOffset(ofs ?? 0, 10, _count);
 
-			var postits = Mapper.Map<IEnumerable<PostitModel>>(_postits);
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 			
-			var view = new PostitSearchContainer
+			var view = new NoteSearchContainer
 			{
-				Postits = postits,
+				Notes = notes,
 				Offset = _pager,
 				Term = q?.Trim()
 			};

@@ -1,8 +1,8 @@
 using MongoDB.Bson;
 
-namespace postit.Models
+namespace notes.Models
 {
-	public class PostitModel
+	public class NoteModel
 	{
 		public ObjectId Id { get; set; }
 

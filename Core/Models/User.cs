@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace postit.Core.Models
+namespace notes.Core.Models
 {
 	[BsonIgnoreExtraElements]
 	public class User

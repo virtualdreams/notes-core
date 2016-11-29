@@ -1,5 +1,5 @@
-@model postit.Models.PostitSearchContainer
-@using postit.Helper
+@model notes.Models.NoteSearchContainer
+@using notes.Helper
 
 <div class="row">
 	<div class="col-lg-12">
@@ -14,10 +14,10 @@
 	<div class="col-lg-12">
 		
 		<div class="list-group">
-			@foreach(var postit in Model.Postits) {
-			<a href="@Url.Action("view", "postit", new { id = postit.Id, slug = postit.Title.ToSlug() })" class="list-group-item">
-				<i class="fa fa-comment fa-file"></i> @postit.Title
-				<span class="pull-right text-muted small"><em>@postit.Age</em>
+			@foreach(var note in Model.Notes) {
+			<a href="@Url.Action("view", "note", new { id = note.Id, slug = note.Title.ToSlug() })" class="list-group-item">
+				<i class="fa fa-comment fa-file"></i> @note.Title
+				<span class="pull-right text-muted small"><em>@note.Age</em>
 				</span>
 			</a>
 			}

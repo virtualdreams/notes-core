@@ -4,21 +4,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using Newtonsoft.Json;
-using postit.Core.Services;
-using postit.Helper;
-using postit.Models;
+using notes.Core.Services;
+using notes.Helper;
+using notes.Models;
 
-namespace postit.Controllers
+namespace notes.Controllers
 {
     [Authorize]
-    public class PostitController : Controller
+    public class NoteController : Controller
 	{
-		private readonly PostitService PostitService;
+		private readonly NoteService NoteService;
 		private readonly UserService UserService;
 
-		public PostitController(PostitService postit, UserService user)
+		public NoteController(NoteService note, UserService user)
 		{
-			PostitService = postit;
+			NoteService = note;
 			UserService = user;
 		}
 
@@ -27,15 +27,15 @@ namespace postit.Controllers
 		{
 			var _user = UserService.GetByName(User.GetUserName());
 
-			var _postit = PostitService.GetById(id, _user.Id);
-			if(_postit == null)
+			var _note = NoteService.GetById(id, _user.Id);
+			if(_note == null)
 				return new StatusCodeResult(404);
 
-			var postit = Mapper.Map<PostitModel>(_postit);
+			var note = Mapper.Map<NoteModel>(_note);
 
-			var view = new PostitViewContainer
+			var view = new NoteViewContainer
 			{
-				Postit = postit
+				Note = note
 			};
 
 			return View(view);
@@ -44,9 +44,9 @@ namespace postit.Controllers
 		[HttpGet]
 		public IActionResult Create()
 		{
-			var view = new PostitEditContainer
+			var view = new NoteEditContainer
 			{
-				Postit = new PostitModel()
+				Note = new NoteModel()
 			};
 
 			return View("Edit", view);
@@ -57,28 +57,28 @@ namespace postit.Controllers
 		{
 			var _user = UserService.GetByName(User.GetUserName());
 
-			var _postit = PostitService.GetById(id, _user.Id);
-			if(_postit == null)
+			var _note = NoteService.GetById(id, _user.Id);
+			if(_note == null)
 				return new StatusCodeResult(404);
 
-			var postit = Mapper.Map<PostitModel>(_postit);
+			var note = Mapper.Map<NoteModel>(_note);
 
-			var view = new PostitEditContainer
+			var view = new NoteEditContainer
 			{
-				Postit = postit
+				Note = note
 			};
 
 			return View("Edit", view);
 		}
 
 		[HttpPost]
-		public IActionResult Edit(PostitPostModel model)
+		public IActionResult Edit(NotePostModel model)
 		{
 			if(!ModelState.IsValid)
 			{
-				var view = new PostitEditContainer
+				var view = new NoteEditContainer
 				{
-					Postit = new PostitModel
+					Note = new NoteModel
 					{
 						Id = model.Id,
 						Title = model.Title,
@@ -93,30 +93,30 @@ namespace postit.Controllers
 			if(model.Id == ObjectId.Empty)
 			{
 				var _user = UserService.GetByName(User.GetUserName());
-				_id = PostitService.Create(_user.Id, model.Title, model.Content);
+				_id = NoteService.Create(_user.Id, model.Title, model.Content);
 			}
 			else
 			{
 				var _user = UserService.GetByName(User.GetUserName());
-				var _postit = PostitService.GetById(model.Id, _user.Id);
-				if(_postit == null)
+				var _note = NoteService.GetById(model.Id, _user.Id);
+				if(_note == null)
 					return new StatusCodeResult(404);
 
-				_id = PostitService.Update(model.Id, model.Title, model.Content);
+				_id = NoteService.Update(model.Id, model.Title, model.Content);
 			}
 
-			return RedirectToAction("view", "postit", new { id = _id, slug = model.Title.ToSlug() });
+			return RedirectToAction("view", "note", new { id = _id, slug = model.Title.ToSlug() });
 		}
 
 		[HttpPost]
 		public IActionResult Notebook(ObjectId id, string name)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-			var _postit = PostitService.GetById(id, _user.Id);
-			if(_postit == null)
+			var _note = NoteService.GetById(id, _user.Id);
+			if(_note == null)
 				return new StatusCodeResult(404);
 
-			PostitService.SetNotebook(id, name);
+			NoteService.SetNotebook(id, name);
 
 			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
 		}
@@ -125,11 +125,11 @@ namespace postit.Controllers
 		public IActionResult Trash(ObjectId id)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-			var _postit = PostitService.GetById(id, _user.Id);
-			if(_postit == null)
+			var _note = NoteService.GetById(id, _user.Id);
+			if(_note == null)
 				return new StatusCodeResult(404);
 
-			PostitService.Trash(id, !_postit.Trash);
+			NoteService.Trash(id, !_note.Trash);
 
 			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
 		}
@@ -138,11 +138,11 @@ namespace postit.Controllers
 		public IActionResult Delete(ObjectId id)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-			var _postit = PostitService.GetById(id, _user.Id);
-			if(_postit == null)
+			var _note = NoteService.GetById(id, _user.Id);
+			if(_note == null)
 				return new StatusCodeResult(404);
 
-			PostitService.Delete(id);
+			NoteService.Delete(id);
 
 			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
 		}

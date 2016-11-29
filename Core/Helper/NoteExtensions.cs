@@ -2,9 +2,9 @@ using System;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
-namespace postit.Helper
+namespace notes.Helper
 {
-	static public class PostitExtensions
+	static public class NoteExtensions
 	{
 		/// <summary>
 		/// Slugify the string.

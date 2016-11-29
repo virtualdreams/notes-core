@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
-using postit.Core.Services;
-using postit.Models;
+using notes.Core.Services;
+using notes.Models;
 
-namespace postit.Controllers
+namespace notes.Controllers
 {
 	[Authorize(Policy = "AdministratorOnly")]
 	public class AccountController : Controller
@@ -50,7 +50,7 @@ namespace postit.Controllers
 				var _identity = new ClaimsIdentity(claims, "local");
 				var _principal = new ClaimsPrincipal(_identity);
 
-				HttpContext.Authentication.SignInAsync("postit", _principal, 
+				HttpContext.Authentication.SignInAsync("notes", _principal, 
 					new AuthenticationProperties {
 						IsPersistent = true,
 						AllowRefresh = true
@@ -78,7 +78,7 @@ namespace postit.Controllers
 		[HttpGet]
 		public IActionResult Logout()
 		{
-			HttpContext.Authentication.SignOutAsync("postit");
+			HttpContext.Authentication.SignOutAsync("notes");
 
 			return RedirectToAction("index", "home");
 		}

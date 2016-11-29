@@ -1,6 +1,6 @@
 using MongoDB.Bson;
 
-namespace postit.Models
+namespace notes.Models
 {
 	public class UserModel
 	{

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace postit.Models
+namespace notes.Models
 {
 	public class UserListContainer
 	{

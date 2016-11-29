@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace postit.Models
+namespace notes.Models
 {
 	public class LoginModel
 	{

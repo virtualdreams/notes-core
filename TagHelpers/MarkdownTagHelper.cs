@@ -3,7 +3,7 @@ using CommonMark;
 using HeyRed.MarkdownSharp;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace postit
+namespace notes
 {
     [HtmlTargetElement("markdown")]
 	[HtmlTargetElement("p", Attributes = "markdown")]
