@@ -1,6 +1,8 @@
-using System;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Collections.Generic;
+using System.Linq;
+using System;
 using postit.Core.Helper;
 using postit.Core.Models;
 
@@ -13,6 +15,11 @@ namespace postit.Core.Services
 		public UserService(MongoContext context)
 		{
 			Context = context;
+		}
+
+		public IEnumerable<User> Get()
+		{
+			return Context.User.Find(_ => true).ToEnumerable().OrderBy(o => o.Role).ThenBy(o => o.Username);
 		}
 
 		public User GetById(ObjectId id)

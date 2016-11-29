@@ -1,3 +1,6 @@
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -15,6 +18,9 @@
 		<style>
 			blockquote {
 				border-left: 5px solid #337ab7;
+			}
+			textarea {
+				resize: vertical;
 			}
 		</style>
 	</head>
@@ -41,6 +47,10 @@
 							@*<li><a href="/profile"><i class="fa fa-fw fa-user"></i> Profile</a></li>
 							<li><a href="/settings"><i class="fa fa-fw fa-gear"></i> Settings</a></li>
 							<li class="divider"></li>*@
+							@if(await AuthorizationService.AuthorizeAsync(User, "AdministratorOnly")) {
+							<li><a href="@Url.Action("index", "account")"><i class="fa fa-fw fa-gear"></i> Settings</a></li>
+							<li class="divider"></li>
+							}
 							<li><a href="/logout"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
 						</ul>
 					</li>
@@ -50,7 +60,7 @@
 					<div class="sidebar-nav navbar-collapse">
 						<ul class="nav" id="side-menu">
 							<li class="sidebar-search">
-								<form role="form" action="@Url.Action("search", "home")" method="get", enctype="multipart/form-data" id="search-form" >
+								<form role="form" action="@Url.Action("search", "home")" method="get" id="search-form" >
 									<div class="input-group custom-search-form">
 										<input type="text" name="q" class="form-control" placeholder="Search...">
 										<span class="input-group-btn">

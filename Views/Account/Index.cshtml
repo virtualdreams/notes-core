@@ -1,0 +1,54 @@
+@model postit.Models.UserListContainer
+@using postit.Helper
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			User
+		</h1>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<p>
+			<button type="button" class="btn btn-primary" data-href="@Url.Action("create", "account")"><i class="fa fa-user"></i> Create</button>
+		</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th style="width: 20px;"><input type="checkbox" value="" /></th>
+						<th>Username</th>
+						<th>Role</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach(var user in Model.Users) {
+					<tr>
+						<td><input type="checkbox" value="" /></td>
+						<td><a href="@Url.Action("edit", "account", new { id = user.Id })">@user.Username</a></td>
+						<td>@user.Role</td>
+						<td>@(@user.Enabled ? "Active" : "Disabled" )</td>
+					</tr>
+					}
+				</tbody>
+			</table>
+		</div>	
+	</div>
+</div>
+
+@section script {
+<script>
+	$('[data-href]').click(function() {
+		var href = $(this).data('href');
+		location.href = href;
+	});
+</script>
+}

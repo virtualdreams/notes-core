@@ -36,6 +36,9 @@ namespace postit
 			});
 
 			services.AddAuthorization(options => {
+				options.AddPolicy("AdministratorOnly", policy => {
+					policy.RequireRole("Administrator");
+				});
 			});
 
 			services.AddScoped<MongoContext>(options => new MongoContext(new MongoClient(), "postit"));
@@ -115,8 +118,9 @@ namespace postit
 		{
 			Mapper.Initialize(config => {
 				config.CreateMap<Postit, PostitModel>()
-					.ForMember(d => d.User, map => map.MapFrom(s => "admin"))
 					.ForMember(d => d.Age, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime().AgeInMinutes().AgeInWords()));
+
+				config.CreateMap<User, UserModel>();
 			});
 
 			Mapper.AssertConfigurationIsValid();

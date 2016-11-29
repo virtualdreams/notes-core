@@ -8,8 +8,6 @@ namespace postit.Models
 
 		public string Age { get; set; }
 
-		public string User { get; set; }
-
 		public string Title { get; set; }
 
 		public string Content { get; set; }

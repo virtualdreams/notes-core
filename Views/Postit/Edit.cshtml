@@ -5,6 +5,12 @@
 		<h1 class="page-header">
 			Edit note
 		</h1>
+		<ol class="breadcrumb">
+			<li><i class="fa fa-home"></i> <a href="@Url.Action("index", "home")">Home</a></li>
+			@if(!String.IsNullOrEmpty(@Model.Postit.Notebook)) {
+			<li><i class="fa fa-book"></i> <a href="@Url.Action("view", "notebook", new { id = Model.Postit.Notebook })">@Model.Postit.Notebook</a></li>
+			}
+		</ol>
 	</div>
 </div>
 
