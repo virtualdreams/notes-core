@@ -30,20 +30,26 @@ namespace notes
 
 		public void ConfigureServices(IServiceCollection services)
 		{
+			// add logging to DI
 			services.AddLogging();
+
+			// add options to DI
+			services.AddOptions();
+			services.Configure<Settings>(Configuration.GetSection("Settings"));
+
+			// add custom model binders
 			services.AddMvc(options => {
 				options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
 			});
 
-			services.AddOptions();
-			services.Configure<Settings>(Configuration.GetSection("Settings"));
-
+			// authorization policies
 			services.AddAuthorization(options => {
 				options.AddPolicy("AdministratorOnly", policy => {
 					policy.RequireRole("Administrator");
 				});
 			});
 
+			// DI
 			services.AddScoped<MongoContext>();
 			services.AddTransient<NoteService>();
 			services.AddTransient<UserService>();
@@ -51,7 +57,7 @@ namespace notes
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
 		{
-			logger.AddConsole();
+			logger.AddConsole(Configuration.GetSection("Logging"));
 
 			if(env.IsDevelopment())
 			{
