@@ -1,6 +1,8 @@
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using Newtonsoft.Json;
 using notes.Core.Services;
@@ -14,22 +16,24 @@ namespace notes.Controllers
 	{
 		private readonly NoteService NoteService;
 		private readonly UserService UserService;
+		private readonly IOptions<Settings> Settings;
 
-		public NoteController(NoteService note, UserService user)
+		public NoteController(NoteService note, UserService user, IOptions<Settings> settings)
 		{
 			NoteService = note;
 			UserService = user;
+			Settings = settings;
 		}
 
 		[HttpGet]
 		public IActionResult View(ObjectId id)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-
 			var _note = NoteService.GetById(id, _user.Id);
 			if(_note == null)
 				return new StatusCodeResult(404);
-
+			
+			var tags = NoteService.Tags(_user.Id).ToArray();
 			var note = Mapper.Map<NoteModel>(_note);
 
 			var view = new NoteViewContainer
@@ -116,6 +120,19 @@ namespace notes.Controllers
 				return new StatusCodeResult(404);
 
 			NoteService.SetNotebook(id, name);
+
+			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
+		}
+
+		[HttpPost]
+		public IActionResult Tags(ObjectId id, string tags)
+		{
+			var _user = UserService.GetByName(User.GetUserName());
+			var _note = NoteService.GetById(id, _user.Id);
+			if(_note == null)
+				return new StatusCodeResult(404);
+
+			NoteService.SetTags(id, tags);
 
 			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
 		}

@@ -12,6 +12,8 @@ namespace notes.Models
 
 		public string Content { get; set; }
 
+		public string Tags { get; set; }
+
 		public string Notebook { get; set; }
 
 		public bool Trash { get; set; }

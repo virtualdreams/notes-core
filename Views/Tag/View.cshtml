@@ -1,0 +1,37 @@
+@model notes.Models.NoteTagContainer
+@using notes.Helper
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			<i class="fa fa-tag"></i> @Model.Tag
+		</h1>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		
+		<div class="list-group">
+			@foreach(var note in Model.Notes) {
+			<a href="@Url.Action("view", "note", new { id = note.Id, slug = note.Title.ToSlug() })" class="list-group-item">
+				<i class="fa fa-comment fa-file"></i> @note.Title
+				<span class="pull-right text-muted small"><em>@note.Age</em>
+				</span>
+			</a>
+			}
+		</div>
+
+		<nav>
+			<ul class="pager">
+				@if(Model.Offset.HasPrevious) {
+				<li><a href="@Url.Action("view", "notebook", new { id = Model.Tag, ofs = Model.Offset.PreviousOffset })">Newer</a></li>
+				}
+				@if(Model.Offset.HasNext) {
+				<li><a href="@Url.Action("view", "notebook", new { id = Model.Tag, ofs = Model.Offset.NextOffset })">Older</a></li>
+				}
+			</ul>
+		</nav>
+			
+	</div>
+</div>

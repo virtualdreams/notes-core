@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using notes.Core.Services;
 using notes.Models;
@@ -14,10 +15,12 @@ namespace notes.Controllers
 	public class AccountController : Controller
 	{
 		private readonly UserService UserService;
+		private readonly IOptions<Settings> Settings;
 
-		public AccountController(UserService user)
+		public AccountController(UserService user, IOptions<Settings> settings)
 		{
 			UserService = user;
+			Settings = settings;
 		}
 
 		[AllowAnonymous]

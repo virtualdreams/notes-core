@@ -47,6 +47,21 @@ namespace notes.Core.Services
 			return Context.Note.Find(_id & _user & _trash).Skip(offset).Limit(limit).ToEnumerable();
 		}
 
+		public IEnumerable<Note> GetByTag(ObjectId user, string tag, int? offset, int? limit)
+		{
+			tag = tag?.Trim();
+
+			if(tag == null)
+				return Enumerable.Empty<Note>();
+
+			var _filter = Builders<Note>.Filter;
+			var _id = _filter.AnyIn("Tags", new string[] { tag });
+			var _user = _filter.Eq(f => f.Owner, user);
+			var _trash = _filter.Eq(f => f.Trash, false);
+
+			return Context.Note.Find(_id & _user & _trash).Skip(offset).Limit(limit).ToEnumerable();
+		}
+
 		/// <summary>
 		/// Get a note by id.
 		/// </summary>
@@ -72,6 +87,11 @@ namespace notes.Core.Services
 			return Context.Note.Distinct<string>("Notebook", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s));
 		}
 
+		public IEnumerable<string> Tags(ObjectId user)
+		{
+			return Context.Note.Distinct<string>("Tags", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s));
+		}
+
 		/// <summary>
 		/// Set the notebook name for a note.
 		/// </summary>
@@ -88,6 +108,20 @@ namespace notes.Core.Services
 			var _update = Builders<Note>.Update;
 			var _set = _update
 						.Set(f => f.Notebook, notebook);
+
+			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
+		}
+
+		public void SetTags(ObjectId note, string tags)
+		{
+			var _tags = tags?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).Where(s => !String.IsNullOrEmpty(s)).ToArray();
+
+			var _filter = Builders<Note>.Filter;
+			var _id = _filter.Eq(f => f.Id, note);
+
+			var _update = Builders<Note>.Update;
+			var _set = _update
+						.Set(f => f.Tags, _tags);
 
 			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}

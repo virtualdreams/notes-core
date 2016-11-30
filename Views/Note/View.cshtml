@@ -99,9 +99,13 @@
 				<h4 class="modal-title" id="notebookLabel">Notebook</h4>
 			</div>
 			<div class="modal-body">
-				<div class="form-group">
-					Set a notebook name, to add it to a notebook collection.
-					<input class="form-control" name="notebook" id="notebook-name" value="@Model.Note.Notebook" />
+				<div class="form-group input-group">
+					<input class="form-control" name="notebook" id="notebookValue" value="@Model.Note.Notebook" />
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" id="notebookDelete">
+							<i class="fa fa-times"></i>
+						</button>
+					</span>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -112,7 +116,7 @@
 	</div>
 </div>
 
-<!-- Model notebook -->
+<!-- Model tags -->
 <div class="modal fade" id="tags" tabindex="-1" role="dialog" aria-labelledby="tagsLabel" aria-hidden="true" data-id="@Model.Note.Id">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -121,9 +125,13 @@
 				<h4 class="modal-title" id="tagsLabel">Tags</h4>
 			</div>
 			<div class="modal-body">
-				<div class="form-group">
-					Set tags for this note.
-					<input class="form-control" name="tags" id="tag-name" value="" />
+				<div class="form-group input-group">
+					<input class="form-control" type="text" name="tags" id="tagsValue" value="@Model.Note.Tags" />
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" id="tagsDelete">
+							<i class="fa fa-times"></i>
+						</button>
+					</span>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -168,17 +176,54 @@
 
 	});
 
+	$('#notebookDelete').click(function() {
+		$('#notebookValue').val('')
+	});
+
 	$('#notebookSubmit').click(function() {
 		var id = $('#notebook').data('id');
 
 		var d = {
 			id: id,
-			name: $('#notebook-name').val()
+			name: $('#notebookValue').val()
 		};
 
 		$.ajax({
 			type: "POST",
 			url: '/note/notebook/',
+			dataType: 'json',
+			data: d,
+			statusCode: {
+				403: function () {
+					location.href = '/account/login?ReturnUrl=' + encodeURIComponent(location.pathname);
+				},
+				404: function () {
+					alert('Resource not found.');
+				}
+			},
+			success: function (data) {
+				if (data.Success) {
+					location.reload();
+				}
+			}
+		});
+	});
+
+	$('#tagsDelete').click(function() {
+		$('#tagsValue').val('')
+	});
+
+	$('#tagsSubmit').click(function() {
+		var id = $('#tags').data('id');
+
+		var d = {
+			id: id,
+			tags: $('#tagsValue').val()
+		};
+
+		$.ajax({
+			type: "POST",
+			url: '/note/tags/',
 			dataType: 'json',
 			data: d,
 			statusCode: {

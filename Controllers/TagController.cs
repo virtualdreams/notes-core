@@ -11,34 +11,35 @@ using notes.Models;
 namespace notes.Controllers
 {
 	[Authorize]
-	public class NotebookController : Controller
+	public class TagController : Controller
 	{
 		private readonly NoteService NoteService;
 		private readonly UserService UserService;
 		private readonly IOptions<Settings> Settings;
 
-		public NotebookController(NoteService note, UserService user, IOptions<Settings> settings)
+		public TagController(NoteService note, UserService user, IOptions<Settings> settings)
 		{
 			NoteService = note;
 			UserService = user;
 			Settings = settings;
 		}
 
+		[HttpGet]
 		public IActionResult View(string id, int? ofs)
 		{
 			var _pageSize = Settings.Value.PageSize;
 			var _user = UserService.GetByName(User.GetUserName());
-			var _count = NoteService.GetByNotebook(_user.Id, id, null, null).Count();
-			var _notes = NoteService.GetByNotebook(_user.Id, id, ofs ?? 0, _pageSize);
+			var _count = NoteService.GetByTag(_user.Id, id, null, null).Count();
+			var _notes = NoteService.GetByTag(_user.Id, id, ofs ?? 0, _pageSize);
 			var _pager = new PageOffset(ofs ?? 0, _pageSize, _count);
 			
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 			
-			var view = new NoteNotebookContainer
+			var view = new NoteTagContainer
 			{
 				Notes = notes,
 				Offset = _pager,
-				Notebook = id?.Trim()
+				Tag = id?.Trim()
 			};
 
 			return View(view);

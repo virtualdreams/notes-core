@@ -1,5 +1,9 @@
-using CommonMark;
+#if MARKDOWN
 using HeyRed.MarkdownSharp;
+#else
+using CommonMark;
+#endif
+
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace notes

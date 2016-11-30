@@ -1,28 +1,28 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
+using System;
+using notes.Core.Models;
 using notes.Core.Services;
+using notes.Helper;
 using notes.ModelBinders;
 using notes.Models;
-using notes.Helper;
-using notes.Core.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace notes
 {
-	public class Startup
+    public class Startup
 	{
-		public  IConfigurationRoot Configuration { get; }
+		public IConfigurationRoot Configuration { get; set; }
 
 		public Startup(IHostingEnvironment env, ILoggerFactory logger)
 		{
 			var builder = new ConfigurationBuilder()
 				.SetBasePath(env.ContentRootPath)
-				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
 				.AddEnvironmentVariables();
 
 			Configuration = builder.Build();
@@ -35,13 +35,16 @@ namespace notes
 				options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
 			});
 
+			services.AddOptions();
+			services.Configure<Settings>(Configuration.GetSection("Settings"));
+
 			services.AddAuthorization(options => {
 				options.AddPolicy("AdministratorOnly", policy => {
 					policy.RequireRole("Administrator");
 				});
 			});
 
-			services.AddScoped<MongoContext>(options => new MongoContext(new MongoClient(), "notes"));
+			services.AddScoped<MongoContext>();
 			services.AddTransient<NoteService>();
 			services.AddTransient<UserService>();
 		}
@@ -72,6 +75,12 @@ namespace notes
 					name: "search",
 					template: "search/{q?}",
 					defaults: new { controller = "Home", action = "Search" }
+				);
+
+				routes.MapRoute(
+					name: "tag",
+					template: "tag/{id}",
+					defaults: new { controller = "Tag", action = "View" }
 				);
 
 				routes.MapRoute(
@@ -118,6 +127,7 @@ namespace notes
 		{
 			Mapper.Initialize(config => {
 				config.CreateMap<Note, NoteModel>()
+					.ForMember(d => d.Tags, map => map.MapFrom(s => String.Join(", ", s.Tags ?? new string[] {})))
 					.ForMember(d => d.Age, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime().AgeInMinutes().AgeInWords()));
 
 				config.CreateMap<User, UserModel>();

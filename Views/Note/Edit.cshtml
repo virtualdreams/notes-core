@@ -1,14 +1,20 @@
 @model notes.Models.NoteEditContainer
+@using notes.Helper;
+@using MongoDB.Bson;
 
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">
-			Edit note
+			@if(Model.Note.Id != ObjectId.Empty) {
+			@:Edit note
+			} else {
+			@:Create note
+			}
 		</h1>
 		<ol class="breadcrumb">
 			<li><i class="fa fa-home"></i> <a href="@Url.Action("index", "home")">Home</a></li>
-			@if(!String.IsNullOrEmpty(@Model.Note.Notebook)) {
-			<li><i class="fa fa-book"></i> <a href="@Url.Action("view", "notebook", new { id = Model.Note.Notebook })">@Model.Note.Notebook</a></li>
+			@if(Model.Note.Id != ObjectId.Empty) {
+			<li><i class="fa fa-file"></i> <a href="@Url.Action("view", "note", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })">@Model.Note.Title</a></li>
 			}
 		</ol>
 	</div>

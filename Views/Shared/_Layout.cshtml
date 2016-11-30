@@ -76,12 +76,14 @@
 								<a href="#"><i class="fa fa-fw fa-book"></i> Notebooks<span class="fa arrow"></span></a>
 								<ul class="nav nav-second-level">
 									@await Component.InvokeAsync("Notebooks")
-									@*<li><a href="index.html">Server</a></li>
-									<li><a href="index.html">Backup</a></li>
-									<li><a href="index.html">Sonstiges</a></li>*@
 								</ul>
 							</li>
-							<li><a href="/tags"><i class="fa fa-fw fa-tags"></i> Tags</a></li>
+							<li>
+								<a href="#"><i class="fa fa-fw fa-tags"></i> Tags<span class="fa arrow"></span></a>
+								<ul class="nav nav-second-level">
+									@await Component.InvokeAsync("Tags")
+								</ul>
+							</li>
 							<li><a href="/trash"><i class="fa fa-fw fa-trash-o"></i> Trash</a></li>
 							<li><a href="/create"><i class="fa fa-fw fa-file"></i> Create</a></li>
 						</ul>
