@@ -35,34 +35,53 @@ namespace notes.Helper
 			return value;
 		}
 
-		static public int AgeInMinutes(this DateTime dt)
+		static public int ToMinutes(this DateTime dt)
 		{
 			var _diff = DateTime.Now - dt;
-			//var _minutes = (_diff.Days * 24 * 60) + ((int)_diff.TotalMinutes .TotalSeconds / 60);
 
 			return (int)_diff.TotalMinutes;
 		}
 
-		static public string AgeInWords(this int minutes)
+		static public string ToWords(this int minutes)
 		{
-			if(minutes < 60)
-				return String.Format("{0} minutes ago", minutes);
-			
-			if((minutes / 60) < 24)
-				return String.Format("{0} hours ago", (minutes / 60));
-			
-			if((minutes / 60) >= 24 && (minutes / 60) < 48)
-				return "yesterday";
-			
-			return String.Format("{0} days ago", ((minutes / 60) / 24));
+			// stolen from reddit https://github.com/reddit/reddit/blob/bd922104b971a5c6794b199f364a06fdf61359a2/r2/r2/public/static/js/timetext.js
+			var chunks = new Chunk[]
+			{
+				new Chunk{ Val = 60 * 24 * 365, S1 = "a year ago", S2 = "{0} years ago" },
+				new Chunk{ Val = 60 * 24 * 30, S1 = "a month ago", S2 = "{0} months ago" },
+				new Chunk{ Val = 60 * 24, S1 = "a day ago", S2 = "{0} days ago" },
+				new Chunk{ Val = 60, S1 = "an hour ago", S2 = "{0} hours ago" },
+				new Chunk{ Val = 1, S1 = "a minute ago", S2 = "{0} minutes ago" },
+			};
+
+			foreach(var chunk in chunks)
+			{
+				var count = (int)Math.Floor((double)minutes / (double)chunk.Val);
+
+				if(count > 0)
+				{
+					if(count == 1)
+						return String.Format(chunk.S1, count);
+					else
+						return String.Format(chunk.S2, count);
+				}
+			}
+			return "just now";
 		}
 
-		public static string GetUserName(this ClaimsPrincipal principal)
+		static public string GetUserName(this ClaimsPrincipal principal)
 		{
 			if (principal == null)
 				throw new ArgumentNullException(nameof(principal));
 
 			return principal.FindFirst(ClaimTypes.Name)?.Value;
 		}
+	}
+
+	class Chunk
+	{
+		public int Val;
+		public string S1;
+		public string S2;
 	}
 }

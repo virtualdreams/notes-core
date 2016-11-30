@@ -128,7 +128,7 @@ namespace notes
 			Mapper.Initialize(config => {
 				config.CreateMap<Note, NoteModel>()
 					.ForMember(d => d.Tags, map => map.MapFrom(s => String.Join(", ", s.Tags ?? new string[] {})))
-					.ForMember(d => d.Age, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime().AgeInMinutes().AgeInWords()));
+					.ForMember(d => d.Age, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime().ToMinutes().ToWords()));
 
 				config.CreateMap<User, UserModel>();
 			});
