@@ -1,4 +1,3 @@
-using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +32,6 @@ namespace notes.Controllers
 			if(_note == null)
 				return new StatusCodeResult(404);
 			
-			var tags = NoteService.Tags(_user.Id).ToArray();
 			var note = Mapper.Map<NoteModel>(_note);
 
 			var view = new NoteViewContainer
@@ -59,7 +57,6 @@ namespace notes.Controllers
 		public IActionResult Edit(ObjectId id)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-
 			var _note = NoteService.GetById(id, _user.Id);
 			if(_note == null)
 				return new StatusCodeResult(404);

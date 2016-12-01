@@ -2,13 +2,12 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using notes.Core.Helper;
 using notes.Core.Models;
 
 namespace notes.Core.Services
 {
-	public class UserService
+    public class UserService
 	{
 		private readonly MongoContext Context;
 
@@ -17,17 +16,34 @@ namespace notes.Core.Services
 			Context = context;
 		}
 
+		/// <summary>
+		/// Get all available users.
+		/// </summary>
+		/// <returns>A list of users.</returns>
 		public IEnumerable<User> Get()
 		{
 			return Context.User.Find(_ => true).ToEnumerable().OrderBy(o => o.Role).ThenBy(o => o.Username);
 		}
 
-		public User GetById(ObjectId id)
+		/// <summary>
+		/// Get a user by user id.
+		/// </summary>
+		/// <param name="user">The user id.</param>
+		/// <returns>The user if exists or null.</returns>
+		public User GetById(ObjectId user)
 		{
-			throw new NotImplementedException();
+			var _filter = Builders<User>.Filter;
+			var _id = _filter.Eq(f => f.Id, user);
+
+			return Context.User.Find(_id).SingleOrDefault();
 		}
 
-		internal User GetByName(string username)
+		/// <summary>
+		/// Get a user by username.
+		/// </summary>
+		/// <param name="username">The username.</param>
+		/// <returns>The user if exists or null.</returns>
+		public User GetByName(string username)
         {
             var _filter = Builders<User>.Filter;
 			var _username = _filter.Eq(f => f.Username, username);
@@ -36,6 +52,13 @@ namespace notes.Core.Services
 			return Context.User.Find(_username & _active).SingleOrDefault();
         }
 
+		/// <summary>
+		/// Create a new user with username, password and role.
+		/// </summary>
+		/// <param name="username">The username.</param>
+		/// <param name="password">The paramref name="password".</param>
+		/// <param name="role">The role. Can be "User" or "Administrator".</param>
+		/// <returns>The new ObjectId.</returns>
 		public ObjectId Create(string username, string password, string role)
 		{
 			username = username.Trim();
@@ -61,6 +84,12 @@ namespace notes.Core.Services
 			}
 		}
 
+		/// <summary>
+		/// Get a user by username and password. If one of both false, null is returned. 
+		/// </summary>
+		/// <param name="username">The username.</param>
+		/// <param name="password">The paramref name="password".</param>
+		/// <returns>The user if authenticated or null.</returns>
         public User Login(string username, string password)
 		{
 			username = username.Trim();

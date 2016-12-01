@@ -138,8 +138,8 @@ namespace notes.Core.Services
 			var _insert = new Note
 			{
 				Owner = user,
-				Title = title,
-				Content = content,
+				Title = title?.Trim(),
+				Content = content?.Trim(),
 				Tags = new string[] { },
 				Notebook = String.Empty,
 				Trash = false,
@@ -155,8 +155,8 @@ namespace notes.Core.Services
 		{
 			var _update = Builders<Note>.Update;
 			var _set = _update
-						.Set(f => f.Title, title)
-						.Set(f => f.Content, content);
+						.Set(f => f.Title, title?.Trim())
+						.Set(f => f.Content, content?.Trim());
 
 			Context.Note.UpdateOne(f => f.Id == note, _set, new UpdateOptions { IsUpsert = true });
 
