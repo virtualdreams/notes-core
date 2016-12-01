@@ -112,27 +112,27 @@ namespace notes.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Notebook(ObjectId id, string name)
+		public IActionResult Notebook(NotebookPostModel model)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-			var _note = NoteService.GetById(id, _user.Id);
+			var _note = NoteService.GetById(model.Id, _user.Id);
 			if(_note == null)
 				return new StatusCodeResult(404);
 
-			NoteService.SetNotebook(id, name);
+			NoteService.SetNotebook(model.Id, model.Notebook);
 
 			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
 		}
 
 		[HttpPost]
-		public IActionResult Tags(ObjectId id, string tags)
+		public IActionResult Tags(TagsPostModel model)
 		{
 			var _user = UserService.GetByName(User.GetUserName());
-			var _note = NoteService.GetById(id, _user.Id);
+			var _note = NoteService.GetById(model.Id, _user.Id);
 			if(_note == null)
 				return new StatusCodeResult(404);
 
-			NoteService.SetTags(id, tags);
+			NoteService.SetTags(model.Id, model.Tags);
 
 			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
 		}
