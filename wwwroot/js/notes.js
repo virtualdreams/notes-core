@@ -1,7 +1,7 @@
 $(function() {
-	$('#trashDelete').click(function () {
+	$('#selectAll').click(function () {
 		$('input[name=id][type=checkbox]').prop('checked', function () {
-			if ($('#trashDelete').is(':checked')) {
+			if ($('#selectAll').is(':checked')) {
 				return true;
 			}
 			return false;
