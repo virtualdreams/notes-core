@@ -41,6 +41,11 @@ namespace notes.Controllers
 				return View("Login", model);
 			}
 
+			if(!UserService.HasUsers())
+			{
+				UserService.Create(model.Username, model.Password, "Administrator");
+			}
+
 			var _user = UserService.Login(model.Username, model.Password);
 			if(_user != null && _user.Enabled)
 			{

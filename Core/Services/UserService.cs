@@ -26,6 +26,15 @@ namespace notes.Core.Services
 		}
 
 		/// <summary>
+		/// Test, if the database has users.
+		/// </summary>
+		/// <returns>True if any user exists.</returns>
+		public bool HasUsers()
+		{
+			return Context.User.Find(_ => true).Count() != 0;
+		}
+
+		/// <summary>
 		/// Get a user by user id.
 		/// </summary>
 		/// <param name="user">The user id.</param>
