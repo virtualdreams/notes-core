@@ -13,7 +13,5 @@ namespace notes.Models
 		[Required(ErrorMessage="Please fill in a password.")]
 		[MinLength(8, ErrorMessage="Minimum length 8 characters.")]
 		public string Password { get; set; }
-
-		public string Role { get; set; }
 	}
 }

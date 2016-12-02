@@ -28,17 +28,15 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th style="width: 20px;"><input type="checkbox" value="" /></th>
 						<th>Username</th>
 						<th>Role</th>
-						<th>Status</th>
+						<th style="width: 100px;">Status</th>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach(var user in Model.Users) {
 					<tr>
-						<td><input type="checkbox" value="" /></td>
-						<td><a href="@Url.Action("edit", "account", new { id = user.Id })">@user.Username</a></td>
+						<td>@user.Username</td>
 						<td>@user.Role</td>
 						<td>@(@user.Enabled ? "Active" : "Disabled" )</td>
 					</tr>

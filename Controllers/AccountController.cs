@@ -149,7 +149,7 @@ namespace notes.Controllers
 					{
 						Id = model.Id,
 						Username = model.Username,
-						Role = model.Role	
+						Role = String.Empty	
 					}
 				};
 
@@ -158,7 +158,7 @@ namespace notes.Controllers
 
 			if(model.Id == ObjectId.Empty)
 			{
-				UserService.Create(model.Username, model.Password, model.Role);
+				UserService.Create(model.Username, model.Password, "User");
 			}
 
 			return RedirectToAction("index");
