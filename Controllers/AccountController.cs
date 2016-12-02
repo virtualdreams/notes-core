@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using AutoMapper;
@@ -7,11 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using notes.Core.Services;
+using notes.Helper;
 using notes.Models;
 
 namespace notes.Controllers
 {
-	[Authorize(Policy = "AdministratorOnly")]
+	[Authorize]
 	public class AccountController : Controller
 	{
 		private readonly UserService UserService;
@@ -91,6 +93,7 @@ namespace notes.Controllers
 			return RedirectToAction("index", "home");
 		}
 
+		[Authorize(Policy = "AdministratorOnly")]
 		[HttpGet]
         public IActionResult Index()
         {
@@ -106,6 +109,7 @@ namespace notes.Controllers
             return View(view);
         }
 
+		[Authorize(Policy = "AdministratorOnly")]
 		[HttpGet]
 		public IActionResult Create()
 		{
@@ -117,6 +121,8 @@ namespace notes.Controllers
 			return View("Edit", view);
 		}
 
+		[Authorize(Policy = "AdministratorOnly")]
+		[HttpGet]
 		public IActionResult Edit(ObjectId id)
 		{
 			var _user = UserService.GetById(id);
@@ -131,6 +137,7 @@ namespace notes.Controllers
 			return View(view);
 		}
 
+		[Authorize(Policy = "AdministratorOnly")]
 		[HttpPost]
 		public IActionResult Edit(UserPostModel model)
 		{
@@ -155,6 +162,31 @@ namespace notes.Controllers
 			}
 
 			return RedirectToAction("index");
+		}
+
+		[HttpGet]
+		public IActionResult ChangePasswd(ObjectId id)
+		{
+			return View();
+		}
+
+		[HttpPost]
+		public IActionResult ChangePasswd(PasswdPostModel model)
+		{
+			if(!ModelState.IsValid || !model.Password.Equals(model.PasswordRepeat))
+			{
+				return View();
+			}
+
+			// set new password
+			var _user = UserService.GetByName(User.GetUserName());
+			UserService.SetPassword(_user.Id, model.Password);
+
+			// force logout
+			HttpContext.Authentication.SignOutAsync("notes");
+
+			// redirect to home
+			return RedirectToAction("index", "home");
 		}
     }
 }

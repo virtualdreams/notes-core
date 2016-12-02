@@ -70,8 +70,8 @@ namespace notes.Core.Services
 		/// <returns>The new ObjectId.</returns>
 		public ObjectId Create(string username, string password, string role)
 		{
-			username = username.Trim();
-			password = password.Trim();
+			username = username?.Trim();
+			password = password?.Trim();
 
 			var _user = new User
 			{
@@ -94,6 +94,25 @@ namespace notes.Core.Services
 		}
 
 		/// <summary>
+		/// Set a new password for the given user.
+		/// </summary>
+		/// <param name="user">The user id.</param>
+		/// <param name="password">The new password.</param>
+		public void SetPassword(ObjectId user, string password)
+		{
+			password = password?.Trim();
+
+			var _filter = Builders<User>.Filter;
+			var _id = _filter.Eq(f => f.Id, user);
+			var _active = _filter.Eq(f => f.Enabled, true);
+
+			var _update = Builders<User>.Update;
+			var _set = _update.Set(f => f.Password, PasswordHasher.HashPassword(password));
+
+			Context.User.UpdateOne(_id & _active, _set);
+		}
+
+		/// <summary>
 		/// Get a user by username and password. If one of both false, null is returned. 
 		/// </summary>
 		/// <param name="username">The username.</param>
@@ -101,8 +120,8 @@ namespace notes.Core.Services
 		/// <returns>The user if authenticated or null.</returns>
         public User Login(string username, string password)
 		{
-			username = username.Trim();
-			password = password.Trim();
+			username = username?.Trim();
+			password = password?.Trim();
 
 			var _filter = Builders<User>.Filter;
 			var _username = _filter.Eq(f => f.Username, username);
