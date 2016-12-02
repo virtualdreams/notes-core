@@ -55,8 +55,8 @@ namespace notes.Controllers
 
 				HttpContext.Authentication.SignInAsync("notes", _principal, 
 					new AuthenticationProperties {
-						IsPersistent = true,
-						AllowRefresh = true
+						IsPersistent = model.Remember,
+						AllowRefresh = model.Remember
 					}
 				).Wait();
 			}
