@@ -2,11 +2,35 @@
   "title": "notes",
   "description": "notes",
   "version": "1.0.0-*",
+  "configurations": {
+    "Debug": {
+      "buildOptions": {
+        "define": [ "DEBUG", "TRACE" ]
+      }
+    },
+    "Release": {
+      "buildOptions": {
+        "define": [ "RELEASE", "TRACE" ],
+        "optimize": true
+      }
+    }
+  },
   "buildOptions": {
     "outputName": "notes",
     "preserveCompilationContext": true,
     "debugType": "portable",
     "emitEntryPoint": true
+  },
+  "publishOptions": {
+    "include": [
+      "wwwroot",
+      "Views/**/*.cshtml",
+      "Areas/**/*.cshtml"
+    ],
+    "exclude": [
+      "wwwroot/**/*.less",
+      "wwwroot/**/*.map"
+    ]
   },
   "dependencies": {
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
