@@ -13,21 +13,25 @@ namespace notes.Core.Models
 		/// <summary>
 		/// The username/loginname
 		/// </summary>
+		[BsonElement("username")]
 		public string Username { get; set; }
 
 		/// <summary>
 		/// The encrypted password
 		/// </summary>
+		[BsonElement("password")]
 		public string Password { get; set; }
 
 		/// <summary>
 		/// The user role.
 		/// </summary>
+		[BsonElement("role")]
 		public string Role { get; set; }
 
 		/// <summary>
 		/// User is active
 		/// </summary>
+		[BsonElement("enabled")]
 		public bool Enabled { get; set; }
 	}
 }
