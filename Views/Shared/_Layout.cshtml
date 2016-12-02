@@ -44,11 +44,9 @@
 							<i class="fa fa-user"></i> @User.Identity.Name <b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu dropdown-user">
-							@*<li><a href="/profile"><i class="fa fa-fw fa-user"></i> Profile</a></li>
-							<li><a href="/settings"><i class="fa fa-fw fa-gear"></i> Settings</a></li>
-							<li class="divider"></li>*@
 							@if(await AuthorizationService.AuthorizeAsync(User, "AdministratorOnly")) {
-							<li><a href="@Url.Action("index", "account")"><i class="fa fa-fw fa-gear"></i> Settings</a></li>
+							<li><a href="@Url.Action("index", "account")"><i class="fa fa-fw fa-user"></i> Accounts</a></li>
+							@*<li><a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a></li>*@
 							<li class="divider"></li>
 							}
 							<li><a href="/logout"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
