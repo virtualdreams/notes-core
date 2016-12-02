@@ -8,18 +8,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using notes.Core.Services;
-using notes.Helper;
 using notes.Models;
 
 namespace notes.Controllers
 {
-	[Authorize]
-	public class AccountController : Controller
+    [Authorize]
+	public class AccountController : BaseController
 	{
 		private readonly UserService UserService;
 		private readonly IOptions<Settings> Settings;
 
 		public AccountController(UserService user, IOptions<Settings> settings)
+			: base(user)
 		{
 			UserService = user;
 			Settings = settings;
@@ -179,8 +179,7 @@ namespace notes.Controllers
 			}
 
 			// set new password
-			var _user = UserService.GetByName(User.GetUserName());
-			UserService.SetPassword(_user.Id, model.Password);
+			UserService.SetPassword(UserId, model.Password);
 
 			// force logout
 			HttpContext.Authentication.SignOutAsync("notes");

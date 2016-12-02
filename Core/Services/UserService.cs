@@ -61,6 +61,15 @@ namespace notes.Core.Services
 			return Context.User.Find(_username & _active).SingleOrDefault();
         }
 
+		public ObjectId GetUserId(string username)
+		{
+			var _filter = Builders<User>.Filter;
+			var _username = _filter.Eq(f => f.Username, username);
+			var _active = _filter.Eq(f => f.Enabled, true);
+
+			return Context.User.Find(_username & _active).Project(f => f.Id).SingleOrDefault();
+		}
+
 		/// <summary>
 		/// Create a new user with username, password and role.
 		/// </summary>
