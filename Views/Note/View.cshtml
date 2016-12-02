@@ -2,10 +2,32 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">
-			@Model.Note.Title
-			<small>@Model.Note.Age</small>
-		</h1>
+		<div class="page-header">
+			<div class="btn-toolbar pull-right">
+				<div class="btn-group">
+					<button type="button" class="btn btn-primary" data-href="@Url.Action("edit", "note", new { id = Model.Note.Id })"><i class="fa fa-pencil"></i> Edit</button>
+					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+	    				<span class="caret"></span>
+       				</button>
+       				<ul class="dropdown-menu pull-right">
+						<li><a href="#" data-toggle="modal" data-target="#notebook"><i class="fa fa-book"></i> Notebook</a></li>
+						<li><a href="#" data-toggle="modal" data-target="#tags"><i class="fa fa-tags"></i> Tags</a></li>
+						<li class="divider"></li>
+						<li><a href="#" data-toggle="modal" data-target="#trash">
+							@if(Model.Note.Trash) {
+							<i class="fa fa-undo"></i> @:Restore
+							} else {
+							<i class="fa fa-trash-o"></i> @:Delete
+							}
+							</a>
+						</li>
+	  				</ul>
+     			</div>
+   			</div>
+   			<h1>@Model.Note.Title
+				<small>@Model.Note.Age</small>
+			</h1>
+		</div>
 		<ol class="breadcrumb">
 			<li><i class="fa fa-home"></i> <a href="@Url.Action("index", "home")">Home</a></li>
 			@if(!String.IsNullOrEmpty(@Model.Note.Notebook)) {
@@ -17,28 +39,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<p>
-			<button type="button" class="btn btn-primary" data-href="@Url.Action("edit", "note", new { id = Model.Note.Id })"><i class="fa fa-pencil"></i> Edit</button>
-			@if(Model.Note.Trash) {
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#trash"><i class="fa fa-undo"></i> Restore</button>
-			} else {
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#trash"><i class="fa fa-trash-o"></i> Delete</button>
-			@*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#share"><i class="fa fa-share-alt"></i></button>*@
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#notebook"><i class="fa fa-book"></i> Notebook</button>
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tags"><i class="fa fa-tags"></i> Tags</button>
-			}
-		</p>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-lg-12">
-		@*<div class="panel panel-default">
-            <div class="panel-body">*@
-				<!-- Content -->
 		<markdown>@Html.Raw(Model.Note.Content)</markdown>
-			@*</div>
-		</div>*@
 	</div>
 </div>
 
@@ -102,6 +103,9 @@
 				<div class="form-group input-group">
 					<input class="form-control" name="notebook" id="notebookValue" value="@Model.Note.Notebook" />
 					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" id="notebookUndo">
+							<i class="fa fa-undo"></i>
+						</button>
 						<button class="btn btn-default" type="button" id="notebookDelete">
 							<i class="fa fa-times"></i>
 						</button>
@@ -128,6 +132,9 @@
 				<div class="form-group input-group">
 					<input class="form-control" type="text" name="tags" id="tagsValue" value="@Model.Note.Tags" />
 					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" id="tagsUndo">
+							<i class="fa fa-undo"></i>
+						</button>
 						<button class="btn btn-default" type="button" id="tagsDelete">
 							<i class="fa fa-times"></i>
 						</button>
