@@ -13,6 +13,12 @@ namespace notes
 		public string Database { get; set; }
 
 		/// <summary>
+		/// Site name.
+		/// </summary>
+		/// <returns></returns>
+		public string SiteName { get; set; }
+
+		/// <summary>
 		/// Items per page.
 		/// </summary>
 		public int PageSize { get; set; }

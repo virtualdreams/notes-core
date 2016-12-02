@@ -2,6 +2,16 @@
 @using notes.Helper;
 @using MongoDB.Bson;
 
+@section title
+{
+	@if(Model.Note.Id != ObjectId.Empty) {
+	@Model.Note.Title
+	} else {
+	@:Create 
+	}
+	-
+}
+
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">

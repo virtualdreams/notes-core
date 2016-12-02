@@ -1,5 +1,8 @@
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Options
+@using notes
 @inject IAuthorizationService AuthorizationService
+@inject IOptions<Settings> Settings
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +13,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>Notes!</title>
+		<title>@RenderSection("title", required: false)@Settings.Value.SiteName</title>
 		<link href="/css/bootstrap.min.css" rel="stylesheet">
 		<link href="/css/metisMenu.min.css" rel="stylesheet">
 		<link href="/css/sb-admin-2.min.css" rel="stylesheet">
@@ -35,7 +38,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="/">Notes!</a>
+					<a class="navbar-brand" href="/">@Settings.Value.SiteName</a>
 				</div>
 				<!-- Top Menu Items -->
 				<ul class="nav navbar-top-links navbar-right">
