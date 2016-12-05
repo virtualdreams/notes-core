@@ -12,13 +12,15 @@ namespace notes.Controllers
     [Authorize]
 	public class TagController : BaseController
 	{
+		private readonly IMapper Mapper;
 		private readonly NoteService NoteService;
 		private readonly UserService UserService;
 		private readonly IOptions<Settings> Settings;
 
-		public TagController(NoteService note, UserService user, IOptions<Settings> settings)
+		public TagController(IMapper mapper, NoteService note, UserService user, IOptions<Settings> settings)
 			: base(user)
 		{
+			Mapper = mapper;
 			NoteService = note;
 			UserService = user;
 			Settings = settings;

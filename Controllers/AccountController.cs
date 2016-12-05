@@ -15,12 +15,14 @@ namespace notes.Controllers
     [Authorize]
 	public class AccountController : BaseController
 	{
+		private readonly IMapper Mapper;
 		private readonly UserService UserService;
 		private readonly IOptions<Settings> Settings;
 
-		public AccountController(UserService user, IOptions<Settings> settings)
+		public AccountController(IMapper mapper, UserService user, IOptions<Settings> settings)
 			: base(user)
 		{
+			Mapper = mapper;
 			UserService = user;
 			Settings = settings;
 		}

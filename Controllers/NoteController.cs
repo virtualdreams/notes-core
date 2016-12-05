@@ -13,13 +13,15 @@ namespace notes.Controllers
     [Authorize]
     public class NoteController : BaseController
 	{
+		private readonly IMapper Mapper;
 		private readonly NoteService NoteService;
 		private readonly UserService UserService;
 		private readonly IOptions<Settings> Settings;
 
-		public NoteController(NoteService note, UserService user, IOptions<Settings> settings)
+		public NoteController(IMapper mapper, NoteService note, UserService user, IOptions<Settings> settings)
 			: base(user)
 		{
+			Mapper = mapper;
 			NoteService = note;
 			UserService = user;
 			Settings = settings;
