@@ -115,8 +115,8 @@ namespace notes.Controllers
 				return new StatusCodeResult(404);
 
 			NoteService.SetNotebook(model.Id, model.Notebook);
-
-			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
+			
+			return new NoContentResult();
 		}
 
 		[HttpPost]
@@ -128,7 +128,7 @@ namespace notes.Controllers
 
 			NoteService.SetTags(model.Id, model.Tags);
 
-			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
+			return new NoContentResult();
 		}
 
 		[HttpPost]
@@ -140,7 +140,7 @@ namespace notes.Controllers
 
 			NoteService.Trash(id, !_note.Trash);
 
-			return Json(new { Success = true }, new JsonSerializerSettings { Formatting = Formatting.Indented });
+			return new NoContentResult();
 		}
 	}
 }
