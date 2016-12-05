@@ -14,7 +14,7 @@ namespace notes
 	{
 		public IConfigurationRoot Configuration { get; set; }
 
-		public Startup(IHostingEnvironment env, ILoggerFactory logger)
+		public Startup(IHostingEnvironment env)
 		{
 			var builder = new ConfigurationBuilder()
 				.SetBasePath(env.ContentRootPath)
