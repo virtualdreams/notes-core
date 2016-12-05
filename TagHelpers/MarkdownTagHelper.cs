@@ -1,9 +1,4 @@
-#if MARKDOWN
-using HeyRed.MarkdownSharp;
-#else
-using CommonMark;
-#endif
-
+using Markdig;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace notes
@@ -21,11 +16,13 @@ namespace notes
 
 			var _content = output.GetChildContentAsync().Result.GetContent();
 
-#if MARKDOWN
-			var _markdown = new Markdown().Transform(_content);
-#else
-			var _markdown = CommonMarkConverter.Convert(_content);
-#endif
+			var _pipeline = new MarkdownPipelineBuilder()
+				.UseNoFollowLinks()
+				.UseSoftlineBreakAsHardlineBreak()
+				.UseAbbreviations()
+				.UseEmphasisExtras()
+				.Build();
+			var _markdown = Markdown.ToHtml(_content, _pipeline);
 
 			output.Content.SetHtmlContent(_markdown ?? string.Empty);
 		}

@@ -52,8 +52,7 @@
     "Microsoft.Extensions.Logging.Filter": "1.0.0",
     "MongoDB.Driver": "2.3.0",
     "AutoMapper": "5.1.1",
-    "CommonMark.NET": "0.14.0",
-    "Markdown": "2.2.0",
+    "Markdig": "0.10.3",
     "System.Diagnostics.FileVersionInfo": "4.0.0"
   },
   "frameworks": {
