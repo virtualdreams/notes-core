@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using notes.Core.Models;
@@ -9,10 +10,12 @@ namespace notes.Core.Services
 {
     public class NoteService
 	{
+		private readonly ILogger<NoteService> Log;
 		private readonly MongoContext Context;
 
-		public NoteService(MongoContext context)
+		public NoteService(ILogger<NoteService> log, MongoContext context)
 		{
+			Log = log;
 			Context = context;
 		}
 
@@ -28,6 +31,11 @@ namespace notes.Core.Services
 			var _filter = Builders<Note>.Filter;
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _active = _filter.Eq(f => f.Trash, trashed);
+			
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.Note.Find(_user & _active).SortByDescending(f => f.Id).Skip(offset).Limit(limit).ToString());
+			}
 
 			return Context.Note.Find(_user & _active).SortByDescending(f => f.Id).Skip(offset).Limit(limit).ToEnumerable();
 		}
@@ -44,6 +52,11 @@ namespace notes.Core.Services
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _trash = _filter.Eq(f => f.Trash, false);
 
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.Note.Find(_id & _user & _trash).Skip(offset).Limit(limit).ToString());
+			}
+
 			return Context.Note.Find(_id & _user & _trash).Skip(offset).Limit(limit).ToEnumerable();
 		}
 
@@ -59,6 +72,11 @@ namespace notes.Core.Services
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _trash = _filter.Eq(f => f.Trash, false);
 
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.Note.Find(_id & _user & _trash).Skip(offset).Limit(limit).ToString());
+			}
+
 			return Context.Note.Find(_id & _user & _trash).Skip(offset).Limit(limit).ToEnumerable();
 		}
 
@@ -73,6 +91,11 @@ namespace notes.Core.Services
 			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Id, note);
 			var _user = _filter.Eq(f => f.Owner, user);
+
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.Note.Find(_id & _user).ToString());
+			}
 
 			return Context.Note.Find(_id & _user).SingleOrDefault();
 		}
@@ -109,6 +132,11 @@ namespace notes.Core.Services
 			var _set = _update
 						.Set(f => f.Notebook, notebook);
 
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
+			}
+
 			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
 
@@ -122,6 +150,11 @@ namespace notes.Core.Services
 			var _update = Builders<Note>.Update;
 			var _set = _update
 						.Set(f => f.Tags, _tags);
+			
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
+			}
 
 			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
@@ -148,6 +181,11 @@ namespace notes.Core.Services
 
 			Context.Note.InsertOne(_insert);
 
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug("Insert new note with id {0}.", _insert.Id);
+			}
+
 			return _insert.Id;
 		}
 
@@ -157,8 +195,18 @@ namespace notes.Core.Services
 			var _set = _update
 						.Set(f => f.Title, title?.Trim())
 						.Set(f => f.Content, content?.Trim());
+			
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.Note.UpdateOne(f => f.Id == note, _set, new UpdateOptions { IsUpsert = true }).ToString());
+			}
 
 			Context.Note.UpdateOne(f => f.Id == note, _set, new UpdateOptions { IsUpsert = true });
+
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug("Update note with id {0}.", note);
+			}
 
 			return note;
 		}
@@ -179,6 +227,11 @@ namespace notes.Core.Services
 			var _set = _update
 				.Set(f => f.Trash, trash);
 			
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
+			}
+
 			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
 
@@ -193,6 +246,11 @@ namespace notes.Core.Services
 			var _id = _filter.Eq(f => f.Id, note);
 			var _user = _filter.Eq(f => f.Owner, user);
 
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.Note.DeleteOne(_id & _user).ToString());
+			}
+
 			Context.Note.DeleteOne(_id & _user);
 
 			return GetById(note, user) == null;
@@ -206,6 +264,11 @@ namespace notes.Core.Services
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _text = _filter.Text(term, "none");
 			var _trash = _filter.Eq(f => f.Trash, trashed);
+
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.Note.Find(_user & _text & _trash).Skip(offset).Limit(limit).ToString());
+			}
 
 			return Context.Note.Find(_user & _text & _trash).Skip(offset).Limit(limit).ToEnumerable();
 		}

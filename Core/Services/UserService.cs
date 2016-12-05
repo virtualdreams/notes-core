@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using notes.Core.Helper;
 using notes.Core.Models;
+using Microsoft.Extensions.Logging;
 
 namespace notes.Core.Services
 {
     public class UserService
 	{
+		private readonly ILogger<UserService> Log;
 		private readonly MongoContext Context;
 
-		public UserService(MongoContext context)
+		public UserService(ILogger<UserService> log, MongoContext context)
 		{
+			Log = log;
 			Context = context;
 		}
 
@@ -44,6 +47,11 @@ namespace notes.Core.Services
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
 
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.User.Find(_id).ToString());
+			}
+
 			return Context.User.Find(_id).SingleOrDefault();
 		}
 
@@ -58,6 +66,11 @@ namespace notes.Core.Services
 			var _username = _filter.Eq(f => f.Username, username);
 			var _active = _filter.Eq(f => f.Enabled, true);
 
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.User.Find(_username & _active).ToString());
+			}
+
 			return Context.User.Find(_username & _active).SingleOrDefault();
         }
 
@@ -66,6 +79,11 @@ namespace notes.Core.Services
 			var _filter = Builders<User>.Filter;
 			var _username = _filter.Eq(f => f.Username, username);
 			var _active = _filter.Eq(f => f.Enabled, true);
+
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.User.Find(_username & _active).Project(f => f.Id).ToString());
+			}
 
 			return Context.User.Find(_username & _active).Project(f => f.Id).SingleOrDefault();
 		}
@@ -91,6 +109,8 @@ namespace notes.Core.Services
 			};
 
 			Context.User.InsertOne(_user);
+
+			Log.LogInformation("Create new user {0} with id {1}.", username, _user.Id);
 
 			if(_user.Id == ObjectId.Empty)
 			{
@@ -118,6 +138,13 @@ namespace notes.Core.Services
 			var _update = Builders<User>.Update;
 			var _set = _update.Set(f => f.Password, PasswordHasher.HashPassword(password));
 
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.User.UpdateOne(_id & _active, _set).ToString());
+			}
+
+			Log.LogInformation("Update password for user {0}.", GetById(user).Username);
+
 			Context.User.UpdateOne(_id & _active, _set);
 		}
 
@@ -136,10 +163,19 @@ namespace notes.Core.Services
 			var _username = _filter.Eq(f => f.Username, username);
 			var _active = _filter.Eq(f => f.Enabled, true);
 
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug(Context.User.Find(_username & _active).ToString());
+			}
+			
 			var _user = Context.User.Find(_username & _active).SingleOrDefault();
 			if(_user != null && PasswordHasher.VerifyHashedPassword(_user.Password, password))
+			{
+				Log.LogInformation("User {0} has been authenticated.", username);
 				return _user;
+			}
 			
+			Log.LogWarning("User {0} failed to log in with password {1}.", username, password);
 			return null;
 		}
 	}
