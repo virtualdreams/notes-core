@@ -28,6 +28,8 @@ All notes are rendered with markdown.
 
 ## Build and deploy
 
+	npm install
+
 	dotnet restore
 	dotnet build --configuration Release
 	dotnet publish --configuration Release
