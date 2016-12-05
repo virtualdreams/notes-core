@@ -158,11 +158,6 @@
 <script>
 	$('[data-toggle=popover]').popover();
 
-	$('[data-href]').click(function() {
-		var href = $(this).data('href');
-		location.href = href;
-	});
-
 	$('#trashSubmit').click(function() {
 		var id = $('#trash').data('id');
 		$.ajax({
