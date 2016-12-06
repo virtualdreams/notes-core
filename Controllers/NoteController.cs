@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -141,6 +143,39 @@ namespace notes.Controllers
 			NoteService.Trash(id, !_note.Trash);
 
 			return new NoContentResult();
+		}
+
+		[HttpGet]
+		public IActionResult Trash(int? ofs)
+		{
+			var _pageSize = Settings.Value.PageSize;
+			var _count = NoteService.Get(UserId, true, null, null).Count();
+			var _notes = NoteService.Get(UserId, true, ofs ?? 0, _pageSize);
+			var _pager = new PageOffset(ofs ?? 0, _pageSize, _count);
+			
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
+			
+			var view = new NoteListContainer
+			{
+				Notes = notes,
+				Offset = _pager
+			};
+
+			return View(view);
+		}
+
+		[HttpPost]
+		public IActionResult Delete(NoteDeleteModel model)
+		{
+			if(model.Id != null)
+			{
+				foreach(var note in model?.Id)
+				{
+					NoteService.Delete(note, UserId);
+				}
+			}
+
+			return RedirectToAction("trash");
 		}
 	}
 }

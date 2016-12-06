@@ -16,7 +16,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<form role="form" action="@Url.Action("delete", "trash")" method="post", enctype="multipart/form-data" id="trash-form" >
+		<form role="form" action="@Url.Action("delete", "note")" method="post", enctype="multipart/form-data" id="trash-form" >
 			<div class="table-responsive">
 				<table class="table">
 					<thead>
@@ -43,10 +43,10 @@
 		<nav>
 			<ul class="pager">
 				@if(Model.Offset.HasPrevious) {
-				<li><a href="@Url.Action("index", "trash", new { ofs = Model.Offset.PreviousOffset })">Newer</a></li>
+				<li><a href="@Url.Action("trash", "note", new { ofs = Model.Offset.PreviousOffset })">Newer</a></li>
 				}
 				@if(Model.Offset.HasNext) {
-				<li><a href="@Url.Action("index", "trash", new { ofs = Model.Offset.NextOffset })">Older</a></li>
+				<li><a href="@Url.Action("trash", "note", new { ofs = Model.Offset.NextOffset })">Older</a></li>
 				}
 			</ul>
 		</nav>

@@ -26,6 +26,12 @@ namespace notes.Extensions
 				);
 
 				routes.MapRoute(
+					name: "trash",
+					template: "trash",
+					defaults: new { controller = "Note", action = "Trash" }
+				);
+
+				routes.MapRoute(
 					name: "create",
 					template: "create",
 					defaults: new { controller = "Note", action = "Create" }
