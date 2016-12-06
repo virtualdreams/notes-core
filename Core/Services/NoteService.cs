@@ -104,12 +104,17 @@ namespace notes.Core.Services
 		/// Get a list of notebooks.
 		/// </summary>
 		/// <param name="user">The users notebooks.</param>
-		/// <returns></returns>
+		/// <returns>A list of notebook.</returns>
 		public IEnumerable<string> Notebooks(ObjectId user)
 		{
 			return Context.Note.Distinct<string>("Notebook", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s));
 		}
 
+		/// <summary>
+		/// Get a list of tags,
+		/// </summary>
+		/// <param name="user">The users tags.</param>
+		/// <returns>A list of tags.</returns>
 		public IEnumerable<string> Tags(ObjectId user)
 		{
 			return Context.Note.Distinct<string>("Tags", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s));
@@ -140,6 +145,11 @@ namespace notes.Core.Services
 			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
 
+		/// <summary>
+		/// Set tags to note.
+		/// </summary>
+		/// <param name="note">The note.</param>
+		/// <param name="tags">The tags, comma separated.</param>
 		public void SetTags(ObjectId note, string tags)
 		{
 			var _tags = tags?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).Where(s => !String.IsNullOrEmpty(s)).ToArray();
@@ -189,6 +199,13 @@ namespace notes.Core.Services
 			return _insert.Id;
 		}
 
+		/// <summary>
+		/// Update a note.
+		/// </summary>
+		/// <param name="note">The note.</param>
+		/// <param name="title">The new title.</param>
+		/// <param name="content">The new content.</param>
+		/// <returns></returns>
 		public ObjectId Update(ObjectId note, string title, string content)
 		{
 			var _update = Builders<Note>.Update;
@@ -256,6 +273,15 @@ namespace notes.Core.Services
 			return GetById(note, user) == null;
 		}
 
+		/// <summary>
+		/// Search for  notes.
+		/// </summary>
+		/// <param name="user">The user who owns the notes.</param>
+		/// <param name="term">The search terms.</param>
+		/// <param name="trashed">Search in trashed.</param>
+		/// <param name="offset">The page offset.</param>
+		/// <param name="limit">The search result limit.</param>
+		/// <returns></returns>
 		public IEnumerable<Note> Search(ObjectId user, string term, bool trashed, int? offset, int? limit)
 		{
 			term = term?.Trim();
