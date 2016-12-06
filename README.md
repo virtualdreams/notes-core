@@ -8,7 +8,6 @@ Notes is an ASP.NET Core based app to manage text notes like OneNote, Google Kee
 	* All standard markdown features
 	* Extended emphasis
 	* Abbreviations
-	* Softline breaks
 * Assign a notebook name to a note
 * Assign tags to a note
 * Notes can searched through mongo search engine
