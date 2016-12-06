@@ -1,9 +1,14 @@
 # Notes!
 
-Notes! is an ASP.NET Core based app to manage text notes like OneNote, Google Keep or Evernote.
+Notes is an ASP.NET Core based app to manage text notes like OneNote, Google Keep or Evernote.
 
 ## Features
 
+* Notes can written with markdown
+	* All standard markdown features
+	* Extended emphasis
+	* Abbreviations
+	* Softline breaks
 * Assign a notebook name to a note
 * Assign tags to a note
 * Notes can searched through mongo search engine
@@ -13,8 +18,6 @@ Notes! is an ASP.NET Core based app to manage text notes like OneNote, Google Ke
 
 * Share notes to users or the public
 * Syntax highligting for code blocks
-
-All notes are rendered with markdown.
 
 ## Technolgy
 
