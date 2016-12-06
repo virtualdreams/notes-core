@@ -8,7 +8,7 @@ notes = (function($){
 	});
 	
 	$('#selectAll').click(function () {
-		$('input[name=id][type=checkbox]').prop('checked', function () {
+		$('input[name=id][type=checkbox]').prop('checked', function() {
 			if ($('#selectAll').is(':checked')) {
 				return true;
 			}
@@ -22,7 +22,7 @@ notes = (function($){
 			type: "POST",
 			url: '/note/trash/' + id
 		}).done(function() {
-			location.reload();
+			location.href = '/';
 		}).fail(function() {
 			alert('Failed to delete note.');
 		});
