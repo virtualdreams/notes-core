@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
-using Newtonsoft.Json;
 using notes.Core.Services;
 using notes.Helper;
 using notes.Models;
