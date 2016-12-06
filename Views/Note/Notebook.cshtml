@@ -38,10 +38,10 @@
 		<nav>
 			<ul class="pager">
 				@if(Model.Offset.HasPrevious) {
-				<li><a href="@Url.Action("view", "notebook", new { id = Model.Notebook, ofs = Model.Offset.PreviousOffset })">Newer</a></li>
+				<li><a href="@Url.Action("notebook", "note", new { id = Model.Notebook, ofs = Model.Offset.PreviousOffset })">Newer</a></li>
 				}
 				@if(Model.Offset.HasNext) {
-				<li><a href="@Url.Action("view", "notebook", new { id = Model.Notebook, ofs = Model.Offset.NextOffset })">Older</a></li>
+				<li><a href="@Url.Action("notebook", "note", new { id = Model.Notebook, ofs = Model.Offset.NextOffset })">Older</a></li>
 				}
 			</ul>
 		</nav>

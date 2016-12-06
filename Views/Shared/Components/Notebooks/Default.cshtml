@@ -1,5 +1,5 @@
 @model IEnumerable<string>
 
 @foreach(var notebook in Model) {
-<li><a href="@Url.Action("view", "notebook", new { id = notebook })">@notebook</a></li>
+<li><a href="@Url.Action("notebook", "note", new { id = notebook })">@notebook</a></li>
 }

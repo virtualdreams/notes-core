@@ -109,6 +109,26 @@ namespace notes.Controllers
 			return RedirectToAction("view", "note", new { id = _id, slug = model.Title.ToSlug() });
 		}
 
+		[HttpGet]
+		public IActionResult Notebook(string id, int? ofs)
+		{
+			var _pageSize = Settings.Value.PageSize;
+			var _count = NoteService.GetByNotebook(UserId, id, null, null).Count();
+			var _notes = NoteService.GetByNotebook(UserId, id, ofs ?? 0, _pageSize);
+			var _pager = new PageOffset(ofs ?? 0, _pageSize, _count);
+			
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
+			
+			var view = new NoteNotebookContainer
+			{
+				Notes = notes,
+				Offset = _pager,
+				Notebook = id?.Trim()
+			};
+
+			return View(view);
+		}
+
 		[HttpPost]
 		public IActionResult Notebook(NotebookPostModel model)
 		{
@@ -119,6 +139,26 @@ namespace notes.Controllers
 			NoteService.SetNotebook(model.Id, model.Notebook);
 			
 			return new NoContentResult();
+		}
+
+		[HttpGet]
+		public IActionResult Tag(string id, int? ofs)
+		{
+			var _pageSize = Settings.Value.PageSize;
+			var _count = NoteService.GetByTag(UserId, id, null, null).Count();
+			var _notes = NoteService.GetByTag(UserId, id, ofs ?? 0, _pageSize);
+			var _pager = new PageOffset(ofs ?? 0, _pageSize, _count);
+			
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
+			
+			var view = new NoteTagContainer
+			{
+				Notes = notes,
+				Offset = _pager,
+				Tag = id?.Trim()
+			};
+
+			return View(view);
 		}
 
 		[HttpPost]
