@@ -1,7 +1,7 @@
 var notes = notes || {};
 notes = (function($){
 	$('[data-toggle=popover]').popover();
-	
+
 	$('[data-href]').click(function() {
 		var href = $(this).data('href');
 		location.href = href;
@@ -28,8 +28,16 @@ notes = (function($){
 		});
 	});
 
+	$('#notebook').on('hidden.bs.modal', function() {
+        $('#notebookValue').val($('#notebook').data('value'));
+    });
+
+	$('#notebookRestore').click(function() {
+		$('#notebookValue').val($('#notebook').data('value'));
+	});
+
 	$('#notebookDelete').click(function() {
-		$('#notebookValue').val('')
+		$('#notebookValue').val('');
 	});
 
 	$('#notebookSubmit').click(function() {
@@ -52,8 +60,16 @@ notes = (function($){
 		});
 	});
 
+	$('#tags').on('hidden.bs.modal', function() {
+        $('#tagsValue').val($('#tags').data('value'));
+    });
+
+	$('#tagsRestore').click(function() {
+		$('#tagsValue').val($('#tags').data('value'));
+	});
+
 	$('#tagsDelete').click(function() {
-		$('#tagsValue').val('')
+		$('#tagsValue').val('');
 	});
 
 	$('#tagsSubmit').click(function() {

@@ -96,7 +96,7 @@
 </div>
 
 <!-- Model notebook -->
-<div class="modal fade" id="notebook" tabindex="-1" role="dialog" aria-labelledby="notebookLabel" aria-hidden="true" data-id="@Model.Note.Id">
+<div class="modal fade" id="notebook" tabindex="-1" role="dialog" aria-labelledby="notebookLabel" aria-hidden="true" data-id="@Model.Note.Id" data-value="@Model.Note.Notebook">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -107,7 +107,7 @@
 				<div class="form-group input-group">
 					<input class="form-control" name="notebook" id="notebookValue" value="@Model.Note.Notebook" />
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" id="notebookUndo">
+						<button class="btn btn-default" type="button" id="notebookRestore">
 							<i class="fa fa-undo"></i>
 						</button>
 						<button class="btn btn-default" type="button" id="notebookDelete">
@@ -125,7 +125,7 @@
 </div>
 
 <!-- Model tags -->
-<div class="modal fade" id="tags" tabindex="-1" role="dialog" aria-labelledby="tagsLabel" aria-hidden="true" data-id="@Model.Note.Id">
+<div class="modal fade" id="tags" tabindex="-1" role="dialog" aria-labelledby="tagsLabel" aria-hidden="true" data-id="@Model.Note.Id" data-value="@Model.Note.Tags">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -136,7 +136,7 @@
 				<div class="form-group input-group">
 					<input class="form-control" type="text" name="tags" id="tagsValue" value="@Model.Note.Tags" />
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" id="tagsUndo">
+						<button class="btn btn-default" type="button" id="tagsRestore">
 							<i class="fa fa-undo"></i>
 						</button>
 						<button class="btn btn-default" type="button" id="tagsDelete">
