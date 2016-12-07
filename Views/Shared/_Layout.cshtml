@@ -24,14 +24,6 @@
 		<link href="/lib/highlight.css" rel="stylesheet">
 		<link href="/css/sb-admin-2.min.css" rel="stylesheet">
 		<link href="/css/notes.min.css" rel="stylesheet">
-		<style>
-			blockquote {
-				border-left: 5px solid #337ab7;
-			}
-			textarea {
-				resize: vertical;
-			}
-		</style>
 	</head>
 	<body>
 		<div id="wrapper">
@@ -115,7 +107,7 @@
 		<script src="/js/sb-admin-2.min.js"></script>
 		<script src="/lib/highlight.pack.js"></script>
 		<script src="/js/notes.min.js"></script>
-		<script>hljs.initHighlightingOnLoad();</script>
+		<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
 
 		@RenderSection("script", required: false)
 	</body>
