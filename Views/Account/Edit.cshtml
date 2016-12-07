@@ -1,8 +1,7 @@
 @model notes.Models.UserEditContainer
 
-@section title
-{
-	@Model.User.Username - 
+@{
+	ViewBag.Title = String.Format("{0} - ", Model.User.Username);
 }
 
 <div class="row">

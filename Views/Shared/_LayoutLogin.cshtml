@@ -1,3 +1,7 @@
+@using Microsoft.Extensions.Options
+@using notes
+@inject IOptions<Settings> Settings
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -7,7 +11,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>@RenderSection("title", required: false)Notes!</title>
+		<title>@ViewBag.Title@Settings.Value.SiteName</title>
 		<link href="/lib/bootstrap.min.css" rel="stylesheet">
 		<link href="/lib/metisMenu.min.css" rel="stylesheet">
 		<link href="/lib/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -15,7 +19,7 @@
 	</head>
 	<body>
 		<div class="container">
-				@RenderBody()
+			@RenderBody()
 		</div>
 
 		<script src="/lib/jquery.min.js"></script>

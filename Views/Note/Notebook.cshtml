@@ -1,9 +1,8 @@
 @model notes.Models.NoteNotebookContainer
 @using notes.Helper
 
-@section title
-{
-	@Model.Notebook - 
+@{
+	ViewBag.Title = $"{Model.Notebook} - ";
 }
 
 <div class="row">

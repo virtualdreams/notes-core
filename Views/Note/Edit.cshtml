@@ -2,14 +2,8 @@
 @using notes.Helper;
 @using MongoDB.Bson;
 
-@section title
-{
-	@if(Model.Note.Id != ObjectId.Empty) {
-	@Model.Note.Title
-	} else {
-	@:Create 
-	}
-	-
+@{
+	ViewBag.Title = $"{(Model.Note.Id != ObjectId.Empty ? Model.Note.Title : "Create")} - ";
 }
 
 <div class="row">
