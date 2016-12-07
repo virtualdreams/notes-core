@@ -26,6 +26,11 @@ namespace notes
 
 		public void ConfigureServices(IServiceCollection services)
 		{
+			// IIS integration
+			services.Configure<IISOptions>(options => {
+
+			});
+
 			// add logging to DI
 			services.AddLogging();
 

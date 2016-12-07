@@ -7,15 +7,13 @@ namespace notes
     {
         public static void Main(string[] args)
         {
-            // configure the server
             var host = new WebHostBuilder()
 				.UseKestrel()
-				//.UseUrls(GlobalConfig.Get().Kestrel)
 				.UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
 				.UseStartup<Startup>()
 				.Build();
             
-            // start
 			host.Run();
         }
     }
