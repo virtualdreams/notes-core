@@ -3,7 +3,7 @@
 @using MongoDB.Bson;
 
 @{
-	ViewBag.Title = $"{(Model.Note.Id != ObjectId.Empty ? Model.Note.Title : "Create")} - ";
+	ViewBag.Title = $"{(Model.Note.Id != ObjectId.Empty ? Model.Note.Title : "New note")} - ";
 }
 
 <div class="row">
@@ -34,9 +34,10 @@
 			<div class="form-group">
 				<label>Content</label>
 				<textarea class="form-control" name="content" rows="20">@Model.Note.Content</textarea>
+				<small><a href="@Url.Action("help", "home")" target="_blank"><i class="fa fa-code"></i> Styling with Markdown</a></small>
 			</div>
 			<input type="hidden" name="id" value="@Model.Note.Id" />
-			<button type="submit" class="btn btn-primary">Save</button>
+			<button type="submit" class="btn btn-primary"><i class="fa fa-check-square-o"></i> Save</button>
 		</form>
 	</div>
 </div>

@@ -65,5 +65,10 @@ namespace notes.Controllers
 
 			return View(view);
 		}
+
+		public IActionResult Help()
+		{
+			return View();
+		}
 	}
 }

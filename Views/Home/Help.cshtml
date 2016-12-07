@@ -1,0 +1,235 @@
+@{
+	ViewBag.Title = "Markdown Syntax - ";
+}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			<i class="fa fa-code"></i> Markdown Syntax
+		</h1>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="row">
+			<div class="col-md-6">
+				<markdown>
+## Header
+
+```
+# This is a level 1 header
+## This is a level 2 header
+### This is a level 3 header
+#### This is a level 4 header
+##### This is a level 5 header
+###### This is a level 6 header
+```
+				</markdown>
+			</div>
+			<div class="col-md-6">
+				<markdown>
+## Result
+
+# This is an level 1 header
+## This is an level 2 header
+### This is an level 3 header
+				</markdown>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<markdown>
+## Emphasis
+
+```
+*Italic*
+_Italic_
+
+**Bold**
+__Bold__
+
+***Bolditalic***
+___Bolditalic***
+
+Normal text, ^Super^
+Normal text, ~Sub~
+Normal text, ~~Strike~~
+Normal text, ++Underline++
+Normal text, ==Mark==
+```
+				</markdown>
+			</div>
+			<div class="col-md-6">
+				<markdown>
+## Result
+
+*Italic*
+_Italic_
+
+**Bold**
+__Bold__
+
+***Bolditalic***
+___Bolditalic___
+
+Normal text, ^Super text^
+Normal text, ~Sub text~
+Normal text, ~~Strike~~
+Normal text, ++Underline++
+Normal text, ==Mark==
+				</markdown>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<markdown>
+## Lists
+
+### Unordered
+```
+* Item 1
+* Item 2
+* Item 3
+	* Item 3a
+	* Item 3b
+``` 
+
+### Ordered
+```
+1. Item 1
+2. Item 2
+2. Item 3
+	* Item 3a
+	* Item 3b
+``` 
+				</markdown>
+			</div>
+			<div class="col-md-6">
+				<markdown>
+## Result
+
+### Unordered
+
+* Item 1
+* Item 2
+* Item 3
+	* Item 3a
+	* Item 3b
+
+### Ordered
+
+1. Item 1
+2. Item 2
+2. Item 3
+	* Item 3a
+	* Item 3b
+				</markdown>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<markdown>
+## Links
+
+```
+[Example](http://example.org)
+```
+				</markdown>
+			</div>
+			<div class="col-md-6">
+				<markdown>
+## Result
+
+[Example](http://example.org)
+				</markdown>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<markdown>
+## Blockquotes
+
+```
+> Blockquote
+```
+				</markdown>
+			</div>
+			<div class="col-md-6">
+				<markdown>
+## Result
+
+> Blockquote
+				</markdown>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<markdown>
+## Inline code
+
+```
+This is an `inline code` element.
+```
+				</markdown>
+			</div>
+			<div class="col-md-6">
+				<markdown>
+## Result
+
+This is an `inline code` element.
+				</markdown>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<markdown>
+## Codeblocks (Syntax highlighting)
+
+````
+```
+This is an code block element.
+```
+````
+
+````
+``` csharp
+namespace Demo
+{
+    public class DemoClass
+    {
+        public string Name { get; set; } = "John";
+
+        public DemoClass()
+        { }
+    }
+}
+```
+````
+				</markdown>
+			</div>
+			<div class="col-md-6">
+				<markdown>
+## Result
+
+```
+This is an code block element.
+```
+
+``` csharp
+namespace Demo
+{
+    public class DemoClass
+    {
+        public string Name { get; set; } = "John";
+
+        public DemoClass()
+        { }
+    }
+}
+```
+				</markdown>
+			</div>
+		</div>
+	</div>
+</div>
