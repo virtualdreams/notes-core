@@ -18,7 +18,7 @@ Notes is an ASP.NET Core based app to manage text notes like OneNote, Google Kee
 
 * Share notes to users or the public
 
-## Technolgy
+## Technology
 
 * [.NET Core](https://www.microsoft.com/net/core) (v1.0 / v1.1)
 * [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/)
