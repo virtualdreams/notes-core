@@ -12,11 +12,12 @@ Notes is an ASP.NET Core based app to manage text notes like OneNote, Google Kee
 * Assign tags to a note
 * Notes can searched through mongo search engine
 * Multiple users
+* Syntax highligting for code blocks
 
 ## Missing features
 
 * Share notes to users or the public
-* Syntax highligting for code blocks
+* ~~Syntax highligting for code blocks~~
 
 ## Technolgy
 
