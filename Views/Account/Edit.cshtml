@@ -1,13 +1,18 @@
 @model notes.Models.UserEditContainer
+@using MongoDB.Bson;
 
 @{
-	ViewBag.Title = String.Format("{0} - ", Model.User.Username);
+	ViewBag.Title = $"{(Model.User.Id != ObjectId.Empty ? Model.User.Username : "New user")} - ";
 }
 
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">
-			Edit user
+			@if(Model.User.Id != ObjectId.Empty) {
+			@:Edit user
+			} else {
+			@:Create user
+			}
 		</h1>
 		<ol class="breadcrumb">
 			<li><i class="fa fa-users"></i> <a href="@Url.Action("index", "account")">Accounts</a></li>
