@@ -14,6 +14,10 @@
 		<meta name="author" content="">
 
 		<title>@RenderSection("title", required: false)@Settings.Value.SiteName</title>
+		
+		<environment names="Development"></environment>
+		<environment names="Staging,Production"></environment>
+		
 		<link href="/lib/bootstrap.min.css" rel="stylesheet">
 		<link href="/lib/metisMenu.min.css" rel="stylesheet">
 		<link href="/lib/font-awesome.min.css" rel="stylesheet">
@@ -101,6 +105,9 @@
 				</div>
 			</div>
 		</div>
+
+		<environment names="Development"></environment>
+		<environment names="Staging,Production"></environment>
 
 		<script src="/lib/jquery.min.js"></script>
 		<script src="/lib/bootstrap.min.js"></script>

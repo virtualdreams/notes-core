@@ -1,7 +1,7 @@
 using Markdig;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace notes
+namespace notes.TagHelpers
 {
     [HtmlTargetElement("markdown")]
 	[HtmlTargetElement("p", Attributes = "markdown")]
