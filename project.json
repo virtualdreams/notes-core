@@ -51,7 +51,7 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "Microsoft.Extensions.Logging.Filter": "1.0.0",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0", 
-    "MongoDB.Driver": "2.3.0",
+    "MongoDB.Driver": "2.4.0",
     "AutoMapper": "5.1.1",
     "Markdig": "0.10.3"
   },
