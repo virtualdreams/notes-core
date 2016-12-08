@@ -107,7 +107,7 @@ namespace notes.Core.Services
 		/// <returns>A list of notebook.</returns>
 		public IEnumerable<string> Notebooks(ObjectId user)
 		{
-			return Context.Note.Distinct<string>("Notebook", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s));
+			return Context.Note.Distinct<string>("Notebook", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s)).OrderBy(s => s);
 		}
 
 		/// <summary>
@@ -117,7 +117,7 @@ namespace notes.Core.Services
 		/// <returns>A list of tags.</returns>
 		public IEnumerable<string> Tags(ObjectId user)
 		{
-			return Context.Note.Distinct<string>("Tags", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s));
+			return Context.Note.Distinct<string>("Tags", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s)).OrderBy(s => s);
 		}
 
 		/// <summary>
