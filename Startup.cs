@@ -32,7 +32,9 @@ namespace notes
 			var _keyStore = Configuration.GetSection("Settings")["KeyStore"];
 			if(!String.IsNullOrEmpty(_keyStore))
 			{
-				services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(_keyStore));
+				services.AddDataProtection(options => {
+					options.ApplicationDiscriminator = "notes";
+				}).PersistKeysToFileSystem(new DirectoryInfo(_keyStore));
 			}
 
 			// IIS integration
