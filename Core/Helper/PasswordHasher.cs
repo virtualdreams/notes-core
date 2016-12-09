@@ -8,7 +8,7 @@ namespace notes.Core.Helper
 	{
 		private const int SaltByteSize = 24;
 		private const int HashByteSize = 24;
-		private const int HasingIterationsCount = 10101;
+		private const int HashingIterationsCount = 10101;
 
 		static public string HashPassword(string password)
 		{
@@ -19,7 +19,7 @@ namespace notes.Core.Helper
 			if (String.IsNullOrEmpty(password))
 				throw new ArgumentNullException("password");
 
-			using (var bytes = new Rfc2898DeriveBytes(password, SaltByteSize, HasingIterationsCount))
+			using (var bytes = new Rfc2898DeriveBytes(password, SaltByteSize, HashingIterationsCount))
 			{
 				salt = bytes.Salt;
 				buffer2 = bytes.GetBytes(HashByteSize);
@@ -53,7 +53,7 @@ namespace notes.Core.Helper
 			byte[] _currentHashBytes = new byte[HashByteSize];
 			Buffer.BlockCopy(src, SaltByteSize + 1, _currentHashBytes, 0, HashByteSize);
 
-			using (var bytes = new Rfc2898DeriveBytes(password, _currentSaltBytes, HasingIterationsCount))
+			using (var bytes = new Rfc2898DeriveBytes(password, _currentSaltBytes, HashingIterationsCount))
 			{
 				_passwordHashBytes = bytes.GetBytes(SaltByteSize);
 			}
