@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.IO;
+using System;
 using notes.Core.Services;
-using notes.ModelBinders;
 using notes.Extensions;
+using notes.ModelBinders;
 
 namespace notes
 {
@@ -26,6 +29,12 @@ namespace notes
 
 		public void ConfigureServices(IServiceCollection services)
 		{
+			var _keyStore = Configuration.GetSection("Settings")["KeyStore"];
+			if(!String.IsNullOrEmpty(_keyStore))
+			{
+				services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo(_keyStore));
+			}
+
 			// IIS integration
 			services.Configure<IISOptions>(options => {
 
