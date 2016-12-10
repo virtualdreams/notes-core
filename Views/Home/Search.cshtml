@@ -16,24 +16,8 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<div class="table-responsive">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>Title</th>
-						<th style="text-align: right;">Submitted</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach(var note in Model.Notes) {
-					<tr>
-						<td><a href="@Url.Action("view", "note", new { id = note.Id, slug = note.Title.ToSlug() })">@note.Title</a></td>
-						<td><span class="pull-right text-muted small"><em>@note.Age</em></td>
-					</tr>
-					}
-				</tbody>
-			</table>
-		</div>
+		
+		@await Component.InvokeAsync("Notes", new { model = @Model.Notes })
 
 		<nav>
 			<ul class="pager">
