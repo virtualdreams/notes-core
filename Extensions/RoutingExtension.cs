@@ -9,7 +9,7 @@ namespace notes.Extensions
 			app.UseMvc(routes => {
 				routes.MapRoute(
 					name: "search",
-					template: "search/{q?}",
+					template: "search",
 					defaults: new { controller = "Home", action = "Search" }
 				);
 
