@@ -47,7 +47,6 @@
 						<ul class="dropdown-menu dropdown-user">
 							@if(await AuthorizationService.AuthorizeAsync(User, "AdministratorOnly")) {
 							<li><a href="@Url.Action("index", "account")"><i class="fa fa-fw fa-users"></i> Accounts</a></li>
-							@*<li><a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a></li>*@
 							<li class="divider"></li>
 							}
 							<li><a href="@Url.Action("changepasswd", "account")"><i class="fa fa-fw fa-cog"></i> Change Password</a></li>
