@@ -17,5 +17,7 @@ namespace notes.Models
 		public string Notebook { get; set; }
 
 		public bool Trash { get; set; }
+
+		public double? Score { get; set; }
 	}
 }

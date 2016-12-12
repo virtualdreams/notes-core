@@ -288,15 +288,21 @@ namespace notes.Core.Services
 
 			var _filter = Builders<Note>.Filter;
 			var _user = _filter.Eq(f => f.Owner, user);
-			var _text = _filter.Text(term, "none");
+			var _text = _filter.Text(term);
 			var _trash = _filter.Eq(f => f.Trash, trashed);
+
+			var _projection = Builders<Note>.Projection;
+			var _score = _projection.MetaTextScore("Score");
+
+			var _sort = Builders<Note>.Sort;
+			var _order = _sort.MetaTextScore("Score");
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.Note.Find(_user & _text & _trash).Skip(offset).Limit(limit).ToString());
+				Log.LogDebug(Context.Note.Find(_user & _text & _trash).Project<Note>(_score).Sort(_order).Skip(offset).Limit(limit).ToString());
 			}
 
-			return Context.Note.Find(_user & _text & _trash).Skip(offset).Limit(limit).ToEnumerable();
+			return Context.Note.Find(_user & _text & _trash).Project<Note>(_score).Sort(_order).Skip(offset).Limit(limit).ToEnumerable();
 		}
 	}
 }

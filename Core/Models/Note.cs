@@ -29,5 +29,8 @@ namespace notes.Core.Models
 
 		[BsonElement("shared")]
 		public bool Shared { get; set; }
+
+		[BsonIgnoreIfNull]
+		public double? Score { get; set; }
 	}
 }

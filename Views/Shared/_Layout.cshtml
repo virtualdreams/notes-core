@@ -63,7 +63,7 @@
 							<li class="sidebar-search">
 								<form role="form" action="@Url.Action("search", "home")" method="get" id="search-form" >
 									<div class="input-group custom-search-form">
-										<input type="text" name="q" class="form-control" placeholder="Search...">
+										<input type="text" name="q" class="form-control" placeholder="Search..." value="@ViewBag.Search" />
 										<span class="input-group-btn">
 											<button class="btn btn-default" type="submit">
 												<i class="fa fa-search"></i>

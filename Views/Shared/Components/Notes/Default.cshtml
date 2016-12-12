@@ -11,11 +11,11 @@
         </thead>
         <tbody>
             @foreach(var note in Model) {
-            <tr>
+            <tr data-score="@note.Score">
                 <td>
                     <a href="@Url.Action("view", "note", new { id = note.Id, slug = note.Title.ToSlug() })">@note.Title</a>
                 </td>
-                <td><span class="pull-right text-muted small"><em>@note.Age</em></td>
+                <td><span class="pull-right text-muted small"><em>@note.Age</em></span></td>
             </tr>
             }
         </tbody>
