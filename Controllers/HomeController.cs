@@ -7,6 +7,7 @@ using System;
 using notes.Core.Services;
 using notes.Models;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 
 namespace notes.Controllers
 {
@@ -28,38 +29,36 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Index(int? ofs)
+		public IActionResult Index(ObjectId after)
 		{
 			var _pageSize = Settings.Value.PageSize;
-			var _count = NoteService.Get(UserId, false, null, null).Count();
-			var _notes = NoteService.Get(UserId, false, ofs ?? 0, _pageSize);
-			var _pager = new PageOffset(ofs ?? 0, _pageSize, _count);
-			
-			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
+			var _notes = NoteService.Get(UserId, after, false, _pageSize);
+			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
+
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
 			
 			var view = new NoteListContainer
 			{
 				Notes = notes,
-				Offset = _pager
+				Pager = _pager
 			};
 
 			return View(view);
 		}
 
 		[HttpGet]
-		public IActionResult Search(string q, int? ofs)
+		public IActionResult Search(string q, ObjectId after)
 		{
 			var _pageSize = Settings.Value.PageSize;
-			var _count = NoteService.Search(UserId, q ?? String.Empty, false, null, null).Count();
-			var _notes = NoteService.Search(UserId, q ?? String.Empty, false, ofs, _pageSize);
-			var _pager = new PageOffset(ofs ?? 0, _pageSize, _count);
+			var _notes = NoteService.Search(UserId, q ?? String.Empty, after, _pageSize);
+			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 
-			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
 			
 			var view = new NoteSearchContainer
 			{
 				Notes = notes,
-				Offset = _pager,
+				Pager = _pager,
 				Term = q?.Trim()
 			};
 

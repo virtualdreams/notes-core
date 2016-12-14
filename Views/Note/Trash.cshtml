@@ -41,11 +41,8 @@
 				
 		<nav>
 			<ul class="pager">
-				@if(Model.Offset.HasPrevious) {
-				<li><a href="@Url.Action("trash", "note", new { ofs = Model.Offset.PreviousOffset })">Newer</a></li>
-				}
-				@if(Model.Offset.HasNext) {
-				<li><a href="@Url.Action("trash", "note", new { ofs = Model.Offset.NextOffset })">Older</a></li>
+				@if(Model.Pager.HasNext) {
+				<li><a href="@Url.Action("trash", "note", new { after = Model.Pager.NextPage })" rel="nofollow next">Older</a></li>
 				}
 			</ul>
 		</nav>

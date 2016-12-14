@@ -20,7 +20,7 @@ notes = (function($){
 		var id = $('#trash').data('id');
 		$.ajax({
 			type: "POST",
-			url: '/note/trash/' + id
+			url: '/note/remove/' + id
 		}).done(function() {
 			location.href = '/';
 		}).fail(function() {

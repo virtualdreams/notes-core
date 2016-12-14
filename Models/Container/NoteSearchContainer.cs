@@ -6,7 +6,7 @@ namespace notes.Models
 	{
 		public IEnumerable<NoteModel> Notes { get; set; }
 
-		public PageOffset Offset { get; set; }
+		public Pager Pager { get; set; }
 
 		public string Term { get; set; }
 	}

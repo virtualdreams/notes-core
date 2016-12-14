@@ -18,66 +18,143 @@ namespace notes.Core.Services
 			Log = log;
 			Context = context;
 		}
-
+		
 		/// <summary>
 		/// Get a list of notes.
 		/// </summary>
 		/// <param name="user">The user who owns the notes.</param>
-		/// <param name="offset">The page offset.</param>
-		/// <param name="limit">The page limit.</param>
+		/// <param name="previous">The previous id.</param>
+		/// <param name="next">The next id.</param>
+		/// <param name="trashed">Request trashed items or not.</param>
+		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public IEnumerable<Note> Get(ObjectId user, bool trashed, int? offset, int? limit)
+		public Tuple<IEnumerable<Note>, bool> Get(ObjectId user, ObjectId next, bool trashed, int limit)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _active = _filter.Eq(f => f.Trash, trashed);
+			var _next = _filter.Lt(f => f.Id, next);
+			
+			var _sort = Builders<Note>.Sort;
+			var _order = _sort.Descending(f => f.Id);
+
+			var _query = _user & _active;
+
+			if(next != ObjectId.Empty)
+				_query &= _next;
 			
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.Note.Find(_user & _active).SortByDescending(f => f.Id).Skip(offset).Limit(limit).ToString());
+				Log.LogDebug("Paginated request -> '{0}'", Context.Note.Find(_query).Sort(_order).Limit(limit + 1).ToString());
 			}
 
-			return Context.Note.Find(_user & _active).SortByDescending(f => f.Id).Skip(offset).Limit(limit).ToEnumerable();
+			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit + 1);
+
+			return new Tuple<IEnumerable<Note>, bool>
+			(
+				_result.ToEnumerable().Take(limit),
+				_result.Count() > limit
+			);
 		}
 
-		public IEnumerable<Note> GetByNotebook(ObjectId user, string notebook, int? offset, int? limit)
+		/// <summary>
+		/// Get a list of notes by notebook name.
+		/// </summary>
+		/// <param name="user">The user who owns the notes.</param>
+		/// <param name="notebook">The notebook name.</param>
+		/// <param name="previous">The previous cursor.</param>
+		/// <param name="next">The next cursor.</param>
+		/// <param name="limit">Limit the result.</param>
+		/// <returns></returns>
+		public Tuple<IEnumerable<Note>, bool> GetByNotebook(ObjectId user, string notebook, ObjectId next, int limit)
 		{
 			notebook = notebook?.Trim();
 
-			if(notebook == null)
-				return Enumerable.Empty<Note>();
+			if(String.IsNullOrEmpty(notebook))
+			{
+				return new Tuple<IEnumerable<Note>, bool>
+				(
+					Enumerable.Empty<Note>(),
+					false
+				);
+			}
 
 			var _filter = Builders<Note>.Filter;
-			var _id = _filter.Eq(f => f.Notebook, notebook);
+			var _notebook = _filter.Eq(f => f.Notebook, notebook);
 			var _user = _filter.Eq(f => f.Owner, user);
-			var _trash = _filter.Eq(f => f.Trash, false);
+			var _active = _filter.Eq(f => f.Trash, false);
+			var _next = _filter.Lt(f => f.Id, next);
+			
+			var _sort = Builders<Note>.Sort;
+			var _order = _sort.Descending(f => f.Id);
+
+			var _query = _notebook &_user & _active;
+
+			if(next != ObjectId.Empty)
+				_query &= _next;
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.Note.Find(_id & _user & _trash).Skip(offset).Limit(limit).ToString());
+				Log.LogDebug("Paginated request by notebook -> '{0}'", Context.Note.Find(_query).Sort(_order).Limit(limit + 1).ToString());
 			}
 
-			return Context.Note.Find(_id & _user & _trash).Skip(offset).Limit(limit).ToEnumerable();
+			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit + 1);
+
+			return new Tuple<IEnumerable<Note>, bool>
+			(
+				_result.ToEnumerable().Take(limit),
+				_result.Count() > limit
+			);
 		}
 
-		public IEnumerable<Note> GetByTag(ObjectId user, string tag, int? offset, int? limit)
+		/// <summary>
+		/// Get a list of notes by tag.
+		/// </summary>
+		/// <param name="user">The user who owns the notes.</param>
+		/// <param name="tag"></param>
+		/// <param name="previous">The previous cursor.</param>
+		/// <param name="next">The next cursor.</param>
+		/// <param name="limit">Limit the result.</param>
+		/// <returns></returns>
+		public Tuple<IEnumerable<Note>, bool> GetByTag(ObjectId user, string tag, ObjectId next, int limit)
 		{
 			tag = tag?.Trim();
 
-			if(tag == null)
-				return Enumerable.Empty<Note>();
+			if(String.IsNullOrEmpty(tag))
+			{
+				return new Tuple<IEnumerable<Note>, bool>
+				(
+					Enumerable.Empty<Note>(),
+					false
+				);
+			}
 
 			var _filter = Builders<Note>.Filter;
-			var _id = _filter.AnyIn("Tags", new string[] { tag });
+			var _tag = _filter.AnyIn("Tags", new string[] { tag });
 			var _user = _filter.Eq(f => f.Owner, user);
-			var _trash = _filter.Eq(f => f.Trash, false);
+			var _active = _filter.Eq(f => f.Trash, false);
+			var _next = _filter.Lt(f => f.Id, next);
+			
+			var _sort = Builders<Note>.Sort;
+			var _order = _sort.Descending(f => f.Id);
+
+			var _query = _tag & _user & _active;
+
+			if(next != ObjectId.Empty)
+				_query &= _next;
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.Note.Find(_id & _user & _trash).Skip(offset).Limit(limit).ToString());
+				Log.LogDebug("Paginated request by tag -> '{0}'", Context.Note.Find(_query).Sort(_order).Limit(limit + 1).ToString());
 			}
 
-			return Context.Note.Find(_id & _user & _trash).Skip(offset).Limit(limit).ToEnumerable();
+			var _result =  Context.Note.Find(_query).Sort(_order).Limit(limit + 1);
+
+			return new Tuple<IEnumerable<Note>, bool>
+			(
+				_result.ToEnumerable().Take(limit),
+				_result.Count() > limit
+			);
 		}
 
 		/// <summary>
@@ -246,7 +323,7 @@ namespace notes.Core.Services
 			
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
+				Log.LogDebug("Mark note as trash/restore -> '{0}'", Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
 			}
 
 			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
@@ -265,7 +342,7 @@ namespace notes.Core.Services
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.Note.DeleteOne(_id & _user).ToString());
+				Log.LogDebug("Delete note permanently -> '{0}'", Context.Note.DeleteOne(_id & _user).ToString());
 			}
 
 			Context.Note.DeleteOne(_id & _user);
@@ -274,35 +351,65 @@ namespace notes.Core.Services
 		}
 
 		/// <summary>
-		/// Search for  notes.
+		/// Search for a term.
 		/// </summary>
 		/// <param name="user">The user who owns the notes.</param>
-		/// <param name="term">The search terms.</param>
-		/// <param name="trashed">Search in trashed.</param>
-		/// <param name="offset">The page offset.</param>
-		/// <param name="limit">The search result limit.</param>
+		/// <param name="term">The term to search for.</param>
+		/// <param name="previous">The previous cursor.</param>
+		/// <param name="next">The next cursor.</param>
+		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public IEnumerable<Note> Search(ObjectId user, string term, bool trashed, int? offset, int? limit)
+		public Tuple<IEnumerable<Note>, bool> Search(ObjectId user, string term, ObjectId next, int limit)
 		{
 			term = term?.Trim();
+
+			if(String.IsNullOrEmpty(term))
+			{
+				return new Tuple<IEnumerable<Note>, bool>
+				(
+					Enumerable.Empty<Note>(),
+					false
+				);
+			}
 
 			var _filter = Builders<Note>.Filter;
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _text = _filter.Text(term);
-			var _trash = _filter.Eq(f => f.Trash, trashed);
+			var _active = _filter.Eq(f => f.Trash, false);
 
 			var _projection = Builders<Note>.Projection;
 			var _score = _projection.MetaTextScore("Score");
 
 			var _sort = Builders<Note>.Sort;
 			var _order = _sort.MetaTextScore("Score");
+			
+			var _query = _user & _text & _active;
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.Note.Find(_user & _text & _trash).Project<Note>(_score).Sort(_order).Skip(offset).Limit(limit).ToString());
+				Log.LogDebug("Paginated request by search -> '{0}'", Context.Note.Find(_query).Project<Note>(_score).Sort(_order).Limit(100).ToString());
 			}
 
-			return Context.Note.Find(_user & _text & _trash).Project<Note>(_score).Sort(_order).Skip(offset).Limit(limit).ToEnumerable();
+			var _result = Context.Note.Find(_query).Project<Note>(_score).Sort(_order).Limit(100);
+			if(next != ObjectId.Empty)
+			{
+				Log.LogDebug("Use next cursor on result -> '{0}'", next);
+
+				var _skip = _result.ToEnumerable().SkipWhile(condition => condition.Id != next).Skip(1);
+
+				return new Tuple<IEnumerable<Note>, bool>
+				(
+					_skip.Take(limit),
+					_skip.Count() > limit
+				);
+			}
+
+			Log.LogDebug("Take first {0} results.", limit);
+			return new Tuple<IEnumerable<Note>, bool>
+			(
+				_result.ToEnumerable().Take(limit),
+				_result.Count() > limit
+			);
 		}
 	}
 }

@@ -109,19 +109,18 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Notebook(string id, int? ofs)
+		public IActionResult Notebook(string id, ObjectId after)
 		{
 			var _pageSize = Settings.Value.PageSize;
-			var _count = NoteService.GetByNotebook(UserId, id, null, null).Count();
-			var _notes = NoteService.GetByNotebook(UserId, id, ofs ?? 0, _pageSize);
-			var _pager = new PageOffset(ofs ?? 0, _pageSize, _count);
-			
-			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
+			var _notes = NoteService.GetByNotebook(UserId, id ?? string.Empty, after, _pageSize);
+			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
+
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
 			
 			var view = new NoteNotebookContainer
 			{
 				Notes = notes,
-				Offset = _pager,
+				Pager = _pager,
 				Notebook = id?.Trim()
 			};
 
@@ -141,19 +140,18 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Tag(string id, int? ofs)
+		public IActionResult Tag(string id, ObjectId after)
 		{
 			var _pageSize = Settings.Value.PageSize;
-			var _count = NoteService.GetByTag(UserId, id, null, null).Count();
-			var _notes = NoteService.GetByTag(UserId, id, ofs ?? 0, _pageSize);
-			var _pager = new PageOffset(ofs ?? 0, _pageSize, _count);
+			var _notes = NoteService.GetByTag(UserId, id ?? string.Empty, after, _pageSize);
+			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 			
-			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
 			
 			var view = new NoteTagContainer
 			{
 				Notes = notes,
-				Offset = _pager,
+				Pager = _pager,
 				Tag = id?.Trim()
 			};
 
@@ -173,7 +171,7 @@ namespace notes.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Trash(ObjectId id)
+		public IActionResult Remove(ObjectId id)
 		{
 			var _note = NoteService.GetById(id, UserId);
 			if(_note == null)
@@ -185,19 +183,18 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Trash(int? ofs)
+		public IActionResult Trash(ObjectId after)
 		{
 			var _pageSize = Settings.Value.PageSize;
-			var _count = NoteService.Get(UserId, true, null, null).Count();
-			var _notes = NoteService.Get(UserId, true, ofs ?? 0, _pageSize);
-			var _pager = new PageOffset(ofs ?? 0, _pageSize, _count);
+			var _notes = NoteService.Get(UserId, after, true, _pageSize);
+			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 			
-			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
 			
 			var view = new NoteListContainer
 			{
 				Notes = notes,
-				Offset = _pager
+				Pager = _pager
 			};
 
 			return View(view);

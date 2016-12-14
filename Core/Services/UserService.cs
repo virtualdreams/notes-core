@@ -49,7 +49,7 @@ namespace notes.Core.Services
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.User.Find(_id).ToString());
+				Log.LogDebug("Get user by id -> '{0}'", Context.User.Find(_id).ToString());
 			}
 
 			return Context.User.Find(_id).SingleOrDefault();
@@ -68,7 +68,7 @@ namespace notes.Core.Services
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.User.Find(_username & _active).ToString());
+				Log.LogDebug("Get user by name -> '{0}'", Context.User.Find(_username & _active).ToString());
 			}
 
 			return Context.User.Find(_username & _active).SingleOrDefault();
@@ -82,7 +82,7 @@ namespace notes.Core.Services
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.User.Find(_username & _active).Project(f => f.Id).ToString());
+				Log.LogDebug("Get user id -> '{0}'", Context.User.Find(_username & _active).Project(f => f.Id).ToString());
 			}
 
 			return Context.User.Find(_username & _active).Project(f => f.Id).SingleOrDefault();
@@ -140,7 +140,7 @@ namespace notes.Core.Services
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.User.UpdateOne(_id & _active, _set).ToString());
+				Log.LogDebug("Set new password -> '{0}'", Context.User.UpdateOne(_id & _active, _set).ToString());
 			}
 
 			Log.LogInformation("Update password for user {0}.", GetById(user).Username);
@@ -165,7 +165,7 @@ namespace notes.Core.Services
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.User.Find(_username & _active).ToString());
+				Log.LogDebug("Login -> '{0}'", Context.User.Find(_username & _active).ToString());
 			}
 			
 			var _user = Context.User.Find(_username & _active).SingleOrDefault();
