@@ -171,7 +171,7 @@ namespace notes.Core.Services
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.Note.Find(_id & _user).ToString());
+				Log.LogDebug("Get note by id -> '{0}'", Context.Note.Find(_id & _user).ToString());
 			}
 
 			return Context.Note.Find(_id & _user).SingleOrDefault();
@@ -216,7 +216,7 @@ namespace notes.Core.Services
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
+				Log.LogDebug("Set notebook -> '{0}'", Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
 			}
 
 			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
@@ -240,7 +240,7 @@ namespace notes.Core.Services
 			
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
+				Log.LogDebug("Set tags -> '{0}'", Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
 			}
 
 			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
@@ -270,7 +270,7 @@ namespace notes.Core.Services
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug("Insert new note with id {0}.", _insert.Id);
+				Log.LogInformation("Insert new note with id {0}.", _insert.Id);
 			}
 
 			return _insert.Id;
@@ -285,6 +285,9 @@ namespace notes.Core.Services
 		/// <returns></returns>
 		public ObjectId Update(ObjectId note, string title, string content)
 		{
+			var _filter = Builders<Note>.Filter;
+			var _id = _filter.Eq(f => f.Id, note);
+
 			var _update = Builders<Note>.Update;
 			var _set = _update
 						.Set(f => f.Title, title?.Trim())
@@ -292,14 +295,14 @@ namespace notes.Core.Services
 			
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug(Context.Note.UpdateOne(f => f.Id == note, _set, new UpdateOptions { IsUpsert = true }).ToString());
+				Log.LogDebug("Update note -> '{0}'", Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
 			}
 
-			Context.Note.UpdateOne(f => f.Id == note, _set, new UpdateOptions { IsUpsert = true });
+			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug("Update note with id {0}.", note);
+				Log.LogInformation("Update note with id {0}.", note);
 			}
 
 			return note;
@@ -312,11 +315,9 @@ namespace notes.Core.Services
 		/// <param name="user"></param>
 		public void Trash(ObjectId note, bool trash)
 		{
-			// update filter
 			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Id, note);
 
-			// update values
 			var _update = Builders<Note>.Update;
 			var _set = _update
 				.Set(f => f.Trash, trash);
@@ -393,7 +394,7 @@ namespace notes.Core.Services
 			var _result = Context.Note.Find(_query).Project<Note>(_score).Sort(_order).Limit(100);
 			if(next != ObjectId.Empty)
 			{
-				Log.LogDebug("Use next cursor on result -> '{0}'", next);
+				Log.LogDebug("Use next cursor on search result -> '{0}'", next);
 
 				var _skip = _result.ToEnumerable().SkipWhile(condition => condition.Id != next).Skip(1);
 
@@ -404,7 +405,7 @@ namespace notes.Core.Services
 				);
 			}
 
-			Log.LogDebug("Take first {0} results.", limit);
+			Log.LogDebug("Take first {0} search results.", limit);
 			return new Tuple<IEnumerable<Note>, bool>
 			(
 				_result.ToEnumerable().Take(limit),
