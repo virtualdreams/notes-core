@@ -15,7 +15,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<form role="form" action="@Url.Action("delete", "note")" method="post", enctype="multipart/form-data" id="trash-form" >
+		<form role="form" action="@Url.Action("delete", "note")" method="post" enctype="multipart/form-data" id="trash-form" >
 			<div class="table-responsive">
 				<table class="table">
 					<thead>
@@ -30,7 +30,7 @@
 						<tr>
 							<td><input type="checkbox" name="id" value="@note.Id" /></td>
 							<td><a href="@Url.Action("view", "note", new { id = note.Id, slug = note.Title.ToSlug() })">@note.Title</a></td>
-							<td><span class="pull-right text-muted small"><em>@note.Age</em></td>
+							<td><span class="pull-right text-muted small"><em>@note.Age</em></span></td>
 						</tr>
 						}
 					</tbody>
