@@ -21,6 +21,7 @@ namespace notes.TagHelpers
 				.UseSoftlineBreakAsHardlineBreak()
 				.UseAbbreviations()
 				.UseEmphasisExtras()
+				.UseTaskLists()
 				.Build();
 			var _markdown = Markdown.ToHtml(_content, _pipeline);
 
