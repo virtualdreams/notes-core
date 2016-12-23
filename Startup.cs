@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -79,13 +80,18 @@ namespace notes
 
 			app.UseStaticFiles();
 
-			app.UseCookieAuthentication(new CookieAuthenticationOptions {
+			app.UseCookieAuthentication(
+				new CookieAuthenticationOptions {
 				AuthenticationScheme = "notes",
 				CookieName = "notes",
 				LoginPath = new PathString("/login"),
 				AccessDeniedPath = new PathString("/login"),
 				AutomaticAuthenticate = true,
-				AutomaticChallenge = true
+				AutomaticChallenge = true,
+				Events = new CookieAuthenticationEvents
+				{
+					OnValidatePrincipal = CookieValidator.ValidateAsync
+				}
 			});
 
 			app.AddRoutes();
