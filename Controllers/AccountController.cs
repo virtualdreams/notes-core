@@ -17,14 +17,14 @@ namespace notes.Controllers
 	{
 		private readonly IMapper Mapper;
 		private readonly UserService UserService;
-		private readonly IOptions<Settings> Settings;
+		private readonly IOptions<Settings> Options;
 
-		public AccountController(IMapper mapper, UserService user, IOptions<Settings> settings)
+		public AccountController(IMapper mapper, UserService user, IOptions<Settings> options)
 			: base(user)
 		{
 			Mapper = mapper;
 			UserService = user;
-			Settings = settings;
+			Options = options;
 		}
 
 		[AllowAnonymous]
@@ -167,14 +167,16 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult ChangePasswd(ObjectId id)
+		public IActionResult Security(ObjectId id)
 		{
 			return View();
 		}
 
 		[HttpPost]
-		public IActionResult ChangePasswd(PasswdPostModel model)
+		public IActionResult Security(PasswdPostModel model)
 		{
+			// TODO check previous password before change
+
 			if(!ModelState.IsValid || !model.Password.Equals(model.PasswordRepeat))
 			{
 				return View();
@@ -188,6 +190,43 @@ namespace notes.Controllers
 
 			// redirect to home
 			return RedirectToAction("index", "home");
+		}
+
+		[HttpGet]
+		public IActionResult Settings()
+		{
+			var view = new SettingsEditContainer
+			{
+				Settings = new SettingsModel
+				{
+					Items = UserSettings?.PageSize ?? Options.Value.PageSize,
+					Language = UserSettings?.SearchLanguage ?? "en"
+				}
+			};
+
+			return View(view);
+		}
+
+		[HttpPost]
+		public IActionResult Settings(SettingsPostModel model)
+		{
+			if(!ModelState.IsValid)
+			{
+				var view = new SettingsEditContainer
+				{
+					Settings = new SettingsModel
+					{
+						Items = model.Items,
+						Language = model.Language
+					}
+				};
+
+				return View(view);
+			}
+
+			UserService.SetSettings(UserId, model.Items, model.Language);
+
+			return RedirectToAction("settings");
 		}
     }
 }

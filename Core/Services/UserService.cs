@@ -74,6 +74,11 @@ namespace notes.Core.Services
 			return Context.User.Find(_username & _active).SingleOrDefault();
         }
 
+		/// <summary>
+        /// Get user id.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <returns></returns>
 		public ObjectId GetUserId(string username)
 		{
 			var _filter = Builders<User>.Filter;
@@ -86,6 +91,25 @@ namespace notes.Core.Services
 			}
 
 			return Context.User.Find(_username & _active).Project(f => f.Id).SingleOrDefault();
+		}
+
+		/// <summary>
+        /// Get user settings.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <returns></returns>
+		public UserSettings GetUserSettings(string username)
+		{
+			var _filter = Builders<User>.Filter;
+			var _username = _filter.Eq(f => f.Username, username);
+			var _active = _filter.Eq(f => f.Enabled, true);
+
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug("Get user id -> '{0}'", Context.User.Find(_username & _active).Project(f => f.Settings).ToString());
+			}
+
+			return Context.User.Find(_username & _active).Project(f => f.Settings).SingleOrDefault();
 		}
 
 		/// <summary>
@@ -146,6 +170,31 @@ namespace notes.Core.Services
 			Log.LogInformation("Update password for user {0}.", GetById(user).Username);
 
 			Context.User.UpdateOne(_id & _active, _set);
+		}
+
+		/// <summary>
+        /// Update user settings.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <param name="pageSize">The new page size.</param>
+        /// <param name="searchLanguage">The new search language.</param>
+		public void SetSettings(ObjectId user, int pageSize, string searchLanguage)
+		{
+			var _filter = Builders<User>.Filter;
+			var _id = _filter.Eq(f => f.Id, user);
+			var _active = _filter.Eq(f => f.Enabled, true);
+
+			var _update = Builders<User>.Update;
+			var _set = _update
+				.Set(f => f.Settings.PageSize, pageSize)
+				.Set(f => f.Settings.SearchLanguage, searchLanguage);
+
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug("Update settings -> '{0}'", Context.User.UpdateOne(_id & _active, _set).ToString());
+			}
+
+			Context.User.UpdateOne(_id & _active, _set, new UpdateOptions { IsUpsert = true });
 		}
 
 		/// <summary>

@@ -33,5 +33,17 @@ namespace notes.Core.Models
 		/// </summary>
 		[BsonElement("enabled")]
 		public bool Enabled { get; set; }
+
+		[BsonElement("settings")]
+		public UserSettings Settings { get; set; }
+	}
+
+	public class UserSettings
+	{
+		[BsonElement("pagesize")]
+		public int PageSize { get; set; }
+
+		[BsonElement("searchlanguage")]
+		public string SearchLanguage { get; set; }
 	}
 }
