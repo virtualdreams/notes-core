@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using notes.Core.Services;
+using notes.Helper;
 using notes.Models;
 
 namespace notes.Controllers
@@ -175,15 +176,13 @@ namespace notes.Controllers
 		[HttpPost]
 		public IActionResult Security(PasswdPostModel model)
 		{
-			// TODO check previous password before change
-
-			if(!ModelState.IsValid || !model.Password.Equals(model.PasswordRepeat))
+			if(!ModelState.IsValid || (UserService.Login(User.GetUserName(), model.OldPassword) == null || !model.NewPassword.Equals(model.ConfirmPassword)))
 			{
 				return View();
 			}
 
 			// set new password
-			UserService.SetPassword(UserId, model.Password);
+			UserService.SetPassword(UserId, model.NewPassword);
 
 			// force logout
 			HttpContext.Authentication.SignOutAsync("notes");
