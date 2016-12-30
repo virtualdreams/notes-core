@@ -91,4 +91,90 @@ notes = (function($){
 			alert('Failed to write tags.');
 		});
 	});
+
+	$.validator.setDefaults({
+		highlight: function(element) {
+			$(element).closest('.form-group').addClass('has-error');
+		},
+		unhighlight: function(element) {
+			$(element).closest('.form-group').removeClass('has-error');
+		}
+	});
+
+	$.validator.addMethod(
+	    "regex",
+	    function (value, element, regexp) {
+	    	return this.optional(element) || value.match(regexp);
+	    },
+	    "This field has the wrong format."
+	);
+
+	$.validator.addMethod(
+		'nowhitespace',
+		function (value, element) {
+			return this.optional(element) || value.trim() != ''
+		},
+		'This field is required.'
+	);
+
+	$("#note-form").validate({
+		rules: {
+			'title': {
+				required: true,
+				nowhitespace: true
+			},
+			'content': {
+				required: true,
+				nowhitespace: true
+			}
+		}
+	});
+
+	$("#settings-form").validate({
+		rules: {
+			'items': {
+				required: true,
+				nowhitespace: true,
+				min: 1,
+				max: 100
+			},
+			'language': {
+				required: true,
+				nowhitespace: true,
+				regex: 'en|de'
+			}
+		}
+	});
+
+	$("#security-form").validate({
+		rules: {
+			'oldpassword': {
+				required: true,
+				minlength: 8
+			},
+			'newpassword': {
+				required: true,
+				minlength: 8
+			},
+			'confirmpassword': {
+				required: true,
+				minlength: 8,
+				equalTo: '#newpassword'
+			}
+		}
+	});
+
+	$("#account-form").validate({
+		rules: {
+			'username': {
+				required: true,
+				email: true
+			},
+			'password': {
+				required: true,
+				minlength: 8
+			}
+		}
+	});
+
 }(jQuery));
