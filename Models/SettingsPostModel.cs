@@ -5,7 +5,7 @@ namespace notes.Models
     public class SettingsPostModel
     {
         [Required]
-        [RegularExpression("[0-9]{1,3}")]
+        [Range(1,100)]
         public int Items { get; set; }
 
         [Required]
