@@ -17,7 +17,7 @@
 				<markdown>
 ## Header
 
-```
+``` md
 # This is a level 1 header
 ## This is a level 2 header
 ### This is a level 3 header
@@ -42,7 +42,7 @@
 				<markdown>
 ## Emphasis
 
-```
+``` md
 *Italic*
 _Italic_
 
@@ -87,7 +87,7 @@ Normal text, ==Mark==
 ## Lists
 
 ### Unordered
-```
+``` md
 * Item 1
 * Item 2
 * Item 3
@@ -96,12 +96,18 @@ Normal text, ==Mark==
 ``` 
 
 ### Ordered
-```
+``` md
 1. Item 1
 2. Item 2
 2. Item 3
 	* Item 3a
 	* Item 3b
+```
+
+### Tasks
+``` md
+- [ ] Task 1
+- [x] Task 2
 ``` 
 				</markdown>
 			</div>
@@ -124,6 +130,10 @@ Normal text, ==Mark==
 2. Item 3
 	* Item 3a
 	* Item 3b
+
+### Tasks
+- [ ] Task 1
+- [x] Task 2
 				</markdown>
 			</div>
 		</div>
@@ -132,7 +142,7 @@ Normal text, ==Mark==
 				<markdown>
 ## Links
 
-```
+``` md
 [Example](http://example.org)
 ```
 				</markdown>
@@ -150,7 +160,7 @@ Normal text, ==Mark==
 				<markdown>
 ## Images
 
-```
+``` md
 ![alt text](http://example.org/image.jpg)
 ```
 				</markdown>
@@ -168,7 +178,7 @@ Normal text, ==Mark==
 				<markdown>
 ## Blockquotes
 
-```
+``` md
 > Blockquote
 ```
 				</markdown>
@@ -186,7 +196,7 @@ Normal text, ==Mark==
 				<markdown>
 ## Inline code
 
-```
+``` md
 This is an `inline code` element.
 ```
 				</markdown>
@@ -204,7 +214,7 @@ This is an `inline code` element.
 				<markdown>
 ## Abbreviations
 
-```
+``` md
 *[HTML]: Hyper Text Markup Language
 *[W3C]:  World Wide Web Consortium
 ```
@@ -227,13 +237,13 @@ is maintained by the W3C.
 				<markdown>
 ## Codeblocks (Syntax highlighting)
 
-````
+```` md
 ```
 This is an code block element.
 ```
 ````
 
-````
+```` md
 ``` csharp
 namespace Demo
 {
