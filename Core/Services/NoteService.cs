@@ -253,15 +253,17 @@ namespace notes.Core.Services
 		/// <param name="title">The note title.</param>
 		/// <param name="content">The note content.</param>
 		/// <returns></returns>
-		public ObjectId Create(ObjectId user, string title, string content)
+		public ObjectId Create(ObjectId user, string title, string content, string notebook, string tags)
 		{
+			var _tags = tags?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).Where(s => !String.IsNullOrEmpty(s)).ToArray();
+
 			var _insert = new Note
 			{
 				Owner = user,
 				Title = title?.Trim(),
 				Content = content?.Trim(),
-				Tags = new string[] { },
-				Notebook = String.Empty,
+				Tags = _tags,
+				Notebook = notebook?.Trim(),
 				Trash = false,
 				Shared = false,
 			};
@@ -283,15 +285,19 @@ namespace notes.Core.Services
 		/// <param name="title">The new title.</param>
 		/// <param name="content">The new content.</param>
 		/// <returns></returns>
-		public ObjectId Update(ObjectId note, string title, string content)
+		public ObjectId Update(ObjectId note, string title, string content, string notebook, string tags)
 		{
+			var _tags = tags?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).Where(s => !String.IsNullOrEmpty(s)).ToArray();
+
 			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Id, note);
 
 			var _update = Builders<Note>.Update;
 			var _set = _update
 						.Set(f => f.Title, title?.Trim())
-						.Set(f => f.Content, content?.Trim());
+						.Set(f => f.Content, content?.Trim())
+						.Set(f => f.Notebook, notebook?.Trim())
+						.Set(f => f.Tags, _tags);
 			
 			if(Log.IsEnabled(LogLevel.Debug))
 			{

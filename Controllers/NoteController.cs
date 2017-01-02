@@ -84,7 +84,9 @@ namespace notes.Controllers
 					{
 						Id = model.Id,
 						Title = model.Title,
-						Content = model.Content
+						Content = model.Content,
+						Notebook = model.Notebook,
+						Tags = model.Tags
 					}
 				};
 
@@ -94,7 +96,7 @@ namespace notes.Controllers
 			var _id = ObjectId.Empty;
 			if(model.Id == ObjectId.Empty)
 			{
-				_id = NoteService.Create(UserId, model.Title, model.Content);
+				_id = NoteService.Create(UserId, model.Title, model.Content, model.Notebook, model.Tags);
 			}
 			else
 			{
@@ -102,7 +104,7 @@ namespace notes.Controllers
 				if(_note == null)
 					return new StatusCodeResult(404);
 
-				_id = NoteService.Update(model.Id, model.Title, model.Content);
+				_id = NoteService.Update(model.Id, model.Title, model.Content, model.Notebook, model.Tags);
 			}
 
 			return RedirectToAction("view", "note", new { id = _id, slug = model.Title.ToSlug() });

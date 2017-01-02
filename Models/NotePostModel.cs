@@ -13,5 +13,9 @@ namespace notes.Models
 
 		[Required]
 		public string Content { get; set; }
+
+		public string Notebook { get; set; }
+
+		public string Tags { get; set; }
 	}
 }
