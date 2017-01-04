@@ -46,6 +46,23 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
+		public IActionResult Print(ObjectId id)
+		{
+			var _note = NoteService.GetById(id, UserId);
+			if(_note == null)
+				return new StatusCodeResult(404);
+			
+			var note = Mapper.Map<NoteModel>(_note);
+
+			var view = new NoteViewContainer
+			{
+				Note = note
+			};
+
+			return View(view);
+		}
+
+		[HttpGet]
 		public IActionResult Create()
 		{
 			var view = new NoteEditContainer
