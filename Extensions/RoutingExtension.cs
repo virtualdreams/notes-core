@@ -51,6 +51,13 @@ namespace notes.Extensions
 				);
 
 				routes.MapRoute(
+					name: "print",
+					template: "print/{id?}/{slug?}",
+					defaults: new { controller = "Note", action = "Print"},
+					constraints: new { id = @"^[a-f0-9]{24}$" } 
+				);
+
+				routes.MapRoute(
 					name: "login",
 					template: "login",
 					defaults: new { controller = "account", action = "login"}

@@ -1,4 +1,5 @@
 @model notes.Models.NoteViewContainer
+@using notes.Helper;
 
 @{
 	ViewBag.Title = $"{Model.Note.Title} - ";
@@ -16,7 +17,7 @@
        				<ul class="dropdown-menu pull-right">
 						<li><a href="#" data-toggle="modal" data-target="#notebook"><i class="fa fa-book"></i> Notebook</a></li>
 						<li><a href="#" data-toggle="modal" data-target="#tags"><i class="fa fa-tags"></i> Tags</a></li>
-						<li><a href="@Url.Action("print", "note", new { id = Model.Note.Id })" target="_blank"><i class="fa fa-print"></i> Print</a></li>
+						<li><a href="@Url.Action("print", "note", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })" target="_blank"><i class="fa fa-print"></i> Print</a></li>
 						<li class="divider"></li>
 						<li><a href="#" data-toggle="modal" data-target="#trash">
 							@if(Model.Note.Trash) {
