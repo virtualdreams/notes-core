@@ -92,6 +92,53 @@ notes = (function($){
 		});
 	});
 
+	function getFormData($form){
+		var unindexed_array = $form.serializeArray();
+		var indexed_array = {};
+
+		$.map(unindexed_array, function(n, i){
+			indexed_array[n['name']] = n['value'];
+		});
+
+		return indexed_array;
+	}
+
+	$('#saveContinue').click(function() {
+		if($('#note-form').valid()) {
+			var data = getFormData($('#note-form'));
+			$.ajax({
+				type: "POST",
+				url: '/note/edit/',
+				dataType: 'json',
+				data: data
+			}).done(function(d) {
+				if(d.success) {
+					$('#id').val(d.id);
+					
+					$('#result').html('<div class="alert alert-success"><button type="button" class="close">×</button>Successfully saved note!</div>');
+					window.setTimeout(function() {
+						$(".alert").fadeTo(500, 0).slideUp(500, function(){
+                    		$(this).remove(); 
+                		});
+            		}, 5000);
+
+          			$('.alert .close').on("click", function(e){
+                		$(this).parent().fadeTo(500, 0).slideUp(500);
+             		});
+
+				} else {
+					$('#result').html('<div class="alert alert-danger"><button type="button" class="close">×</button>Failed to save note!</div>');
+
+          			$('.alert .close').on("click", function(e){
+                		$(this).parent().fadeTo(500, 0).slideUp(500);
+             		});
+				}
+			}).fail(function() {
+				alert('Failed to save note.');
+			});
+		}
+	});
+
 	$.validator.setDefaults({
 		highlight: function(element) {
 			$(element).closest('.form-group').addClass('has-error');

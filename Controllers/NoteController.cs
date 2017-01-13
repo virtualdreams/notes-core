@@ -1,11 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
+using System.Collections.Generic;
+using System.Linq;
 using notes.Core.Services;
+using notes.Extensions;
 using notes.Helper;
 using notes.Models;
 
@@ -107,6 +108,9 @@ namespace notes.Controllers
 					}
 				};
 
+				if(Request.IsAjaxRequest())
+					return Json(new { Success = false, Id = model.Id.ToString() });
+
 				return View(view);
 			}
 			
@@ -123,6 +127,9 @@ namespace notes.Controllers
 
 				_id = NoteService.Update(model.Id, model.Title, model.Content, model.Notebook, model.Tags);
 			}
+
+			if(Request.IsAjaxRequest())
+				return Json(new { Success = true, Id = _id.ToString() });
 
 			return RedirectToAction("view", "note", new { id = _id, slug = model.Title.ToSlug() });
 		}
