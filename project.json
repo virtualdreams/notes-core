@@ -54,7 +54,7 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "MongoDB.Driver": "2.4.0",
     "AutoMapper": "5.1.1",
-    "Markdig": "0.10.3"
+    "Markdig": "0.10.4"
   },
   "frameworks": {
     "netcoreapp1.0": {
