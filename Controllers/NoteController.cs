@@ -19,14 +19,16 @@ namespace notes.Controllers
 		private readonly NoteService NoteService;
 		private readonly UserService UserService;
 		private readonly IOptions<Settings> Options;
+		private readonly IViewRenderService ViewRenderService;
 
-		public NoteController(IMapper mapper, NoteService note, UserService user, IOptions<Settings> options)
+		public NoteController(IMapper mapper, NoteService note, UserService user, IOptions<Settings> options, IViewRenderService render)
 			: base(user)
 		{
 			Mapper = mapper;
 			NoteService = note;
 			UserService = user;
 			Options = options;
+			ViewRenderService = render;
 		}
 
 		[HttpGet]
@@ -132,6 +134,30 @@ namespace notes.Controllers
 				return Json(new { Success = true, Id = _id.ToString() });
 
 			return RedirectToAction("view", "note", new { id = _id, slug = model.Title.ToSlug() });
+		}
+
+		[HttpPost]
+		public IActionResult Preview(NotePostModel model)
+		{
+			if(!ModelState.IsValid)
+				return Json(new { Success = false, Content = string.Empty });
+			
+			var _note = new NoteModel
+			{
+				Id = model.Id,
+				Title = model.Title,
+				Content = model.Content,
+				Notebook = model.Notebook,
+				Tags = model.Tags
+			};
+			
+			var view = new NoteViewContainer
+			{
+				Note = _note
+			};
+
+			var _content = ViewRenderService.RenderToStringAsync("Shared/_Preview", view).Result;
+			return Json(new { Success = true, Content = _content });
 		}
 
 		[HttpGet]

@@ -139,6 +139,34 @@ notes = (function($){
 		}
 	});
 
+	$('#preview').click(function() {
+		if($('#note-form').valid()) {
+			if($('#editorPane').is(':visible'))
+			{
+				var data = getFormData($('#note-form'));
+				$.ajax({
+					type: "POST",
+					url: '/note/preview/',
+					dataType: 'json',
+					data: data
+				}).done(function(d) {
+					$('#previewPane').html(d.content);
+					$('#preview').text('Return to edit');
+
+					$('#editorPane').toggle();
+					$('#previewPane').toggle();
+				});
+			}
+			else
+			{
+				$('#preview').text('Preview');
+
+				$('#editorPane').toggle();
+				$('#previewPane').toggle();
+			}
+		}
+	});
+
 	$.validator.setDefaults({
 		highlight: function(element) {
 			$(element).closest('.form-group').addClass('has-error');

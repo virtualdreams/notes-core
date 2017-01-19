@@ -67,6 +67,7 @@ namespace notes
 			services.AddScoped<MongoContext>();
 			services.AddTransient<NoteService>();
 			services.AddTransient<UserService>();
+			services.AddScoped<IViewRenderService, ViewRenderService>();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
