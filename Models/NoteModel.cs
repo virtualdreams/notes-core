@@ -18,6 +18,8 @@ namespace notes.Models
 
 		public bool Trash { get; set; }
 
+		public int Version { get; set; }
+
 		public double? Score { get; set; }
 	}
 }
