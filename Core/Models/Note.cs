@@ -27,9 +27,6 @@ namespace notes.Core.Models
 		[BsonElement("trash")]
 		public bool Trash { get; set; }
 
-		[BsonElement("shared")]
-		public bool Shared { get; set; }
-
 		[BsonElement("version")]
 		public int Version { get; set; }
 

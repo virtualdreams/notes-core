@@ -216,7 +216,7 @@ namespace notes.Core.Services
 				Tags = _tags,
 				Notebook = notebook?.Trim(),
 				Trash = false,
-				Shared = false,
+				Version = 1
 			};
 
 			Context.Note.InsertOne(_insert);
