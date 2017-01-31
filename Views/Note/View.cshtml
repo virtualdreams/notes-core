@@ -15,8 +15,6 @@
 	    				<span class="caret"></span>
        				</button>
        				<ul class="dropdown-menu pull-right">
-						<li><a href="#" data-toggle="modal" data-target="#notebook"><i class="fa fa-book"></i> Notebook</a></li>
-						<li><a href="#" data-toggle="modal" data-target="#tags"><i class="fa fa-tags"></i> Tags</a></li>
 						<li><a href="@Url.Action("print", "note", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })" target="_blank"><i class="fa fa-print"></i> Print</a></li>
 						<li class="divider"></li>
 						<li><a href="#" data-toggle="modal" data-target="#trash">
@@ -71,83 +69,6 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				<button type="button" class="btn btn-primary" id="trashSubmit">Ok</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Model share -->
-<div class="modal fade" id="share" tabindex="-1" role="dialog" aria-labelledby="shareLabel" aria-hidden="true" data-id="@Model.Note.Id">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="shareLabel">Share note</h4>
-			</div>
-			<div class="modal-body">
-				Share &quot;@Model.Note.Title&quot;?
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary" id="shareSubmit">Ok</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Model notebook -->
-<div class="modal fade" id="notebook" tabindex="-1" role="dialog" aria-labelledby="notebookLabel" aria-hidden="true" data-id="@Model.Note.Id" data-value="@Model.Note.Notebook">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="notebookLabel">Notebook</h4>
-			</div>
-			<div class="modal-body">
-				<div class="form-group input-group">
-					<input class="form-control" name="notebook" id="notebookValue" value="@Model.Note.Notebook" />
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" id="notebookRestore">
-							<i class="fa fa-undo"></i>
-						</button>
-						<button class="btn btn-default" type="button" id="notebookDelete">
-							<i class="fa fa-times"></i>
-						</button>
-					</span>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary" id="notebookSubmit">Ok</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Model tags -->
-<div class="modal fade" id="tags" tabindex="-1" role="dialog" aria-labelledby="tagsLabel" aria-hidden="true" data-id="@Model.Note.Id" data-value="@Model.Note.Tags">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="tagsLabel">Tags</h4>
-			</div>
-			<div class="modal-body">
-				<div class="form-group input-group">
-					<input class="form-control" type="text" name="tags" id="tagsValue" value="@Model.Note.Tags" />
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" id="tagsRestore">
-							<i class="fa fa-undo"></i>
-						</button>
-						<button class="btn btn-default" type="button" id="tagsDelete">
-							<i class="fa fa-times"></i>
-						</button>
-					</span>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-primary" id="tagsSubmit">Ok</button>
 			</div>
 		</div>
 	</div>

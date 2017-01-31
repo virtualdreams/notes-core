@@ -179,18 +179,6 @@ namespace notes.Controllers
 			return View(view);
 		}
 
-		[HttpPost]
-		public IActionResult Notebook(NotebookPostModel model)
-		{
-			var _note = NoteService.GetById(model.Id, UserId);
-			if(_note == null)
-				return new StatusCodeResult(404);
-
-			NoteService.SetNotebook(model.Id, model.Notebook);
-			
-			return new NoContentResult();
-		}
-
 		[HttpGet]
 		public IActionResult Tag(string id, ObjectId after)
 		{
@@ -208,18 +196,6 @@ namespace notes.Controllers
 			};
 
 			return View(view);
-		}
-
-		[HttpPost]
-		public IActionResult Tags(TagsPostModel model)
-		{
-			var _note = NoteService.GetById(model.Id, UserId);
-			if(_note == null)
-				return new StatusCodeResult(404);
-
-			NoteService.SetTags(model.Id, model.Tags);
-
-			return new NoContentResult();
 		}
 
 		[HttpPost]
