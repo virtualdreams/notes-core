@@ -297,12 +297,8 @@ namespace notes.Core.Services
 						.Set(f => f.Title, title?.Trim())
 						.Set(f => f.Content, content?.Trim())
 						.Set(f => f.Notebook, notebook?.Trim())
-						.Set(f => f.Tags, _tags);
-			
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Update note -> '{0}'", Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
-			}
+						.Set(f => f.Tags, _tags)
+						.Inc(f => f.Version, 1);
 
 			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 
