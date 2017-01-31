@@ -198,55 +198,6 @@ namespace notes.Core.Services
 		}
 
 		/// <summary>
-		/// Set the notebook name for a note.
-		/// </summary>
-		/// <param name="note">The note.</param>
-		/// <param name="user">The user who owns the note.</param>
-		/// <param name="notebook">The notebook name.</param>
-		public void SetNotebook(ObjectId note, string notebook)
-		{
-			notebook = notebook?.Trim();
-
-			var _filter = Builders<Note>.Filter;
-			var _id = _filter.Eq(f => f.Id, note);
-
-			var _update = Builders<Note>.Update;
-			var _set = _update
-						.Set(f => f.Notebook, notebook);
-
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Set notebook -> '{0}'", Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
-			}
-
-			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
-		}
-
-		/// <summary>
-		/// Set tags to note.
-		/// </summary>
-		/// <param name="note">The note.</param>
-		/// <param name="tags">The tags, comma separated.</param>
-		public void SetTags(ObjectId note, string tags)
-		{
-			var _tags = tags?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).Where(s => !String.IsNullOrEmpty(s)).ToArray();
-
-			var _filter = Builders<Note>.Filter;
-			var _id = _filter.Eq(f => f.Id, note);
-
-			var _update = Builders<Note>.Update;
-			var _set = _update
-						.Set(f => f.Tags, _tags);
-			
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Set tags -> '{0}'", Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
-			}
-
-			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
-		}
-
-		/// <summary>
 		/// Create a new note.
 		/// </summary>
 		/// <param name="user">The user who owns thos note.</param>
