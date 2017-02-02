@@ -206,7 +206,7 @@ namespace notes.Core.Services
 		/// <returns></returns>
 		public ObjectId Create(ObjectId user, string title, string content, string notebook, string tags)
 		{
-			var _tags = tags?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).Where(s => !String.IsNullOrEmpty(s)).ToArray();
+			var _tags = tags?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).Where(s => !String.IsNullOrEmpty(s)).ToArray();
 
 			var _insert = new Note
 			{
@@ -238,7 +238,7 @@ namespace notes.Core.Services
 		/// <returns></returns>
 		public ObjectId Update(ObjectId note, string title, string content, string notebook, string tags)
 		{
-			var _tags = tags?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).Where(s => !String.IsNullOrEmpty(s)).ToArray();
+			var _tags = tags?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).Where(s => !String.IsNullOrEmpty(s)).ToArray();
 
 			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Id, note);
