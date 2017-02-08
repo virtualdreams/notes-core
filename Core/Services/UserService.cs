@@ -1,10 +1,14 @@
+using MailKit.Net.Smtp;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MimeKit;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using notes.Core.Helper;
 using notes.Core.Models;
-using Microsoft.Extensions.Logging;
 
 namespace notes.Core.Services
 {
@@ -12,11 +16,13 @@ namespace notes.Core.Services
 	{
 		private readonly ILogger<UserService> Log;
 		private readonly MongoContext Context;
+		private readonly IOptions<Settings> Options;
 
-		public UserService(ILogger<UserService> log, MongoContext context)
+		public UserService(ILogger<UserService> log, MongoContext context, IOptions<Settings> options)
 		{
 			Log = log;
 			Context = context;
+			Options = options;
 		}
 
 		/// <summary>
@@ -162,11 +168,6 @@ namespace notes.Core.Services
 			var _update = Builders<User>.Update;
 			var _set = _update.Set(f => f.Password, PasswordHasher.HashPassword(password));
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Set new password -> '{0}'", Context.User.UpdateOne(_id & _active, _set).ToString());
-			}
-
 			Log.LogInformation("Update password for user {0}.", GetById(user).Username);
 
 			Context.User.UpdateOne(_id & _active, _set);
@@ -226,6 +227,109 @@ namespace notes.Core.Services
 			
 			Log.LogWarning("User {0} failed to log in with password {1}.", username, password);
 			return null;
+		}
+
+		/// <summary>
+		/// Create a reset token and send an email to the user.
+		/// </summary>
+		/// <param name="username">The username.</param>
+		/// <param name="origin">The origon url.</param>
+		/// <returns></returns>
+		public bool ForgotPassword(string username, string origin)
+		{
+			username = username?.Trim()?.ToLower();
+
+			// get user from database
+			var user = GetByName(username);
+			if(user == null)
+				return false;
+
+			// create reset token
+			var nonce = ObjectId.GenerateNewId().ToString();
+			Context.Token.InsertOne(new Token {
+				Created = DateTime.Now,
+				User = user.Id,
+				Nonce = nonce
+			});
+
+			// create reset password e-mail
+			var message = new MimeMessage();
+			message.From.Add(new MailboxAddress(Options.Value.Smtp.From));
+			message.To.Add(new MailboxAddress(username));
+			message.Subject = $"[{Options.Value.SiteName}] - Reset Password";
+			message.Body = new TextPart("plain")
+			{
+				Text = 
+$@"Hi {username},
+
+You recently requested to reset your password for your {Options.Value.SiteName} account. Use the link below to reset it. This password reset is only valid for the next <TIME> hours.
+
+{origin}/account/reset_password/{nonce}
+
+If you did not request a password reset, please ignore this email or contact support if you have questions.
+
+Thanks,
+The {Options.Value.SiteName} Team
+				
+{Options.Value.SiteName} ({origin})"
+			};
+
+			// send e-mail
+			using(var client = new SmtpClient()) {
+				// accept all SSL certificates (in case the server supports STARTTLS)
+				if(Options.Value.Smtp.SkipVerify)
+                	client.ServerCertificateValidationCallback = (s,c,h,e) => true;
+				
+				client.Connect(Options.Value.Smtp.Server, Options.Value.Smtp.Port, false);
+				
+				// disable authentication if username or password missing
+				if(!String.IsNullOrEmpty(Options.Value.Smtp.Username) && !String.IsNullOrEmpty(Options.Value.Smtp.Passwd))
+					client.Authenticate(Options.Value.Smtp.Username, Options.Value.Smtp.Passwd);
+				
+				client.Send(message);
+				client.Disconnect(true);
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// Get a user by reset token.
+		/// </summary>
+		/// <param name="nonce">The token.</param>
+		/// <returns></returns>
+		public User GetUserByToken(string nonce)
+		{
+			var _filter = Builders<Token>.Filter;
+			var _nonce = _filter.Eq(f => f.Nonce, nonce);
+
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug("Get user by token -> '{0}'", Context.Token.Find(_nonce).ToString());
+			}
+
+			var _token = Context.Token.Find(_nonce).SingleOrDefault();
+			if(_token == null)
+				return null;
+
+			return GetById(_token.User);
+		}
+
+		/// <summary>
+		/// Remove the reset token.
+		/// </summary>
+		/// <param name="nonce">The token.</param>
+		public void RemoveToken(string nonce)
+		{
+			var _filter = Builders<Token>.Filter;
+			var _nonce = _filter.Eq(f => f.Nonce, nonce);
+
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug("Delete reset token -> '{0}'", Context.Token.DeleteOne(_nonce).ToString());
+			}
+
+			Context.Token.DeleteOne(_nonce);
 		}
 	}
 }

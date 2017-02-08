@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System;
 using notes.Core.Services;
 using notes.Helper;
 using notes.Models;
@@ -87,6 +87,66 @@ namespace notes.Controllers
 			}
 		}
 
+		[HttpGet]
+		[AllowAnonymous]
+		public IActionResult Forgot_Password()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		public IActionResult Forgot_Password(PasswdForgotPostModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View();
+			}
+
+			UserService.ForgotPassword(model.Username, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}");
+
+			return View("Forgot_Confirmation");
+		}
+
+		[HttpGet]
+		[AllowAnonymous]
+		public IActionResult Reset_Password(string id)
+		{
+			var _user = UserService.GetUserByToken(id);
+			if(_user == null)
+				return RedirectToAction("Login");
+
+			var view = new PasswdResetModel {
+				Token = id
+			};
+
+			return View(view);
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		public IActionResult Reset_Password(PasswdResetPostModel model)
+		{
+			if (!ModelState.IsValid || !model.NewPassword.Equals(model.ConfirmPassword))
+			{
+				var view = new PasswdResetModel {
+					Token = model.Token
+				};
+
+				return View(view);
+			}
+
+			var _user = UserService.GetUserByToken(model.Token);
+			if(_user == null)
+				return new StatusCodeResult(404);
+			
+			UserService.SetPassword(_user.Id, model.NewPassword);
+			UserService.RemoveToken(model.Token);
+
+			return RedirectToAction("Login");
+		}
+
+#region User
 		[Authorize]
 		[HttpGet]
 		public IActionResult Logout()
@@ -95,6 +155,73 @@ namespace notes.Controllers
 
 			return RedirectToAction("index", "home");
 		}
+
+		[Authorize]
+		[HttpGet]
+		public IActionResult Security(ObjectId id)
+		{
+			return View();
+		}
+
+		[Authorize]
+		[HttpPost]
+		public IActionResult Security(PasswdPostModel model)
+		{
+			if(!ModelState.IsValid || (UserService.Login(User.GetUserName(), model.OldPassword) == null || !model.NewPassword.Equals(model.ConfirmPassword)))
+			{
+				return View();
+			}
+
+			// set new password
+			UserService.SetPassword(UserId, model.NewPassword);
+
+			// force logout
+			HttpContext.Authentication.SignOutAsync("notes");
+
+			// redirect to home
+			return RedirectToAction("index", "home");
+		}
+
+		[Authorize]
+		[HttpGet]
+		public IActionResult Settings()
+		{
+			var view = new SettingsEditContainer
+			{
+				Settings = new SettingsModel
+				{
+					Items = UserSettings?.PageSize ?? Options.Value.PageSize,
+					Language = UserSettings?.SearchLanguage ?? "en"
+				}
+			};
+
+			return View(view);
+		}
+
+		[HttpPost]
+		public IActionResult Settings(SettingsPostModel model)
+		{
+			if(!ModelState.IsValid)
+			{
+				var view = new SettingsEditContainer
+				{
+					Settings = new SettingsModel
+					{
+						Items = model.Items,
+						Language = model.Language
+					}
+				};
+
+				return View(view);
+			}
+
+			UserService.SetSettings(UserId, model.Items, model.Language);
+
+			return RedirectToAction("settings");
+		}
+#endregion
+
+#region Admin
 
 		[Authorize(Policy = "AdministratorOnly")]
 		[HttpGet]
@@ -166,66 +293,6 @@ namespace notes.Controllers
 
 			return RedirectToAction("index");
 		}
-
-		[HttpGet]
-		public IActionResult Security(ObjectId id)
-		{
-			return View();
-		}
-
-		[HttpPost]
-		public IActionResult Security(PasswdPostModel model)
-		{
-			if(!ModelState.IsValid || (UserService.Login(User.GetUserName(), model.OldPassword) == null || !model.NewPassword.Equals(model.ConfirmPassword)))
-			{
-				return View();
-			}
-
-			// set new password
-			UserService.SetPassword(UserId, model.NewPassword);
-
-			// force logout
-			HttpContext.Authentication.SignOutAsync("notes");
-
-			// redirect to home
-			return RedirectToAction("index", "home");
-		}
-
-		[HttpGet]
-		public IActionResult Settings()
-		{
-			var view = new SettingsEditContainer
-			{
-				Settings = new SettingsModel
-				{
-					Items = UserSettings?.PageSize ?? Options.Value.PageSize,
-					Language = UserSettings?.SearchLanguage ?? "en"
-				}
-			};
-
-			return View(view);
-		}
-
-		[HttpPost]
-		public IActionResult Settings(SettingsPostModel model)
-		{
-			if(!ModelState.IsValid)
-			{
-				var view = new SettingsEditContainer
-				{
-					Settings = new SettingsModel
-					{
-						Items = model.Items,
-						Language = model.Language
-					}
-				};
-
-				return View(view);
-			}
-
-			UserService.SetSettings(UserId, model.Items, model.Language);
-
-			return RedirectToAction("settings");
-		}
+#endregion
     }
 }

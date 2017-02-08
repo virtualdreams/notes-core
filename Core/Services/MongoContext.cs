@@ -13,6 +13,7 @@ namespace notes.Core.Services
 		private readonly IMongoDatabase _database;
 		public IMongoCollection<Note> Note { get; private set; }
 		public IMongoCollection<User> User { get; private set; }
+		public IMongoCollection<Token> Token { get; private set; }
 
 		public MongoContext(IOptions<Settings> settings, ILogger<MongoContext> log)
 		{
@@ -25,6 +26,7 @@ namespace notes.Core.Services
 			_database = _client.GetDatabase(Settings.Value.Database);
 			Note = _database.GetCollection<Note>("notes");
 			User = _database.GetCollection<User>("user");
+			Token = _database.GetCollection<Token>("token");
 		}
 	}
 }
