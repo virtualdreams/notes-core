@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System;
 using notes.Core.Services;
 using notes.Helper;
 using notes.Models;
@@ -14,13 +13,13 @@ using notes.Models;
 namespace notes.Controllers
 {
     [Authorize]
-	public class AccountController : BaseController
+	public class UserController : BaseController
 	{
 		private readonly IMapper Mapper;
 		private readonly UserService UserService;
 		private readonly IOptions<Settings> Options;
 
-		public AccountController(IMapper mapper, UserService user, IOptions<Settings> options)
+		public UserController(IMapper mapper, UserService user, IOptions<Settings> options)
 			: base(user)
 		{
 			Mapper = mapper;
@@ -221,6 +220,7 @@ namespace notes.Controllers
 		}
 #endregion
 
+/*
 #region Admin
 
 		[Authorize(Policy = "AdministratorOnly")]
@@ -294,5 +294,6 @@ namespace notes.Controllers
 			return RedirectToAction("index");
 		}
 #endregion
+*/
     }
 }
