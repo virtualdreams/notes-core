@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace notes.Models
 {
-    public class SettingsPostModel
+    public class UserSettingsPostModel
     {
         [Required]
         [Range(1,100)]

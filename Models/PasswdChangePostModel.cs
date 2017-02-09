@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace notes.Models
 {
-	public class PasswdPostModel
+	public class PasswdChangePostModel
 	{
 		[Required(ErrorMessage="Please fill in a password.")]
 		public string OldPassword { get; set; }

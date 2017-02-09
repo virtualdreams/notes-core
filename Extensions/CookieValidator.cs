@@ -17,9 +17,9 @@ namespace notes.Extensions
 		{
 			var _userService = context.HttpContext.RequestServices.GetRequiredService<UserService>();
 			var _username = context.Principal.GetUserName();
-			var _user = _userService.GetByName(_username);
+			var _user = _userService.GetUserByName(_username);
 			
-			if(_user == null)
+			if(_user == null || !_user.Enabled)
 			{
 				context.RejectPrincipal();
         		await context.HttpContext.Authentication.SignOutAsync("notes");

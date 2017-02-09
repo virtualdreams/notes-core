@@ -164,7 +164,7 @@ namespace notes.Controllers
 
 		[Authorize]
 		[HttpPost]
-		public IActionResult Security(PasswdPostModel model)
+		public IActionResult Security(PasswdChangePostModel model)
 		{
 			if(!ModelState.IsValid || (UserService.Login(User.GetUserName(), model.OldPassword) == null || !model.NewPassword.Equals(model.ConfirmPassword)))
 			{
@@ -185,9 +185,9 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Settings()
 		{
-			var view = new SettingsEditContainer
+			var view = new UserSettingsEditContainer
 			{
-				Settings = new SettingsModel
+				Settings = new UserSettingsModel
 				{
 					Items = UserSettings?.PageSize ?? Options.Value.PageSize,
 					Language = UserSettings?.SearchLanguage ?? "en"
@@ -198,13 +198,13 @@ namespace notes.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Settings(SettingsPostModel model)
+		public IActionResult Settings(UserSettingsPostModel model)
 		{
 			if(!ModelState.IsValid)
 			{
-				var view = new SettingsEditContainer
+				var view = new UserSettingsEditContainer
 				{
-					Settings = new SettingsModel
+					Settings = new UserSettingsModel
 					{
 						Items = model.Items,
 						Language = model.Language

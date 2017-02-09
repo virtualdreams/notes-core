@@ -8,11 +8,6 @@ namespace notes.Extensions
 		{
 			app.UseMvc(routes => {
 				routes.MapRoute(
-					name: "areaRoute",
-    				template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-				);
-
-				routes.MapRoute(
 					name: "search",
 					template: "search",
 					defaults: new { controller = "Home", action = "Search" }
@@ -84,6 +79,11 @@ namespace notes.Extensions
 					name: "reset_password",
 					template: "reset_password",
 					defaults: new { controller = "user", action = "reset_password"}
+				);
+
+				routes.MapRoute(
+					name: "areaRoute",
+    				template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
 				);
 
 				routes.MapRoute(

@@ -56,7 +56,7 @@ namespace notes.Areas.Admin.Controllers
 		[HttpGet]
 		public IActionResult Edit(ObjectId id)
 		{
-			var _user = UserService.GetById(id);
+			var _user = UserService.GetUserById(id);
 
 			var user = Mapper.Map<UserModel>(_user);
 

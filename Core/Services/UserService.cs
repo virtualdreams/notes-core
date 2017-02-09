@@ -48,7 +48,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The user id.</param>
 		/// <returns>The user if exists or null.</returns>
-		public User GetById(ObjectId user)
+		public User GetUserById(ObjectId user)
 		{
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
@@ -66,19 +66,40 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="username">The username.</param>
 		/// <returns>The user if exists or null.</returns>
-		public User GetByName(string username)
+		public User GetUserByName(string username)
         {
             var _filter = Builders<User>.Filter;
 			var _username = _filter.Eq(f => f.Username, username);
-			var _active = _filter.Eq(f => f.Enabled, true);
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug("Get user by name -> '{0}'", Context.User.Find(_username & _active).ToString());
+				Log.LogDebug("Get user by name -> '{0}'", Context.User.Find(_username).ToString());
 			}
 
-			return Context.User.Find(_username & _active).SingleOrDefault();
+			return Context.User.Find(_username).SingleOrDefault();
         }
+
+		/// <summary>
+		/// Get a user by reset token.
+		/// </summary>
+		/// <param name="nonce">The token.</param>
+		/// <returns></returns>
+		public User GetUserByToken(string nonce)
+		{
+			var _filter = Builders<Token>.Filter;
+			var _nonce = _filter.Eq(f => f.Nonce, nonce);
+
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug("Get user by token -> '{0}'", Context.Token.Find(_nonce).ToString());
+			}
+
+			var _token = Context.Token.Find(_nonce).SingleOrDefault();
+			if(_token == null)
+				return null;
+
+			return GetUserById(_token.User);
+		}
 
 		/// <summary>
         /// Get user id.
@@ -89,14 +110,13 @@ namespace notes.Core.Services
 		{
 			var _filter = Builders<User>.Filter;
 			var _username = _filter.Eq(f => f.Username, username);
-			var _active = _filter.Eq(f => f.Enabled, true);
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug("Get user id -> '{0}'", Context.User.Find(_username & _active).Project(f => f.Id).ToString());
+				Log.LogDebug("Get user id -> '{0}'", Context.User.Find(_username).Project(f => f.Id).ToString());
 			}
 
-			return Context.User.Find(_username & _active).Project(f => f.Id).SingleOrDefault();
+			return Context.User.Find(_username).Project(f => f.Id).SingleOrDefault();
 		}
 
 		/// <summary>
@@ -168,7 +188,7 @@ namespace notes.Core.Services
 			var _update = Builders<User>.Update;
 			var _set = _update.Set(f => f.Password, PasswordHasher.HashPassword(password));
 
-			Log.LogInformation("Update password for user {0}.", GetById(user).Username);
+			Log.LogInformation("Update password for user {0}.", GetUserById(user).Username);
 
 			Context.User.UpdateOne(_id & _active, _set);
 		}
@@ -240,8 +260,8 @@ namespace notes.Core.Services
 			username = username?.Trim()?.ToLower();
 
 			// get user from database
-			var user = GetByName(username);
-			if(user == null)
+			var user = GetUserByName(username);
+			if(user == null || !user.Enabled)
 				return false;
 
 			// create reset token
@@ -291,28 +311,6 @@ The {Options.Value.SiteName} Team
 			}
 
 			return true;
-		}
-
-		/// <summary>
-		/// Get a user by reset token.
-		/// </summary>
-		/// <param name="nonce">The token.</param>
-		/// <returns></returns>
-		public User GetUserByToken(string nonce)
-		{
-			var _filter = Builders<Token>.Filter;
-			var _nonce = _filter.Eq(f => f.Nonce, nonce);
-
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Get user by token -> '{0}'", Context.Token.Find(_nonce).ToString());
-			}
-
-			var _token = Context.Token.Find(_nonce).SingleOrDefault();
-			if(_token == null)
-				return null;
-
-			return GetById(_token.User);
 		}
 
 		/// <summary>

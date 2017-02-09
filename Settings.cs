@@ -23,6 +23,9 @@ namespace notes
 		/// </summary>
 		public int PageSize { get; set; }
 
+		/// <summary>
+		/// Smtp settings
+		/// </summary>
 		public Smtp Smtp { get; set; }
 	}
 
@@ -56,7 +59,6 @@ namespace notes
 		/// <summary>
 		/// Skip verify SSL certificates.
 		/// </summary>
-		/// <returns></returns>
 		public bool SkipVerify { get; set; }
 	}
 }
