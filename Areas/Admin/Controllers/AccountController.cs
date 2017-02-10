@@ -57,6 +57,8 @@ namespace notes.Areas.Admin.Controllers
 		public IActionResult Edit(ObjectId id)
 		{
 			var _user = UserService.GetUserById(id);
+			if(_user == null)
+				return NotFound();
 
 			var user = Mapper.Map<UserModel>(_user);
 

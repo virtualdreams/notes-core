@@ -53,7 +53,7 @@ namespace notes.Controllers
 		{
 			var _note = NoteService.GetById(id, UserId);
 			if(_note == null)
-				return new StatusCodeResult(404);
+				return NotFound();
 			
 			var note = Mapper.Map<NoteModel>(_note);
 
@@ -81,7 +81,7 @@ namespace notes.Controllers
 		{
 			var _note = NoteService.GetById(id, UserId);
 			if(_note == null)
-				return new StatusCodeResult(404);
+				return NotFound();
 
 			var note = Mapper.Map<NoteModel>(_note);
 
@@ -125,7 +125,7 @@ namespace notes.Controllers
 			{
 				var _note = NoteService.GetById(model.Id, UserId);
 				if(_note == null)
-					return new StatusCodeResult(404);
+					return NotFound();
 
 				_id = NoteService.Update(model.Id, model.Title, model.Content, model.Notebook, model.Tags);
 			}
@@ -203,7 +203,7 @@ namespace notes.Controllers
 		{
 			var _note = NoteService.GetById(id, UserId);
 			if(_note == null)
-				return new StatusCodeResult(404);
+				return NotFound();
 
 			NoteService.Trash(id, !_note.Trash);
 
