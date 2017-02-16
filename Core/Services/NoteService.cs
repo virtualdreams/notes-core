@@ -23,7 +23,6 @@ namespace notes.Core.Services
 		/// Get a list of notes.
 		/// </summary>
 		/// <param name="user">The user who owns the notes.</param>
-		/// <param name="previous">The previous id.</param>
 		/// <param name="next">The next id.</param>
 		/// <param name="trashed">Request trashed items or not.</param>
 		/// <param name="limit">Limit the result.</param>
@@ -62,7 +61,6 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The user who owns the notes.</param>
 		/// <param name="notebook">The notebook name.</param>
-		/// <param name="previous">The previous cursor.</param>
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
@@ -112,7 +110,6 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The user who owns the notes.</param>
 		/// <param name="tag"></param>
-		/// <param name="previous">The previous cursor.</param>
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
