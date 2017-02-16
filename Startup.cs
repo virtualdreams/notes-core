@@ -67,6 +67,7 @@ namespace notes
 			services.AddScoped<MongoContext>();
 			services.AddTransient<NoteService>();
 			services.AddTransient<UserService>();
+			services.AddTransient<MailService>();
 			services.AddScoped<IViewRenderService, ViewRenderService>();
 		}
 

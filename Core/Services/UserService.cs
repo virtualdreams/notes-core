@@ -1,7 +1,4 @@
-using MailKit.Net.Smtp;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using MimeKit;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Collections.Generic;
@@ -16,13 +13,13 @@ namespace notes.Core.Services
 	{
 		private readonly ILogger<UserService> Log;
 		private readonly MongoContext Context;
-		private readonly IOptions<Settings> Options;
+		private readonly MailService Mail;
 
-		public UserService(ILogger<UserService> log, MongoContext context, IOptions<Settings> options)
+		public UserService(ILogger<UserService> log, MongoContext context, MailService mail)
 		{
 			Log = log;
 			Context = context;
-			Options = options;
+			Mail = mail;
 		}
 
 		/// <summary>
@@ -142,23 +139,25 @@ namespace notes.Core.Services
 		/// Create a new user with username, password and role.
 		/// </summary>
 		/// <param name="username">The username.</param>
-		/// <param name="password">The paramref name="password".</param>
+		/// <param name="password">The password.</param>
 		/// <param name="role">The role. Can be "User" or "Administrator".</param>
+		/// <param name="active">User account active.</param>
 		/// <returns>The new ObjectId.</returns>
-		public ObjectId Create(string username, string password, string role)
+		public ObjectId Create(string username, string password, string role, bool active)
 		{
-			username = username?.Trim();
+			username = username?.Trim()?.ToLower();
 			password = password?.Trim();
 
 			var _user = new User
 			{
 				Username = username,
 				Password = PasswordHasher.HashPassword(password),
-				Role = role.ToString(),
-				Enabled = true
+				Role = role,
+				Enabled = active
 			};
 
 			Context.User.InsertOne(_user);
+			//catch(MongoWriteException ex) when(ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
 
 			Log.LogInformation("Create new user {0} with id {1}.", username, _user.Id);
 
@@ -170,6 +169,52 @@ namespace notes.Core.Services
 			{
 				return _user.Id;
 			}
+		}
+
+		/// <summary>
+		/// Update a user.
+		/// </summary>
+		/// <param name="user">The user id.</param>
+		/// <param name="username">The username.</param>
+		/// <param name="password">The paramref name="password". Leave empty if you don't want to change.</param>
+		/// <param name="role">The user role. Can be "User" or "Administrator".</param>
+		/// <param name="active">User account active.</param>
+		public void Update(ObjectId user, string username, string password, string role, bool active)
+		{
+			username = username?.Trim()?.ToLower();
+			password = password?.Trim();
+
+			var _filter = Builders<User>.Filter;
+			var _id = _filter.Eq(f => f.Id, user);
+
+			var _update = Builders<User>.Update;
+			var _set = _update
+				.Set(f => f.Username, username)
+				.Set(f => f.Role, role)
+				.Set(f => f.Enabled, active);
+
+			// set new password if password not empty
+			if(!String.IsNullOrEmpty(password))
+				_set = _set.Set(f => f.Password, PasswordHasher.HashPassword(password));
+
+			if(Log.IsEnabled(LogLevel.Debug))
+				Log.LogDebug(_set.Render(Context.User.DocumentSerializer, Context.User.Settings.SerializerRegistry).ToString());
+
+			Log.LogInformation("Update user data for {0}", user.ToString());
+
+			Context.User.UpdateOne(_id, _set);
+		}
+
+		/// <summary>
+		/// Delete a user permanently.
+		/// </summary>
+		/// <param name="user">The user id.</param>
+		public void Delete(ObjectId user)
+		{
+			Log.LogInformation("Delete user {0} permanently.", GetUserById(user).Username);
+
+			Context.User.DeleteOne(f => f.Id == user);
+			Context.Note.DeleteMany(f => f.Owner == user);
 		}
 
 		/// <summary>
@@ -226,7 +271,7 @@ namespace notes.Core.Services
 		/// <returns>The user if authenticated or null.</returns>
         public User Login(string username, string password)
 		{
-			username = username?.Trim();
+			username = username?.Trim()?.ToLower();
 			password = password?.Trim();
 
 			var _filter = Builders<User>.Filter;
@@ -245,7 +290,7 @@ namespace notes.Core.Services
 				return _user;
 			}
 			
-			Log.LogWarning("User {0} failed to log in with password {1}.", username, password);
+			Log.LogWarning("User {0} failed to log in.", username);
 			return null;
 		}
 
@@ -272,43 +317,7 @@ namespace notes.Core.Services
 				Nonce = nonce
 			});
 
-			// create reset password e-mail
-			var message = new MimeMessage();
-			message.From.Add(new MailboxAddress(Options.Value.Smtp.From));
-			message.To.Add(new MailboxAddress(username));
-			message.Subject = $"[{Options.Value.SiteName}] - Reset Password";
-			message.Body = new TextPart("plain")
-			{
-				Text = 
-$@"Hi {username},
-
-You recently requested to reset your password for your {Options.Value.SiteName} account. Use the link below to reset it. This password reset is only valid for the next <TIME> hours.
-
-{origin}/account/reset_password/{nonce}
-
-If you did not request a password reset, please ignore this email or contact support if you have questions.
-
-Thanks,
-The {Options.Value.SiteName} Team
-				
-{Options.Value.SiteName} ({origin})"
-			};
-
-			// send e-mail
-			using(var client = new SmtpClient()) {
-				// accept all SSL certificates (in case the server supports STARTTLS)
-				if(Options.Value.Smtp.SkipVerify)
-                	client.ServerCertificateValidationCallback = (s,c,h,e) => true;
-				
-				client.Connect(Options.Value.Smtp.Server, Options.Value.Smtp.Port, false);
-				
-				// disable authentication if username or password missing
-				if(!String.IsNullOrEmpty(Options.Value.Smtp.Username) && !String.IsNullOrEmpty(Options.Value.Smtp.Passwd))
-					client.Authenticate(Options.Value.Smtp.Username, Options.Value.Smtp.Passwd);
-				
-				client.Send(message);
-				client.Disconnect(true);
-			}
+			Mail.SendResetPasswordMail(username, origin, nonce);
 
 			return true;
 		}

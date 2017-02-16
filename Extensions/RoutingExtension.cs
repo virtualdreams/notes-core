@@ -77,7 +77,7 @@ namespace notes.Extensions
 
 				routes.MapRoute(
 					name: "reset_password",
-					template: "reset_password",
+					template: "reset_password/{id?}",
 					defaults: new { controller = "user", action = "reset_password"}
 				);
 

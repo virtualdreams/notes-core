@@ -17,7 +17,8 @@ namespace notes.Core.Helper
 			byte[] salt;
 			byte[] buffer2;
 			if (String.IsNullOrEmpty(password))
-				throw new ArgumentNullException("password");
+				password = String.Empty;
+				//throw new ArgumentNullException("password");
 
 			using (var bytes = new Rfc2898DeriveBytes(password, SaltByteSize, HashingIterationsCount))
 			{

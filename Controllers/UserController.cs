@@ -45,9 +45,11 @@ namespace notes.Controllers
 				return View("Login", model);
 			}
 
+			// if no accounts exists, create the first user as administrator.
+			// HACK!
 			if(!UserService.HasUsers())
 			{
-				UserService.Create(model.Username, model.Password, "Administrator");
+				UserService.Create(model.Username, model.Password, "Administrator", true);
 			}
 
 			var _user = UserService.Login(model.Username, model.Password);

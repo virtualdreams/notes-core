@@ -28,6 +28,18 @@ notes = (function($){
 		});
 	});
 
+	$('#delAccountSubmit').click(function() {
+		var id = $('#delAccount').data('id');
+		$.ajax({
+			type: "POST",
+			url: '/admin/account/delete/' + id
+		}).done(function() {
+			location.href = '/admin/account/';
+		}).fail(function() {
+			alert('Failed to delete account.');
+		});
+	});
+
 	function getFormData($form){
 		var unindexed_array = $form.serializeArray();
 		var indexed_array = {};
@@ -182,7 +194,7 @@ notes = (function($){
 				email: true
 			},
 			'password': {
-				required: true,
+				//required: true,
 				minlength: 8
 			}
 		}

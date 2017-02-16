@@ -36,7 +36,7 @@
 				<tbody>
 					@foreach(var user in Model.Users) {
 					<tr>
-						<td>@user.Username</td>
+						<td><a href="@Url.Action("edit", "account", new { area = "admin", id = @user.Id })">@user.Username</a></td>
 						<td>@user.Role</td>
 						<td>@(@user.Enabled ? "Active" : "Disabled" )</td>
 					</tr>

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using System.Collections.Generic;
-using System;
 using notes.Controllers;
 using notes.Core.Services;
 using notes.Models;
@@ -81,7 +80,8 @@ namespace notes.Areas.Admin.Controllers
 					{
 						Id = model.Id,
 						Username = model.Username,
-						Role = String.Empty	
+						Role = model.Role,
+						Enabled = model.Enabled
 					}
 				};
 
@@ -90,10 +90,26 @@ namespace notes.Areas.Admin.Controllers
 
 			if(model.Id == ObjectId.Empty)
 			{
-				UserService.Create(model.Username, model.Password, "User");
+				UserService.Create(model.Username, model.Password, model.Role, model.Enabled);
+			}
+			else
+			{
+				UserService.Update(model.Id, model.Username, model.Password, model.Role, model.Enabled);
 			}
 
 			return RedirectToAction("Index");
+		}
+
+		[HttpPost]
+		public IActionResult Delete(ObjectId id)
+		{
+			var _user = UserService.GetUserById(id);
+			if(_user == null)
+				return NotFound();
+
+			UserService.Delete(id);
+
+			return new NoContentResult();
 		}
     }
 }
