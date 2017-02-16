@@ -52,7 +52,7 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "Microsoft.Extensions.Logging.Filter": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-    "MongoDB.Driver": "2.4.0",
+    "MongoDB.Driver": "2.4.2",
     "AutoMapper": "5.1.1",
     "Markdig": "0.10.4",
     "MailKit": "1.10.2"
