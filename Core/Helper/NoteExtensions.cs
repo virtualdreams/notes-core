@@ -76,6 +76,14 @@ namespace notes.Helper
 
 			return principal.FindFirst(ClaimTypes.Name)?.Value;
 		}
+
+		static public string GetUserRole(this ClaimsPrincipal principal)
+		{
+			if (principal == null)
+				throw new ArgumentNullException(nameof(principal));
+
+			return principal.FindFirst(ClaimTypes.Role)?.Value;
+		}
 	}
 
 	class Chunk

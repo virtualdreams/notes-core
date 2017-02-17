@@ -19,7 +19,8 @@ namespace notes.Extensions
 			var _username = context.Principal.GetUserName();
 			var _user = _userService.GetUserByName(_username);
 			
-			if(_user == null || !_user.Enabled)
+			// if the user not exists or the user is disabled or his role has changed, reject his login
+			if(_user == null || !_user.Enabled || !_user.Role.Equals(context.Principal.GetUserRole()))
 			{
 				context.RejectPrincipal();
         		await context.HttpContext.Authentication.SignOutAsync("notes");
