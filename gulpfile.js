@@ -5,12 +5,13 @@ var gulp = require("gulp"),
 	less = require("gulp-less"),
 	uglify = require("gulp-uglify")
 
+var srcDir = 'wwwroot/assets/'
 var cssTargetDir = 'wwwroot/css/'
 var jsTargetDir = 'wwwroot/js/'
 
 gulp.task('notes-css', function() {
 	return gulp.src([
-		'Assets/css/notes.less'
+		srcDir + 'css/notes.less'
 	])
 	.pipe(less())
 	.pipe(concat('notes.min.css'))
@@ -20,7 +21,7 @@ gulp.task('notes-css', function() {
 
 gulp.task('admin2-js', function() {
 	return gulp.src([
-		'Assets/js/sb-admin-2.js'
+		srcDir + 'js/sb-admin-2.js'
 	])
 	.pipe(uglify())
 	.pipe(rename({suffix: '.min'}))
@@ -29,7 +30,7 @@ gulp.task('admin2-js', function() {
 
 gulp.task('notes-js', function() {
 	return gulp.src([
-		'Assets/js/notes.js'
+		srcDir + 'js/notes.js'
 	])
 	.pipe(uglify())
 	.pipe(rename({suffix: '.min'}))
