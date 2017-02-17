@@ -75,9 +75,15 @@ namespace notes
 		{
 			logger.AddConsole(Configuration.GetSection("Logging"));
 
+			app.UseStatusCodePagesWithRedirects("~/error/{0}");
+
 			if(env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
+			}
+			else
+			{
+				app.UseExceptionHandler("/error/500");
 			}
 
 			app.UseStaticFiles();

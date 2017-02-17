@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 
 namespace notes.Extensions
 {
-	static public class RoutingExtensions
+    static public class RoutingExtensions
 	{
 		static public IApplicationBuilder AddRoutes(this IApplicationBuilder app)
 		{
@@ -82,8 +82,14 @@ namespace notes.Extensions
 				);
 
 				routes.MapRoute(
+					name: "error",
+					template: "error/{code?}",
+					defaults: new { controller = "home", action = "error" }
+				);
+
+				routes.MapRoute(
 					name: "areaRoute",
-    				template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+					template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
 				);
 
 				routes.MapRoute(
