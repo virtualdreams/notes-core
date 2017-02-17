@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using notes.Core.Services;
 
@@ -18,8 +19,10 @@ namespace notes.ViewComponents
 			var _user = UserService.GetUserById(UserId);
 			if(_user == null)
 				return Content("unknown");
+			
+			var _displayName = String.IsNullOrEmpty(_user.DisplayName) ? _user.Username : _user.DisplayName;
 
-			return Content(_user.Username);
+			return Content($"{_displayName}");
 		}
     }
 }

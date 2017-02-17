@@ -80,6 +80,7 @@ namespace notes.Areas.Admin.Controllers
 					{
 						Id = model.Id,
 						Username = model.Username,
+						DisplayName = model.DisplayName,
 						Role = model.Role,
 						Enabled = model.Enabled
 					}
@@ -90,11 +91,11 @@ namespace notes.Areas.Admin.Controllers
 
 			if(model.Id == ObjectId.Empty)
 			{
-				UserService.Create(model.Username, model.Password, model.Role, model.Enabled);
+				UserService.Create(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
 			}
 			else
 			{
-				UserService.Update(model.Id, model.Username, model.Password, model.Role, model.Enabled);
+				UserService.Update(model.Id, model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
 			}
 
 			return RedirectToAction("Index");

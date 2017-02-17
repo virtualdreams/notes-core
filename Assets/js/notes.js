@@ -173,14 +173,17 @@ notes = (function($){
 		rules: {
 			'oldpassword': {
 				required: true,
+				nowhitespace: true,
 				minlength: 8
 			},
 			'newpassword': {
 				required: true,
+				nowhitespace: true,
 				minlength: 8
 			},
 			'confirmpassword': {
 				required: true,
+				nowhitespace: true,
 				minlength: 8,
 				equalTo: '#newpassword'
 			}
@@ -194,8 +197,10 @@ notes = (function($){
 				email: true
 			},
 			'password': {
-				//required: true,
 				minlength: 8
+			},
+			'displayname': {
+				nowhitespace: true
 			}
 		}
 	});

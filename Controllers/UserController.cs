@@ -49,7 +49,7 @@ namespace notes.Controllers
 			// HACK!
 			if(!UserService.HasUsers())
 			{
-				UserService.Create(model.Username, model.Password, "Administrator", true);
+				UserService.Create(model.Username, model.Password, "Administrator", "Administrator", true);
 			}
 
 			var _user = UserService.Login(model.Username, model.Password);

@@ -14,6 +14,8 @@ namespace notes.Models
 		[MinLength(8, ErrorMessage="Minimum length 8 characters.")]
 		public string Password { get; set; }
 
+		public string DisplayName { get; set; }
+
 		[Required(ErrorMessage="Please set a role.")]
 		[RegularExpression("Administrator|User")]
 		public string Role { get; set; }

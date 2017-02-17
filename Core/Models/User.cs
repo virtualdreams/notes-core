@@ -22,6 +22,9 @@ namespace notes.Core.Models
 		[BsonElement("password")]
 		public string Password { get; set; }
 
+		[BsonElement("displayname")]
+		public string DisplayName { get; set; }
+
 		/// <summary>
 		/// The user role.
 		/// </summary>

@@ -143,15 +143,17 @@ namespace notes.Core.Services
 		/// <param name="role">The role. Can be "User" or "Administrator".</param>
 		/// <param name="active">User account active.</param>
 		/// <returns>The new ObjectId.</returns>
-		public ObjectId Create(string username, string password, string role, bool active)
+		public ObjectId Create(string username, string password, string displayName, string role, bool active)
 		{
 			username = username?.Trim()?.ToLower();
 			password = password?.Trim();
+			displayName = displayName?.Trim();
 
 			var _user = new User
 			{
 				Username = username,
 				Password = PasswordHasher.HashPassword(password),
+				DisplayName = displayName,
 				Role = role,
 				Enabled = active
 			};
@@ -179,10 +181,11 @@ namespace notes.Core.Services
 		/// <param name="password">The paramref name="password". Leave empty if you don't want to change.</param>
 		/// <param name="role">The user role. Can be "User" or "Administrator".</param>
 		/// <param name="active">User account active.</param>
-		public void Update(ObjectId user, string username, string password, string role, bool active)
+		public void Update(ObjectId user, string username, string password, string displayName, string role, bool active)
 		{
 			username = username?.Trim()?.ToLower();
 			password = password?.Trim();
+			displayName = displayName?.Trim();
 
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
@@ -190,6 +193,7 @@ namespace notes.Core.Services
 			var _update = Builders<User>.Update;
 			var _set = _update
 				.Set(f => f.Username, username)
+				.Set(f => f.DisplayName, displayName)
 				.Set(f => f.Role, role)
 				.Set(f => f.Enabled, active);
 
@@ -202,7 +206,7 @@ namespace notes.Core.Services
 
 			Log.LogInformation("Update user data for {0}", user.ToString());
 
-			Context.User.UpdateOne(_id, _set);
+			Context.User.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
 
 		/// <summary>
