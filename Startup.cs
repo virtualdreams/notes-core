@@ -93,7 +93,7 @@ namespace notes
 				AuthenticationScheme = "notes",
 				CookieName = "notes",
 				LoginPath = new PathString("/login"),
-				AccessDeniedPath = new PathString("/login"),
+				AccessDeniedPath = new PathString("/"),
 				AutomaticAuthenticate = true,
 				AutomaticChallenge = true,
 				Events = new CookieAuthenticationEvents
