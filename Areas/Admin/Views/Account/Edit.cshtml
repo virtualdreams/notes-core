@@ -9,9 +9,11 @@
 	<div class="col-lg-12">
 		<div class="page-header">
 			<div class="btn-toolbar pull-right">
+				@if(Model.User.Id != ObjectId.Empty) {
 				<div class="btn-group">
 					<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAccount"><i class="fa fa-user"></i> Delete</button>
 				</div>
+				}
 			</div>
 			<h1><i class="fa fa-user"></i> 
 			@if(Model.User.Id != ObjectId.Empty) {
