@@ -4,11 +4,11 @@ using notes.Core.Services;
 
 namespace notes.ViewComponents
 {
-    public class UserProfileViewComponent : BaseViewComponent
+    public class DisplayNameViewComponent : BaseViewComponent
     {
         private readonly UserService UserService;
 
-		public UserProfileViewComponent(UserService user)
+		public DisplayNameViewComponent(UserService user)
 			: base(user)
 		{
 			UserService = user;
