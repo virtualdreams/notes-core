@@ -4,8 +4,8 @@ using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using notes.Core.Helper;
 using notes.Core.Models;
+using notes.Helper;
 
 namespace notes.Core.Services
 {
