@@ -141,7 +141,7 @@ namespace notes.Controllers
 			if(_user == null)
 				return NotFound();
 			
-			UserService.SetPassword(_user.Id, model.NewPassword);
+			UserService.UpdatePassword(_user.Id, model.NewPassword);
 			UserService.RemoveToken(model.Token);
 
 			return RedirectToAction("Login");
@@ -174,7 +174,7 @@ namespace notes.Controllers
 			}
 
 			// set new password
-			UserService.SetPassword(UserId, model.NewPassword);
+			UserService.UpdatePassword(UserId, model.NewPassword);
 
 			// force logout
 			HttpContext.Authentication.SignOutAsync("notes");
@@ -189,6 +189,10 @@ namespace notes.Controllers
 		{
 			var view = new UserSettingsEditContainer
 			{
+				Profile = new UserProfileModel
+				{
+					DisplayName = UserService.GetUserById(UserId)?.DisplayName
+				},
 				Settings = new UserSettingsModel
 				{
 					Items = UserSettings?.PageSize ?? Options.Value.PageSize,
@@ -204,19 +208,23 @@ namespace notes.Controllers
 		{
 			if(!ModelState.IsValid)
 			{
-				var view = new UserSettingsEditContainer
-				{
-					Settings = new UserSettingsModel
-					{
-						Items = model.Items,
-						Language = model.Language
-					}
-				};
-
-				return View(view);
+				return RedirectToAction("settings");
 			}
 
-			UserService.SetSettings(UserId, model.Items, model.Language);
+			UserService.UpdateSettings(UserId, model.Items, model.Language);
+
+			return RedirectToAction("settings");
+		}
+
+		[HttpPost]
+		public IActionResult Profile(UserProfilePostModel model)
+		{
+			if(!ModelState.IsValid)
+			{
+				return RedirectToAction("settings");
+			}
+
+			UserService.UpdateProfile(UserId, model.DisplayName);
 
 			return RedirectToAction("settings");
 		}

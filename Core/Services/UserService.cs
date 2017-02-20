@@ -226,7 +226,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The user id.</param>
 		/// <param name="password">The new password.</param>
-		public void SetPassword(ObjectId user, string password)
+		public void UpdatePassword(ObjectId user, string password)
 		{
 			password = password?.Trim();
 
@@ -248,11 +248,10 @@ namespace notes.Core.Services
         /// <param name="user">The user.</param>
         /// <param name="pageSize">The new page size.</param>
         /// <param name="searchLanguage">The new search language.</param>
-		public void SetSettings(ObjectId user, int pageSize, string searchLanguage)
+		public void UpdateSettings(ObjectId user, int pageSize, string searchLanguage)
 		{
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
-			var _active = _filter.Eq(f => f.Enabled, true);
 
 			var _update = Builders<User>.Update;
 			var _set = _update
@@ -261,10 +260,34 @@ namespace notes.Core.Services
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogDebug("Update settings -> '{0}'", Context.User.UpdateOne(_id & _active, _set).ToString());
+				Log.LogDebug("Update settings -> '{0}'", Context.User.UpdateOne(_id, _set).ToString());
 			}
 
-			Context.User.UpdateOne(_id & _active, _set, new UpdateOptions { IsUpsert = true });
+			Context.User.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
+		}
+
+		/// <summary>
+		/// Update user profile.
+		/// </summary>
+		/// <param name="user">The user.</param>
+		/// <param name="displayName">The new display name.</param>
+		public void UpdateProfile(ObjectId user, string displayName)
+		{
+			displayName = displayName?.Trim();
+
+			var _filter = Builders<User>.Filter;
+			var _id = _filter.Eq(f => f.Id, user);
+
+			var _update = Builders<User>.Update;
+			var _set = _update
+				.Set(f => f.DisplayName, displayName);
+
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug("Update profile -> '{0}'", Context.User.UpdateOne(_id, _set).ToString());
+			}
+
+			Context.User.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
 
 		/// <summary>
