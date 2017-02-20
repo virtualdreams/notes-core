@@ -73,7 +73,7 @@ namespace notes.Controllers
 			}
 			else
 			{
-				ModelState.AddModelError("failed", "Benutzername oder Passwort falsch.");
+				ModelState.AddModelError("failed", "Invalid username or password.");
 				return View("Login", model);
 			}
 
