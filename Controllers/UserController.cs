@@ -139,7 +139,7 @@ namespace notes.Controllers
 
 			var _user = UserService.GetUserByToken(model.Token);
 			if(_user == null)
-				return new StatusCodeResult(404);
+				return NotFound();
 			
 			UserService.SetPassword(_user.Id, model.NewPassword);
 			UserService.RemoveToken(model.Token);

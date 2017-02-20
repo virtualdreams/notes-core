@@ -36,7 +36,7 @@ namespace notes.Controllers
 		{
 			var _note = NoteService.GetById(id, UserId);
 			if(_note == null)
-				return new StatusCodeResult(404);
+				return NotFound();
 			
 			var note = Mapper.Map<NoteModel>(_note);
 
