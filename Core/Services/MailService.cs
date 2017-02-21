@@ -1,17 +1,20 @@
-using System;
 using MailKit.Net.Smtp;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using System;
 
 namespace notes.Core.Services
 {
 	public class MailService
 	{
 		private readonly IOptions<Settings> Options;
+		private readonly ILogger<MailService> Log;
 
-		public MailService(IOptions<Settings> options)
+		public MailService(IOptions<Settings> options, ILogger<MailService> log)
 		{
 			Options = options;
+			Log = log;
 		}
 
 		/// <summary>
@@ -52,21 +55,28 @@ The {Options.Value.SiteName} Team
 		/// <param name="message">The message to send.</param>
 		private void SendMail(MimeMessage message)
 		{
-			// send e-mail
-			using(var client = new SmtpClient()) {
-				// accept all SSL certificates (in case the server supports STARTTLS)
-				if(Options.Value.Smtp.SkipVerify)
-					client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+			if(Options.Value.Smtp.Enabled)
+			{
+				// send e-mail
+				using(var client = new SmtpClient()) {
+					// accept all SSL certificates (in case the server supports STARTTLS)
+					if(Options.Value.Smtp.SkipVerify)
+						client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
-				// connect to given host and port
-				client.Connect(Options.Value.Smtp.Server, Options.Value.Smtp.Port, false);
+					// connect to given host and port
+					client.Connect(Options.Value.Smtp.Server, Options.Value.Smtp.Port, false);
 
-				// disable authentication if username or password is empty
-				if(!String.IsNullOrEmpty(Options.Value.Smtp.Username) && !String.IsNullOrEmpty(Options.Value.Smtp.Passwd))
-					client.Authenticate(Options.Value.Smtp.Username, Options.Value.Smtp.Passwd);
+					// disable authentication if username or password is empty
+					if(!String.IsNullOrEmpty(Options.Value.Smtp.Username) && !String.IsNullOrEmpty(Options.Value.Smtp.Passwd))
+						client.Authenticate(Options.Value.Smtp.Username, Options.Value.Smtp.Passwd);
 
-				client.Send(message);
-				client.Disconnect(true);
+					client.Send(message);
+					client.Disconnect(true);
+				}
+			}
+			else
+			{
+				Log.LogInformation("Sending emails disabled.");
 			}
 		}
 	}

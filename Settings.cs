@@ -32,6 +32,11 @@ namespace notes
 	public class Smtp
 	{
 		/// <summary>
+		/// Enable sending emails.
+		/// </summary>
+		public bool Enabled { get; set; }
+
+		/// <summary>
 		/// Smtp server.
 		/// </summary>
 		public string Server { get; set; } = "127.0.0.1";
