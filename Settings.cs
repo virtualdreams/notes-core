@@ -5,28 +5,28 @@ namespace notes
 		/// <summary>
 		/// MongoDb connection string.
 		/// </summary>
-		public string MongoDB { get; set; }
+		public string MongoDB { get; set; } = "mongodb://127.0.0.1/";
 
 		/// <summary>
 		/// MongoDb database name.
 		/// </summary>
-		public string Database { get; set; }
+		public string Database { get; set; } = "notes";
 
 		/// <summary>
 		/// Site name.
 		/// </summary>
 		/// <returns></returns>
-		public string SiteName { get; set; }
+		public string SiteName { get; set; } = "Notes!";
 
 		/// <summary>
 		/// Items per page.
 		/// </summary>
-		public int PageSize { get; set; }
+		public int PageSize { get; set; } = 10;
 
 		/// <summary>
 		/// Smtp settings
 		/// </summary>
-		public Smtp Smtp { get; set; }
+		public Smtp Smtp { get; set; } = new Smtp();
 	}
 
 	public class Smtp
@@ -34,12 +34,12 @@ namespace notes
 		/// <summary>
 		/// Smtp server.
 		/// </summary>
-		public string Server { get; set; }
+		public string Server { get; set; } = "127.0.0.1";
 
 		/// <summary>
 		/// Smtp port.
 		/// </summary>
-		public int Port { get; set; }
+		public int Port { get; set; } = 25;
 
 		/// <summary>
 		/// Smtp login username.
@@ -54,7 +54,7 @@ namespace notes
 		/// <summary>
 		/// Smtp from mail.
 		/// </summary>
-		public string From { get; set; }
+		public string From { get; set; } = "admin@localhost";
 
 		/// <summary>
 		/// Skip verify SSL certificates.
