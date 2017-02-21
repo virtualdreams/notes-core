@@ -1,10 +1,12 @@
-using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using System;
 
 namespace notes.Helper
 {
-	static public class NoteExtensions
+    static public class NoteExtensions
 	{
 		/// <summary>
 		/// Slugify the string.
@@ -83,6 +85,29 @@ namespace notes.Helper
 				throw new ArgumentNullException(nameof(principal));
 
 			return principal.FindFirst(ClaimTypes.Role)?.Value;
+		}
+	}
+
+	static public class HtmlHelperExtensions
+	{
+		static public bool HasError(this IHtmlHelper helper, string modelName)
+		{
+			if(helper.ViewData.ModelState.ContainsKey(modelName))
+			{
+				return helper.ViewData.ModelState[modelName].Errors.Count > 0;
+			}
+
+			return false;
+		}
+
+		static public string ErrorMessage(this IHtmlHelper helper, string modelName)
+		{
+			if(helper.ViewData.ModelState.ContainsKey(modelName))
+			{
+				return helper.ViewData.ModelState[modelName].Errors.FirstOrDefault()?.ErrorMessage;
+			}
+
+			return String.Empty;
 		}
 	}
 

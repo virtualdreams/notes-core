@@ -41,6 +41,25 @@ namespace notes.Core.Services
 		}
 
 		/// <summary>
+		/// Test, if more than one administrator exists.
+		/// </summary>
+		/// <returns>True if more than one administrator exists.</returns>
+		public long GetAdminCount()
+		{
+			return Context.User.Find(f => f.Role.Equals("Administrator") && f.Enabled == true).Count();
+		}
+
+		/// <summary>
+		/// Test, if the given user is an administrator.
+		/// </summary>
+		/// <param name="user">The user object.</param>
+		/// <returns>True if the user is an administrator.</returns>
+		public bool IsAdmin(ObjectId user)
+		{
+			return Context.User.Find(f => f.Id == user && f.Role.Equals("Administrator")).Count() == 1;
+		}
+
+		/// <summary>
 		/// Get a user by user id.
 		/// </summary>
 		/// <param name="user">The user id.</param>
@@ -158,19 +177,18 @@ namespace notes.Core.Services
 				Enabled = active
 			};
 
-			Context.User.InsertOne(_user);
-			//catch(MongoWriteException ex) when(ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
+			try
+			{
+				Context.User.InsertOne(_user);
+			}
+			catch(MongoWriteException ex) when(ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
+			{
+				throw new DuplicateUsernameNotesException();
+			}
 
 			Log.LogInformation("Create new user {0} with id {1}.", username, _user.Id);
 
-			if(_user.Id == ObjectId.Empty)
-			{
-				return ObjectId.Empty;
-			}
-			else
-			{
-				return _user.Id;
-			}
+			return _user.Id;
 		}
 
 		/// <summary>
@@ -186,6 +204,9 @@ namespace notes.Core.Services
 			username = username?.Trim()?.ToLower();
 			password = password?.Trim();
 			displayName = displayName?.Trim();
+
+			if(IsAdmin(user) && GetAdminCount() < 2 && (!active || !role.Equals("Administrator")))
+				throw new ModifyAdminNotesException();
 
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
@@ -206,7 +227,14 @@ namespace notes.Core.Services
 
 			Log.LogInformation("Update user data for {0}", user.ToString());
 
-			Context.User.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
+			try
+			{
+				Context.User.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
+			}
+			catch(MongoWriteException ex) when(ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
+			{
+				throw new DuplicateUsernameNotesException();
+			}
 		}
 
 		/// <summary>
@@ -215,6 +243,9 @@ namespace notes.Core.Services
 		/// <param name="user">The user id.</param>
 		public void Delete(ObjectId user)
 		{
+			if(IsAdmin(user) && GetAdminCount() < 2)
+				throw new DeleteAdminNotesException();
+
 			Log.LogInformation("Delete user {0} permanently.", GetUserById(user).Username);
 
 			Context.User.DeleteOne(f => f.Id == user);

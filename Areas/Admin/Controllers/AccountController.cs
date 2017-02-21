@@ -1,16 +1,16 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using System.Collections.Generic;
 using notes.Controllers;
 using notes.Core.Services;
 using notes.Models;
-using Microsoft.Extensions.Options;
 
 namespace notes.Areas.Admin.Controllers
 {
-	[Area("Admin")]
+    [Area("Admin")]
 	[Authorize(Policy = "AdministratorOnly")]
     public class AccountController : BaseController
     {
@@ -72,33 +72,41 @@ namespace notes.Areas.Admin.Controllers
 		[HttpPost]
 		public IActionResult Edit(UserPostModel model)
 		{
-			if(!ModelState.IsValid)
+			if(ModelState.IsValid)
 			{
-				var view = new UserEditContainer
+				try
 				{
-					User = new UserModel
+					if(model.Id == ObjectId.Empty)
 					{
-						Id = model.Id,
-						Username = model.Username,
-						DisplayName = model.DisplayName,
-						Role = model.Role,
-						Enabled = model.Enabled
+						UserService.Create(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
 					}
-				};
+					else
+					{
+						UserService.Update(model.Id, model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
+					}
 
-				return View(view);
+					return RedirectToAction("Index");
+				}
+				catch(NotesException ex)
+				{
+					ModelState.AddModelError("exception", ex.Message);
+				}
 			}
 
-			if(model.Id == ObjectId.Empty)
+			// validation failed
+			var view = new UserEditContainer
 			{
-				UserService.Create(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
-			}
-			else
-			{
-				UserService.Update(model.Id, model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
-			}
+				User = new UserModel
+				{
+					Id = model.Id,
+					Username = model.Username,
+					DisplayName = model.DisplayName,
+					Role = model.Role,
+					Enabled = model.Enabled
+				}
+			};
 
-			return RedirectToAction("Index");
+			return View(view);
 		}
 
 		[HttpPost]
@@ -107,8 +115,15 @@ namespace notes.Areas.Admin.Controllers
 			var _user = UserService.GetUserById(id);
 			if(_user == null)
 				return NotFound();
-
-			UserService.Delete(id);
+			
+			try
+			{
+				UserService.Delete(id);
+			}
+			catch(NotesException ex)
+			{
+				return new JsonResult(new { Success = false, Error = ex.Message});
+			}
 
 			return new NoContentResult();
 		}

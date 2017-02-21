@@ -1,5 +1,6 @@
 @model notes.Models.UserEditContainer
 @using MongoDB.Bson;
+@using notes.Helper;
 
 @{
 	ViewBag.Title = $"{(Model.User.Id != ObjectId.Empty ? Model.User.Username : "New user")} - ";
@@ -36,6 +37,13 @@
 	<div class="col-lg-12">
         <div class="row">
 			<div class="col-lg-4">
+
+				@if(Html.HasError("exception")) {
+					<div class="alert alert-danger">
+						@Html.ErrorMessage("exception")
+					</div>
+				}
+
 				<form role="form" action="@Url.Action("edit", "account", new { area = "admin" })" method="post" enctype="multipart/form-data" id="account-form" >
 					<div class="form-group">
 						<label>Username</label>
@@ -85,6 +93,7 @@
 				</h4>
 			</div>
 			<div class="modal-body">
+				<div id="error"></div>
 				<p>
 					The account &quot;@Model.User.Username&quot; will be permanently deleted and will loose all notes.
 				</p>

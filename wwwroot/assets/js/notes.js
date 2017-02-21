@@ -33,10 +33,17 @@ notes = (function($){
 		$.ajax({
 			type: "POST",
 			url: '/admin/account/delete/' + id
-		}).done(function() {
-			location.href = '/admin/account/';
+		}).done(function(data) {
+			if(data.success === false)
+			{
+				$('#error').html('<div class="alert alert-danger">' + data.error + '</div>');
+			}
+			else
+			{
+				location.href = '/admin/account/';
+			}
 		}).fail(function() {
-			alert('Failed to delete account.');
+			$('#error').html('<div class="alert alert-danger">Failed to delete account!</div>');
 		});
 	});
 
