@@ -55,7 +55,7 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "MongoDB.Driver": "2.4.2",
     "AutoMapper": "5.1.1",
-    "Markdig": "0.10.4",
+    "Markdig": "0.10.5",
     "MailKit": "1.10.2"
   },
   "frameworks": {
