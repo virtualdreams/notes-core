@@ -358,26 +358,24 @@ namespace notes.Core.Services
 		/// <param name="username">The username.</param>
 		/// <param name="origin">The origon url.</param>
 		/// <returns></returns>
-		public bool ForgotPassword(string username, string origin)
+		public void ForgotPassword(string username, string origin)
 		{
 			username = username?.Trim()?.ToLower();
 
 			// get user from database
-			var user = GetUserByName(username);
-			if(user == null || !user.Enabled)
-				return false;
+			var _user = GetUserByName(username);
+			if(_user == null || !_user.Enabled)
+				return;
 
 			// create reset token
 			var nonce = ObjectId.GenerateNewId().ToString();
 			Context.Token.InsertOne(new Token {
 				Created = DateTime.Now,
-				User = user.Id,
+				User = _user.Id,
 				Nonce = nonce
 			});
 
 			Mail.SendResetPasswordMail(username, origin, nonce);
-
-			return true;
 		}
 
 		/// <summary>
