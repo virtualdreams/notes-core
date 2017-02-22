@@ -231,9 +231,9 @@ namespace notes.Controllers
 		[HttpPost]
 		public IActionResult Delete(NoteDeleteModel model)
 		{
-			if(model.Id != null)
+			if(ModelState.IsValid)
 			{
-				foreach(var note in model?.Id)
+				foreach(var note in model.Id)
 				{
 					NoteService.Delete(note, UserId);
 				}
