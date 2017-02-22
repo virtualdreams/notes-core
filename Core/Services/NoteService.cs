@@ -205,7 +205,7 @@ namespace notes.Core.Services
 		{
 			var _tags = tags?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).Where(s => !String.IsNullOrEmpty(s)).ToArray();
 
-			var _insert = new Note
+			var _note = new Note
 			{
 				Owner = user,
 				Title = title?.Trim(),
@@ -216,14 +216,14 @@ namespace notes.Core.Services
 				Version = 1
 			};
 
-			Context.Note.InsertOne(_insert);
+			Context.Note.InsertOne(_note);
 
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
-				Log.LogInformation("Insert new note with id {0}.", _insert.Id);
+				Log.LogInformation("Insert new note with id {0}.", _note.Id);
 			}
 
-			return _insert.Id;
+			return _note.Id;
 		}
 
 		/// <summary>
@@ -233,12 +233,13 @@ namespace notes.Core.Services
 		/// <param name="title">The new title.</param>
 		/// <param name="content">The new content.</param>
 		/// <returns></returns>
-		public ObjectId Update(ObjectId note, string title, string content, string notebook, string tags)
+		public void Update(ObjectId note, ObjectId user, string title, string content, string notebook, string tags)
 		{
 			var _tags = tags?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).Where(s => !String.IsNullOrEmpty(s)).ToArray();
 
 			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Id, note);
+			var _user = _filter.Eq(f => f.Owner, user);
 
 			var _update = Builders<Note>.Update;
 			var _set = _update
@@ -248,14 +249,12 @@ namespace notes.Core.Services
 						.Set(f => f.Tags, _tags)
 						.Inc(f => f.Version, 1);
 
-			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
-
 			if(Log.IsEnabled(LogLevel.Debug))
 			{
 				Log.LogInformation("Update note with id {0}.", note);
 			}
 
-			return note;
+			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
 
 		/// <summary>
@@ -285,7 +284,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="note">The note id.</param>
 		/// <param name="user">The user who own this note.</param>
-		public bool Delete(ObjectId note, ObjectId user)
+		public void Delete(ObjectId note, ObjectId user)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Id, note);
@@ -297,8 +296,6 @@ namespace notes.Core.Services
 			}
 
 			Context.Note.DeleteOne(_id & _user);
-
-			return GetById(note, user) == null;
 		}
 
 		/// <summary>

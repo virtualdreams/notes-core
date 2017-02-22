@@ -96,9 +96,57 @@ namespace notes.Controllers
 		[HttpPost]
 		public IActionResult Edit(NotePostModel model)
 		{
-			if(!ModelState.IsValid)
+			if(ModelState.IsValid)
 			{
-				var view = new NoteEditContainer
+				try
+				{
+					var _id = ObjectId.Empty;
+					if(model.Id == ObjectId.Empty)
+					{
+						_id = NoteService.Create(UserId, model.Title, model.Content, model.Notebook, model.Tags);
+					}
+					else
+					{
+						NoteService.Update(model.Id, UserId, model.Title, model.Content, model.Notebook, model.Tags);
+						_id = model.Id;
+					}
+
+					if(Request.IsAjaxRequest())
+						return Json(new { Success = true, Id = _id.ToString() });
+
+					return RedirectToAction("view", "note", new { id = _id, slug = model.Title.ToSlug() });
+				}
+				catch(NotesException ex)
+				{
+					ModelState.AddModelError("exception", ex.Message);
+				}
+			}
+
+			// validation failed
+			if(Request.IsAjaxRequest())
+				return Json(new { Success = false, Id = model.Id.ToString(), Error = "" });
+
+			var view = new NoteEditContainer
+			{
+				Note = new NoteModel
+				{
+					Id = model.Id,
+					Title = model.Title,
+					Content = model.Content,
+					Notebook = model.Notebook,
+					Tags = model.Tags
+				}
+			};
+
+			return View(view);
+		}
+
+		[HttpPost]
+		public IActionResult Preview(NotePostModel model)
+		{
+			if(ModelState.IsValid)
+			{
+				var view = new NoteViewContainer
 				{
 					Note = new NoteModel
 					{
@@ -110,54 +158,12 @@ namespace notes.Controllers
 					}
 				};
 
-				if(Request.IsAjaxRequest())
-					return Json(new { Success = false, Id = model.Id.ToString() });
+				var _content = ViewRenderService.RenderToStringAsync("Shared/_Preview", view).Result;
 
-				return View(view);
-			}
-			
-			var _id = ObjectId.Empty;
-			if(model.Id == ObjectId.Empty)
-			{
-				_id = NoteService.Create(UserId, model.Title, model.Content, model.Notebook, model.Tags);
-			}
-			else
-			{
-				var _note = NoteService.GetById(model.Id, UserId);
-				if(_note == null)
-					return NotFound();
-
-				_id = NoteService.Update(model.Id, model.Title, model.Content, model.Notebook, model.Tags);
+				return Json(new { Success = true, Content = _content });
 			}
 
-			if(Request.IsAjaxRequest())
-				return Json(new { Success = true, Id = _id.ToString() });
-
-			return RedirectToAction("view", "note", new { id = _id, slug = model.Title.ToSlug() });
-		}
-
-		[HttpPost]
-		public IActionResult Preview(NotePostModel model)
-		{
-			if(!ModelState.IsValid)
-				return Json(new { Success = false, Content = string.Empty });
-			
-			var _note = new NoteModel
-			{
-				Id = model.Id,
-				Title = model.Title,
-				Content = model.Content,
-				Notebook = model.Notebook,
-				Tags = model.Tags
-			};
-			
-			var view = new NoteViewContainer
-			{
-				Note = _note
-			};
-
-			var _content = ViewRenderService.RenderToStringAsync("Shared/_Preview", view).Result;
-			return Json(new { Success = true, Content = _content });
+			return Json(new { Success = false, Content = string.Empty });
 		}
 
 		[HttpGet]
