@@ -1,3 +1,5 @@
+@using notes.Helper;
+
 @{
 	ViewBag.Title = "Change Password - ";
 }
@@ -19,6 +21,13 @@
 	<div class="col-lg-12">
         <div class="row">
 			<div class="col-lg-4">
+
+				@if(Html.HasError("error")) {
+					<div class="alert alert-danger">
+						@Html.ErrorMessage("error")
+					</div>
+				}
+
 				<form role="form" action="@Url.Action("security", "user")" method="post" enctype="multipart/form-data" id="security-form" >
 					<div class="form-group">
 						<label>Old Password</label>

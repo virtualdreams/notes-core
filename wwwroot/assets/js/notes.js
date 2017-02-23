@@ -147,6 +147,52 @@ notes = (function($){
 		'This field is required.'
 	);
 
+	$("#login-form").validate({
+		rules: {
+			'username': {
+				required: true,
+				nowhitespace: true,
+				email: true
+			},
+			'password': {
+				required: true,
+				nowhitespace: true,
+				minlength: 8
+			}
+		}
+	});
+
+	$("#forgot-form").validate({
+		rules: {
+			'username': {
+				required: true,
+				nowhitespace: true,
+				email: true
+			}
+		}
+	});
+
+	$("#reset-form").validate({
+		rules: {
+			'newpassword': {
+				required: true,
+				nowhitespace: true,
+				minlength: 8
+			},
+			'confirmpassword': {
+				required: true,
+				nowhitespace: true,
+				minlength: 8,
+				equalTo: '#newpassword'
+			}
+		},
+		messages: {
+			confirmpassword: {
+				equalTo: "The passwords doesn't match."
+			}
+		}
+	});
+
 	$("#note-form").validate({
 		rules: {
 			'title': {
@@ -193,6 +239,11 @@ notes = (function($){
 				nowhitespace: true,
 				minlength: 8,
 				equalTo: '#newpassword'
+			}
+		},
+		messages: {
+			confirmpassword: {
+				equalTo: "The passwords doesn't match."
 			}
 		}
 	});

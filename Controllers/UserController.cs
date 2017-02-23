@@ -40,52 +40,50 @@ namespace notes.Controllers
 		[HttpPost]
 		public IActionResult Login(LoginModel model, string returnUrl)
 		{
-			if (!ModelState.IsValid)
+			if(ModelState.IsValid)
 			{
-				return View("Login", model);
-			}
-
-			// if no accounts exists, create the first user as administrator.
-			// HACK!
-			if(!UserService.HasUsers())
-			{
-				UserService.Create(model.Username, model.Password, "Administrator", "Administrator", true);
-			}
-
-			var _user = UserService.Login(model.Username, model.Password);
-			if(_user != null && _user.Enabled)
-			{
-				var claims = new List<Claim>
+				try
 				{
-					new Claim(ClaimTypes.Name, _user.Username, ClaimValueTypes.String),
-					new Claim(ClaimTypes.Role, _user.Role, ClaimValueTypes.String)
-				};
-
-				var _identity = new ClaimsIdentity(claims, "local");
-				var _principal = new ClaimsPrincipal(_identity);
-
-				HttpContext.Authentication.SignInAsync("notes", _principal, 
-					new AuthenticationProperties {
-						IsPersistent = model.Remember,
-						AllowRefresh = model.Remember
+					// if no accounts exists, create the first user as administrator.
+					// HACK!
+					if(!UserService.HasUsers())
+					{
+						UserService.Create(model.Username, model.Password, "Administrator", "Administrator", true);
 					}
-				).Wait();
-			}
-			else
-			{
-				ModelState.AddModelError("failed", "Invalid username or password.");
-				return View("Login", model);
+
+					var _user = UserService.Login(model.Username, model.Password);
+					if(_user == null || !_user.Enabled)
+						throw new NotesLoginFailedException();
+
+					var claims = new List<Claim>
+					{
+						new Claim(ClaimTypes.Name, _user.Username, ClaimValueTypes.String),
+						new Claim(ClaimTypes.Role, _user.Role, ClaimValueTypes.String)
+					};
+
+					var _identity = new ClaimsIdentity(claims, "local");
+					var _principal = new ClaimsPrincipal(_identity);
+
+					HttpContext.Authentication.SignInAsync("notes", _principal, 
+						new AuthenticationProperties {
+							IsPersistent = model.Remember,
+							AllowRefresh = model.Remember
+						}
+					).Wait();
+
+					// return to target page.
+					if (Url.IsLocalUrl(returnUrl))
+						return Redirect(returnUrl);
+					else
+						return RedirectToAction("index", "home");
+				}
+				catch(NotesException ex)
+				{
+					ModelState.AddModelError("error", ex.Message);
+				}
 			}
 
-			// return to target page.
-			if (Url.IsLocalUrl(returnUrl))
-			{
-				return Redirect(returnUrl);
-			}
-			else
-			{
-				return RedirectToAction("index", "home");
-			}
+			return View("Login", model);
 		}
 
 		[HttpGet]
@@ -99,14 +97,21 @@ namespace notes.Controllers
 		[AllowAnonymous]
 		public IActionResult Forgot_Password(PasswdForgotPostModel model)
 		{
-			if (!ModelState.IsValid)
+			if(ModelState.IsValid)
 			{
-				return View();
+				try
+				{
+					UserService.ForgotPassword(model.Username, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}");
+
+					return View("Forgot_Confirmation");
+				}
+				catch(NotesException ex)
+				{
+					ModelState.AddModelError("error", ex.Message);
+				}
 			}
 
-			UserService.ForgotPassword(model.Username, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}");
-
-			return View("Forgot_Confirmation");
+			return View();
 		}
 
 		[HttpGet]
@@ -128,23 +133,33 @@ namespace notes.Controllers
 		[AllowAnonymous]
 		public IActionResult Reset_Password(PasswdResetPostModel model)
 		{
-			if (!ModelState.IsValid || !model.NewPassword.Equals(model.ConfirmPassword))
+			if(ModelState.IsValid)
 			{
-				var view = new PasswdResetModel {
-					Token = model.Token
-				};
+				try
+				{
+					if(!model.NewPassword.Equals(model.ConfirmPassword))
+						throw new NotesPasswordMismatchException();
 
-				return View(view);
+					var _user = UserService.GetUserByToken(model.Token);
+					if(_user == null)
+						return NotFound();
+
+					UserService.UpdatePassword(_user.Id, model.NewPassword);
+					UserService.RemoveToken(model.Token);
+
+					return RedirectToAction("Login");
+				}
+				catch(NotesException ex)
+				{
+					ModelState.AddModelError("error", ex.Message);
+				}
 			}
 
-			var _user = UserService.GetUserByToken(model.Token);
-			if(_user == null)
-				return NotFound();
-			
-			UserService.UpdatePassword(_user.Id, model.NewPassword);
-			UserService.RemoveToken(model.Token);
+			var view = new PasswdResetModel {
+				Token = model.Token
+			};
 
-			return RedirectToAction("Login");
+			return View(view);
 		}
 
 #region User
@@ -168,19 +183,29 @@ namespace notes.Controllers
 		[HttpPost]
 		public IActionResult Security(PasswdChangePostModel model)
 		{
-			if(!ModelState.IsValid || (UserService.Login(User.GetUserName(), model.OldPassword) == null || !model.NewPassword.Equals(model.ConfirmPassword)))
+			if(ModelState.IsValid)
 			{
-				return View();
+				try
+				{
+					var _user = UserService.Login(User.GetUserName(), model.OldPassword);
+					if(_user == null)
+						throw new NotesPasswordIncorrectException();
+
+					if(!model.NewPassword.Equals(model.ConfirmPassword))
+						throw new NotesPasswordMismatchException();
+
+					UserService.UpdatePassword(UserId, model.NewPassword);
+
+					// redirect to home
+					return RedirectToAction("settings", "user");
+				}
+				catch(NotesException ex)
+				{
+					ModelState.AddModelError("error", ex.Message);
+				}
 			}
 
-			// set new password
-			UserService.UpdatePassword(UserId, model.NewPassword);
-
-			// force logout
-			HttpContext.Authentication.SignOutAsync("notes");
-
-			// redirect to home
-			return RedirectToAction("index", "home");
+			return View();
 		}
 
 		[Authorize]

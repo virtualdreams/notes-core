@@ -1,3 +1,5 @@
+@using notes.Helper;
+
 @{
 	Layout = "_LayoutMinimal";
 	ViewBag.Title = "Login - ";
@@ -10,7 +12,14 @@
 				<h3 class="panel-title">Please Sign In</h3>
 			</div>
 			<div class="panel-body">
-				<form role="form" action="@Url.Action("login", "user", new { ReturnUrl = Context.Request.Query["ReturnUrl"] })" method="post" enctype="multipart/form-data">
+
+				@if(Html.HasError("error")) {
+					<div class="alert alert-danger">
+						@Html.ErrorMessage("error")
+					</div>
+				}
+
+				<form role="form" action="@Url.Action("login", "user", new { ReturnUrl = Context.Request.Query["ReturnUrl"] })" method="post" enctype="multipart/form-data" id="login-form">
 					<fieldset>
 						<div class="form-group">
 							<input class="form-control" placeholder="E-mail" name="username" type="email" autofocus>

@@ -29,4 +29,25 @@ namespace notes
 			: base("The last administrator's role or state can't be changed!")
 		{ }
 	}
+
+	public class NotesPasswordIncorrectException : NotesException
+	{
+		public NotesPasswordIncorrectException()
+			: base("Old password isn't valid!")
+		{ }
+	}
+
+	public class NotesPasswordMismatchException : NotesException
+	{
+		public NotesPasswordMismatchException()
+			: base("Password doesn't match the confirmation!")
+		{ }
+	}
+
+	public class NotesLoginFailedException : NotesException
+	{
+		public NotesLoginFailedException()
+			: base("Incorrect username or password!")
+		{ }
+	}
 }
