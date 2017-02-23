@@ -34,7 +34,7 @@ namespace notes.Core.Services
 				Text = 
 $@"Hi {username},
 
-You recently requested to reset your password for your {Options.Value.SiteName} account. Use the link below to reset it. This password reset is only valid for the next <TIME> hours.
+You recently requested to reset your password for your {Options.Value.SiteName} account. Use the link below to reset it. This password reset is only valid for the next 1 hour.
 
 {origin}/reset_password/{nonce}
 
