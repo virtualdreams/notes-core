@@ -70,7 +70,7 @@
 							<li><a href="@Url.Action("index", "account", new { area = "admin" })"><i class="fa fa-fw fa-users"></i> Accounts</a></li>
 							<li class="divider"></li>
 							}
-							<li><a href="@Url.Action("settings", "user", new { area = String.Empty })"><i class="fa fa-fw fa-cog"></i> Settings</a></li>
+							<li><a href="@Url.Action("settings", "user", new { area = String.Empty })"><i class="fa fa-fw fa-sliders"></i> Settings</a></li>
 							<li class="divider"></li>
 							<li><a href="@Url.Action("logout", "user")"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
 						</ul>
@@ -118,19 +118,30 @@
 			</div>
 		</div>
 
-		<environment names="Development"></environment>
-		<environment names="Staging,Production"></environment>
-
-		<script src="/lib/jquery.min.js"></script>
-		<script src="/lib/jquery.validate.min.js"></script>
-		<script src="/lib/bootstrap.min.js"></script>
-		<script src="/lib/metisMenu.min.js"></script>
-		<script src="/js/sb-admin-2.min.js"></script>
-		<script src="/lib/highlight.pack.js"></script>
-		<script src="/lib/taboverride.min.js"></script>
-		<script src="/js/notes.min.js"></script>
-		<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
-		<script>tabOverride.set(document.getElementsByTagName('textarea'));</script>
+		<environment names="Development">
+			<script src="/lib/jquery.min.js"></script>
+			<script src="/lib/jquery.validate.min.js"></script>
+			<script src="/lib/bootstrap.min.js"></script>
+			<script src="/lib/metisMenu.min.js"></script>
+			<script src="/assets/js/sb-admin-2.js"></script>
+			<script src="/lib/highlight.pack.js"></script>
+			<script src="/lib/taboverride.min.js"></script>
+			<script src="/assets/js/notes.js"></script>
+			<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+			<script>tabOverride.set(document.getElementsByTagName('textarea'));</script>
+		</environment>
+		<environment names="Staging,Production">
+			<script src="/lib/jquery.min.js"></script>
+			<script src="/lib/jquery.validate.min.js"></script>
+			<script src="/lib/bootstrap.min.js"></script>
+			<script src="/lib/metisMenu.min.js"></script>
+			<script src="/js/sb-admin-2.min.js"></script>
+			<script src="/lib/highlight.pack.js"></script>
+			<script src="/lib/taboverride.min.js"></script>
+			<script src="/js/notes.min.js"></script>
+			<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+			<script>tabOverride.set(document.getElementsByTagName('textarea'));</script>
+		</environment>
 
 		@RenderSection("script", required: false)
 	</body>
