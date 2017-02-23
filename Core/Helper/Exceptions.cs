@@ -9,23 +9,23 @@ namespace notes
 		{ }
 	}
 
-	public class DuplicateUsernameNotesException : NotesException
+	public class NotesDuplicateUsernameException : NotesException
 	{
-		public DuplicateUsernameNotesException()
+		public NotesDuplicateUsernameException()
 			: base("The username is already taken!")
 		{ }
 	}
 
-	public class DeleteAdminNotesException : NotesException
+	public class NotesDeleteAdminException : NotesException
 	{
-		public DeleteAdminNotesException()
+		public NotesDeleteAdminException()
 			: base("The last administrator can't be deleted!")
 		{ }
 	}
 
-	public class ModifyAdminNotesException : NotesException
+	public class NotesModifyAdminException : NotesException
 	{
-		public ModifyAdminNotesException()
+		public NotesModifyAdminException()
 			: base("The last administrator's role or state can't be changed!")
 		{ }
 	}

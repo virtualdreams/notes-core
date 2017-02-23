@@ -183,7 +183,7 @@ namespace notes.Core.Services
 			}
 			catch(MongoWriteException ex) when(ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
 			{
-				throw new DuplicateUsernameNotesException();
+				throw new NotesDuplicateUsernameException();
 			}
 
 			Log.LogInformation("Create new user {0} with id {1}.", username, _user.Id);
@@ -206,7 +206,7 @@ namespace notes.Core.Services
 			displayName = displayName?.Trim();
 
 			if(IsAdmin(user) && GetAdminCount() < 2 && (!active || !role.Equals("Administrator")))
-				throw new ModifyAdminNotesException();
+				throw new NotesModifyAdminException();
 
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
@@ -233,7 +233,7 @@ namespace notes.Core.Services
 			}
 			catch(MongoWriteException ex) when(ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
 			{
-				throw new DuplicateUsernameNotesException();
+				throw new NotesDuplicateUsernameException();
 			}
 		}
 
@@ -244,7 +244,7 @@ namespace notes.Core.Services
 		public void Delete(ObjectId user)
 		{
 			if(IsAdmin(user) && GetAdminCount() < 2)
-				throw new DeleteAdminNotesException();
+				throw new NotesDeleteAdminException();
 
 			Log.LogInformation("Delete user {0} permanently.", GetUserById(user).Username);
 
