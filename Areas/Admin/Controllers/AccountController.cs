@@ -89,7 +89,7 @@ namespace notes.Areas.Admin.Controllers
 				}
 				catch(NotesException ex)
 				{
-					ModelState.AddModelError("exception", ex.Message);
+					ModelState.AddModelError("error", ex.Message);
 				}
 			}
 
