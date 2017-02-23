@@ -16,7 +16,8 @@ namespace notes.Extensions
 					.ForMember(d => d.Tags, map => map.MapFrom(s => String.Join(" ", s.Tags ?? new string[] {})))
 					.ForMember(d => d.Age, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime().ToMinutes().ToWords()));
 
-				config.CreateMap<User, UserModel>();
+				config.CreateMap<User, UserModel>()
+					.ForMember(d => d.Created, map => map.MapFrom(s => String.Format(new System.Globalization.CultureInfo("en-US"), "{0:MMM dd, yyyy}", s.Id.CreationTime)));
 			});
 
 			_autoMapperConfig.AssertConfigurationIsValid();

@@ -13,5 +13,7 @@ namespace notes.Models
 		public string Role { get; set; }
 
 		public bool Enabled { get; set; }
+
+		public string Created { get; set; }
 	}
 }

@@ -29,16 +29,18 @@
 				<thead>
 					<tr>
 						<th>Username</th>
-						<th>Role</th>
-						<th style="width: 100px;">Status</th>
+						<th class="fit">Role</th>
+						<th class="fit">Created</th>
+						<th class="fit">Status</th>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach(var user in Model.Users) {
 					<tr>
 						<td><a href="@Url.Action("edit", "account", new { area = "admin", id = @user.Id })">@user.Username</a></td>
-						<td>@user.Role</td>
-						<td>@(@user.Enabled ? "Active" : "Disabled" )</td>
+						<td class="fit">@user.Role</td>
+						<td class="fit">@user.Created</td>
+						<td class="fit">@(@user.Enabled ? "Active" : "Disabled" )</td>
 					</tr>
 					}
 				</tbody>
