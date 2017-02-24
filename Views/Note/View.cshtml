@@ -60,11 +60,14 @@
 				</h4>
 			</div>
 			<div class="modal-body">
+				<div id="error"></div>
+				<p>
 				@if(Model.Note.Trash) {
 				@:Restore note &quot;@Model.Note.Title&quot;?
 				} else {
 				@:Delete note &quot;@Model.Note.Title&quot;?
 				}
+				</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

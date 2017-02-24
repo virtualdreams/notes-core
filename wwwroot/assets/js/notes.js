@@ -24,7 +24,7 @@ notes = (function($){
 		}).done(function() {
 			location.href = '/';
 		}).fail(function() {
-			alert('Failed to delete note.');
+			$('#error').html('<div class="alert alert-danger">Failed to delete or restore note!</div>');
 		});
 	});
 
@@ -82,14 +82,18 @@ notes = (function($){
              		});
 
 				} else {
-					$('#result').html('<div class="alert alert-danger"><button type="button" class="close">×</button>Failed to save note!</div>');
-
-          			$('.alert .close').on("click", function(e){
-                		$(this).parent().fadeTo(500, 0).slideUp(500);
-             		});
+					error();
 				}
 			}).fail(function() {
-				alert('Failed to save note.');
+				error();
+			});
+		}
+
+		var error = function() {
+			$('#result').html('<div class="alert alert-danger"><button type="button" class="close">×</button>Failed to save note!</div>');
+
+			$('.alert .close').on("click", function(e){
+				$(this).parent().fadeTo(500, 0).slideUp(500);
 			});
 		}
 	});
