@@ -39,7 +39,7 @@ namespace notes
 		/// <summary>
 		/// Smtp server.
 		/// </summary>
-		public string Server { get; set; } = "127.0.0.1";
+		public string Server { get; set; } = "localhost";
 
 		/// <summary>
 		/// Smtp port.

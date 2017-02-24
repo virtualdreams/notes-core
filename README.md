@@ -51,9 +51,10 @@ Configure application in `appsettings.json`.
 		"SiteName": "Notes!",              // site name
 		"PageSize": 10,                    // items per page
 		"Smtp": {
+			"Enabled": false,              // enable sending mails
 			"Server": "localhost",         // mail server
 			"Port": 25,                    // mail port
-			"From": "",                    // from mail
+			"From": "admin@localhost",     // from mail
 			"Username": "",                // mail username
 			"Passwd": "",                  // mail password
 			"SkipVerify": false            // verify SSL certificates
