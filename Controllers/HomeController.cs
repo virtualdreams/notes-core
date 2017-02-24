@@ -74,6 +74,9 @@ namespace notes.Controllers
 		{
 			switch(code ?? 0)
 			{
+				case 400:
+					return View("BadRequest");
+
 				case 404:
 					return View("PageNotFound");
 
