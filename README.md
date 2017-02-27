@@ -1,6 +1,6 @@
 # Notes!
 
-Notes is an ASP.NET Core based app to manage text notes like OneNote, Google Keep or Evernote.
+Notes! is an ASP.NET Core based app to manage text notes like Evernote or Simplenote.
 
 ## Features
 
@@ -28,15 +28,6 @@ Notes is an ASP.NET Core based app to manage text notes like OneNote, Google Kee
 * [SB Admin 2 Theme](https://github.com/BlackrockDigital/startbootstrap-sb-admin-2)
 * [nodejs](https://nodejs.org/) (v6.9.1 LTS)
 * [gulpjs](http://gulpjs.com/)
-
-## Build and deploy
-
-	npm install
-
-	dotnet restore
-	dotnet build --configuration Release
-	dotnet publish --configuration Release
-	dotnet note.dll
 
 ## Configuration
 
