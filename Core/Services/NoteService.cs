@@ -41,11 +41,8 @@ namespace notes.Core.Services
 
 			if(next != ObjectId.Empty)
 				_query &= _next;
-			
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Paginated request -> '{0}'", Context.Note.Find(_query).Sort(_order).Limit(limit + 1).ToString());
-			}
+
+			Log.LogDebug($"Request notes.");
 
 			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit + 1);
 
@@ -91,10 +88,7 @@ namespace notes.Core.Services
 			if(next != ObjectId.Empty)
 				_query &= _next;
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Paginated request by notebook -> '{0}'", Context.Note.Find(_query).Sort(_order).Limit(limit + 1).ToString());
-			}
+			Log.LogDebug($"Request notes by notebook '{notebook}'.");
 
 			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit + 1);
 
@@ -140,10 +134,7 @@ namespace notes.Core.Services
 			if(next != ObjectId.Empty)
 				_query &= _next;
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Paginated request by tag -> '{0}'", Context.Note.Find(_query).Sort(_order).Limit(limit + 1).ToString());
-			}
+			Log.LogDebug($"Request notes by tag '{tag}'.");
 
 			var _result =  Context.Note.Find(_query).Sort(_order).Limit(limit + 1);
 
@@ -166,10 +157,7 @@ namespace notes.Core.Services
 			var _id = _filter.Eq(f => f.Id, note);
 			var _user = _filter.Eq(f => f.Owner, user);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Get note by id -> '{0}'", Context.Note.Find(_id & _user).ToString());
-			}
+			Log.LogDebug($"Get note by id '{note.ToString()}'.");
 
 			return Context.Note.Find(_id & _user).SingleOrDefault();
 		}
@@ -218,10 +206,7 @@ namespace notes.Core.Services
 
 			Context.Note.InsertOne(_note);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogInformation("Insert new note with id {0}.", _note.Id);
-			}
+			Log.LogDebug($"Create new note with id '{_note.Id.ToString()}'.");
 
 			return _note.Id;
 		}
@@ -249,10 +234,7 @@ namespace notes.Core.Services
 						.Set(f => f.Tags, _tags)
 						.Inc(f => f.Version, 1);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogInformation("Update note with id {0}.", note);
-			}
+			Log.LogInformation($"Update note '{note.ToString()}'.");
 
 			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
@@ -270,11 +252,8 @@ namespace notes.Core.Services
 			var _update = Builders<Note>.Update;
 			var _set = _update
 				.Set(f => f.Trash, trash);
-			
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Mark note as trash/restore -> '{0}'", Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true }).ToString());
-			}
+
+			Log.LogDebug($"Mark note '{note.ToString()}' as trash/restore ({trash}).");
 
 			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
@@ -290,10 +269,7 @@ namespace notes.Core.Services
 			var _id = _filter.Eq(f => f.Id, note);
 			var _user = _filter.Eq(f => f.Owner, user);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Delete note permanently -> '{0}'", Context.Note.DeleteOne(_id & _user).ToString());
-			}
+			Log.LogDebug($"Delete note '{note.ToString()}' permanently.");
 
 			Context.Note.DeleteOne(_id & _user);
 		}
@@ -333,16 +309,11 @@ namespace notes.Core.Services
 			
 			var _query = _user & _text & _active;
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Paginated request by search -> '{0}'", Context.Note.Find(_query).Project<Note>(_score).Sort(_order).Limit(100).ToString());
-			}
+			Log.LogDebug($"Search for notes with term '{term}'.");
 
 			var _result = Context.Note.Find(_query).Project<Note>(_score).Sort(_order).Limit(100);
 			if(next != ObjectId.Empty)
 			{
-				Log.LogDebug("Use next cursor on search result -> '{0}'", next);
-
 				var _skip = _result.ToEnumerable().SkipWhile(condition => condition.Id != next).Skip(1);
 
 				return new Tuple<IEnumerable<Note>, bool>
@@ -352,7 +323,6 @@ namespace notes.Core.Services
 				);
 			}
 
-			Log.LogDebug("Take first {0} search results.", limit);
 			return new Tuple<IEnumerable<Note>, bool>
 			(
 				_result.ToEnumerable().Take(limit),

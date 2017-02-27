@@ -57,6 +57,7 @@ The {Options.Value.SiteName} Team
 		{
 			if(Options.Value.Smtp.Enabled)
 			{
+				Log.LogInformation($"Send mail...");
 				// send e-mail
 				using(var client = new SmtpClient()) {
 					// accept all SSL certificates (in case the server supports STARTTLS)
@@ -76,7 +77,7 @@ The {Options.Value.SiteName} Team
 			}
 			else
 			{
-				Log.LogInformation("Sending emails disabled.");
+				Log.LogInformation($"Sending emails disabled.");
 			}
 		}
 	}

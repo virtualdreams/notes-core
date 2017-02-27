@@ -69,10 +69,7 @@ namespace notes.Core.Services
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Get user by id -> '{0}'", Context.User.Find(_id).ToString());
-			}
+			Log.LogDebug($"Get user by id '{user.ToString()}'.");
 
 			return Context.User.Find(_id).SingleOrDefault();
 		}
@@ -87,10 +84,7 @@ namespace notes.Core.Services
             var _filter = Builders<User>.Filter;
 			var _username = _filter.Eq(f => f.Username, username);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Get user by name -> '{0}'", Context.User.Find(_username).ToString());
-			}
+			Log.LogDebug($"Get user by name '{username}'.");
 
 			return Context.User.Find(_username).SingleOrDefault();
         }
@@ -105,10 +99,7 @@ namespace notes.Core.Services
 			var _filter = Builders<Token>.Filter;
 			var _nonce = _filter.Eq(f => f.Nonce, nonce);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Get user by token -> '{0}'", Context.Token.Find(_nonce).ToString());
-			}
+			Log.LogDebug($"Get user by token '{nonce}'.");
 
 			var _token = Context.Token.Find(_nonce).SingleOrDefault();
 			if(_token == null)
@@ -127,10 +118,7 @@ namespace notes.Core.Services
 			var _filter = Builders<User>.Filter;
 			var _username = _filter.Eq(f => f.Username, username);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Get user id -> '{0}'", Context.User.Find(_username).Project(f => f.Id).ToString());
-			}
+			Log.LogDebug($"Get user id for username '{username}'.");
 
 			return Context.User.Find(_username).Project(f => f.Id).SingleOrDefault();
 		}
@@ -183,7 +171,7 @@ namespace notes.Core.Services
 				throw new NotesDuplicateUsernameException();
 			}
 
-			Log.LogInformation("Create new user {0} with id {1}.", username, _user.Id);
+			Log.LogInformation($"Create new user '{username}' with id '{_user.Id.ToString()}'.");
 
 			return _user.Id;
 		}
@@ -203,7 +191,10 @@ namespace notes.Core.Services
 			displayName = displayName?.Trim();
 
 			if(IsAdmin(user) && GetAdminCount() < 2 && (!active || !role.Equals("Administrator")))
+			{
+				Log.LogWarning($"The user '{user.ToString()}' is the last available administrator. This account can't be changed.");
 				throw new NotesModifyAdminException();
+			}
 
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
@@ -215,14 +206,13 @@ namespace notes.Core.Services
 				.Set(f => f.Role, role)
 				.Set(f => f.Enabled, active);
 
-			// set new password if password not empty
+			// add set new password if password not empty
 			if(!String.IsNullOrEmpty(password))
 				_set = _set.Set(f => f.Password, PasswordHasher.HashPassword(password));
 
-			if(Log.IsEnabled(LogLevel.Debug))
-				Log.LogDebug(_set.Render(Context.User.DocumentSerializer, Context.User.Settings.SerializerRegistry).ToString());
+			//Log.LogDebug(_set.Render(Context.User.DocumentSerializer, Context.User.Settings.SerializerRegistry).ToString());
 
-			Log.LogInformation("Update user data for {0}", user.ToString());
+			Log.LogInformation($"Update user data for user '{user.ToString()}'.");
 
 			try
 			{
@@ -230,6 +220,7 @@ namespace notes.Core.Services
 			}
 			catch(MongoWriteException ex) when(ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
 			{
+				Log.LogWarning($"The username '{username}' is already taken.");
 				throw new NotesDuplicateUsernameException();
 			}
 		}
@@ -243,7 +234,7 @@ namespace notes.Core.Services
 			if(IsAdmin(user) && GetAdminCount() < 2)
 				throw new NotesDeleteAdminException();
 
-			Log.LogInformation("Delete user {0} permanently.", GetUserById(user).Username);
+			Log.LogInformation($"Delete user '{GetUserById(user).Username}' permanently.");
 
 			Context.User.DeleteOne(f => f.Id == user);
 			Context.Note.DeleteMany(f => f.Owner == user);
@@ -265,7 +256,7 @@ namespace notes.Core.Services
 			var _update = Builders<User>.Update;
 			var _set = _update.Set(f => f.Password, PasswordHasher.HashPassword(password));
 
-			Log.LogInformation("Update password for user {0}.", GetUserById(user).Username);
+			Log.LogInformation($"Update password for user '{GetUserById(user).Username}'.");
 
 			Context.User.UpdateOne(_id & _active, _set);
 		}
@@ -286,10 +277,7 @@ namespace notes.Core.Services
 				.Set(f => f.Settings.PageSize, pageSize)
 				.Set(f => f.Settings.SearchLanguage, searchLanguage);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Update settings -> '{0}'", Context.User.UpdateOne(_id, _set).ToString());
-			}
+			Log.LogDebug($"Update settings for user '{user.ToString()}'.");
 
 			Context.User.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
@@ -310,10 +298,7 @@ namespace notes.Core.Services
 			var _set = _update
 				.Set(f => f.DisplayName, displayName);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Update profile -> '{0}'", Context.User.UpdateOne(_id, _set).ToString());
-			}
+			Log.LogDebug($"Update profile for user '{user.ToString()}'.");
 
 			Context.User.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
 		}
@@ -333,19 +318,16 @@ namespace notes.Core.Services
 			var _username = _filter.Eq(f => f.Username, username);
 			var _active = _filter.Eq(f => f.Enabled, true);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Login -> '{0}'", Context.User.Find(_username & _active).ToString());
-			}
+			Log.LogInformation($"User login for user '{username}'.");
 			
 			var _user = Context.User.Find(_username & _active).SingleOrDefault();
 			if(_user != null && PasswordHasher.VerifyHashedPassword(_user.Password, password))
 			{
-				Log.LogInformation("User {0} has been authenticated.", username);
+				Log.LogInformation($"User '{username}' has been authenticated.");
 				return _user;
 			}
 			
-			Log.LogWarning("User {0} failed to log in.", username);
+			Log.LogWarning($"User '{username}' failed to log in.");
 			return null;
 		}
 
@@ -363,6 +345,8 @@ namespace notes.Core.Services
 			var _user = GetUserByName(username);
 			if(_user == null || !_user.Enabled)
 				return;
+
+			Log.LogInformation($"Create password reset token for user '{username}'.");
 
 			// create reset token
 			var nonce = ObjectId.GenerateNewId().ToString();
@@ -384,10 +368,7 @@ namespace notes.Core.Services
 			var _filter = Builders<Token>.Filter;
 			var _nonce = _filter.Eq(f => f.Nonce, nonce);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Delete reset token -> '{0}'", Context.Token.DeleteOne(_nonce).ToString());
-			}
+			Log.LogDebug($"Delete reset token '{nonce}'.");
 
 			Context.Token.DeleteOne(_nonce);
 		}

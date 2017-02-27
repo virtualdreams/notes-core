@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
+using MongoDB.Driver.Core.Events;
 using MongoDB.Driver;
 using notes.Core.Models;
 
@@ -20,9 +22,24 @@ namespace notes.Core.Services
 			Log = log;
 			Settings = settings;
 
-			Log.LogInformation("Set mongo database to {0}.", Settings.Value.Database);
+			Log.LogDebug("Set mongo database to '{0}'.", Settings.Value.Database);
 
-			_client = new MongoClient(Settings.Value.MongoDB);
+			var _settings = MongoClientSettings.FromUrl(new MongoUrl(Settings.Value.MongoDB));
+
+			// log commands if debug enabled
+			if(Log.IsEnabled(LogLevel.Debug))
+			{
+				Log.LogDebug("MongoDB command log enabled.");
+				_settings.ClusterConfigurator = cb =>
+				{
+					cb.Subscribe<CommandStartedEvent>(e =>
+					{
+						Log.LogDebug($"{e.CommandName} - {e.Command.ToJson()}");
+					});
+				};
+			}
+
+			_client = new MongoClient(_settings);
 			_database = _client.GetDatabase(Settings.Value.Database);
 			Note = _database.GetCollection<Note>("notes");
 			User = _database.GetCollection<User>("user");
