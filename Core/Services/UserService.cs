@@ -41,18 +41,18 @@ namespace notes.Core.Services
 		}
 
 		/// <summary>
-		/// Test, if more than one administrator exists.
+		/// Get count of available administrators.
 		/// </summary>
-		/// <returns>True if more than one administrator exists.</returns>
+		/// <returns>Count if active adminsitrators</returns>
 		public long GetAdminCount()
 		{
 			return Context.User.Find(f => f.Role.Equals("Administrator") && f.Enabled == true).Count();
 		}
 
 		/// <summary>
-		/// Test, if the given user is an administrator.
+		/// Check if the given user is an administrator.
 		/// </summary>
-		/// <param name="user">The user object.</param>
+		/// <param name="user">The user.</param>
 		/// <returns>True if the user is an administrator.</returns>
 		public bool IsAdmin(ObjectId user)
 		{
@@ -140,18 +140,15 @@ namespace notes.Core.Services
         /// </summary>
         /// <param name="username">The username.</param>
         /// <returns></returns>
-		public UserSettings GetUserSettings(string username)
+		public UserSettings GetUserSettings(ObjectId user)
 		{
 			var _filter = Builders<User>.Filter;
-			var _username = _filter.Eq(f => f.Username, username);
+			var _id = _filter.Eq(f => f.Id, user);
 			var _active = _filter.Eq(f => f.Enabled, true);
 
-			if(Log.IsEnabled(LogLevel.Debug))
-			{
-				Log.LogDebug("Get user id -> '{0}'", Context.User.Find(_username & _active).Project(f => f.Settings).ToString());
-			}
+			Log.LogDebug($"Get user settings '{user.ToString()}'.");
 
-			return Context.User.Find(_username & _active).Project(f => f.Settings).SingleOrDefault();
+			return Context.User.Find(_id & _active).Project(f => f.Settings).SingleOrDefault();
 		}
 
 		/// <summary>

@@ -11,7 +11,7 @@ namespace notes.Controllers
 		private readonly UserService UserService;
 
 		public ObjectId UserId => UserService.GetUserId(User.GetUserName());
-		public UserSettings UserSettings => UserService.GetUserSettings(User.GetUserName());
+		public UserSettings UserSettings => UserService.GetUserSettings(UserId);
 
 		public BaseController(UserService userService)
 		{
