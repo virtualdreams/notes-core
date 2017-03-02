@@ -24,19 +24,21 @@
 <div class="row">
 	<div class="col-lg-12">
         <div class="row">
-			<div class="col-md-4">
+			<div class="col-lg-4">
                 <form role="form" action="@Url.Action("profile", "user")" method="post" enctype="multipart/form-data" id="profile-form" >
                     <div class="form-group">
                         <label>Display Name</label>
                         <input type="text" class="form-control" placeholder="Display Name" name="displayname" value="@Model.Profile.DisplayName" />
                     </div>
-                    <button type="submit" class="btn btn-primary">Update profile</button>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Update profile</button>
+                    </div>
                 </form>
             </div>
         </div>
         <hr>
         <div class="row">
-			<div class="col-md-4">
+			<div class="col-lg-4">
                 <form role="form" action="@Url.Action("settings", "user")" method="post" enctype="multipart/form-data" id="settings-form" >
                     <div class="form-group">
                         <label>Items per page</label>
@@ -49,7 +51,9 @@
                             <option value="de">German</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Update settings</button>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Update settings</button>
+                    </div>
                 </form>
             </div>
         </div>
