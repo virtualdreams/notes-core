@@ -21,6 +21,8 @@ namespace notes.Controllers
 		private readonly IOptions<Settings> Options;
 		private readonly IViewRenderService ViewRenderService;
 
+		private int PageSize => UserSettings?.PageSize ?? Options.Value.PageSize;
+
 		public NoteController(IMapper mapper, NoteService note, UserService user, IOptions<Settings> options, IViewRenderService render)
 			: base(user)
 		{
@@ -169,8 +171,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Notebook(string id, ObjectId after)
 		{
-			var _pageSize = UserSettings?.PageSize ?? Options.Value.PageSize;
-			var _notes = NoteService.GetByNotebook(UserId, id ?? string.Empty, after, _pageSize);
+			var _notes = NoteService.GetByNotebook(UserId, id ?? string.Empty, after, PageSize);
 			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
@@ -188,8 +189,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Tag(string id, ObjectId after)
 		{
-			var _pageSize = UserSettings?.PageSize ?? Options.Value.PageSize;
-			var _notes = NoteService.GetByTag(UserId, id ?? string.Empty, after, _pageSize);
+			var _notes = NoteService.GetByTag(UserId, id ?? string.Empty, after, PageSize);
 			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 			
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
@@ -219,8 +219,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Trash(ObjectId after)
 		{
-			var _pageSize = UserSettings?.PageSize ?? Options.Value.PageSize;
-			var _notes = NoteService.Get(UserId, after, true, _pageSize);
+			var _notes = NoteService.Get(UserId, after, true, PageSize);
 			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 			
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);

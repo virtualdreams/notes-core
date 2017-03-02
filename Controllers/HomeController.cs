@@ -19,6 +19,8 @@ namespace notes.Controllers
 		private readonly UserService UserService;
 		private readonly IOptions<Settings> Options;
 
+		private int PageSize => UserSettings?.PageSize ?? Options.Value.PageSize;
+
 		public HomeController(IMapper mapper, NoteService note, UserService user, IOptions<Settings> options)
 			: base(user)
 		{
@@ -31,8 +33,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Index(ObjectId after)
 		{
-			var _pageSize = UserSettings?.PageSize ?? Options.Value.PageSize;
-			var _notes = NoteService.Get(UserId, after, false, _pageSize);
+			var _notes = NoteService.Get(UserId, after, false, PageSize);
 			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
@@ -49,8 +50,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Search(string q, ObjectId after)
 		{
-			var _pageSize = UserSettings?.PageSize ?? Options.Value.PageSize;
-			var _notes = NoteService.Search(UserId, q ?? String.Empty, after, _pageSize);
+			var _notes = NoteService.Search(UserId, q ?? String.Empty, after, PageSize);
 			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
