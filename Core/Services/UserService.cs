@@ -249,6 +249,9 @@ namespace notes.Core.Services
 		{
 			password = password?.Trim();
 
+			if(!new PasswordPolicy{ NonAlphaLength = 0, UpperCaseLength = 0}.IsValid(password))
+				throw new NotesWeakPasswordException();
+
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
 			var _active = _filter.Eq(f => f.Enabled, true);

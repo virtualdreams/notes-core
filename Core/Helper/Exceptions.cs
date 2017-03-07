@@ -50,4 +50,11 @@ namespace notes
 			: base("Incorrect username or password!")
 		{ }
 	}
+
+	public class NotesWeakPasswordException : NotesException
+	{
+		public NotesWeakPasswordException()
+			: base("The new password is too weak!")
+		{ }
+	}
 }
