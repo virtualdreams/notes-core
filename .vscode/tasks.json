@@ -9,7 +9,7 @@
 		{
 			"taskName": "build",
 			"args": [
-                "${workspaceRoot}\\project.json"
+                "${workspaceRoot}\\notes.csproj"
             ],
 			"isBuildCommand": true,
 			"problemMatcher": "$msCompile",
@@ -20,7 +20,7 @@
             "args": [
                 "--configuration",
                 "Release",
-                "${workspaceRoot}\\project.json"
+                "${workspaceRoot}\\notes.csproj"
             ],
             "isBuildCommand": false,
             "showOutput": "always",
