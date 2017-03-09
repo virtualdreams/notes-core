@@ -4,24 +4,13 @@ Notes! is an ASP.NET Core based app to manage text notes like Evernote or Simple
 
 ## Features
 
-* Notes can written with markdown
-	* All standard markdown features
-	* Extended emphasis
-	* Abbreviations
-	* Task lists
-* Assign a notebook name to a note
-* Assign tags to a note
-* Notes can searched through mongo search engine
-* Multiple users
+* Markdown support
+* Tags and notebooks
 * Syntax highligting for code blocks
-
-## Missing features
-
-* Share notes to users or the public
 
 ## Technology
 
-* [.NET Core](https://www.microsoft.com/net/core) (v1.0 / v1.1)
+* [.NET Core 1.1.1](https://www.microsoft.com/net/core)
 * [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/)
 * [MongoDB](https://www.mongodb.com/)
 * [bootstrap 3](http://getbootstrap.com/)
