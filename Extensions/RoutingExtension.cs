@@ -44,7 +44,7 @@ namespace notes.Extensions
 				);
 
 				routes.MapRoute(
-					name: "note",
+					name: "view",
 					template: "note/{id?}/{slug?}",
 					defaults: new { controller = "Note", action = "View"},
 					constraints: new { id = @"^[a-f0-9]{24}$" } 

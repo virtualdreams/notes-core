@@ -18,7 +18,7 @@
 		<ol class="breadcrumb">
 			<li><i class="fa fa-home"></i> <a href="@Url.Action("index", "home")">Home</a></li>
 			@if(Model.Note.Id != ObjectId.Empty) {
-			<li><i class="fa fa-file"></i> <a href="@Url.Action("view", "note", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })">@Model.Note.Title</a></li>
+			<li><i class="fa fa-file"></i> <a href="@Url.RouteUrl("view", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })">@Model.Note.Title</a></li>
 			<li><i class="fa fa-pencil"></i> Edit</li>
 			} else {
 			<li><i class="fa fa-pencil"></i> Create</li>
@@ -43,7 +43,7 @@
 						<div class="form-group">
 							<label>Content</label>
 							<textarea class="form-control" name="content" rows="20">@Html.Raw(@Model.Note.Content)</textarea>
-							<small><a href="@Url.Action("help", "home")" target="_blank"><i class="fa fa-code"></i> Styling with Markdown</a></small>
+							<small><a href="@Url.RouteUrl("help")" target="_blank"><i class="fa fa-code"></i> Styling with Markdown</a></small>
 						</div>
 					</div>
 				</div>

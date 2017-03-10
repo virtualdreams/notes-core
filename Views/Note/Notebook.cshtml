@@ -25,7 +25,7 @@
 		<nav>
 			<ul class="pager">
 				@if(Model.Pager.HasNext) {
-				<li><a href="@Url.Action("notebook", "note", new { id = Model.Notebook, after = Model.Pager.NextPage })" rel="nofollow next">Older</a></li>
+				<li><a href="@Url.RouteUrl("notebook", new { id = Model.Notebook, after = Model.Pager.NextPage })" rel="nofollow next">Older</a></li>
 				}
 			</ul>
 		</nav>

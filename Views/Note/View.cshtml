@@ -15,7 +15,7 @@
 	    				<span class="caret"></span>
        				</button>
        				<ul class="dropdown-menu pull-right">
-						<li><a href="@Url.Action("print", "note", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })" target="_blank"><i class="fa fa-print"></i> Print</a></li>
+						<li><a href="@Url.RouteUrl("print", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })" target="_blank"><i class="fa fa-print"></i> Print</a></li>
 						<li class="divider"></li>
 						<li><a href="#" data-toggle="modal" data-target="#trash">
 							@if(Model.Note.Trash) {

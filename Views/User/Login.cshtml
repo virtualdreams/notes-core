@@ -19,7 +19,7 @@
 					</div>
 				}
 
-				<form role="form" action="@Url.Action("login", "user", new { ReturnUrl = Context.Request.Query["ReturnUrl"] })" method="post" enctype="multipart/form-data" id="login-form">
+				<form role="form" action="@Url.RouteUrl("login", new { ReturnUrl = Context.Request.Query["ReturnUrl"] })" method="post" enctype="multipart/form-data" id="login-form">
 					<fieldset>
 						<div class="form-group">
 							<input class="form-control" placeholder="E-mail" name="username" type="email" autofocus>
@@ -32,7 +32,7 @@
 								<input name="remember" type="checkbox" value="true">Remember Me
 							</label>
 						</div>
-						<input type="submit" class="btn btn-lg btn-primary btn-block" value="Login" /> <a href="@Url.Action("forgot_password", "user")">Forgot password?</a>
+						<input type="submit" class="btn btn-lg btn-primary btn-block" value="Login" /> <a href="@Url.RouteUrl("forgot_password")">Forgot password?</a>
 					</fieldset>
 				</form>
 			</div>

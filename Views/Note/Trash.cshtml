@@ -33,7 +33,7 @@
 						@foreach(var note in Model.Notes) {
 						<tr>
 							<td><input type="checkbox" name="id" value="@note.Id" /></td>
-							<td><a href="@Url.Action("view", "note", new { id = note.Id, slug = note.Title.ToSlug() })">@note.Title</a></td>
+							<td><a href="@Url.RouteUrl("view", new { id = note.Id, slug = note.Title.ToSlug() })">@note.Title</a></td>
 							<td><span class="pull-right text-muted small"><em>@note.Age</em></span></td>
 						</tr>
 						}
@@ -46,7 +46,7 @@
 		<nav>
 			<ul class="pager">
 				@if(Model.Pager.HasNext) {
-				<li><a href="@Url.Action("trash", "note", new { after = Model.Pager.NextPage })" rel="nofollow next">Older</a></li>
+				<li><a href="@Url.RouteUrl("trash", new { after = Model.Pager.NextPage })" rel="nofollow next">Older</a></li>
 				}
 			</ul>
 		</nav>
