@@ -269,16 +269,14 @@ namespace notes.Core.Services
         /// </summary>
         /// <param name="user">The user.</param>
         /// <param name="pageSize">The new page size.</param>
-        /// <param name="searchLanguage">The new search language.</param>
-		public void UpdateSettings(ObjectId user, int pageSize, string searchLanguage)
+		public void UpdateSettings(ObjectId user, int pageSize)
 		{
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
 
 			var _update = Builders<User>.Update;
 			var _set = _update
-				.Set(f => f.Settings.PageSize, pageSize)
-				.Set(f => f.Settings.SearchLanguage, searchLanguage);
+				.Set(f => f.Settings.PageSize, pageSize);
 
 			Log.LogDebug($"Update settings for user '{user.ToString()}'.");
 

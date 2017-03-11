@@ -41,12 +41,10 @@ namespace notes.Core.Models
 		public UserSettings Settings { get; set; }
 	}
 
+	[BsonIgnoreExtraElements]
 	public class UserSettings
 	{
 		[BsonElement("pagesize")]
 		public int PageSize { get; set; }
-
-		[BsonElement("searchlanguage")]
-		public string SearchLanguage { get; set; }
 	}
 }

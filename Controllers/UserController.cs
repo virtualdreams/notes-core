@@ -220,8 +220,7 @@ namespace notes.Controllers
 				},
 				Settings = new UserSettingsModel
 				{
-					Items = UserSettings?.PageSize ?? Options.Value.PageSize,
-					Language = UserSettings?.SearchLanguage ?? "en"
+					Items = UserSettings?.PageSize ?? Options.Value.PageSize
 				}
 			};
 
@@ -236,7 +235,7 @@ namespace notes.Controllers
 				return RedirectToAction("settings");
 			}
 
-			UserService.UpdateSettings(UserId, model.Items, model.Language);
+			UserService.UpdateSettings(UserId, model.Items);
 
 			return RedirectToAction("settings");
 		}

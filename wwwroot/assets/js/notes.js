@@ -217,11 +217,6 @@ notes = (function($){
 				nowhitespace: true,
 				min: 1,
 				max: 100
-			},
-			'language': {
-				required: true,
-				nowhitespace: true,
-				regex: 'en|de'
 			}
 		}
 	});
