@@ -1,0 +1,144 @@
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#block" data-toggle="tab">Headers &amp; Quotes</a></li>
+	<li><a href="#lists" data-toggle="tab">Lists</a></li>
+	<li><a href="#links" data-toggle="tab">Links &amp; Images</a></li>
+	<li><a href="#emph" data-toggle="tab">Emphasis</a></li>
+	<li><a href="#code" data-toggle="tab">Code</a></li>
+	<li><a href="#misc" data-toggle="tab">Miscellaneous</a></li>
+</ul>
+<div class="tab-content">
+	<div class="tab-pane fade in active" id="block">
+		<markdown>
+#### Header
+
+``` md
+# This is a level 1 header
+## This is a level 2 header
+### This is a level 3 header
+```
+
+#### Blockquotes
+
+``` md
+> Blockquote
+```
+		</markdown>
+	</div>
+	<div class="tab-pane fade" id="lists">
+		<markdown>
+#### Lists
+
+##### Unordered
+``` md
+* Item 1
+* Item 2
+* Item 3
+	* Item 3a
+	* Item 3b
+``` 
+
+##### Ordered
+``` md
+1. Item 1
+2. Item 2
+2. Item 3
+	* Item 3a
+	* Item 3b
+```
+
+##### Tasks
+``` md
+- [ ] Task 1
+- [x] Task 2
+```
+		</markdown>
+	</div>
+	<div class="tab-pane fade" id="links">
+		<markdown>
+#### Links
+
+``` md
+[Linktext](http://example.org)
+```
+
+#### Images
+
+``` md
+![alt text](http://example.org/image.jpg)
+```
+		</markdown>
+	</div>
+	<div class="tab-pane fade" id="emph">
+		<markdown>
+#### Emphasis
+
+``` md
+*Italic*
+_Italic_
+
+**Bold**
+__Bold__
+
+***Bolditalic***
+___Bolditalic***
+
+^Super^
+~Sub~
+~~Strike~~
+++Underline++
+==Mark==
+```
+		</markdown>
+	</div>
+	<div class="tab-pane fade" id="code">
+		<markdown>
+
+#### Inline Code
+
+``` md
+This is an `inline code` element.
+```
+
+#### Code Blocks (Syntax highlighting)
+
+```` md
+```
+This is an code block element.
+```
+````
+
+```` md
+``` csharp
+namespace Demo
+{
+    public class DemoClass
+    {
+        public string Name { get; set; } = "John";
+
+        public DemoClass()
+        { }
+    }
+}
+```
+````
+
+Available [language names and aliases](http://highlightjs.readthedocs.io/en/latest/css-classes-reference.html#language-names-and-aliases)
+		</markdown>
+	</div>
+	<div class="tab-pane fade" id="misc">
+		<markdown>
+#### Horizontal Rules
+
+``` md
+---
+```
+
+#### Abbreviations
+
+``` md
+*[HTML]: Hyper Text Markup Language
+*[W3C]:  World Wide Web Consortium
+```
+		</markdown>
+	</div>
+</div>

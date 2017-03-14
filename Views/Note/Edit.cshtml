@@ -30,7 +30,6 @@
 <div class="row">
 	<div class="col-lg-12">
 		<form role="form" action="@Url.Action("edit", "note")" method="post" enctype="multipart/form-data" id="note-form">
-
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="form-group">
@@ -41,19 +40,20 @@
 						<label>Content</label>
 						<div class="editor-toolbar">
 							<button type="button" class="btn btn-default" id="preview"><i class="fa fa-eye"></i> Preview</button>
+							<button type="button" class="btn btn-default" id="help"><i class="fa fa-question-circle"></i></button>
+						</div>
+						<div class="editor-help" id="editor-help">
+							@await Html.PartialAsync("_PartialHelp")
 						</div>
 						<div class="editor-container">
 							<div class="editor-source" id="editor-source">
 								<textarea class="form-control" name="content" rows="20" >@Html.Raw(@Model.Note.Content)</textarea>
-								<small><a href="@Url.RouteUrl("help")" target="_blank"><i class="fa fa-code"></i> Styling with Markdown</a></small>
 							</div>
 							<div class="editor-preview" id="editor-preview"></div>
 						</div>
 					</div>
 				</div>
-
 			</div>
-			
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="form-group">

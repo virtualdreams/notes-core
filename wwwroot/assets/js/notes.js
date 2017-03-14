@@ -126,6 +126,10 @@ notes = (function($){
 		}
 	});
 
+	$('#help').click(function() {
+		$('#editor-help').slideToggle();
+	});
+
 	$.validator.setDefaults({
 		highlight: function(element) {
 			$(element).closest('.form-group').addClass('has-error');

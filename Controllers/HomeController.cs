@@ -65,11 +65,6 @@ namespace notes.Controllers
 			return View(view);
 		}
 
-		public IActionResult Help()
-		{
-			return View();
-		}
-
 		public IActionResult Error(int? code)
 		{
 			switch(code ?? 0)
