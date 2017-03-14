@@ -114,33 +114,41 @@ namespace notes.Controllers
 					}
 
 					if(Request.IsAjaxRequest())
-						return Json(new { Success = true, Id = _id.ToString() });
-
-					return RedirectToAction("view", "note", new { id = _id, slug = model.Title.ToSlug() });
+					{
+						return Json(new { Success = true, Id = _id.ToString(), Error = "" });
+					}
+					else
+					{
+						return RedirectToAction("view", "note", new { id = _id, slug = model.Title.ToSlug() });
+					}
 				}
 				catch(NotesException ex)
 				{
-					ModelState.AddModelError("exception", ex.Message);
+					ModelState.AddModelError("error", ex.Message);
 				}
 			}
 
 			// validation failed
 			if(Request.IsAjaxRequest())
-				return Json(new { Success = false, Id = model.Id.ToString(), Error = "" });
-
-			var view = new NoteEditContainer
 			{
-				Note = new NoteModel
+				return Json(new { Success = false, Id = model.Id.ToString(), Error = "" });
+			}
+			else
+			{
+				var view = new NoteEditContainer
 				{
-					Id = model.Id,
-					Title = model.Title,
-					Content = model.Content,
-					Notebook = model.Notebook,
-					Tags = model.Tags
-				}
-			};
+					Note = new NoteModel
+					{
+						Id = model.Id,
+						Title = model.Title,
+						Content = model.Content,
+						Notebook = model.Notebook,
+						Tags = model.Tags
+					}
+				};
 
-			return View(view);
+				return View(view);
+			}
 		}
 
 		[HttpPost]

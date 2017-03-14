@@ -70,7 +70,7 @@ notes = (function($){
 				if(d.success) {
 					$('#id').val(d.id);
 					
-					$('#result').html('<div class="alert alert-success"><button type="button" class="close">×</button>Successfully saved note!</div>');
+					$('#result').html('<div class="alert alert-success"><button type="button" class="close">×</button>Note has been successfully saved.</div>');
 					window.setTimeout(function() {
 						$(".alert").fadeTo(500, 0).slideUp(500, function(){
                     		$(this).remove(); 
@@ -100,7 +100,7 @@ notes = (function($){
 
 	$('#preview').click(function() {
 		if($('#note-form').valid()) {
-			if($('#editorPane').is(':visible'))
+			if($('#editor-source').is(':visible'))
 			{
 				var data = getFormData($('#note-form'));
 				$.ajax({
@@ -109,19 +109,19 @@ notes = (function($){
 					dataType: 'json',
 					data: data
 				}).done(function(d) {
-					$('#previewPane').html(d.content);
-					$('#preview').text('Return to edit');
+					$('#editor-preview').html(d.content);
+					$('#preview').html('<i class="fa fa-pencil"></i> Edit');
 
-					$('#editorPane').toggle();
-					$('#previewPane').toggle();
+					$('#editor-source').toggle();
+					$('#editor-preview').toggle();
 				});
 			}
 			else
 			{
-				$('#preview').text('Preview');
+				$('#preview').html('<i class="fa fa-eye"></i> Preview');
 
-				$('#editorPane').toggle();
-				$('#previewPane').toggle();
+				$('#editor-source').toggle();
+				$('#editor-preview').toggle();
 			}
 		}
 	});
