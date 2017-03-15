@@ -114,6 +114,12 @@ notes = (function($){
 
 					$('#editor-source').toggle();
 					$('#editor-preview').toggle();
+				}).fail(function() {
+					$('#result').html('<div class="alert alert-danger"><button type="button" class="close">×</button>Failed to generate preview!</div>');
+
+					$('.alert .close').on("click", function(e){
+						$(this).parent().fadeTo(500, 0).slideUp(500);
+					});
 				});
 			}
 			else
