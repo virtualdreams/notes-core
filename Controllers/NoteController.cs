@@ -154,6 +154,8 @@ namespace notes.Controllers
 		[HttpPost]
 		public IActionResult Preview(NotePostModel model)
 		{
+			// remove title related error messages, because is not needed for preview mode
+			ModelState.Remove("title");
 			if(ModelState.IsValid)
 			{
 				var view = new NoteViewContainer
@@ -253,6 +255,18 @@ namespace notes.Controllers
 			}
 
 			return RedirectToAction("trash");
+		}
+
+		[Route("search/tags")]
+		public IActionResult TagSuggestions(string term)
+		{
+			return Json(NoteService.TagSuggestions(UserId, term).ToArray());
+		}
+
+		[Route("search/notebook")]
+		public IActionResult NotebookSuggestions(string term)
+		{
+			return Json(NoteService.NotebookSuggestions(UserId, term).ToArray());
 		}
 	}
 }

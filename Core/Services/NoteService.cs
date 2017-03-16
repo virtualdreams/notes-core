@@ -8,7 +8,7 @@ using notes.Core.Models;
 
 namespace notes.Core.Services
 {
-    public class NoteService
+	public class NoteService
 	{
 		private readonly ILogger<NoteService> Log;
 		private readonly MongoContext Context;
@@ -328,6 +328,38 @@ namespace notes.Core.Services
 				_result.ToEnumerable().Take(limit),
 				_result.Count() > limit
 			);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="user"></param>
+		/// <param name="term"></param>
+		/// <returns></returns>
+		public IEnumerable<string> TagSuggestions(ObjectId user, string term)
+		{
+			term = term?.Trim();
+
+			if (String.IsNullOrEmpty(term) || term.Length < 3)
+				return Enumerable.Empty<string>();
+
+			return Tags(user).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="user"></param>
+		/// <param name="term"></param>
+		/// <returns></returns>
+		public IEnumerable<string> NotebookSuggestions(ObjectId user, string term)
+		{
+            term = term?.Trim();
+
+            if (String.IsNullOrEmpty(term) || term.Length < 3)
+				return Enumerable.Empty<string>();
+
+            return Notebooks(user).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
 		}
 	}
 }

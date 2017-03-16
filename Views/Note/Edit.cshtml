@@ -50,7 +50,7 @@
 						</div>
 						<div class="editor-container">
 							<div class="editor-source" id="editor-source">
-								<textarea class="form-control" name="content" rows="20" >@Html.Raw(@Model.Note.Content)</textarea>
+								<textarea class="form-control" name="content">@Html.Raw(@Model.Note.Content)</textarea>
 							</div>
 							<div class="editor-preview" id="editor-preview"></div>
 						</div>
@@ -61,13 +61,13 @@
 				<div class="col-lg-6">
 					<div class="form-group">
 						<label>Notebook</label>
-						<input class="form-control" name="notebook" placeholder="Notebook" value="@Model.Note.Notebook" />
+						<input class="form-control" name="notebook" id="notebook" placeholder="Notebook" value="@Model.Note.Notebook" />
 					</div>
 				</div>
 				<div class="col-lg-6">
 					<div class="form-group">
 						<label>Tags</label>
-						<input class="form-control" name="tags" placeholder="Separate with spaces" value="@Model.Note.Tags" />
+						<input class="form-control" name="tags" id="tags" placeholder="Separate with spaces" value="@Model.Note.Tags" />
 					</div>
 				</div>
 			</div>

@@ -1,5 +1,43 @@
 var notes = notes || {};
 notes = (function($){
+	function split(val) {
+		return val.split(' ');
+	}
+
+	function extractLast(term) {
+		return split(term).pop();
+	}
+	
+	$("#notebook").autocomplete({
+		source: '/search/notebook',
+		minLength: 3,
+	});
+	
+	$("#tags").autocomplete({
+		source: function (request, response) {
+			$.getJSON('/search/tags', {
+				term: extractLast(request.term)
+			}, response);
+		},
+		search: function () {
+			var term = extractLast(this.value);
+			if (term.length < 3) {
+				return false;
+			}
+		},
+		focus: function () {
+			return false;
+		},
+		select: function (event, ui) {
+			var terms = split(this.value);
+			terms.pop();
+			terms.push(ui.item.value);
+			terms.push("");
+			this.value = terms.join(" ");
+			return false;
+		}
+	});
+
 	$('[data-toggle=popover]').popover();
 
 	$('[data-href]').click(function() {
@@ -99,36 +137,34 @@ notes = (function($){
 	});
 
 	$('#preview').click(function() {
-		if($('#note-form').valid()) {
-			if($('#editor-source').is(':visible'))
-			{
-				var data = getFormData($('#note-form'));
-				$.ajax({
-					type: "POST",
-					url: '/note/preview/',
-					dataType: 'json',
-					data: data
-				}).done(function(d) {
-					$('#editor-preview').html(d.content);
-					$('#preview').html('<i class="fa fa-pencil"></i> Edit');
-
-					$('#editor-source').toggle();
-					$('#editor-preview').toggle();
-				}).fail(function() {
-					$('#result').html('<div class="alert alert-danger"><button type="button" class="close">×</button>Failed to generate preview!</div>');
-
-					$('.alert .close').on("click", function(e){
-						$(this).parent().fadeTo(500, 0).slideUp(500);
-					});
-				});
-			}
-			else
-			{
-				$('#preview').html('<i class="fa fa-eye"></i> Preview');
+		if($('#editor-source').is(':visible'))
+		{
+			var data = getFormData($('#note-form'));
+			$.ajax({
+				type: "POST",
+				url: '/note/preview/',
+				dataType: 'json',
+				data: data
+			}).done(function(d) {
+				$('#editor-preview').html(d.content);
+				$('#preview').html('<i class="fa fa-pencil"></i> Edit');
 
 				$('#editor-source').toggle();
 				$('#editor-preview').toggle();
-			}
+			}).fail(function() {
+				$('#result').html('<div class="alert alert-danger"><button type="button" class="close">×</button>Failed to generate preview!</div>');
+
+				$('.alert .close').on("click", function(e){
+					$(this).parent().fadeTo(500, 0).slideUp(500);
+				});
+			});
+		}
+		else
+		{
+			$('#preview').html('<i class="fa fa-eye"></i> Preview');
+
+			$('#editor-source').toggle();
+			$('#editor-preview').toggle();
 		}
 	});
 
