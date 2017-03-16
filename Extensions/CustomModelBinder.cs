@@ -1,8 +1,9 @@
-using System;
-using System.Globalization;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MongoDB.Bson;
+using System.Globalization;
+using System.Threading.Tasks;
+using System;
+using notes.Helper;
 
 namespace notes.ModelBinders
 {
@@ -18,7 +19,7 @@ namespace notes.ModelBinders
 			}
 
 			ObjectId _id;
-			if(!ObjectId.TryParse((string)result.ConvertTo(typeof(string)), out _id))
+			if(!ObjectId.TryParse(((string)result.ConvertTo(typeof(string))).GetLast(24), out _id))
 			{
 				bindingContext.Result = ModelBindingResult.Success(ObjectId.Empty);
 				return Task.CompletedTask;

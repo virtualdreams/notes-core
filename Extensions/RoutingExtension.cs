@@ -39,16 +39,14 @@ namespace notes.Extensions
 
 				routes.MapRoute(
 					name: "view",
-					template: "note/{id?}/{slug?}",
-					defaults: new { controller = "Note", action = "View"},
-					constraints: new { id = @"^[a-f0-9]{24}$" } 
+					template: "note/{id?}",
+					defaults: new { controller = "Note", action = "View"}
 				);
 
 				routes.MapRoute(
 					name: "print",
-					template: "print/{id?}/{slug?}",
-					defaults: new { controller = "Note", action = "Print"},
-					constraints: new { id = @"^[a-f0-9]{24}$" } 
+					template: "print/{id?}",
+					defaults: new { controller = "Note", action = "Print"}
 				);
 
 				routes.MapRoute(

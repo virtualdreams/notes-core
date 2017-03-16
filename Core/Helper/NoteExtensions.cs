@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MongoDB.Bson;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -46,6 +47,32 @@ namespace notes.Helper
 
 			// max length of text
 			return value.Substring(0, value.Length <= maxLength ? value.Length : maxLength);
+		}
+
+		/// <summary>
+		/// Extended slug with id at the end.
+		/// </summary>
+		/// <param name="value">The string to slugify.</param>
+		/// <param name="id"></param>
+		/// <param name="maxLength">Max length of text.</param>
+		/// <returns></returns>
+		static public string ToSlug(this string value, ObjectId id, int maxLength = 100)
+		{
+			return $"{value.ToSlug(maxLength)}-{id.ToString()}";
+		}
+
+		/// <summary>
+		/// Get last n characters.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <param name="len">Max length.</param>
+		/// <returns></returns>
+		static public string GetLast(this string value, int len)
+		{
+			if(String.IsNullOrEmpty(value) || len >= value.Length)
+				return value;
+
+			return value.Substring(value.Length - len);
 		}
 
 		static public int ToMinutes(this DateTime dt)

@@ -119,7 +119,7 @@ namespace notes.Controllers
 					}
 					else
 					{
-						return RedirectToAction("view", "note", new { id = _id, slug = model.Title.ToSlug() });
+						return RedirectToAction("view", "note", new { id = model.Title.ToSlug(_id) });
 					}
 				}
 				catch(NotesException ex)
