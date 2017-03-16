@@ -22,6 +22,7 @@ namespace notes.TagHelpers
 				.UseAbbreviations()
 				.UseEmphasisExtras()
 				.UseTaskLists()
+				.UseAutoLinks()
 				.Build();
 			var _markdown = Markdown.ToHtml(_content, _pipeline);
 
