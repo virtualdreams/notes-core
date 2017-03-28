@@ -55,6 +55,14 @@ namespace notes
 				options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
 			});
 
+			// add sessions
+			services.AddDistributedMemoryCache();
+			services.AddSession(options => {
+				options.CookieName = "notes_session";
+				options.IdleTimeout = TimeSpan.FromMinutes(30);
+				options.CookieHttpOnly = true;
+			});
+
 			// authorization policies
 			services.AddAuthorization(options => {
 				options.AddPolicy("AdministratorOnly", policy => {
@@ -101,6 +109,8 @@ namespace notes
 					OnValidatePrincipal = CookieValidator.ValidateAsync
 				}
 			});
+
+			app.UseSession();
 
 			app.AddRoutes();
 		}
