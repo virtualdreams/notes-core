@@ -11,9 +11,6 @@ namespace notes.Models
 		[Required(ErrorMessage="Please confirm the password.")]
 		[MinLength(8, ErrorMessage="Minimum length 8 characters.")]
 		public string ConfirmPassword { get; set; }
-
-		[Required]
-		public string Token { get; set; }
 	}
 
 	public class PasswdResetModel

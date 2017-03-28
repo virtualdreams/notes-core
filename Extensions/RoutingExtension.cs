@@ -63,14 +63,14 @@ namespace notes.Extensions
 
 				routes.MapRoute(
 					name: "forgot_password",
-					template: "forgot_password",
-					defaults: new { controller = "user", action = "forgot_password"}
+					template: "reset_password",
+					defaults: new { controller = "user", action = "forgotpassword"}
 				);
 
 				routes.MapRoute(
 					name: "reset_password",
 					template: "reset_password/{id?}",
-					defaults: new { controller = "user", action = "reset_password"}
+					defaults: new { controller = "user", action = "resetpassword"}
 				);
 
 				routes.MapRoute(

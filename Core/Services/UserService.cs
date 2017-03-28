@@ -92,14 +92,16 @@ namespace notes.Core.Services
 		/// <summary>
 		/// Get a user by reset token.
 		/// </summary>
-		/// <param name="nonce">The token.</param>
+		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		public User GetUserByToken(string nonce)
+		public User GetUserByToken(string token)
 		{
-			var _filter = Builders<Token>.Filter;
-			var _nonce = _filter.Eq(f => f.Nonce, nonce);
+			var hash = new ResetToken(token).ToHash();
 
-			Log.LogDebug($"Get user by token '{nonce}'.");
+			var _filter = Builders<Token>.Filter;
+			var _nonce = _filter.Eq(f => f.Nonce, hash);
+
+			Log.LogDebug($"Get user by token '{hash}'.");
 
 			var _token = Context.Token.Find(_nonce).SingleOrDefault();
 			if(_token == null)
@@ -350,26 +352,28 @@ namespace notes.Core.Services
 			Log.LogInformation($"Create password reset token for user '{username}'.");
 
 			// create reset token
-			var nonce = ObjectId.GenerateNewId().ToString();
+			var _token = ResetToken.CreateNew();
 			Context.Token.InsertOne(new Token {
 				Created = DateTime.Now,
 				User = _user.Id,
-				Nonce = nonce
+				Nonce = _token.ToHash() // save token as sha512
 			});
 
-			Mail.SendResetPasswordMail(username, origin, nonce);
+			Mail.SendResetPasswordMail(!String.IsNullOrEmpty(_user.DisplayName) ? _user.DisplayName : _user.Username, _user.Username, origin, _token.ToBase62String()); // send the non hashed token as email
 		}
 
 		/// <summary>
 		/// Remove the reset token.
 		/// </summary>
-		/// <param name="nonce">The token.</param>
-		public void RemoveToken(string nonce)
+		/// <param name="token">The token.</param>
+		public void RemoveToken(string token)
 		{
-			var _filter = Builders<Token>.Filter;
-			var _nonce = _filter.Eq(f => f.Nonce, nonce);
+			var _hash = new ResetToken(token).ToHash();
 
-			Log.LogDebug($"Delete reset token '{nonce}'.");
+			var _filter = Builders<Token>.Filter;
+			var _nonce = _filter.Eq(f => f.Nonce, _hash);
+
+			Log.LogDebug($"Delete reset token '{_hash}'.");
 
 			Context.Token.DeleteOne(_nonce);
 		}

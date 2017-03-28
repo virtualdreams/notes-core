@@ -57,4 +57,11 @@ namespace notes
 			: base("The new password is too weak!")
 		{ }
 	}
+
+	public class NotesInvalidTokenException : NotesException
+	{
+		public NotesInvalidTokenException()
+			: base("It looks like you clicked on an invalid password reset link. Please try again.")
+		{ }
+	}
 }

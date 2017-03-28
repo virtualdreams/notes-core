@@ -21,13 +21,14 @@ namespace notes.Core.Services
 		/// Send a reset password mail to the recipient.
 		/// </summary>
 		/// <param name="username">The username.</param>
+		/// <param name="mail">The email address.</param>
 		/// <param name="origin">The origin from where the user has the passswors reset requested.</param>
-		/// <param name="nonce">The token to reset the password.</param>
-		public void SendResetPasswordMail(string username, string origin, string nonce)
+		/// <param name="token">The token to reset the password.</param>
+		public void SendResetPasswordMail(string username, string mail, string origin, string token)
 		{
 			var message = new MimeMessage();
 			message.From.Add(new MailboxAddress(Options.Value.Smtp.From));
-			message.To.Add(new MailboxAddress(username));
+			message.To.Add(new MailboxAddress(mail));
 			message.Subject = $"[{Options.Value.SiteName}] - Reset Password";
 			message.Body = new TextPart("plain")
 			{
@@ -36,7 +37,7 @@ $@"Hi {username},
 
 You recently requested to reset your password for your {Options.Value.SiteName} account. Use the link below to reset it. This password reset is only valid for the next 1 hour.
 
-{origin}/reset_password/{nonce}
+{origin}/reset_password/{token}
 
 If you did not request a password reset, please ignore this email or contact support if you have questions.
 

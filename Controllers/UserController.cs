@@ -88,14 +88,14 @@ namespace notes.Controllers
 
 		[HttpGet]
 		[AllowAnonymous]
-		public IActionResult Forgot_Password()
+		public IActionResult ForgotPassword()
 		{
-			return View();
+			return View("Forgot_Password");
 		}
 
 		[HttpPost]
 		[AllowAnonymous]
-		public IActionResult Forgot_Password(PasswdForgotPostModel model)
+		public IActionResult ForgotPassword(PasswdForgotPostModel model)
 		{
 			if(ModelState.IsValid)
 			{
@@ -111,43 +111,59 @@ namespace notes.Controllers
 				}
 			}
 
-			return View();
+			return View("Forgot_Confirmation");
 		}
 
 		[HttpGet]
 		[AllowAnonymous]
-		public IActionResult Reset_Password(string id)
+		public IActionResult ResetPassword(string id)
 		{
-			var _user = UserService.GetUserByToken(id);
-			if(_user == null)
-				return RedirectToAction("Login");
+			try
+			{
+				var _user = UserService.GetUserByToken(id);
+				if (_user == null)
+					throw new NotesInvalidTokenException();
 
-			var view = new PasswdResetModel {
-				Token = id
-			};
+				var view = new PasswdResetModel
+				{
+					Token = id
+				};
 
-			return View(view);
+				return View("Reset_Password", view);
+			}
+			catch (NotesException ex)
+			{
+				ModelState.AddModelError("error", ex.Message);
+			}
+
+			return View("Forgot_Password");
 		}
 
 		[HttpPost]
 		[AllowAnonymous]
-		public IActionResult Reset_Password(PasswdResetPostModel model)
+		public IActionResult ResetPassword(string id, PasswdResetPostModel model)
 		{
 			if(ModelState.IsValid)
 			{
 				try
 				{
+					var _user = UserService.GetUserByToken(id);
+					if(_user == null)
+						throw new NotesInvalidTokenException();
+
 					if(!model.NewPassword.Equals(model.ConfirmPassword))
 						throw new NotesPasswordMismatchException();
 
-					var _user = UserService.GetUserByToken(model.Token);
-					if(_user == null)
-						return NotFound();
-
 					UserService.UpdatePassword(_user.Id, model.NewPassword);
-					UserService.RemoveToken(model.Token);
+					UserService.RemoveToken(id);
 
 					return RedirectToAction("Login");
+				}
+				catch(NotesInvalidTokenException ex)
+				{
+					ModelState.AddModelError("error", ex.Message);
+
+					return View("Forgot_Password");
 				}
 				catch(NotesException ex)
 				{
@@ -156,10 +172,10 @@ namespace notes.Controllers
 			}
 
 			var view = new PasswdResetModel {
-				Token = model.Token
+				Token = id
 			};
 
-			return View(view);
+			return View("Reset_Password", view);
 		}
 
 #region User
