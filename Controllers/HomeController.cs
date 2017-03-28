@@ -65,6 +65,7 @@ namespace notes.Controllers
 			return View(view);
 		}
 
+		[AllowAnonymous]
 		public IActionResult Error(int? code)
 		{
 			switch(code ?? 0)
