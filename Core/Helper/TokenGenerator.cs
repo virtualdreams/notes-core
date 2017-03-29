@@ -49,10 +49,10 @@ namespace notes.Helper
 		}
 
 		/// <summary>
-		/// Return a sha512 hashed token.
+		/// Return a sha512 hashed base62 token.
 		/// </summary>
-		/// <returns>Return a sha512 hashed token.</returns>
-		public string ToHash()
+		/// <returns>Returns a sha512 hashed base62 token.</returns>
+		public string PrivateKey()
 		{
 			var sha = System.Security.Cryptography.SHA512.Create();
 			return sha.ComputeHash(_token).ToBase62();
@@ -61,8 +61,8 @@ namespace notes.Helper
 		/// <summary>
 		/// Return a base64 token.
 		/// </summary>
-		/// <returns>Return a base64 token.</returns>
-		public string ToBase62String()
+		/// <returns>Returns a base62 token.</returns>
+		public string PublicKey()
 		{
 			return _token.ToBase62();
 		}

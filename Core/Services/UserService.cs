@@ -96,12 +96,12 @@ namespace notes.Core.Services
 		/// <returns></returns>
 		public User GetUserByToken(string token)
 		{
-			var hash = new ResetToken(token).ToHash();
+			var _hash = new ResetToken(token).PrivateKey();
 
 			var _filter = Builders<Token>.Filter;
-			var _nonce = _filter.Eq(f => f.Nonce, hash);
+			var _nonce = _filter.Eq(f => f.Nonce, _hash);
 
-			Log.LogDebug($"Get user by token '{hash}'.");
+			Log.LogDebug($"Get user by token '{_hash}'.");
 
 			var _token = Context.Token.Find(_nonce).SingleOrDefault();
 			if(_token == null)
@@ -356,10 +356,10 @@ namespace notes.Core.Services
 			Context.Token.InsertOne(new Token {
 				Created = DateTime.Now,
 				User = _user.Id,
-				Nonce = _token.ToHash() // save token as sha512
+				Nonce = _token.PrivateKey() // save token as sha512
 			});
 
-			Mail.SendResetPasswordMail(!String.IsNullOrEmpty(_user.DisplayName) ? _user.DisplayName : _user.Username, _user.Username, origin, _token.ToBase62String()); // send the non hashed token as email
+			Mail.SendResetPasswordMail(!String.IsNullOrEmpty(_user.DisplayName) ? _user.DisplayName : _user.Username, _user.Username, origin, _token.PublicKey()); // send the non hashed token as email
 		}
 
 		/// <summary>
@@ -368,7 +368,7 @@ namespace notes.Core.Services
 		/// <param name="token">The token.</param>
 		public void RemoveToken(string token)
 		{
-			var _hash = new ResetToken(token).ToHash();
+			var _hash = new ResetToken(token).PrivateKey();
 
 			var _filter = Builders<Token>.Filter;
 			var _nonce = _filter.Eq(f => f.Nonce, _hash);
