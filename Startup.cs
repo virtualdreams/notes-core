@@ -83,7 +83,7 @@ namespace notes
 		{
 			logger.AddConsole(Configuration.GetSection("Logging"));
 
-			app.UseStatusCodePagesWithRedirects("~/error/{0}");
+			app.UseStatusCodePagesWithReExecute("/error/{0}");
 
 			if(env.IsDevelopment())
 			{
