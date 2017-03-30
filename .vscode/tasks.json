@@ -13,6 +13,7 @@
             ],
 			"isBuildCommand": true,
 			"problemMatcher": "$msCompile",
+			"showOutput": "always",
 			"echoCommand": true
 		},
 		{
