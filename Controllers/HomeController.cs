@@ -1,13 +1,13 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Linq;
 using System;
 using notes.Core.Services;
 using notes.Models;
-using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 
 namespace notes.Controllers
 {
@@ -33,7 +33,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Index(ObjectId after)
 		{
-			var _notes = NoteService.Get(UserId, after, false, PageSize);
+			var _notes = NoteService.GetNotes(UserId, after, false, PageSize);
 			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);

@@ -27,7 +27,7 @@ namespace notes.Core.Services
 		/// <param name="trashed">Request trashed items or not.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public Tuple<IEnumerable<Note>, bool> Get(ObjectId user, ObjectId next, bool trashed, int limit)
+		public Tuple<IEnumerable<Note>, bool> GetNotes(ObjectId user, ObjectId next, bool trashed, int limit)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _user = _filter.Eq(f => f.Owner, user);
@@ -167,7 +167,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The users notebooks.</param>
 		/// <returns>A list of notebook.</returns>
-		public IEnumerable<string> Notebooks(ObjectId user)
+		public IEnumerable<string> GetNotebooks(ObjectId user)
 		{
 			return Context.Note.Distinct<string>("Notebook", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s)).OrderBy(s => s);
 		}
@@ -177,7 +177,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The users tags.</param>
 		/// <returns>A list of tags.</returns>
-		public IEnumerable<string> Tags(ObjectId user)
+		public IEnumerable<string> GetTags(ObjectId user)
 		{
 			return Context.Note.Distinct<string>("Tags", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s)).OrderBy(s => s);
 		}
@@ -351,7 +351,7 @@ namespace notes.Core.Services
 			if (String.IsNullOrEmpty(term) || term.Length < 3)
 				return Enumerable.Empty<string>();
 
-			return Tags(user).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
+			return GetTags(user).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
 		}
 
 		/// <summary>
@@ -367,7 +367,7 @@ namespace notes.Core.Services
             if (String.IsNullOrEmpty(term) || term.Length < 3)
 				return Enumerable.Empty<string>();
 
-            return Notebooks(user).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
+            return GetNotebooks(user).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
 		}
 	}
 }

@@ -29,7 +29,7 @@ namespace notes.Areas.Admin.Controllers
 		[HttpGet]
         public IActionResult Index()
         {
-            var _users = UserService.Get();
+            var _users = UserService.GetUsers();
 
             var users = Mapper.Map<IEnumerable<UserModel>>(_users);
 
@@ -55,7 +55,7 @@ namespace notes.Areas.Admin.Controllers
 		[HttpGet]
 		public IActionResult Edit(ObjectId id)
 		{
-			var _user = UserService.GetUserById(id);
+			var _user = UserService.GetById(id);
 			if(_user == null)
 				return NotFound();
 
@@ -112,7 +112,7 @@ namespace notes.Areas.Admin.Controllers
 		[HttpPost]
 		public IActionResult Delete(ObjectId id)
 		{
-			var _user = UserService.GetUserById(id);
+			var _user = UserService.GetById(id);
 			if(_user == null)
 				return NotFound();
 			

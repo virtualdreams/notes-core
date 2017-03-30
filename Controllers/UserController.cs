@@ -120,7 +120,7 @@ namespace notes.Controllers
 		{
 			try
 			{
-				var _user = UserService.GetUserByToken(id);
+				var _user = UserService.GetByToken(id);
 				if (_user == null)
 					throw new NotesInvalidTokenException();
 
@@ -147,7 +147,7 @@ namespace notes.Controllers
 			{
 				try
 				{
-					var _user = UserService.GetUserByToken(id);
+					var _user = UserService.GetByToken(id);
 					if(_user == null)
 						throw new NotesInvalidTokenException();
 
@@ -232,7 +232,7 @@ namespace notes.Controllers
 			{
 				Profile = new UserProfileModel
 				{
-					DisplayName = UserService.GetUserById(UserId)?.DisplayName
+					DisplayName = UserService.GetById(UserId)?.DisplayName
 				},
 				Settings = new UserSettingsModel
 				{

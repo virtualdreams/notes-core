@@ -229,7 +229,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Trash(ObjectId after)
 		{
-			var _notes = NoteService.Get(UserId, after, true, PageSize);
+			var _notes = NoteService.GetNotes(UserId, after, true, PageSize);
 			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 			
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);

@@ -27,7 +27,7 @@ namespace notes.Core.Services
 		/// Get all available users.
 		/// </summary>
 		/// <returns>A list of users.</returns>
-		public IEnumerable<User> Get()
+		public IEnumerable<User> GetUsers()
 		{
 			return Context.User.Find(_ => true).ToEnumerable().OrderBy(o => o.Role).ThenBy(o => o.Username);
 		}
@@ -65,7 +65,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The user id.</param>
 		/// <returns>The user if exists or null.</returns>
-		public User GetUserById(ObjectId user)
+		public User GetById(ObjectId user)
 		{
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
@@ -80,7 +80,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="username">The username.</param>
 		/// <returns>The user if exists or null.</returns>
-		public User GetUserByName(string username)
+		public User GetByName(string username)
         {
             var _filter = Builders<User>.Filter;
 			var _username = _filter.Eq(f => f.Username, username);
@@ -95,7 +95,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		public User GetUserByToken(string token)
+		public User GetByToken(string token)
 		{
 			var _hash = new ResetToken(token).PrivateKey();
 
@@ -108,7 +108,7 @@ namespace notes.Core.Services
 			if(_token == null)
 				return null;
 
-			return GetUserById(_token.User);
+			return GetById(_token.User);
 		}
 
 		/// <summary>
@@ -237,7 +237,7 @@ namespace notes.Core.Services
 			if(IsAdmin(user) && GetAdminCount() < 2)
 				throw new NotesDeleteAdminException();
 
-			Log.LogInformation($"Delete user '{GetUserById(user).Username}' permanently.");
+			Log.LogInformation($"Delete user '{GetById(user).Username}' permanently.");
 
 			Context.User.DeleteOne(f => f.Id == user);
 			Context.Note.DeleteMany(f => f.Owner == user);
@@ -262,7 +262,7 @@ namespace notes.Core.Services
 			var _update = Builders<User>.Update;
 			var _set = _update.Set(f => f.Password, PasswordHasher.HashPassword(password));
 
-			Log.LogInformation($"Update password for user '{GetUserById(user).Username}'.");
+			Log.LogInformation($"Update password for user '{GetById(user).Username}'.");
 
 			Context.User.UpdateOne(_id & _active, _set);
 		}
@@ -346,7 +346,7 @@ namespace notes.Core.Services
 			username = username?.Trim()?.ToLower();
 
 			// get user from database
-			var _user = GetUserByName(username);
+			var _user = GetByName(username);
 			if(_user == null || !_user.Enabled)
 				return;
 

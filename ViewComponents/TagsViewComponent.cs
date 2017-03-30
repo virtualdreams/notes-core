@@ -17,7 +17,7 @@ namespace notes.ViewComponents
 
         public IViewComponentResult Invoke()
         {
-            var _tags = NoteService.Tags(UserId);
+            var _tags = NoteService.GetTags(UserId);
 
             return View(_tags);
         }

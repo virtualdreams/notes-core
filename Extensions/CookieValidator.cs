@@ -17,7 +17,7 @@ namespace notes.Extensions
 		{
 			var _userService = context.HttpContext.RequestServices.GetRequiredService<UserService>();
 			var _username = context.Principal.GetUserName();
-			var _user = _userService.GetUserByName(_username);
+			var _user = _userService.GetByName(_username);
 			
 			// if the user not exists or the user is disabled or his role has changed, reject his login
 			if(_user == null || !_user.Enabled || !_user.Role.Equals(context.Principal.GetUserRole()))

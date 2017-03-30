@@ -16,7 +16,7 @@ namespace notes.ViewComponents
 
         public IViewComponentResult Invoke()
 		{
-			var _user = UserService.GetUserById(UserId);
+			var _user = UserService.GetById(UserId);
 			if(_user == null)
 				return Content("unknown");
 			
