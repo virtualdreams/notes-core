@@ -17,8 +17,7 @@ namespace notes.Encryption
 			byte[] salt;
 			byte[] buffer2;
 			if (String.IsNullOrEmpty(password))
-				password = String.Empty;
-				//throw new ArgumentNullException("password");
+				throw new ArgumentNullException("password");
 
 			using (var bytes = new Rfc2898DeriveBytes(password, SaltByteSize, HashingIterationsCount))
 			{
@@ -60,7 +59,6 @@ namespace notes.Encryption
 			}
 			
 			return AreHashesEqual(_currentHashBytes, _passwordHashBytes);
-
 		}
 
 		static private bool AreHashesEqual(byte[] firstHash, byte[] secondHash)

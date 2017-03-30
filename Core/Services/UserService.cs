@@ -159,7 +159,7 @@ namespace notes.Core.Services
 			var _user = new User
 			{
 				Username = username,
-				Password = PasswordHasher.HashPassword(password),
+				Password = !String.IsNullOrEmpty(password) ? PasswordHasher.HashPassword(password) : null,
 				DisplayName = displayName,
 				Role = role,
 				Enabled = active
