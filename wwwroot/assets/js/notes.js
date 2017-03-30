@@ -72,7 +72,7 @@ notes = (function($){
 			type: "POST",
 			url: '/admin/account/delete/' + id
 		}).done(function(data) {
-			if(data.success === false)
+			if(data != null && data.success === false)
 			{
 				$('#error').html('<div class="alert alert-danger">' + data.error + '</div>');
 			}
@@ -104,9 +104,9 @@ notes = (function($){
 				url: '/note/edit/',
 				dataType: 'json',
 				data: data
-			}).done(function(d) {
-				if(d.success) {
-					$('#id').val(d.id);
+			}).done(function(data) {
+				if(data != null && data.success) {
+					$('#id').val(data.id);
 					
 					$('#result').html('<div class="alert alert-success"><button type="button" class="close">×</button>Note has been successfully saved.</div>');
 					window.setTimeout(function() {
@@ -146,18 +146,27 @@ notes = (function($){
 				dataType: 'json',
 				data: data
 			}).done(function(d) {
-				$('#editor-preview').html(d.content);
-				$('#preview').html('<i class="fa fa-pencil"></i> Edit');
+				if(data != null)
+				{
+					$('#editor-preview').html(d.content);
+					$('#preview').html('<i class="fa fa-pencil"></i> Edit');
 
-				$('#editor-source').toggle();
-				$('#editor-preview').toggle();
+					$('#editor-source').toggle();
+					$('#editor-preview').toggle();
+				} else {
+					error();
+				}
 			}).fail(function() {
+				error();
+			});
+
+			var error = function() {
 				$('#result').html('<div class="alert alert-danger"><button type="button" class="close">×</button>Failed to generate preview!</div>');
 
 				$('.alert .close').on("click", function(e){
 					$(this).parent().fadeTo(500, 0).slideUp(500);
 				});
-			});
+			}
 		}
 		else
 		{
