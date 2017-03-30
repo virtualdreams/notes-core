@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using notes.Core.Models;
+using notes.Encryption;
 using notes.Helper;
 
 namespace notes.Core.Services

@@ -2,7 +2,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace notes.Helper
+namespace notes.Encryption
 {
 	static public class PasswordHasher
 	{
