@@ -12,60 +12,18 @@
 		<meta name="author" content="">
 
 		<title>@ViewBag.Title@Settings.Value.SiteName</title>
-		<link href="/lib/bootstrap.min.css" rel="stylesheet">
-		<link href="/lib/metisMenu.min.css" rel="stylesheet">
-		<link href="/lib/font-awesome.min.css" rel="stylesheet">
-		<link href="/lib/highlight.css" rel="stylesheet">
-		<link href="/css/sb-admin-2.min.css" rel="stylesheet">
-		<link href="/css/notes.min.css" rel="stylesheet">
 
-		<link rel="shortcut icon" href="/favicon.ico?v=3">
-		<link rel="icon" sizes="16x16 32x32 64x64" href="/favicon.ico?v=3">
-		<link rel="icon" type="image/png" sizes="196x196" href="/favicon-192.png?v=3">
-		<link rel="icon" type="image/png" sizes="160x160" href="/favicon-160.png?v=3">
-		<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=3">
-		<link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png?v=3">
-		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=3">
-		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=3">
-		<link rel="apple-touch-icon" href="/favicon-57.png?v=3">
-		<link rel="apple-touch-icon" sizes="114x114" href="/favicon-114.png?v=3">
-		<link rel="apple-touch-icon" sizes="72x72" href="/favicon-72.png?v=3">
-		<link rel="apple-touch-icon" sizes="144x144" href="/favicon-144.png?v=3">
-		<link rel="apple-touch-icon" sizes="60x60" href="/favicon-60.png?v=3">
-		<link rel="apple-touch-icon" sizes="120x120" href="/favicon-120.png?v=3">
-		<link rel="apple-touch-icon" sizes="76x76" href="/favicon-76.png?v=3">
-		<link rel="apple-touch-icon" sizes="152x152" href="/favicon-152.png?v=3">
-		<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png?v=3">
-		<meta name="msapplication-TileColor" content="#FFFFFF">
-		<meta name="msapplication-TileImage" content="/favicon-144.png?v=3">
-		<meta name="msapplication-config" content="/browserconfig.xml">
+		@await Html.PartialAsync("_StylesPartial")
+
+		@await Html.PartialAsync("_IconPartial")
 	</head>
 	<body>
 		<div class="container">
 			@RenderBody()
 		</div>
 
-		<environment names="Development">
-			<script src="/lib/jquery.min.js"></script>
-			<script src="/lib/jquery-ui.min.js"></script>
-			<script src="/lib/jquery.validate.min.js"></script>
-			<script src="/lib/bootstrap.min.js"></script>
-			<script src="/lib/metisMenu.min.js"></script>
-			<script src="/assets/js/sb-admin-2.js"></script>
-			<script src="/lib/highlight.pack.js"></script>
-			<script src="/assets/js/notes.js"></script>
-			<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
-		</environment>
-		<environment names="Staging,Production">
-			<script src="/lib/jquery.min.js"></script>
-			<script src="/lib/jquery-ui.min.js"></script>
-			<script src="/lib/jquery.validate.min.js"></script>
-			<script src="/lib/bootstrap.min.js"></script>
-			<script src="/lib/metisMenu.min.js"></script>
-			<script src="/js/sb-admin-2.min.js"></script>
-			<script src="/lib/highlight.pack.js"></script>
-			<script src="/js/notes.min.js"></script>
-			<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
-		</environment>
+		@await Html.PartialAsync("_ScriptsPartial")
+
+		@RenderSection("script", required: false)
 	</body>
 </html>
