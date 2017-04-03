@@ -1,4 +1,5 @@
 using MongoDB.Bson;
+using System.Collections.Generic;
 
 namespace notes.Models
 {
@@ -12,7 +13,9 @@ namespace notes.Models
 
 		public string Content { get; set; }
 
-		public string Tags { get; set; }
+		public IEnumerable<string> Tags { get; set; }
+
+		public string TagsString { get; set; }
 
 		public string Notebook { get; set; }
 

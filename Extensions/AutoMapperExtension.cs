@@ -13,7 +13,7 @@ namespace notes.Extensions
 		{
 			var _autoMapperConfig = new MapperConfiguration(config =>{
 				config.CreateMap<Note, NoteModel>()
-					.ForMember(d => d.Tags, map => map.MapFrom(s => String.Join(" ", s.Tags ?? new string[] {})))
+					.ForMember(d => d.TagsString, map => map.MapFrom(s => String.Join(" ", s.Tags ?? new string[] {})))
 					.ForMember(d => d.Age, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime().ToMinutes().ToWords()));
 
 				config.CreateMap<User, UserModel>()

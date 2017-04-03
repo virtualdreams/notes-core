@@ -143,7 +143,7 @@ namespace notes.Controllers
 						Title = model.Title,
 						Content = model.Content,
 						Notebook = model.Notebook,
-						Tags = model.Tags
+						TagsString = model.Tags
 					}
 				};
 
@@ -166,7 +166,7 @@ namespace notes.Controllers
 						Title = model.Title,
 						Content = model.Content,
 						Notebook = model.Notebook,
-						Tags = model.Tags
+						TagsString = model.Tags
 					}
 				};
 
