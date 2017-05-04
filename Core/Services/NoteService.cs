@@ -121,7 +121,7 @@ namespace notes.Core.Services
 			}
 
 			var _filter = Builders<Note>.Filter;
-			var _tag = _filter.AnyIn("Tags", new string[] { tag });
+			var _tag = _filter.AnyEq("Tags", tag);
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _active = _filter.Eq(f => f.Trash, false);
 			var _next = _filter.Lt(f => f.Id, next);
