@@ -1,11 +1,11 @@
 # Notes!
 
-Notes! is an ASP.NET Core based app to manage text notes like Evernote or Simplenote.
+Notes! is an ASP.NET Core/MongoDB based webapp to create and manage simple text notes.
 
 ## Features
 
 * Markdown support
-* Tags and notebooks
+* Tags and Notebooks
 * Syntax highligting for code blocks
 
 ## Technology
@@ -14,7 +14,6 @@ Notes! is an ASP.NET Core based app to manage text notes like Evernote or Simple
 * [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/)
 * [MongoDB](https://www.mongodb.com/)
 * [bootstrap 3](http://getbootstrap.com/)
-* [SB Admin 2 Theme](https://github.com/BlackrockDigital/startbootstrap-sb-admin-2)
 * [nodejs](https://nodejs.org/) (v6.9.1 LTS)
 * [gulpjs](http://gulpjs.com/)
 

@@ -24,12 +24,6 @@
 			}
 			</h1>
 		</div>
-		<ol class="breadcrumb">
-			<li><i class="fa fa-home"></i> <a href="@Url.Action("index", "home", new { area = String.Empty })">Home</a></li>
-			<li>Admin</li>
-			<li><i class="fa fa-users"></i> <a href="@Url.Action("index", "account", new { area = "admin" })">Accounts</a></li>
-			<li><i class="fa fa-pencil"></i> Edit</li>
-		</ol>
 	</div>
 </div>
 
@@ -76,6 +70,7 @@
 					<div class="form-group">
 						<input type="hidden" name="id" value="@Model.User.Id" />
 						<button type="submit" class="btn btn-primary">Save</button>
+						<button type="button" class="btn btn-primary" data-href="@Url.Action("index", "account", new { area = "admin" })">Cancel</button>
 					</div>
 				</form>
 			</div>

@@ -10,8 +10,8 @@
 		<div class="page-header">
 			<div class="btn-toolbar pull-right">
 				<div class="btn-group">
-					<button type="button" class="btn btn-primary" data-href="@Url.Action("edit", "note", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })"><i class="fa fa-pencil"></i> Edit</button>
-					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					<button type="button" class="btn btn-default" data-href="@Url.Action("edit", "note", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })"><i class="fa fa-pencil"></i> Edit</button>
+					<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 	    				<span class="caret"></span>
        				</button>
        				<ul class="dropdown-menu pull-right">
@@ -32,10 +32,6 @@
 				<small>@Model.Note.Age</small>
 			</h1>
 		</div>
-		<ol class="breadcrumb">
-			<li><i class="fa fa-home"></i> <a href="@Url.Action("index", "home")">Home</a></li>
-			<li><i class="fa fa-file"></i> @Model.Note.Title</li>
-		</ol>
 	</div>
 </div>
 

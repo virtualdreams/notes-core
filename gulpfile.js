@@ -19,15 +19,6 @@ gulp.task('notes-css', function() {
 	.pipe(gulp.dest(cssTargetDir));
 });
 
-gulp.task('admin2-js', function() {
-	return gulp.src([
-		srcDir + 'js/sb-admin-2.js'
-	])
-	.pipe(uglify())
-	.pipe(rename({suffix: '.min'}))
-	.pipe(gulp.dest(jsTargetDir))
-});
-
 gulp.task('notes-js', function() {
 	return gulp.src([
 		srcDir + 'js/notes.js'
@@ -39,6 +30,5 @@ gulp.task('notes-js', function() {
 
 gulp.task('default', [
 	'notes-css',
-	'admin2-js',
 	'notes-js'
 ]);
