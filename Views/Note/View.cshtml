@@ -40,14 +40,13 @@
 		<markdown>@Html.Raw(Model.Note.Content)</markdown>
 	</div>
 </div>
-<hr>
-<div class="row">
+<div class="row tagline">
 	<div class="col-lg-12">
 		@if(!String.IsNullOrEmpty(Model.Note.Notebook)) {
-			<a class="label label-primary" href="@Url.RouteUrl("notebook", new { id = @Model.Note.Notebook })"><i class="fa fa-book"></i> @Model.Note.Notebook</a>
+			<a class="cloud" href="@Url.RouteUrl("notebook", new { id = @Model.Note.Notebook })"><i class="fa fa-book"></i> @Model.Note.Notebook</a>
 		}
 		@foreach(var tag in Model.Note.Tags) {
-			<a class="label label-primary" href="@Url.RouteUrl("tag", new { id = tag })"><i class="fa fa-tag"></i> @tag</a>
+			<a class="cloud" href="@Url.RouteUrl("tag", new { id = tag })"><i class="fa fa-tag"></i> @tag</a>
 		}
 	</div>
 </div>
