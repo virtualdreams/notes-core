@@ -1,0 +1,17 @@
+@model IEnumerable<string>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			<i class="fa fa-fw fa-book"></i> All notebooks
+		</h1>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+	@foreach(var notebook in Model) {
+		<a class="cloud" href="@Url.RouteUrl("notebook", new { id = notebook })"><i class="fa fa-fw fa-book"></i> @notebook</a>
+	}
+	</div>
+</div>

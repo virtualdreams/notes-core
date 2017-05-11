@@ -17,7 +17,7 @@ namespace notes.ViewComponents
 
         public IViewComponentResult Invoke()
         {
-            var _notebooks = NoteService.GetNotebooks(UserId);
+            var _notebooks = NoteService.GetMostlyUsedNotebooks(UserId);
 
             return View(_notebooks);
         }

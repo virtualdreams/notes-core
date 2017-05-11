@@ -14,6 +14,18 @@ namespace notes.Extensions
 				);
 
 				routes.MapRoute(
+					name: "tags",
+					template: "tags",
+					defaults: new { controller = "Note", action = "Tags" }
+				);
+
+				routes.MapRoute(
+					name: "notebooks",
+					template: "notebooks",
+					defaults: new { controller = "Note", action = "Notebooks" }
+				);
+
+				routes.MapRoute(
 					name: "tag",
 					template: "tag/{id}",
 					defaults: new { controller = "Note", action = "Tag" }

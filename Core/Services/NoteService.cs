@@ -1,9 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Collections.Generic;
+using System.Linq;
+using System;
 using notes.Core.Models;
 
 namespace notes.Core.Services
@@ -163,23 +164,127 @@ namespace notes.Core.Services
 		}
 
 		/// <summary>
-		/// Get a list of notebooks.
+		/// Get mostly used notebooks.
+		/// </summary>
+		/// <param name="user">The users notebooks.</param>
+		/// <param name="limit">Limit result to n items.</param>
+		/// <returns>A list of notebook.</returns>
+		public IEnumerable<string> GetMostlyUsedNotebooks(ObjectId user, int limit = 10)
+		{
+			var _filter = Builders<Note>.Filter;
+			var _size = _filter.Size(f => f.Notebook, 0);
+			var _not = _filter.Not(_size);
+			var _user = _filter.Eq(f => f.Owner, user);
+			var _active = _filter.Eq(f => f.Trash, false);
+
+			var _query = _user & _active & _not;
+
+			var _result = Context.Note.Aggregate()
+				.Match(_query)
+				.Unwind(f => f.Notebook)
+				.Group(new BsonDocument { { "_id", "$notebook" }, { "count", new BsonDocument { { "$sum", 1 } } } })
+				.Match(new BsonDocument { { "count", new BsonDocument { { "$gte", 1 } } }, { "_id", new BsonDocument { { "$nin", new BsonArray { BsonNull.Value, "" } } } } })
+				.Sort(new BsonDocument { { "count", -1 } })
+				.Limit(limit)
+				.ToEnumerable()
+				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s))
+				.Select(s => s._id);
+
+			/*var _sort = Builders<DistinctAndCountResult>.Sort;
+			var _order = _sort.Descending(f => f.count);
+			
+			var _result2 = Context.Note.Aggregate()
+				.Match(_query)
+				.Unwind<Note, Note>(f => f.Notebook)
+				.Group(f => f.Notebook, g => new DistinctAndCountResult { _id = g.Key, count = g.Sum(f => 1) })
+				.Match(f => f.count >= 1 & !String.IsNullOrEmpty(f._id))
+				.Sort(_order)
+				.Limit(limit)
+				.ToEnumerable()
+				.Select(s => s._id).ToArray();*/
+
+			return _result;
+		}
+
+		/// <summary>
+		/// Get a list of all notebooks.
 		/// </summary>
 		/// <param name="user">The users notebooks.</param>
 		/// <returns>A list of notebook.</returns>
 		public IEnumerable<string> GetNotebooks(ObjectId user)
 		{
-			return Context.Note.Distinct<string>("Notebook", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s)).OrderBy(s => s);
+			var _filter = Builders<Note>.Filter;
+			var _user = _filter.Eq(f => f.Owner, user);
+			var _active = _filter.Eq(f => f.Trash, false);
+			var _nin = _filter.Nin(f => f.Notebook, new string[] { null, "" });
+
+			var _query = _user & _active & _nin;
+
+			return Context.Note.Distinct<string>("Notebook", _query)
+				.ToEnumerable()
+				.OrderBy(s => s);
 		}
 
 		/// <summary>
-		/// Get a list of tags,
+		/// Get mostly used tags.
+		/// </summary>
+		/// <param name="user">The users tags.</param>
+		/// <param name="limit">Limit result to n items.</param>
+		/// <returns>A list of tags.</returns>
+		public IEnumerable<string> GetMostlyUsedTags(ObjectId user, int limit = 10)
+		{
+			var _filter = Builders<Note>.Filter;
+			var _size = _filter.Size(f => f.Tags, 0);
+			var _not = _filter.Not(_size);
+			var _user = _filter.Eq(f => f.Owner, user);
+			var _active = _filter.Eq(f => f.Trash, false);
+
+			var _query = _user & _active & _not;
+
+			var _result = Context.Note.Aggregate()
+				.Match(_query)
+				.Unwind(f => f.Tags)
+				.Group(new BsonDocument { { "_id", "$tags" }, { "count", new BsonDocument { { "$sum", 1 } } } })
+				.Match(new BsonDocument { { "count", new BsonDocument { { "$gte", 1 } } }, { "_id", new BsonDocument { { "$nin", new BsonArray { BsonNull.Value, "" } } } } })
+				.Sort(new BsonDocument { { "count", -1 } })
+				.Limit(limit)
+				.ToEnumerable()
+				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s))
+				.Select(s => s._id);
+
+			/*var _sort = Builders<DistinctAndCountResult>.Sort;
+			var _order = _sort.Descending(f => f.count);
+
+			var _result2 = Context.Note.Aggregate()
+				.Match(_query)
+				.Unwind<Note, Note>(f => f.Tags)
+				.Group(f => f.Tags, g => new DistinctAndCountResult { _id = g.Key, count = g.Sum(f => 1) })
+				.Match(f => f.count >= 1)
+				.Sort(_order)
+				.Limit(limit)
+				.ToEnumerable()
+				.Select(s => s._id);*/
+
+			return _result;
+		}
+
+		// <summary>
+		/// Get a list of all tags,
 		/// </summary>
 		/// <param name="user">The users tags.</param>
 		/// <returns>A list of tags.</returns>
 		public IEnumerable<string> GetTags(ObjectId user)
 		{
-			return Context.Note.Distinct<string>("Tags", new ExpressionFilterDefinition<Note>(f => f.Owner == user && f.Trash == false)).ToEnumerable().Where(s => !String.IsNullOrEmpty(s)).OrderBy(s => s);
+			var _filter = Builders<Note>.Filter;
+			var _user = _filter.Eq(f => f.Owner, user);
+			var _active = _filter.Eq(f => f.Trash, false);
+			var _nin = _filter.AnyNin(f => f.Tags, new string[] { null, "" });
+
+			var _query = _user & _active & _nin;
+
+			return Context.Note.Distinct<string>("Tags", _query)
+				.ToEnumerable()
+				.OrderBy(s => s);
 		}
 
 		/// <summary>

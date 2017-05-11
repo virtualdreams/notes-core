@@ -179,6 +179,22 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
+		public IActionResult Notebooks()
+		{
+			var _notebooks = NoteService.GetNotebooks(UserId);
+
+            return View(_notebooks);
+		}
+
+		[HttpGet]
+		public IActionResult Tags()
+		{
+			var _tags = NoteService.GetTags(UserId);
+
+            return View(_tags);
+		}
+
+		[HttpGet]
 		public IActionResult Notebook(string id, ObjectId after)
 		{
 			var _notes = NoteService.GetByNotebook(UserId, id ?? string.Empty, after, PageSize);
