@@ -84,18 +84,22 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="trashLabel">
+				<h4 class="modal-title" id="delAccountLabel">
 					Delete account
 				</h4>
 			</div>
 			<div class="modal-body">
-				<div id="error"></div>
-				<p>
-					The account &quot;@Model.User.Username&quot; will be permanently deleted and will loose all notes.
-				</p>
-				<p>
-					<b>This action cannot be undone!</b>
-				</p>
+				<div class="row">
+					<div class="col-sm-12">
+						<div id="error"></div>
+					</div>
+					<div class="col-sm-12">
+						The account &quot;@Model.User.Username&quot; will be permanently deleted and will loose all notes.
+					</div>
+					<div class="col-sm-12">
+						<b>This action cannot be undone!</b>
+					</div>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
