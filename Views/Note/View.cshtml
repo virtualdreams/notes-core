@@ -102,6 +102,11 @@
 						<b>Created on:</b> @Model.Note.Id.CreationTime.ToLocalTime()
 					</div>
 					<div class="col-sm-6">
+						<b>Last modified on:</b> @Model.Note.Modified?.ToLocalTime()
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
 						<b>Version:</b> @Model.Note.Version
 					</div>
 				</div>

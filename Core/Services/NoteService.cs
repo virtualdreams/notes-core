@@ -345,7 +345,8 @@ namespace notes.Core.Services
 						.Set(f => f.Content, content?.Trim())
 						.Set(f => f.Notebook, notebook?.Trim())
 						.Set(f => f.Tags, _tags)
-						.Inc(f => f.Version, 1);
+						.Inc(f => f.Version, 1)
+						.Set(f => f.Modified, DateTime.UtcNow);
 
 			Log.LogInformation($"Update note '{note.ToString()}'.");
 

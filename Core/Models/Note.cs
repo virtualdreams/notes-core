@@ -1,3 +1,4 @@
+using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -29,6 +30,9 @@ namespace notes.Core.Models
 
 		[BsonElement("version")]
 		public int Version { get; set; }
+
+		[BsonElement("modified")]
+		public DateTime? Modified { get; set; }
 
 		[BsonIgnoreIfNull]
 		public double? Score { get; set; }

@@ -1,5 +1,6 @@
 using MongoDB.Bson;
 using System.Collections.Generic;
+using System;
 
 namespace notes.Models
 {
@@ -22,6 +23,8 @@ namespace notes.Models
 		public bool Trash { get; set; }
 
 		public int Version { get; set; }
+
+		public DateTime? Modified { get; set; }
 
 		public double? Score { get; set; }
 	}
