@@ -1,6 +1,6 @@
 using MongoDB.Bson;
 
-namespace notes.Models
+namespace notes.Areas.Admin.Models
 {
 	public class UserModel
 	{

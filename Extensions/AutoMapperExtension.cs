@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using notes.Areas.Admin.Models;
 using notes.Core.Models;
 using notes.Helper;
 using notes.Models;

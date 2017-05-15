@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace notes.Models
+namespace notes.Areas.Admin.Models
 {
 	public class UserListContainer
 	{

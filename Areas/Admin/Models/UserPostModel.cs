@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson;
 
-namespace notes.Models
+namespace notes.Areas.Admin.Models
 {
     public class UserPostModel
 	{

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using notes.Areas.Admin.Models;
 using notes.Controllers;
 using notes.Core.Services;
 using notes.Models;
