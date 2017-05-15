@@ -1,0 +1,67 @@
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Options
+@using notes
+@inject IAuthorizationService AuthorizationService
+@inject IOptions<Settings> Settings
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="@Settings.Value.SiteName">
+		<meta name="author" content="">
+
+		<title>@ViewBag.Title@Settings.Value.SiteName - Administration</title>
+		
+		@await Html.PartialAsync("_StylesPartial")
+
+		@await Html.PartialAsync("_IconPartial")
+	</head>
+	<body>
+		<!-- Navigation -->
+		<nav class="navbar navbar-default navbar-static-top" role="navigation">
+			<div class="container">
+				<!-- brand -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/">Notes - Administration</a>
+				</div>
+				<!-- top menu items -->
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="@Url.Action("index", "account", new { area = "admin" })"><i class="fa fa-fw fa-users"></i> Accounts</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-fw fa-user"></i> @await Component.InvokeAsync("DisplayName") <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								@if(await AuthorizationService.AuthorizeAsync(User, "AdministratorOnly")) {
+								<li><a href="@Url.Action("index", "account", new { area = "admin" })"><i class="fa fa-fw fa-users"></i> Accounts</a></li>
+								<li role="separator" class="divider"></li>
+								}
+								<li><a href="@Url.Action("settings", "user", new { area = String.Empty })"><i class="fa fa-fw fa-sliders"></i> Settings</a></li>
+								<li role="separator" class="divider"></li>
+								<li><a href="@Url.RouteUrl("logout")"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container">
+			@RenderBody()
+		</div>
+
+		@await Html.PartialAsync("_ScriptsPartial")
+
+		@RenderSection("script", required: false)
+	</body>
+</html>
