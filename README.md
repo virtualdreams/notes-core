@@ -38,13 +38,6 @@ Configure application in `appsettings.json`.
 			"Passwd": "",                  // mail password
 			"SkipVerify": false            // verify SSL certificates
 		}
-	},
-	"Logging": {
-		"LogLevel": {
-			"Microsoft": "Warning",
-			"System": "Warning",
-			"Default": "Info"
-		}
 	}
 }
 ```
