@@ -1,0 +1,33 @@
+@{
+	ViewBag.Title = "Maintenance - ";
+}
+
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			<i class="fa fa-fw fa-cogs"></i> Maintenance
+		</h1>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-6">
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 class="panel-title">Indexes</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-12">
+						Remove and rebuild all necessary indexes. This action can take a while.
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<button class="btn btn-danger" data-href="@Url.Action("recreateindexes", "maintenance", new { area = "admin" } )">(Re)Create indexes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

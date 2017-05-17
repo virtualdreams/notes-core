@@ -76,6 +76,7 @@ namespace notes
 			services.AddTransient<NoteService>();
 			services.AddTransient<UserService>();
 			services.AddTransient<MailService>();
+			services.AddTransient<MaintenanceService>();
 			services.AddScoped<IViewRenderService, ViewRenderService>();
 		}
 
