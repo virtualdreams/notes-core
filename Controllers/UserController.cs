@@ -16,15 +16,15 @@ namespace notes.Controllers
 	public class UserController : BaseController
 	{
 		private readonly IMapper Mapper;
-		private readonly UserService UserService;
 		private readonly IOptions<Settings> Options;
+		private readonly UserService UserService;
 
-		public UserController(IMapper mapper, UserService user, IOptions<Settings> options)
+		public UserController(IMapper mapper, IOptions<Settings> options, UserService user)
 			: base(user)
 		{
 			Mapper = mapper;
-			UserService = user;
 			Options = options;
+			UserService = user;
 		}
 
 		[AllowAnonymous]

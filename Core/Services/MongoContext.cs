@@ -10,21 +10,21 @@ namespace notes.Core.Services
     public class MongoContext
 	{
 		private readonly ILogger<MongoContext> Log;
-		private readonly IOptions<Settings> Settings;
+		private readonly IOptions<Settings> Options;
 		private readonly IMongoClient _client;
 		private readonly IMongoDatabase _database;
 		public IMongoCollection<Note> Note { get; private set; }
 		public IMongoCollection<User> User { get; private set; }
 		public IMongoCollection<Token> Token { get; private set; }
 
-		public MongoContext(IOptions<Settings> settings, ILogger<MongoContext> log)
+		public MongoContext(IOptions<Settings> options, ILogger<MongoContext> log)
 		{
 			Log = log;
-			Settings = settings;
+			Options = options;
 
-			Log.LogDebug("Set mongo database to '{0}'.", Settings.Value.Database);
+			Log.LogDebug("Set mongo database to '{0}'.", Options.Value.Database);
 
-			var _settings = MongoClientSettings.FromUrl(new MongoUrl(Settings.Value.MongoDB));
+			var _settings = MongoClientSettings.FromUrl(new MongoUrl(Options.Value.MongoDB));
 
 			// log commands if debug enabled
 			if(Log.IsEnabled(LogLevel.Debug))
@@ -40,7 +40,7 @@ namespace notes.Core.Services
 			}
 
 			_client = new MongoClient(_settings);
-			_database = _client.GetDatabase(Settings.Value.Database);
+			_database = _client.GetDatabase(Options.Value.Database);
 			Note = _database.GetCollection<Note>("notes");
 			User = _database.GetCollection<User>("user");
 			Token = _database.GetCollection<Token>("token");
