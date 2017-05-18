@@ -195,7 +195,7 @@ namespace notes.Core.Services
 
 			if(IsAdmin(user) && GetAdminCount() < 2 && (!active || !role.Equals("Administrator")))
 			{
-				Log.LogWarning($"The user '{user.ToString()}' is the last available administrator. This account can't be changed.");
+				Log.LogWarning($"The user '{user.ToString()}' is the last available administrator. This account can't changed.");
 				throw new NotesModifyAdminException();
 			}
 
@@ -209,7 +209,7 @@ namespace notes.Core.Services
 				.Set(f => f.Role, role)
 				.Set(f => f.Enabled, active);
 
-			// add set new password if password not empty
+			// add set a new password if password not empty
 			if(!String.IsNullOrEmpty(password))
 				_set = _set.Set(f => f.Password, PasswordHasher.HashPassword(password));
 
@@ -235,7 +235,10 @@ namespace notes.Core.Services
 		public void Delete(ObjectId user)
 		{
 			if(IsAdmin(user) && GetAdminCount() < 2)
+			{
+				Log.LogWarning($"The user '{user.ToString()}' is the last available administrator. This account can't deleted.");
 				throw new NotesDeleteAdminException();
+			}
 
 			Log.LogInformation($"Delete user '{GetById(user).Username}' permanently.");
 
