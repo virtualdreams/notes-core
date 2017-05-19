@@ -325,7 +325,7 @@ namespace notes.Core.Services
 			var _username = _filter.Eq(f => f.Username, username);
 			var _active = _filter.Eq(f => f.Enabled, true);
 
-			Log.LogInformation($"User login for user '{username}'.");
+			Log.LogInformation($"Login user '{username}'.");
 
 			var _user = Context.User.Find(_username & _active).SingleOrDefault();
 			if (_user != null && PasswordHasher.VerifyHashedPassword(_user.Password, password))
