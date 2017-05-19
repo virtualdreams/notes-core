@@ -12,8 +12,8 @@ using notes.Models;
 
 namespace notes.Controllers
 {
-    [Authorize]
-    public class NoteController : BaseController
+	[Authorize]
+	public class NoteController : BaseController
 	{
 		private readonly IMapper Mapper;
 		private readonly IOptions<Settings> Options;
@@ -37,9 +37,9 @@ namespace notes.Controllers
 		public IActionResult View(ObjectId id)
 		{
 			var _note = NoteService.GetById(id, UserId);
-			if(_note == null)
+			if (_note == null)
 				return NotFound();
-			
+
 			var note = Mapper.Map<NoteModel>(_note);
 
 			var view = new NoteViewContainer
@@ -54,9 +54,9 @@ namespace notes.Controllers
 		public IActionResult Print(ObjectId id)
 		{
 			var _note = NoteService.GetById(id, UserId);
-			if(_note == null)
+			if (_note == null)
 				return NotFound();
-			
+
 			var note = Mapper.Map<NoteModel>(_note);
 
 			var view = new NoteViewContainer
@@ -82,7 +82,7 @@ namespace notes.Controllers
 		public IActionResult Edit(ObjectId id)
 		{
 			var _note = NoteService.GetById(id, UserId);
-			if(_note == null)
+			if (_note == null)
 				return NotFound();
 
 			var note = Mapper.Map<NoteModel>(_note);
@@ -98,12 +98,12 @@ namespace notes.Controllers
 		[HttpPost]
 		public IActionResult Edit(NotePostModel model)
 		{
-			if(ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
 				try
 				{
 					var _id = ObjectId.Empty;
-					if(model.Id == ObjectId.Empty)
+					if (model.Id == ObjectId.Empty)
 					{
 						_id = NoteService.Create(UserId, model.Title, model.Content, model.Notebook, model.Tags);
 					}
@@ -113,7 +113,7 @@ namespace notes.Controllers
 						_id = model.Id;
 					}
 
-					if(Request.IsAjaxRequest())
+					if (Request.IsAjaxRequest())
 					{
 						return Json(new { Success = true, Id = _id.ToString(), Error = "" });
 					}
@@ -122,14 +122,14 @@ namespace notes.Controllers
 						return RedirectToAction("view", "note", new { id = model.Title.ToSlug(_id) });
 					}
 				}
-				catch(NotesException ex)
+				catch (NotesException ex)
 				{
 					ModelState.AddModelError("error", ex.Message);
 				}
 			}
 
 			// validation failed
-			if(Request.IsAjaxRequest())
+			if (Request.IsAjaxRequest())
 			{
 				return Json(new { Success = false, Id = model.Id.ToString(), Error = "" });
 			}
@@ -156,7 +156,7 @@ namespace notes.Controllers
 		{
 			// remove title related error messages, because is not needed for preview mode
 			ModelState.Remove("title");
-			if(ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
 				var view = new NoteViewContainer
 				{
@@ -183,7 +183,7 @@ namespace notes.Controllers
 		{
 			var _notebooks = NoteService.GetNotebooks(UserId);
 
-            return View(_notebooks);
+			return View(_notebooks);
 		}
 
 		[HttpGet]
@@ -191,7 +191,7 @@ namespace notes.Controllers
 		{
 			var _tags = NoteService.GetTags(UserId);
 
-            return View(_tags);
+			return View(_tags);
 		}
 
 		[HttpGet]
@@ -201,7 +201,7 @@ namespace notes.Controllers
 			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
-			
+
 			var view = new NoteNotebookContainer
 			{
 				Notes = notes,
@@ -217,9 +217,9 @@ namespace notes.Controllers
 		{
 			var _notes = NoteService.GetByTag(UserId, id ?? string.Empty, after, PageSize);
 			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
-			
+
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
-			
+
 			var view = new NoteTagContainer
 			{
 				Notes = notes,
@@ -234,7 +234,7 @@ namespace notes.Controllers
 		public IActionResult Remove(ObjectId id)
 		{
 			var _note = NoteService.GetById(id, UserId);
-			if(_note == null)
+			if (_note == null)
 				return NotFound();
 
 			NoteService.Trash(id, !_note.Trash);
@@ -247,9 +247,9 @@ namespace notes.Controllers
 		{
 			var _notes = NoteService.GetNotes(UserId, after, true, PageSize);
 			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
-			
+
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
-			
+
 			var view = new NoteListContainer
 			{
 				Notes = notes,
@@ -262,9 +262,9 @@ namespace notes.Controllers
 		[HttpPost]
 		public IActionResult Delete(NoteDeleteModel model)
 		{
-			if(ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
-				foreach(var note in model.Id)
+				foreach (var note in model.Id)
 				{
 					NoteService.Delete(note, UserId);
 				}

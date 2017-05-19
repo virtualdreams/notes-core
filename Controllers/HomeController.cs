@@ -11,14 +11,14 @@ using notes.Models;
 
 namespace notes.Controllers
 {
-    [Authorize]
-    public class HomeController : BaseController
+	[Authorize]
+	public class HomeController : BaseController
 	{
 		private readonly IMapper Mapper;
 		private readonly IOptions<Settings> Options;
 		private readonly UserService UserService;
 		private readonly NoteService NoteService;
-		
+
 		private int PageSize => UserSettings?.PageSize ?? Options.Value.PageSize;
 
 		public HomeController(IMapper mapper, IOptions<Settings> options, UserService user, NoteService note)
@@ -37,7 +37,7 @@ namespace notes.Controllers
 			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
-			
+
 			var view = new NoteListContainer
 			{
 				Notes = notes,
@@ -54,7 +54,7 @@ namespace notes.Controllers
 			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
-			
+
 			var view = new NoteSearchContainer
 			{
 				Notes = notes,
@@ -68,7 +68,7 @@ namespace notes.Controllers
 		[AllowAnonymous]
 		public IActionResult Error(int? code)
 		{
-			switch(code ?? 0)
+			switch (code ?? 0)
 			{
 				case 400:
 					return View("BadRequest");

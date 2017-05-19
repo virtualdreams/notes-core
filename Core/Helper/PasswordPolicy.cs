@@ -39,42 +39,42 @@ namespace notes.Helper
 		/// <returns>True on success.</returns>
 		public bool IsValid(string password)
 		{
-			if(password.Length < MinLength)
+			if (password.Length < MinLength)
 				return false;
 
-			if(UpperCaseCount(password) < UpperCaseLength)
+			if (UpperCaseCount(password) < UpperCaseLength)
 				return false;
 
-			if(LowerCaseCount(password) < LowerCaseLength)
+			if (LowerCaseCount(password) < LowerCaseLength)
 				return false;
 
-			if(NonAlphaCount(password) < NonAlphaLength)
+			if (NonAlphaCount(password) < NonAlphaLength)
 				return false;
 
-			if(DigitsCount(password) < DigitsLength)
+			if (DigitsCount(password) < DigitsLength)
 				return false;
 
 			return true;
 		}
 
 		private int UpperCaseCount(string paswword)
-        {
-            return Regex.Matches(paswword, "[A-Z]").Count;
-        }
+		{
+			return Regex.Matches(paswword, "[A-Z]").Count;
+		}
 
-        private int LowerCaseCount(string password)
-        {
-            return Regex.Matches(password, "[a-z]").Count;
-        }
+		private int LowerCaseCount(string password)
+		{
+			return Regex.Matches(password, "[a-z]").Count;
+		}
 
-        private int DigitsCount(string password)
-        {
-            return Regex.Matches(password, "[0-9]").Count;
-        }
+		private int DigitsCount(string password)
+		{
+			return Regex.Matches(password, "[0-9]").Count;
+		}
 
-        private int NonAlphaCount(string password)
-        {
-            return Regex.Matches(password, @"[^0-9a-zA-Z\._]").Count;
-        }
+		private int NonAlphaCount(string password)
+		{
+			return Regex.Matches(password, @"[^0-9a-zA-Z\._]").Count;
+		}
 	}
 }

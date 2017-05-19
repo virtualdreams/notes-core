@@ -2,11 +2,12 @@ using Microsoft.AspNetCore.Builder;
 
 namespace notes.Extensions
 {
-    static public class RoutingExtensions
+	static public class RoutingExtensions
 	{
 		static public IApplicationBuilder AddRoutes(this IApplicationBuilder app)
 		{
-			app.UseMvc(routes => {
+			app.UseMvc(routes =>
+			{
 				routes.MapRoute(
 					name: "search",
 					template: "search",
@@ -52,37 +53,37 @@ namespace notes.Extensions
 				routes.MapRoute(
 					name: "view",
 					template: "note/{id?}",
-					defaults: new { controller = "Note", action = "View"}
+					defaults: new { controller = "Note", action = "View" }
 				);
 
 				routes.MapRoute(
 					name: "print",
 					template: "print/{id?}",
-					defaults: new { controller = "Note", action = "Print"}
+					defaults: new { controller = "Note", action = "Print" }
 				);
 
 				routes.MapRoute(
 					name: "login",
 					template: "login",
-					defaults: new { controller = "user", action = "login"}
+					defaults: new { controller = "user", action = "login" }
 				);
 
 				routes.MapRoute(
 					name: "logout",
 					template: "logout",
-					defaults: new { controller = "user", action = "logout"}
+					defaults: new { controller = "user", action = "logout" }
 				);
 
 				routes.MapRoute(
 					name: "forgot_password",
 					template: "reset_password",
-					defaults: new { controller = "user", action = "forgotpassword"}
+					defaults: new { controller = "user", action = "forgotpassword" }
 				);
 
 				routes.MapRoute(
 					name: "reset_password",
 					template: "reset_password/{id?}",
-					defaults: new { controller = "user", action = "resetpassword"}
+					defaults: new { controller = "user", action = "resetpassword" }
 				);
 
 				routes.MapRoute(

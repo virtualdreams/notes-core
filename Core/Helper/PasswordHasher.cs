@@ -57,7 +57,7 @@ namespace notes.Encryption
 			{
 				_passwordHashBytes = bytes.GetBytes(SaltByteSize);
 			}
-			
+
 			return AreHashesEqual(_currentHashBytes, _passwordHashBytes);
 		}
 
@@ -69,5 +69,5 @@ namespace notes.Encryption
 				xor |= firstHash[i] ^ secondHash[i];
 			return 0 == xor;
 		}
-	}	
+	}
 }

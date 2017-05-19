@@ -4,9 +4,9 @@ using notes.Core.Services;
 
 namespace notes.ViewComponents
 {
-    public class DisplayNameViewComponent : BaseViewComponent
-    {
-        private readonly UserService UserService;
+	public class DisplayNameViewComponent : BaseViewComponent
+	{
+		private readonly UserService UserService;
 
 		public DisplayNameViewComponent(UserService user)
 			: base(user)
@@ -14,15 +14,15 @@ namespace notes.ViewComponents
 			UserService = user;
 		}
 
-        public IViewComponentResult Invoke()
+		public IViewComponentResult Invoke()
 		{
 			var _user = UserService.GetById(UserId);
-			if(_user == null)
+			if (_user == null)
 				return Content("unknown");
-			
+
 			var _displayName = String.IsNullOrEmpty(_user.DisplayName) ? _user.Username : _user.DisplayName;
 
 			return Content($"{_displayName}");
 		}
-    }
+	}
 }

@@ -2,14 +2,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace notes.Models
 {
-    public class PasswdResetPostModel
+	public class PasswdResetPostModel
 	{
-		[Required(ErrorMessage="Please fill in a password.")]
-		[MinLength(8, ErrorMessage="Minimum length 8 characters.")]
+		[Required(ErrorMessage = "Please fill in a password.")]
+		[MinLength(8, ErrorMessage = "Minimum length 8 characters.")]
 		public string NewPassword { get; set; }
 
-		[Required(ErrorMessage="Please confirm the password.")]
-		[MinLength(8, ErrorMessage="Minimum length 8 characters.")]
+		[Required(ErrorMessage = "Please confirm the password.")]
+		[MinLength(8, ErrorMessage = "Minimum length 8 characters.")]
 		public string ConfirmPassword { get; set; }
 	}
 

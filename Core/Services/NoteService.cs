@@ -19,7 +19,7 @@ namespace notes.Core.Services
 			Log = log;
 			Context = context;
 		}
-		
+
 		/// <summary>
 		/// Get a list of notes.
 		/// </summary>
@@ -34,13 +34,13 @@ namespace notes.Core.Services
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _active = _filter.Eq(f => f.Trash, trashed);
 			var _next = _filter.Lt(f => f.Id, next);
-			
+
 			var _sort = Builders<Note>.Sort;
 			var _order = _sort.Descending(f => f.Id);
 
 			var _query = _user & _active;
 
-			if(next != ObjectId.Empty)
+			if (next != ObjectId.Empty)
 				_query &= _next;
 
 			Log.LogDebug($"Request notes.");
@@ -66,7 +66,7 @@ namespace notes.Core.Services
 		{
 			notebook = notebook?.Trim();
 
-			if(String.IsNullOrEmpty(notebook))
+			if (String.IsNullOrEmpty(notebook))
 			{
 				return new Tuple<IEnumerable<Note>, bool>
 				(
@@ -80,13 +80,13 @@ namespace notes.Core.Services
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _active = _filter.Eq(f => f.Trash, false);
 			var _next = _filter.Lt(f => f.Id, next);
-			
+
 			var _sort = Builders<Note>.Sort;
 			var _order = _sort.Descending(f => f.Id);
 
-			var _query = _notebook &_user & _active;
+			var _query = _notebook & _user & _active;
 
-			if(next != ObjectId.Empty)
+			if (next != ObjectId.Empty)
 				_query &= _next;
 
 			Log.LogDebug($"Request notes by notebook '{notebook}'.");
@@ -112,7 +112,7 @@ namespace notes.Core.Services
 		{
 			tag = tag?.Trim();
 
-			if(String.IsNullOrEmpty(tag))
+			if (String.IsNullOrEmpty(tag))
 			{
 				return new Tuple<IEnumerable<Note>, bool>
 				(
@@ -126,18 +126,18 @@ namespace notes.Core.Services
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _active = _filter.Eq(f => f.Trash, false);
 			var _next = _filter.Lt(f => f.Id, next);
-			
+
 			var _sort = Builders<Note>.Sort;
 			var _order = _sort.Descending(f => f.Id);
 
 			var _query = _tag & _user & _active;
 
-			if(next != ObjectId.Empty)
+			if (next != ObjectId.Empty)
 				_query &= _next;
 
 			Log.LogDebug($"Request notes by tag '{tag}'.");
 
-			var _result =  Context.Note.Find(_query).Sort(_order).Limit(limit + 1);
+			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit + 1);
 
 			return new Tuple<IEnumerable<Note>, bool>
 			(
@@ -401,7 +401,7 @@ namespace notes.Core.Services
 		{
 			term = term?.Trim();
 
-			if(String.IsNullOrEmpty(term))
+			if (String.IsNullOrEmpty(term))
 			{
 				return new Tuple<IEnumerable<Note>, bool>
 				(
@@ -420,13 +420,13 @@ namespace notes.Core.Services
 
 			var _sort = Builders<Note>.Sort;
 			var _order = _sort.MetaTextScore("Score");
-			
+
 			var _query = _user & _text & _active;
 
 			Log.LogDebug($"Search for notes with term '{term}'.");
 
 			var _result = Context.Note.Find(_query).Project<Note>(_score).Sort(_order).Limit(100);
-			if(next != ObjectId.Empty)
+			if (next != ObjectId.Empty)
 			{
 				var _skip = _result.ToEnumerable().SkipWhile(condition => condition.Id != next).Skip(1);
 
@@ -468,12 +468,12 @@ namespace notes.Core.Services
 		/// <returns></returns>
 		public IEnumerable<string> NotebookSuggestions(ObjectId user, string term)
 		{
-            term = term?.Trim();
+			term = term?.Trim();
 
-            if (String.IsNullOrEmpty(term) || term.Length < 3)
+			if (String.IsNullOrEmpty(term) || term.Length < 3)
 				return Enumerable.Empty<string>();
 
-            return GetNotebooks(user).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
+			return GetNotebooks(user).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
 		}
 	}
 }

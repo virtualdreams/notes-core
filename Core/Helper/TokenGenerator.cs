@@ -10,7 +10,7 @@ namespace notes.Helper
 
 		private ResetToken(byte[] bytes)
 		{
-			if(bytes == null)
+			if (bytes == null)
 				throw new ArgumentNullException(nameof(bytes));
 
 			_token = bytes;
@@ -18,14 +18,14 @@ namespace notes.Helper
 
 		public ResetToken(string token)
 		{
-			if(String.IsNullOrEmpty(token))
+			if (String.IsNullOrEmpty(token))
 				throw new ArgumentNullException(nameof(token));
 
 			try
 			{
 				_token = token.FromBase62();
 			}
-			catch(FormatException)
+			catch (FormatException)
 			{
 				throw new NotesInvalidTokenException();
 			}
@@ -38,7 +38,7 @@ namespace notes.Helper
 		/// <returns></returns>
 		static public ResetToken CreateNew(uint length = 60)
 		{
-			if(length <= 0)
+			if (length <= 0)
 				throw new ArgumentOutOfRangeException("length", "Value must be greater than zero.");
 
 			var buffer = new byte[length];

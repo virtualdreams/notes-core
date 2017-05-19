@@ -12,7 +12,7 @@ using notes.Models;
 
 namespace notes.Controllers
 {
-    [Authorize]
+	[Authorize]
 	public class UserController : BaseController
 	{
 		private readonly IMapper Mapper;
@@ -40,19 +40,19 @@ namespace notes.Controllers
 		[HttpPost]
 		public IActionResult Login(LoginModel model, string returnUrl)
 		{
-			if(ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
 				try
 				{
 					// if no accounts exists, create the first user as administrator.
 					// HACK!
-					if(!UserService.HasUsers())
+					if (!UserService.HasUsers())
 					{
 						UserService.Create(model.Username, model.Password, "Administrator", "Administrator", true);
 					}
 
 					var _user = UserService.Login(model.Username, model.Password);
-					if(_user == null || !_user.Enabled)
+					if (_user == null || !_user.Enabled)
 						throw new NotesLoginFailedException();
 
 					var claims = new List<Claim>
@@ -64,8 +64,9 @@ namespace notes.Controllers
 					var _identity = new ClaimsIdentity(claims, "local");
 					var _principal = new ClaimsPrincipal(_identity);
 
-					HttpContext.Authentication.SignInAsync("notes", _principal, 
-						new AuthenticationProperties {
+					HttpContext.Authentication.SignInAsync("notes", _principal,
+						new AuthenticationProperties
+						{
 							IsPersistent = model.Remember,
 							AllowRefresh = model.Remember
 						}
@@ -77,7 +78,7 @@ namespace notes.Controllers
 					else
 						return RedirectToAction("index", "home");
 				}
-				catch(NotesException ex)
+				catch (NotesException ex)
 				{
 					ModelState.AddModelError("error", ex.Message);
 				}
@@ -97,7 +98,7 @@ namespace notes.Controllers
 		[AllowAnonymous]
 		public IActionResult ForgotPassword(PasswdForgotPostModel model)
 		{
-			if(ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
 				try
 				{
@@ -105,7 +106,7 @@ namespace notes.Controllers
 
 					return View("Forgot_Confirmation");
 				}
-				catch(NotesException ex)
+				catch (NotesException ex)
 				{
 					ModelState.AddModelError("error", ex.Message);
 				}
@@ -143,15 +144,15 @@ namespace notes.Controllers
 		[AllowAnonymous]
 		public IActionResult ResetPassword(string id, PasswdResetPostModel model)
 		{
-			if(ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
 				try
 				{
 					var _user = UserService.GetByToken(id);
-					if(_user == null)
+					if (_user == null)
 						throw new NotesInvalidTokenException();
 
-					if(!model.NewPassword.Equals(model.ConfirmPassword))
+					if (!model.NewPassword.Equals(model.ConfirmPassword))
 						throw new NotesPasswordMismatchException();
 
 					UserService.UpdatePassword(_user.Id, model.NewPassword);
@@ -159,26 +160,27 @@ namespace notes.Controllers
 
 					return RedirectToAction("Login");
 				}
-				catch(NotesInvalidTokenException ex)
+				catch (NotesInvalidTokenException ex)
 				{
 					ModelState.AddModelError("error", ex.Message);
 
 					return View("Forgot_Password");
 				}
-				catch(NotesException ex)
+				catch (NotesException ex)
 				{
 					ModelState.AddModelError("error", ex.Message);
 				}
 			}
 
-			var view = new PasswdResetModel {
+			var view = new PasswdResetModel
+			{
 				Token = id
 			};
 
 			return View("Reset_Password", view);
 		}
 
-#region User
+		#region User
 		[Authorize]
 		[HttpGet]
 		public IActionResult Logout()
@@ -199,15 +201,15 @@ namespace notes.Controllers
 		[HttpPost]
 		public IActionResult Security(PasswdChangePostModel model)
 		{
-			if(ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
 				try
 				{
 					var _user = UserService.Login(User.GetUserName(), model.OldPassword);
-					if(_user == null)
+					if (_user == null)
 						throw new NotesPasswordIncorrectException();
 
-					if(!model.NewPassword.Equals(model.ConfirmPassword))
+					if (!model.NewPassword.Equals(model.ConfirmPassword))
 						throw new NotesPasswordMismatchException();
 
 					UserService.UpdatePassword(UserId, model.NewPassword);
@@ -215,7 +217,7 @@ namespace notes.Controllers
 					// redirect to home
 					return RedirectToAction("settings", "user");
 				}
-				catch(NotesException ex)
+				catch (NotesException ex)
 				{
 					ModelState.AddModelError("error", ex.Message);
 				}
@@ -246,7 +248,7 @@ namespace notes.Controllers
 		[HttpPost]
 		public IActionResult Settings(UserSettingsPostModel model)
 		{
-			if(!ModelState.IsValid)
+			if (!ModelState.IsValid)
 			{
 				return RedirectToAction("settings");
 			}
@@ -259,7 +261,7 @@ namespace notes.Controllers
 		[HttpPost]
 		public IActionResult Profile(UserProfilePostModel model)
 		{
-			if(!ModelState.IsValid)
+			if (!ModelState.IsValid)
 			{
 				return RedirectToAction("settings");
 			}
@@ -268,6 +270,6 @@ namespace notes.Controllers
 
 			return RedirectToAction("settings");
 		}
-#endregion
-    }
+		#endregion
+	}
 }

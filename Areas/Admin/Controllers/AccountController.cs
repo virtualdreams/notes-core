@@ -11,36 +11,36 @@ using notes.Models;
 
 namespace notes.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+	[Area("Admin")]
 	[Authorize(Policy = "AdministratorOnly")]
-    public class AccountController : BaseController
-    {
+	public class AccountController : BaseController
+	{
 		private readonly IMapper Mapper;
 		private readonly IOptions<Settings> Options;
 		private readonly UserService UserService;
 
-        public AccountController(IMapper mapper, IOptions<Settings> options, UserService user)
+		public AccountController(IMapper mapper, IOptions<Settings> options, UserService user)
 			: base(user)
-        {
+		{
 			Mapper = mapper;
 			UserService = user;
 			Options = options;
-        }
+		}
 
 		[HttpGet]
-        public IActionResult Index()
-        {
-            var _users = UserService.GetUsers();
+		public IActionResult Index()
+		{
+			var _users = UserService.GetUsers();
 
-            var users = Mapper.Map<IEnumerable<UserModel>>(_users);
+			var users = Mapper.Map<IEnumerable<UserModel>>(_users);
 
-            var view = new UserListContainer
-            {
-                Users = users
-            };
+			var view = new UserListContainer
+			{
+				Users = users
+			};
 
-            return View(view);
-        }
+			return View(view);
+		}
 
 		[HttpGet]
 		public IActionResult Create()
@@ -49,7 +49,7 @@ namespace notes.Areas.Admin.Controllers
 			{
 				User = new UserModel()
 			};
-			
+
 			return View("Edit", view);
 		}
 
@@ -57,7 +57,7 @@ namespace notes.Areas.Admin.Controllers
 		public IActionResult Edit(ObjectId id)
 		{
 			var _user = UserService.GetById(id);
-			if(_user == null)
+			if (_user == null)
 				return NotFound();
 
 			var user = Mapper.Map<UserModel>(_user);
@@ -73,11 +73,11 @@ namespace notes.Areas.Admin.Controllers
 		[HttpPost]
 		public IActionResult Edit(UserPostModel model)
 		{
-			if(ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
 				try
 				{
-					if(model.Id == ObjectId.Empty)
+					if (model.Id == ObjectId.Empty)
 					{
 						UserService.Create(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
 					}
@@ -88,7 +88,7 @@ namespace notes.Areas.Admin.Controllers
 
 					return RedirectToAction("Index");
 				}
-				catch(NotesException ex)
+				catch (NotesException ex)
 				{
 					ModelState.AddModelError("error", ex.Message);
 				}
@@ -114,19 +114,19 @@ namespace notes.Areas.Admin.Controllers
 		public IActionResult Delete(ObjectId id)
 		{
 			var _user = UserService.GetById(id);
-			if(_user == null)
+			if (_user == null)
 				return NotFound();
-			
+
 			try
 			{
 				UserService.Delete(id);
 			}
-			catch(NotesException ex)
+			catch (NotesException ex)
 			{
-				return new JsonResult(new { Success = false, Error = ex.Message});
+				return new JsonResult(new { Success = false, Error = ex.Message });
 			}
 
 			return new NoContentResult();
 		}
-    }
+	}
 }

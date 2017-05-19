@@ -7,7 +7,7 @@ using notes.Core.Models;
 
 namespace notes.Core.Services
 {
-    public class MongoContext
+	public class MongoContext
 	{
 		private readonly ILogger<MongoContext> Log;
 		private readonly IOptions<Settings> Options;
@@ -27,7 +27,7 @@ namespace notes.Core.Services
 			var _settings = MongoClientSettings.FromUrl(new MongoUrl(Options.Value.MongoDB));
 
 			// log commands if debug enabled
-			if(Log.IsEnabled(LogLevel.Debug))
+			if (Log.IsEnabled(LogLevel.Debug))
 			{
 				Log.LogDebug("MongoDB command log enabled.");
 				_settings.ClusterConfigurator = cb =>

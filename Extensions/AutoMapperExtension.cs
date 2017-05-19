@@ -8,16 +8,17 @@ using notes.Models;
 
 namespace notes.Extensions
 {
-    static public class AutoMapperExtensions
+	static public class AutoMapperExtensions
 	{
 		static public IServiceCollection AddAutoMapper(this IServiceCollection services)
 		{
-			var _autoMapperConfig = new MapperConfiguration(config =>{
+			var _autoMapperConfig = new MapperConfiguration(config =>
+			{
 				config.CreateMap<Note, NoteModel>()
-					.ForMember(d => d.TagsString, map => map.MapFrom(s => String.Join(" ", s.Tags ?? new string[] {})))
+					.ForMember(d => d.TagsString, map => map.MapFrom(s => String.Join(" ", s.Tags ?? new string[] { })))
 					.ForMember(d => d.Age, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime().ToMinutes().ToWords()))
 					.ForMember(d => d.Created, map => map.MapFrom(s => String.Format(new System.Globalization.CultureInfo("en-US"), "{0:MMM dd, yyyy HH:mm:ss}", s.Id.CreationTime.ToLocalTime())))
-					.ForMember(d => d.Modified, map => map.MapFrom(s => String.Format(new System.Globalization.CultureInfo("en-US"), "{0:MMM dd, yyyy HH:mm:ss}", s.Modified )));
+					.ForMember(d => d.Modified, map => map.MapFrom(s => String.Format(new System.Globalization.CultureInfo("en-US"), "{0:MMM dd, yyyy HH:mm:ss}", s.Modified)));
 
 				config.CreateMap<User, UserModel>()
 					.ForMember(d => d.Created, map => map.MapFrom(s => String.Format(new System.Globalization.CultureInfo("en-US"), "{0:MMM dd, yyyy}", s.Id.CreationTime)));

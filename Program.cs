@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace notes
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var host = new WebHostBuilder()
+	public class Program
+	{
+		public static void Main(string[] args)
+		{
+			var host = new WebHostBuilder()
 				.UseKestrel()
 				.UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
+				.UseIISIntegration()
 				.UseStartup<Startup>()
 				.Build();
-            
+
 			host.Run();
-        }
-    }
+		}
+	}
 }

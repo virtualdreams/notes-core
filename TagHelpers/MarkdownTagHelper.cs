@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace notes.TagHelpers
 {
-    [HtmlTargetElement("markdown")]
+	[HtmlTargetElement("markdown")]
 	[HtmlTargetElement("p", Attributes = "markdown")]
-    public class MarkdownTagHelper : TagHelper
-    {
+	public class MarkdownTagHelper : TagHelper
+	{
 		public override void Process(TagHelperContext context, TagHelperOutput output)
 		{
-			if(output.TagName.Equals("markdown"))
+			if (output.TagName.Equals("markdown"))
 				output.TagName = null;
 
 			output.Attributes.RemoveAll("markdown");

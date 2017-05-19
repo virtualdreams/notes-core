@@ -16,7 +16,7 @@ using notes.ModelBinders;
 
 namespace notes
 {
-    public class Startup
+	public class Startup
 	{
 		public IConfigurationRoot Configuration { get; set; }
 
@@ -36,15 +36,17 @@ namespace notes
 		public void ConfigureServices(IServiceCollection services)
 		{
 			var _keyStore = Configuration.GetSection("Settings")["KeyStore"];
-			if(!String.IsNullOrEmpty(_keyStore))
+			if (!String.IsNullOrEmpty(_keyStore))
 			{
-				services.AddDataProtection(options => {
+				services.AddDataProtection(options =>
+				{
 					options.ApplicationDiscriminator = "notes";
 				}).PersistKeysToFileSystem(new DirectoryInfo(_keyStore));
 			}
 
 			// IIS integration
-			services.Configure<IISOptions>(options => {
+			services.Configure<IISOptions>(options =>
+			{
 
 			});
 
@@ -53,21 +55,25 @@ namespace notes
 			services.Configure<Settings>(Configuration.GetSection("Settings"));
 
 			// add custom model binders
-			services.AddMvc(options => {
+			services.AddMvc(options =>
+			{
 				options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
 			});
 
 			// add sessions
 			services.AddDistributedMemoryCache();
-			services.AddSession(options => {
+			services.AddSession(options =>
+			{
 				options.CookieName = "notes_session";
 				options.IdleTimeout = TimeSpan.FromMinutes(30);
 				options.CookieHttpOnly = true;
 			});
 
 			// authorization policies
-			services.AddAuthorization(options => {
-				options.AddPolicy("AdministratorOnly", policy => {
+			services.AddAuthorization(options =>
+			{
+				options.AddPolicy("AdministratorOnly", policy =>
+				{
 					policy.RequireRole("Administrator");
 				});
 			});
@@ -90,7 +96,7 @@ namespace notes
 
 			app.UseStatusCodePagesWithReExecute("/error/{0}");
 
-			if(env.IsDevelopment())
+			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
@@ -102,18 +108,19 @@ namespace notes
 			app.UseStaticFiles();
 
 			app.UseCookieAuthentication(
-				new CookieAuthenticationOptions {
-				AuthenticationScheme = "notes",
-				CookieName = "notes",
-				LoginPath = new PathString("/login"),
-				AccessDeniedPath = new PathString("/"),
-				AutomaticAuthenticate = true,
-				AutomaticChallenge = true,
-				Events = new CookieAuthenticationEvents
+				new CookieAuthenticationOptions
 				{
-					OnValidatePrincipal = CookieValidator.ValidateAsync
-				}
-			});
+					AuthenticationScheme = "notes",
+					CookieName = "notes",
+					LoginPath = new PathString("/login"),
+					AccessDeniedPath = new PathString("/"),
+					AutomaticAuthenticate = true,
+					AutomaticChallenge = true,
+					Events = new CookieAuthenticationEvents
+					{
+						OnValidatePrincipal = CookieValidator.ValidateAsync
+					}
+				});
 
 			app.UseSession();
 

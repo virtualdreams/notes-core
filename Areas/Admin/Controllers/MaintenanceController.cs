@@ -7,9 +7,9 @@ using notes.Core.Services;
 
 namespace notes.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+	[Area("Admin")]
 	[Authorize(Policy = "AdministratorOnly")]
-    public class MaintenanceController : BaseController
+	public class MaintenanceController : BaseController
 	{
 		private readonly IMapper Mapper;
 		private readonly IOptions<Settings> Options;

@@ -32,7 +32,7 @@ namespace notes.Core.Services
 			message.Subject = $"[{Options.Value.SiteName}] - Reset Password";
 			message.Body = new TextPart("plain")
 			{
-				Text = 
+				Text =
 $@"Hi {username},
 
 You recently requested to reset your password for your {Options.Value.SiteName} account. Use the link below to reset it. This password reset is only valid for the next 1 hour.
@@ -56,20 +56,21 @@ The {Options.Value.SiteName} Team
 		/// <param name="message">The message to send.</param>
 		private void SendMail(MimeMessage message)
 		{
-			if(Options.Value.Smtp.Enabled)
+			if (Options.Value.Smtp.Enabled)
 			{
 				Log.LogInformation($"Send mail...");
 				// send e-mail
-				using(var client = new SmtpClient()) {
+				using (var client = new SmtpClient())
+				{
 					// accept all SSL certificates (in case the server supports STARTTLS)
-					if(Options.Value.Smtp.SkipVerify)
+					if (Options.Value.Smtp.SkipVerify)
 						client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
 					// connect to given host and port
 					client.Connect(Options.Value.Smtp.Server, Options.Value.Smtp.Port, false);
 
 					// disable authentication if username or password is empty
-					if(!String.IsNullOrEmpty(Options.Value.Smtp.Username) && !String.IsNullOrEmpty(Options.Value.Smtp.Passwd))
+					if (!String.IsNullOrEmpty(Options.Value.Smtp.Username) && !String.IsNullOrEmpty(Options.Value.Smtp.Passwd))
 						client.Authenticate(Options.Value.Smtp.Username, Options.Value.Smtp.Passwd);
 
 					client.Send(message);
