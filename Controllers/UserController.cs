@@ -16,14 +16,14 @@ namespace notes.Controllers
 	public class UserController : BaseController
 	{
 		private readonly IMapper Mapper;
-		private readonly IOptions<Settings> Options;
+		private readonly Settings Options;
 		private readonly UserService UserService;
 
-		public UserController(IMapper mapper, IOptions<Settings> options, UserService user)
+		public UserController(IMapper mapper, Settings settings, UserService user)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = options;
+			Options = settings;
 			UserService = user;
 		}
 
@@ -238,7 +238,7 @@ namespace notes.Controllers
 				},
 				Settings = new UserSettingsModel
 				{
-					Items = UserSettings?.PageSize ?? Options.Value.PageSize
+					Items = UserSettings?.PageSize ?? Options.PageSize
 				}
 			};
 

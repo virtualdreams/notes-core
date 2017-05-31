@@ -1,8 +1,7 @@
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.Extensions.Options
 @using notes
 @inject IAuthorizationService AuthorizationService
-@inject IOptions<Settings> Settings
+@inject Settings Options
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,10 +9,10 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="@Settings.Value.SiteName">
+		<meta name="description" content="@Options.SiteName">
 		<meta name="author" content="">
 
-		<title>@ViewBag.Title@Settings.Value.SiteName</title>
+		<title>@ViewBag.Title@Options.SiteName</title>
 		
 		@await Html.PartialAsync("_StylesPartial")
 

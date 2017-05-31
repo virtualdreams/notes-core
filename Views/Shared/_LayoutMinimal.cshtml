@@ -1,6 +1,5 @@
-@using Microsoft.Extensions.Options
 @using notes
-@inject IOptions<Settings> Settings
+@inject Settings Options
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +10,7 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 
-		<title>@ViewBag.Title@Settings.Value.SiteName</title>
+		<title>@ViewBag.Title@Options.SiteName</title>
 
 		@await Html.PartialAsync("_StylesPartial")
 

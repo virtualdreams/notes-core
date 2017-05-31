@@ -15,17 +15,17 @@ namespace notes.Controllers
 	public class HomeController : BaseController
 	{
 		private readonly IMapper Mapper;
-		private readonly IOptions<Settings> Options;
+		private readonly Settings Options;
 		private readonly UserService UserService;
 		private readonly NoteService NoteService;
 
-		private int PageSize => UserSettings?.PageSize ?? Options.Value.PageSize;
+		private int PageSize => UserSettings?.PageSize ?? Options.PageSize;
 
-		public HomeController(IMapper mapper, IOptions<Settings> options, UserService user, NoteService note)
+		public HomeController(IMapper mapper, Settings settings, UserService user, NoteService note)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = options;
+			Options = settings;
 			UserService = user;
 			NoteService = note;
 		}

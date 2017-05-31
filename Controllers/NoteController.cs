@@ -16,18 +16,18 @@ namespace notes.Controllers
 	public class NoteController : BaseController
 	{
 		private readonly IMapper Mapper;
-		private readonly IOptions<Settings> Options;
+		private readonly Settings Options;
 		private readonly UserService UserService;
 		private readonly NoteService NoteService;
 		private readonly IViewRenderService ViewRenderService;
 
-		private int PageSize => UserSettings?.PageSize ?? Options.Value.PageSize;
+		private int PageSize => UserSettings?.PageSize ?? Options.PageSize;
 
-		public NoteController(IMapper mapper, IOptions<Settings> options, UserService user, NoteService note, IViewRenderService render)
+		public NoteController(IMapper mapper, Settings settings, UserService user, NoteService note, IViewRenderService render)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = options;
+			Options = settings;
 			UserService = user;
 			NoteService = note;
 			ViewRenderService = render;

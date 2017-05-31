@@ -12,15 +12,15 @@ namespace notes.Areas.Admin.Controllers
 	public class MaintenanceController : BaseController
 	{
 		private readonly IMapper Mapper;
-		private readonly IOptions<Settings> Options;
+		private readonly Settings Options;
 		private readonly UserService UserService;
 		private readonly MaintenanceService MaintenanceService;
 
-		public MaintenanceController(IMapper mapper, IOptions<Settings> options, UserService user, MaintenanceService maintenance)
+		public MaintenanceController(IMapper mapper, Settings settings, UserService user, MaintenanceService maintenance)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = options;
+			Options = settings;
 			UserService = user;
 			MaintenanceService = maintenance;
 		}

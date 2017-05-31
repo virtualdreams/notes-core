@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using System.IO;
@@ -80,6 +81,7 @@ namespace notes
 
 			// DI
 			services.AddAutoMapper();
+			services.AddScoped(cfg => cfg.GetService<IOptionsSnapshot<Settings>>().Value);
 			services.AddScoped<MongoContext>();
 			services.AddTransient<NoteService>();
 			services.AddTransient<UserService>();

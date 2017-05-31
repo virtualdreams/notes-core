@@ -16,15 +16,15 @@ namespace notes.Areas.Admin.Controllers
 	public class AccountController : BaseController
 	{
 		private readonly IMapper Mapper;
-		private readonly IOptions<Settings> Options;
+		private readonly Settings Options;
 		private readonly UserService UserService;
 
-		public AccountController(IMapper mapper, IOptions<Settings> options, UserService user)
+		public AccountController(IMapper mapper, Settings settings, UserService user)
 			: base(user)
 		{
 			Mapper = mapper;
+			Options = settings;
 			UserService = user;
-			Options = options;
 		}
 
 		[HttpGet]
