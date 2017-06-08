@@ -5,6 +5,12 @@
 	ViewBag.Title = "Accounts - ";
 }
 
+@functions{
+	public string FormatDate(DateTime? dt) {
+		return String.Format(new System.Globalization.CultureInfo("en-US"), "{0:MMM dd, yyyy}", dt);
+	}
+}
+
 <div class="row">
 	<div class="col-lg-12">
 		<div class="page-header">
@@ -35,7 +41,7 @@
 					<tr>
 						<td><a href="@Url.Action("edit", "account", new { area = "admin", id = @user.Id })">@user.Username</a></td>
 						<td class="fit">@user.Role</td>
-						<td class="fit">@user.Created</td>
+						<td class="fit">@FormatDate(@user.Created)</td>
 						<td class="fit">@(@user.Enabled ? "Active" : "Disabled" )</td>
 					</tr>
 					}

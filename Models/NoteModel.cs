@@ -24,9 +24,9 @@ namespace notes.Models
 
 		public int Version { get; set; }
 
-		public string Created { get; set; }
+		public DateTime? Created { get; set; }
 
-		public string Modified { get; set; }
+		public DateTime? Modified { get; set; }
 
 		public double? Score { get; set; }
 	}

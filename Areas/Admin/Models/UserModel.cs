@@ -1,4 +1,5 @@
 using MongoDB.Bson;
+using System;
 
 namespace notes.Areas.Admin.Models
 {
@@ -14,6 +15,6 @@ namespace notes.Areas.Admin.Models
 
 		public bool Enabled { get; set; }
 
-		public string Created { get; set; }
+		public DateTime? Created { get; set; }
 	}
 }
