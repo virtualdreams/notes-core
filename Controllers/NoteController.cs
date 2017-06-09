@@ -198,9 +198,9 @@ namespace notes.Controllers
 		public IActionResult Notebook(string id, ObjectId after)
 		{
 			var _notes = NoteService.GetByNotebook(UserId, id ?? string.Empty, after, PageSize);
-			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
+			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
-			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 
 			var view = new NoteNotebookContainer
 			{
@@ -216,9 +216,9 @@ namespace notes.Controllers
 		public IActionResult Tag(string id, ObjectId after)
 		{
 			var _notes = NoteService.GetByTag(UserId, id ?? string.Empty, after, PageSize);
-			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
+			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
-			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 
 			var view = new NoteTagContainer
 			{
@@ -246,9 +246,9 @@ namespace notes.Controllers
 		public IActionResult Trash(ObjectId after)
 		{
 			var _notes = NoteService.GetNotes(UserId, after, true, PageSize);
-			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
+			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
-			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 
 			var view = new NoteListContainer
 			{

@@ -34,9 +34,9 @@ namespace notes.Controllers
 		public IActionResult Index(ObjectId after)
 		{
 			var _notes = NoteService.GetNotes(UserId, after, false, PageSize);
-			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
+			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
-			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 
 			var view = new NoteListContainer
 			{
@@ -51,9 +51,9 @@ namespace notes.Controllers
 		public IActionResult Search(string q, ObjectId after)
 		{
 			var _notes = NoteService.Search(UserId, q ?? String.Empty, after, PageSize);
-			var _pager = new Pager(_notes.Item1.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Item2);
+			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
-			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes.Item1);
+			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 
 			var view = new NoteSearchContainer
 			{

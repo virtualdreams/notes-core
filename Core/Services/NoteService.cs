@@ -28,7 +28,7 @@ namespace notes.Core.Services
 		/// <param name="trashed">Request trashed items or not.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public Tuple<IEnumerable<Note>, bool> GetNotes(ObjectId user, ObjectId next, bool trashed, int limit)
+		public IEnumerable<Note> GetNotes(ObjectId user, ObjectId next, bool trashed, int limit)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _user = _filter.Eq(f => f.Owner, user);
@@ -45,13 +45,9 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Request notes.");
 
-			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit + 1);
+			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit);
 
-			return new Tuple<IEnumerable<Note>, bool>
-			(
-				_result.ToEnumerable().Take(limit),
-				_result.Count() > limit
-			);
+			return _result.ToEnumerable();
 		}
 
 		/// <summary>
@@ -62,17 +58,13 @@ namespace notes.Core.Services
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public Tuple<IEnumerable<Note>, bool> GetByNotebook(ObjectId user, string notebook, ObjectId next, int limit)
+		public IEnumerable<Note> GetByNotebook(ObjectId user, string notebook, ObjectId next, int limit)
 		{
 			notebook = notebook?.Trim();
 
 			if (String.IsNullOrEmpty(notebook))
 			{
-				return new Tuple<IEnumerable<Note>, bool>
-				(
-					Enumerable.Empty<Note>(),
-					false
-				);
+				return Enumerable.Empty<Note>();
 			}
 
 			var _filter = Builders<Note>.Filter;
@@ -91,13 +83,9 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Request notes by notebook '{notebook}'.");
 
-			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit + 1);
+			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit);
 
-			return new Tuple<IEnumerable<Note>, bool>
-			(
-				_result.ToEnumerable().Take(limit),
-				_result.Count() > limit
-			);
+			return _result.ToEnumerable();
 		}
 
 		/// <summary>
@@ -108,17 +96,13 @@ namespace notes.Core.Services
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public Tuple<IEnumerable<Note>, bool> GetByTag(ObjectId user, string tag, ObjectId next, int limit)
+		public IEnumerable<Note> GetByTag(ObjectId user, string tag, ObjectId next, int limit)
 		{
 			tag = tag?.Trim();
 
 			if (String.IsNullOrEmpty(tag))
 			{
-				return new Tuple<IEnumerable<Note>, bool>
-				(
-					Enumerable.Empty<Note>(),
-					false
-				);
+				return Enumerable.Empty<Note>();
 			}
 
 			var _filter = Builders<Note>.Filter;
@@ -137,13 +121,9 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Request notes by tag '{tag}'.");
 
-			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit + 1);
+			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit);
 
-			return new Tuple<IEnumerable<Note>, bool>
-			(
-				_result.ToEnumerable().Take(limit),
-				_result.Count() > limit
-			);
+			return _result.ToEnumerable();
 		}
 
 		/// <summary>
@@ -397,17 +377,13 @@ namespace notes.Core.Services
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public Tuple<IEnumerable<Note>, bool> Search(ObjectId user, string term, ObjectId next, int limit)
+		public IEnumerable<Note> Search(ObjectId user, string term, ObjectId next, int limit)
 		{
 			term = term?.Trim();
 
 			if (String.IsNullOrEmpty(term))
 			{
-				return new Tuple<IEnumerable<Note>, bool>
-				(
-					Enumerable.Empty<Note>(),
-					false
-				);
+				return Enumerable.Empty<Note>();
 			}
 
 			var _filter = Builders<Note>.Filter;
@@ -430,25 +406,17 @@ namespace notes.Core.Services
 			{
 				var _skip = _result.ToEnumerable().SkipWhile(condition => condition.Id != next).Skip(1);
 
-				return new Tuple<IEnumerable<Note>, bool>
-				(
-					_skip.Take(limit),
-					_skip.Count() > limit
-				);
+				return _skip.Take(limit);
 			}
 
-			return new Tuple<IEnumerable<Note>, bool>
-			(
-				_result.ToEnumerable().Take(limit),
-				_result.Count() > limit
-			);
+			return _result.ToEnumerable().Take(limit);
 		}
 
 		/// <summary>
-		/// 
+		/// Get suggestions for tags.
 		/// </summary>
-		/// <param name="user"></param>
-		/// <param name="term"></param>
+		/// <param name="user">The user.</param>
+		/// <param name="term">The term to search for.</param>
 		/// <returns></returns>
 		public IEnumerable<string> TagSuggestions(ObjectId user, string term)
 		{
@@ -461,10 +429,10 @@ namespace notes.Core.Services
 		}
 
 		/// <summary>
-		/// 
+		/// Get suggestions for notebooks.
 		/// </summary>
-		/// <param name="user"></param>
-		/// <param name="term"></param>
+		/// <param name="user">The user.</param>
+		/// <param name="term">The term to serach for.</param>
 		/// <returns></returns>
 		public IEnumerable<string> NotebookSuggestions(ObjectId user, string term)
 		{
