@@ -17,10 +17,13 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		
 		@if(Model.Notes.Count() > 0) {
-		@await Html.PartialAsync("_PartialNotes", Model.Notes)
-
+			@await Html.PartialAsync("_PartialNotes", Model.Notes)
+		} else {
+			@:Your search returned no matches.
+		}
+	</div>
+	<div class="col-lg-12">
 		<nav>
 			<ul class="pager">
 				@if(Model.Pager.HasNext) {
@@ -28,9 +31,5 @@
 				}
 			</ul>
 		</nav>
-		} else {
-			@:Your search returned no matches.
-		}
-	
 	</div>
 </div>
