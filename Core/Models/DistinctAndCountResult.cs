@@ -1,8 +1,13 @@
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace notes.Core.Models
 {
 	public class DistinctAndCountResult
 	{
-		public string _id { get; set; }
-		public int count { get; set; }
+		[BsonIdAttribute]
+		public string Id { get; set; }
+
+		[BsonElement("count")]
+		public int Count { get; set; }
 	}
 }

@@ -168,7 +168,7 @@ namespace notes.Core.Services
 				.Limit(limit)
 				.ToEnumerable()
 				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s))
-				.Select(s => s._id);
+				.Select(s => s.Id);
 
 			/*var _sort = Builders<DistinctAndCountResult>.Sort;
 			var _order = _sort.Descending(f => f.count);
@@ -230,7 +230,7 @@ namespace notes.Core.Services
 				.Limit(limit)
 				.ToEnumerable()
 				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s))
-				.Select(s => s._id);
+				.Select(s => s.Id);
 
 			/*var _sort = Builders<DistinctAndCountResult>.Sort;
 			var _order = _sort.Descending(f => f.count);
