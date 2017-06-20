@@ -21,6 +21,8 @@ namespace notes.Extensions
 
 				config.CreateMap<User, UserModel>()
 					.ForMember(d => d.Created, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime()));
+
+				config.CreateMap<DistinctAndCountResult, DistinctAndCountModel>();
 			});
 
 			_autoMapperConfig.AssertConfigurationIsValid();

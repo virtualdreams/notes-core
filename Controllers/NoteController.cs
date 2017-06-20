@@ -183,7 +183,9 @@ namespace notes.Controllers
 		{
 			var _notebooks = NoteService.GetNotebooks(UserId);
 
-			return View(_notebooks);
+			var notebooks = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_notebooks);
+
+			return View(notebooks);
 		}
 
 		[HttpGet]
@@ -191,7 +193,9 @@ namespace notes.Controllers
 		{
 			var _tags = NoteService.GetTags(UserId);
 
-			return View(_tags);
+			var tags = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_tags);
+
+			return View(tags);
 		}
 
 		[HttpGet]

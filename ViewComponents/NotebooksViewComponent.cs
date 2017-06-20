@@ -1,16 +1,21 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using notes.Core.Services;
+using notes.Models;
 
 namespace notes.ViewComponents
 {
 	public class NotebooksViewComponent : BaseViewComponent
 	{
-		public readonly NoteService NoteService;
+		private IMapper Mapper;
+		private readonly NoteService NoteService;
 		private readonly UserService UserService;
 
-		public NotebooksViewComponent(NoteService note, UserService user)
+		public NotebooksViewComponent(IMapper mapper, NoteService note, UserService user)
 			: base(user)
 		{
+			Mapper = mapper;
 			NoteService = note;
 			UserService = user;
 		}
@@ -19,7 +24,9 @@ namespace notes.ViewComponents
 		{
 			var _notebooks = NoteService.GetMostlyUsedNotebooks(UserId);
 
-			return View(_notebooks);
+			var notebooks = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_notebooks);
+
+			return View(notebooks);
 		}
 	}
 }

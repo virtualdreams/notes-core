@@ -149,7 +149,7 @@ namespace notes.Core.Services
 		/// <param name="user">The users notebooks.</param>
 		/// <param name="limit">Limit result to n items.</param>
 		/// <returns>A list of notebook.</returns>
-		public IEnumerable<string> GetMostlyUsedNotebooks(ObjectId user, int limit = 10)
+		public IEnumerable<DistinctAndCountResult> GetMostlyUsedNotebooks(ObjectId user, int limit = 10)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _size = _filter.Size(f => f.Notebook, 0);
@@ -167,21 +167,7 @@ namespace notes.Core.Services
 				.Sort(new BsonDocument { { "count", -1 } })
 				.Limit(limit)
 				.ToEnumerable()
-				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s))
-				.Select(s => s.Id);
-
-			/*var _sort = Builders<DistinctAndCountResult>.Sort;
-			var _order = _sort.Descending(f => f.count);
-			
-			var _result2 = Context.Note.Aggregate()
-				.Match(_query)
-				.Unwind<Note, Note>(f => f.Notebook)
-				.Group(f => f.Notebook, g => new DistinctAndCountResult { _id = g.Key, count = g.Sum(f => 1) })
-				.Match(f => f.count >= 1 & !String.IsNullOrEmpty(f._id))
-				.Sort(_order)
-				.Limit(limit)
-				.ToEnumerable()
-				.Select(s => s._id).ToArray();*/
+				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s));
 
 			return _result;
 		}
@@ -191,18 +177,26 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The users notebooks.</param>
 		/// <returns>A list of notebook.</returns>
-		public IEnumerable<string> GetNotebooks(ObjectId user)
+		public IEnumerable<DistinctAndCountResult> GetNotebooks(ObjectId user)
 		{
 			var _filter = Builders<Note>.Filter;
+			var _size = _filter.Size(f => f.Notebook, 0);
+			var _not = _filter.Not(_size);
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _active = _filter.Eq(f => f.Trash, false);
-			var _nin = _filter.Nin(f => f.Notebook, new string[] { null, "" });
 
-			var _query = _user & _active & _nin;
+			var _query = _user & _active & _not;
 
-			return Context.Note.Distinct<string>("Notebook", _query)
+			var _result = Context.Note.Aggregate()
+				.Match(_query)
+				.Unwind(f => f.Notebook)
+				.Group(new BsonDocument { { "_id", "$notebook" }, { "count", new BsonDocument { { "$sum", 1 } } } })
+				.Match(new BsonDocument { { "count", new BsonDocument { { "$gte", 1 } } }, { "_id", new BsonDocument { { "$nin", new BsonArray { BsonNull.Value, "" } } } } })
+				.Sort(new BsonDocument { { "_id", 1 } })
 				.ToEnumerable()
-				.OrderBy(s => s);
+				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s));
+
+			return _result;
 		}
 
 		/// <summary>
@@ -211,7 +205,7 @@ namespace notes.Core.Services
 		/// <param name="user">The users tags.</param>
 		/// <param name="limit">Limit result to n items.</param>
 		/// <returns>A list of tags.</returns>
-		public IEnumerable<string> GetMostlyUsedTags(ObjectId user, int limit = 10)
+		public IEnumerable<DistinctAndCountResult> GetMostlyUsedTags(ObjectId user, int limit = 10)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _size = _filter.Size(f => f.Tags, 0);
@@ -229,21 +223,7 @@ namespace notes.Core.Services
 				.Sort(new BsonDocument { { "count", -1 } })
 				.Limit(limit)
 				.ToEnumerable()
-				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s))
-				.Select(s => s.Id);
-
-			/*var _sort = Builders<DistinctAndCountResult>.Sort;
-			var _order = _sort.Descending(f => f.count);
-
-			var _result2 = Context.Note.Aggregate()
-				.Match(_query)
-				.Unwind<Note, Note>(f => f.Tags)
-				.Group(f => f.Tags, g => new DistinctAndCountResult { _id = g.Key, count = g.Sum(f => 1) })
-				.Match(f => f.count >= 1)
-				.Sort(_order)
-				.Limit(limit)
-				.ToEnumerable()
-				.Select(s => s._id);*/
+				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s));
 
 			return _result;
 		}
@@ -253,18 +233,26 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The users tags.</param>
 		/// <returns>A list of tags.</returns>
-		public IEnumerable<string> GetTags(ObjectId user)
+		public IEnumerable<DistinctAndCountResult> GetTags(ObjectId user)
 		{
 			var _filter = Builders<Note>.Filter;
+			var _size = _filter.Size(f => f.Tags, 0);
+			var _not = _filter.Not(_size);
 			var _user = _filter.Eq(f => f.Owner, user);
 			var _active = _filter.Eq(f => f.Trash, false);
-			var _nin = _filter.AnyNin(f => f.Tags, new string[] { null, "" });
 
-			var _query = _user & _active & _nin;
+			var _query = _user & _active & _not;
 
-			return Context.Note.Distinct<string>("Tags", _query)
+			var _result = Context.Note.Aggregate()
+				.Match(_query)
+				.Unwind(f => f.Tags)
+				.Group(new BsonDocument { { "_id", "$tags" }, { "count", new BsonDocument { { "$sum", 1 } } } })
+				.Match(new BsonDocument { { "count", new BsonDocument { { "$gte", 1 } } }, { "_id", new BsonDocument { { "$nin", new BsonArray { BsonNull.Value, "" } } } } })
+				.Sort(new BsonDocument { { "_id", 1 } })
 				.ToEnumerable()
-				.OrderBy(s => s);
+				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s));
+
+			return _result;
 		}
 
 		/// <summary>
@@ -425,7 +413,7 @@ namespace notes.Core.Services
 			if (String.IsNullOrEmpty(term) || term.Length < 3)
 				return Enumerable.Empty<string>();
 
-			return GetTags(user).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
+			return GetTags(user).Select(s => s.Id).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
 		}
 
 		/// <summary>
@@ -441,7 +429,7 @@ namespace notes.Core.Services
 			if (String.IsNullOrEmpty(term) || term.Length < 3)
 				return Enumerable.Empty<string>();
 
-			return GetNotebooks(user).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
+			return GetNotebooks(user).Select(s => s.Id).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
 		}
 	}
 }
