@@ -45,9 +45,13 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Request notes.");
 
-			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit);
+			var _result = Context.Note
+				.Find(_query)
+				.Sort(_order)
+				.Limit(limit)
+				.ToEnumerable();
 
-			return _result.ToEnumerable();
+			return _result;
 		}
 
 		/// <summary>
@@ -83,9 +87,13 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Request notes by notebook '{notebook}'.");
 
-			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit);
+			var _result = Context.Note
+				.Find(_query)
+				.Sort(_order)
+				.Limit(limit)
+				.ToEnumerable();
 
-			return _result.ToEnumerable();
+			return _result;
 		}
 
 		/// <summary>
@@ -121,9 +129,13 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Request notes by tag '{tag}'.");
 
-			var _result = Context.Note.Find(_query).Sort(_order).Limit(limit);
+			var _result = Context.Note
+				.Find(_query)
+				.Sort(_order)
+				.Limit(limit)
+				.ToEnumerable();
 
-			return _result.ToEnumerable();
+			return _result;
 		}
 
 		/// <summary>
@@ -138,9 +150,15 @@ namespace notes.Core.Services
 			var _id = _filter.Eq(f => f.Id, note);
 			var _user = _filter.Eq(f => f.Owner, user);
 
+			var _query = _id & _user;
+
 			Log.LogDebug($"Get note by id '{note.ToString()}'.");
 
-			return Context.Note.Find(_id & _user).SingleOrDefault();
+			var _result = Context.Note
+				.Find(_query)
+				.SingleOrDefault();
+
+			return _result;
 		}
 
 		/// <summary>
@@ -159,15 +177,15 @@ namespace notes.Core.Services
 
 			var _query = _user & _active & _not;
 
-			var _result = Context.Note.Aggregate()
+			var _result = Context.Note
+				.Aggregate()
 				.Match(_query)
-				.Unwind(f => f.Notebook)
 				.Group(new BsonDocument { { "_id", "$notebook" }, { "count", new BsonDocument { { "$sum", 1 } } } })
 				.Match(new BsonDocument { { "count", new BsonDocument { { "$gte", 1 } } }, { "_id", new BsonDocument { { "$nin", new BsonArray { BsonNull.Value, "" } } } } })
 				.Sort(new BsonDocument { { "count", -1 } })
 				.Limit(limit)
-				.ToEnumerable()
-				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s));
+				.As<DistinctAndCountResult>()
+				.ToEnumerable();
 
 			return _result;
 		}
@@ -187,14 +205,14 @@ namespace notes.Core.Services
 
 			var _query = _user & _active & _not;
 
-			var _result = Context.Note.Aggregate()
+			var _result = Context.Note
+				.Aggregate()
 				.Match(_query)
-				.Unwind(f => f.Notebook)
 				.Group(new BsonDocument { { "_id", "$notebook" }, { "count", new BsonDocument { { "$sum", 1 } } } })
 				.Match(new BsonDocument { { "count", new BsonDocument { { "$gte", 1 } } }, { "_id", new BsonDocument { { "$nin", new BsonArray { BsonNull.Value, "" } } } } })
 				.Sort(new BsonDocument { { "_id", 1 } })
-				.ToEnumerable()
-				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s));
+				.As<DistinctAndCountResult>()
+				.ToEnumerable();
 
 			return _result;
 		}
@@ -215,15 +233,16 @@ namespace notes.Core.Services
 
 			var _query = _user & _active & _not;
 
-			var _result = Context.Note.Aggregate()
+			var _result = Context.Note
+				.Aggregate()
 				.Match(_query)
 				.Unwind(f => f.Tags)
 				.Group(new BsonDocument { { "_id", "$tags" }, { "count", new BsonDocument { { "$sum", 1 } } } })
 				.Match(new BsonDocument { { "count", new BsonDocument { { "$gte", 1 } } }, { "_id", new BsonDocument { { "$nin", new BsonArray { BsonNull.Value, "" } } } } })
 				.Sort(new BsonDocument { { "count", -1 } })
 				.Limit(limit)
-				.ToEnumerable()
-				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s));
+				.As<DistinctAndCountResult>()
+				.ToEnumerable();
 
 			return _result;
 		}
@@ -243,14 +262,15 @@ namespace notes.Core.Services
 
 			var _query = _user & _active & _not;
 
-			var _result = Context.Note.Aggregate()
+			var _result = Context.Note
+				.Aggregate()
 				.Match(_query)
 				.Unwind(f => f.Tags)
 				.Group(new BsonDocument { { "_id", "$tags" }, { "count", new BsonDocument { { "$sum", 1 } } } })
 				.Match(new BsonDocument { { "count", new BsonDocument { { "$gte", 1 } } }, { "_id", new BsonDocument { { "$nin", new BsonArray { BsonNull.Value, "" } } } } })
 				.Sort(new BsonDocument { { "_id", 1 } })
-				.ToEnumerable()
-				.Select(s => BsonSerializer.Deserialize<DistinctAndCountResult>(s));
+				.As<DistinctAndCountResult>()
+				.ToEnumerable();
 
 			return _result;
 		}
@@ -305,7 +325,9 @@ namespace notes.Core.Services
 
 			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Id, note);
-			var _user = _filter.Eq(f => f.Owner, user);
+			//var _user = _filter.Eq(f => f.Owner, user);
+
+			var _query = _id;
 
 			var _update = Builders<Note>.Update;
 			var _set = _update
@@ -318,7 +340,7 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Update note '{note.ToString()}'.");
 
-			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
+			Context.Note.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
 		}
 
 		/// <summary>
@@ -331,13 +353,15 @@ namespace notes.Core.Services
 			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Id, note);
 
+			var _query = _id;
+
 			var _update = Builders<Note>.Update;
 			var _set = _update
 				.Set(f => f.Trash, trash);
 
 			Log.LogDebug($"Mark note '{note.ToString()}' as trash/restore ({trash}).");
 
-			Context.Note.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
+			Context.Note.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
 		}
 
 		/// <summary>
@@ -351,9 +375,11 @@ namespace notes.Core.Services
 			var _id = _filter.Eq(f => f.Id, note);
 			var _user = _filter.Eq(f => f.Owner, user);
 
+			var _query = _id & _user;
+
 			Log.LogDebug($"Delete note '{note.ToString()}' permanently.");
 
-			Context.Note.DeleteOne(_id & _user);
+			Context.Note.DeleteOne(_query);
 		}
 
 		/// <summary>

@@ -70,9 +70,11 @@ namespace notes.Core.Services
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
 
+			var _query = _id;
+
 			Log.LogDebug($"Get user by id '{user.ToString()}'.");
 
-			return Context.User.Find(_id).SingleOrDefault();
+			return Context.User.Find(_query).SingleOrDefault();
 		}
 
 		/// <summary>
@@ -85,9 +87,11 @@ namespace notes.Core.Services
 			var _filter = Builders<User>.Filter;
 			var _username = _filter.Eq(f => f.Username, username);
 
+			var _query = _username;
+
 			Log.LogDebug($"Get user by name '{username}'.");
 
-			return Context.User.Find(_username).SingleOrDefault();
+			return Context.User.Find(_query).SingleOrDefault();
 		}
 
 		/// <summary>
@@ -102,9 +106,11 @@ namespace notes.Core.Services
 			var _filter = Builders<Token>.Filter;
 			var _nonce = _filter.Eq(f => f.Nonce, _hash);
 
+			var _query = _nonce;
+
 			Log.LogDebug($"Get user by token '{_hash}'.");
 
-			var _token = Context.Token.Find(_nonce).SingleOrDefault();
+			var _token = Context.Token.Find(_query).SingleOrDefault();
 			if (_token == null)
 				return null;
 
@@ -121,9 +127,11 @@ namespace notes.Core.Services
 			var _filter = Builders<User>.Filter;
 			var _username = _filter.Eq(f => f.Username, username);
 
+			var _query = _username;
+
 			Log.LogDebug($"Get user id for username '{username}'.");
 
-			return Context.User.Find(_username).Project(f => f.Id).SingleOrDefault();
+			return Context.User.Find(_query).Project(f => f.Id).SingleOrDefault();
 		}
 
 		/// <summary>
@@ -137,9 +145,11 @@ namespace notes.Core.Services
 			var _id = _filter.Eq(f => f.Id, user);
 			var _active = _filter.Eq(f => f.Enabled, true);
 
+			var _query = _id & _active;
+
 			Log.LogDebug($"Get user settings '{user.ToString()}'.");
 
-			return Context.User.Find(_id & _active).Project(f => f.Settings).SingleOrDefault();
+			return Context.User.Find(_query).Project(f => f.Settings).SingleOrDefault();
 		}
 
 		/// <summary>
@@ -202,6 +212,8 @@ namespace notes.Core.Services
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
 
+			var _query = _id;
+
 			var _update = Builders<User>.Update;
 			var _set = _update
 				.Set(f => f.Username, username)
@@ -219,7 +231,7 @@ namespace notes.Core.Services
 
 			try
 			{
-				Context.User.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
+				Context.User.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
 			}
 			catch (MongoWriteException ex) when (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
 			{
@@ -262,12 +274,14 @@ namespace notes.Core.Services
 			var _id = _filter.Eq(f => f.Id, user);
 			var _active = _filter.Eq(f => f.Enabled, true);
 
+			var _query = _id & _active;
+
 			var _update = Builders<User>.Update;
 			var _set = _update.Set(f => f.Password, PasswordHasher.HashPassword(password));
 
 			Log.LogInformation($"Update password for user '{GetById(user).Username}'.");
 
-			Context.User.UpdateOne(_id & _active, _set);
+			Context.User.UpdateOne(_query, _set);
 		}
 
 		/// <summary>
@@ -280,13 +294,15 @@ namespace notes.Core.Services
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
 
+			var _query = _id;
+
 			var _update = Builders<User>.Update;
 			var _set = _update
 				.Set(f => f.Settings.PageSize, pageSize);
 
 			Log.LogDebug($"Update settings for user '{user.ToString()}'.");
 
-			Context.User.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
+			Context.User.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
 		}
 
 		/// <summary>
@@ -301,13 +317,15 @@ namespace notes.Core.Services
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
 
+			var _query = _id;
+
 			var _update = Builders<User>.Update;
 			var _set = _update
 				.Set(f => f.DisplayName, displayName);
 
 			Log.LogDebug($"Update profile for user '{user.ToString()}'.");
 
-			Context.User.UpdateOne(_id, _set, new UpdateOptions { IsUpsert = true });
+			Context.User.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
 		}
 
 		/// <summary>
@@ -325,9 +343,11 @@ namespace notes.Core.Services
 			var _username = _filter.Eq(f => f.Username, username);
 			var _active = _filter.Eq(f => f.Enabled, true);
 
+			var _query = _username & _active;
+
 			Log.LogInformation($"Login user '{username}'.");
 
-			var _user = Context.User.Find(_username & _active).SingleOrDefault();
+			var _user = Context.User.Find(_query).SingleOrDefault();
 			if (_user != null && PasswordHasher.VerifyHashedPassword(_user.Password, password))
 			{
 				Log.LogInformation($"User '{username}' has been authenticated.");
@@ -378,9 +398,11 @@ namespace notes.Core.Services
 			var _filter = Builders<Token>.Filter;
 			var _nonce = _filter.Eq(f => f.Nonce, _hash);
 
+			var _query = _nonce;
+
 			Log.LogDebug($"Delete reset token '{_hash}'.");
 
-			Context.Token.DeleteOne(_nonce);
+			Context.Token.DeleteOne(_query);
 		}
 	}
 }
