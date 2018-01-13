@@ -1,5 +1,6 @@
-﻿using System.IO;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace notes
 {
@@ -7,14 +8,18 @@ namespace notes
 	{
 		public static void Main(string[] args)
 		{
-			var host = new WebHostBuilder()
-				.UseKestrel()
-				.UseContentRoot(Directory.GetCurrentDirectory())
-				.UseIISIntegration()
-				.UseStartup<Startup>()
-				.Build();
-
-			host.Run();
+			BuildWebHost(args).Run();
 		}
+
+		public static IWebHost BuildWebHost(string[] args) =>
+			WebHost.CreateDefaultBuilder(args)
+				.UseStartup<Startup>()
+				.ConfigureAppConfiguration((hostContext, config) =>
+				{
+					config.Sources.Clear();
+					config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+					config.AddEnvironmentVariables();
+				})
+				.Build();
 	}
 }
