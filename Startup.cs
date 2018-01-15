@@ -21,7 +21,7 @@ namespace notes
 	{
 		public IConfiguration Configuration { get; set; }
 
-		public Startup(IConfiguration configuration)
+		public Startup(IConfiguration configuration, IHostingEnvironment env)
 		{
 			Configuration = configuration;
 		}
@@ -63,7 +63,8 @@ namespace notes
 			});
 
 			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-				.AddCookie(options => {
+				.AddCookie(options =>
+				{
 					options.Cookie.Name = "notes";
 					options.LoginPath = new PathString("/login");
 					options.AccessDeniedPath = new PathString("/");
@@ -96,8 +97,6 @@ namespace notes
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
 		{
 			logger.AddNLog();
-
-			app.AddNLogWeb();
 
 			app.UseStatusCodePagesWithReExecute("/error/{0}");
 
