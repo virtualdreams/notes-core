@@ -39,7 +39,7 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="MongoDB.Driver" Version="2.5.0" />
     <PackageReference Include="AutoMapper" Version="6.2.2" />
-    <PackageReference Include="Markdig" Version="0.14.8" />
+    <PackageReference Include="Markdig" Version="0.14.9" />
     <PackageReference Include="MailKit" Version="2.0.1" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.5.0-rc2" />
   </ItemGroup>
