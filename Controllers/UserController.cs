@@ -64,7 +64,6 @@ namespace notes.Controllers
 					var _identity = new ClaimsIdentity(claims, "local");
 					var _principal = new ClaimsPrincipal(_identity);
 
-					//HttpContext.Authentication.SignInAsync("notes", _principal,
 					AuthenticationHttpContextExtensions.SignInAsync(HttpContext, _principal,
 						new AuthenticationProperties
 						{
@@ -186,7 +185,6 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Logout()
 		{
-			//HttpContext.Authentication.SignOutAsync("notes");
 			AuthenticationHttpContextExtensions.SignOutAsync(HttpContext);
 
 			return RedirectToAction("index", "home");

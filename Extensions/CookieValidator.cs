@@ -24,7 +24,6 @@ namespace notes.Extensions
 			if (_user == null || !_user.Enabled || !_user.Role.Equals(context.Principal.GetUserRole()))
 			{
 				context.RejectPrincipal();
-				//await context.HttpContext.Authentication.SignOutAsync("notes");
 				await AuthenticationHttpContextExtensions.SignOutAsync(context.HttpContext);
 			}
 		}
