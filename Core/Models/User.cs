@@ -38,6 +38,7 @@ namespace notes.Core.Models
 		public bool Enabled { get; set; }
 
 		[BsonElement("settings")]
+		[BsonIgnoreIfNull]
 		public UserSettings Settings { get; set; }
 	}
 
