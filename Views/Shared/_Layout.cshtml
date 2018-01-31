@@ -71,7 +71,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-fw fa-user"></i> @await Component.InvokeAsync("DisplayName") <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								@if((await AuthorizationService.AuthorizeAsync(User, "AdministratorOnly")).Succeeded) {
-								<li><a href="@Url.Action("index", "account", new { area = "admin" })"><i class="fa fa-fw fa-users"></i> Accounts</a></li>
+								<li><a href="@Url.Action("index", "account", new { area = "admin" })"><i class="fa fa-fw fa-cogs"></i> Admin Panel</a></li>
 								<li role="separator" class="divider"></li>
 								}
 								<li><a href="@Url.Action("settings", "user", new { area = String.Empty })"><i class="fa fa-fw fa-sliders"></i> Settings</a></li>
