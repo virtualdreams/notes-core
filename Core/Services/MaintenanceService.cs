@@ -1,7 +1,8 @@
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using MongoDB.Driver;
-using System;
 using notes.Core.Models;
+using System;
 
 namespace notes.Core.Services
 {
@@ -116,7 +117,16 @@ namespace notes.Core.Services
 				.Ascending(f => f.Tags);
 
 			Context.Note.Indexes.DropAll();
-			Context.Note.Indexes.CreateOne(_text, new CreateIndexOptions { });
+			Context.Note.Indexes.CreateOne(_text, new CreateIndexOptions
+			{
+				Weights = new BsonDocument
+				{
+					{ "title", 1 },
+					{ "content", 1 },
+					{ "notebook", 1 },
+					{ "tags", 1 }
+				}
+			});
 			Context.Note.Indexes.CreateOne(_owner_trash, new CreateIndexOptions { });
 			Context.Note.Indexes.CreateOne(_id_owner_trash, new CreateIndexOptions { });
 			Context.Note.Indexes.CreateOne(_owner_trash_notebook, new CreateIndexOptions { });
