@@ -1,14 +1,14 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
-using System.Collections.Generic;
-using System.Security.Claims;
 using notes.Core.Services;
 using notes.Helper;
 using notes.Models;
+using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace notes.Controllers
 {
@@ -64,7 +64,7 @@ namespace notes.Controllers
 					var _identity = new ClaimsIdentity(claims, "local");
 					var _principal = new ClaimsPrincipal(_identity);
 
-					HttpContext.Authentication.SignInAsync("notes", _principal,
+					AuthenticationHttpContextExtensions.SignInAsync(HttpContext, _principal,
 						new AuthenticationProperties
 						{
 							IsPersistent = model.Remember,
@@ -185,7 +185,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Logout()
 		{
-			HttpContext.Authentication.SignOutAsync("notes");
+			AuthenticationHttpContextExtensions.SignOutAsync(HttpContext);
 
 			return RedirectToAction("index", "home");
 		}

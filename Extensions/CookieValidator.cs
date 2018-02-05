@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using notes.Core.Services;
 using notes.Helper;
+using Microsoft.AspNetCore.Authentication;
 
 namespace notes.Extensions
 {
@@ -23,7 +24,7 @@ namespace notes.Extensions
 			if (_user == null || !_user.Enabled || !_user.Role.Equals(context.Principal.GetUserRole()))
 			{
 				context.RejectPrincipal();
-				await context.HttpContext.Authentication.SignOutAsync("notes");
+				await AuthenticationHttpContextExtensions.SignOutAsync(context.HttpContext);
 			}
 		}
 	}

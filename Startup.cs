@@ -7,10 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Mvc.RenderViewToString;
 using NLog.Extensions.Logging;
-using NLog.Web;
-using System.IO;
 using System;
+using System.IO;
 using notes.Core.Services;
 using notes.Extensions;
 using notes.ModelBinders;
@@ -19,19 +19,11 @@ namespace notes
 {
 	public class Startup
 	{
-		public IConfigurationRoot Configuration { get; set; }
+		public IConfiguration Configuration { get; set; }
 
-		public Startup(IHostingEnvironment env)
+		public Startup(IConfiguration configuration, IHostingEnvironment env)
 		{
-			// only needed if the file is somewhere else or has a different name.
-			//env.ConfigureNLog("NLog.config");
-
-			var builder = new ConfigurationBuilder()
-				.SetBasePath(env.ContentRootPath)
-				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-				.AddEnvironmentVariables();
-
-			Configuration = builder.Build();
+			Configuration = configuration;
 		}
 
 		public void ConfigureServices(IServiceCollection services)
@@ -65,10 +57,22 @@ namespace notes
 			services.AddDistributedMemoryCache();
 			services.AddSession(options =>
 			{
-				options.CookieName = "notes_session";
+				options.Cookie.Name = "notes_session";
 				options.IdleTimeout = TimeSpan.FromMinutes(30);
-				options.CookieHttpOnly = true;
+				options.Cookie.HttpOnly = true;
 			});
+
+			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+				.AddCookie(options =>
+				{
+					options.Cookie.Name = "notes";
+					options.LoginPath = new PathString("/login");
+					options.AccessDeniedPath = new PathString("/");
+					options.Events = new CookieAuthenticationEvents
+					{
+						OnValidatePrincipal = CookieValidator.ValidateAsync
+					};
+				});
 
 			// authorization policies
 			services.AddAuthorization(options =>
@@ -87,14 +91,12 @@ namespace notes
 			services.AddTransient<UserService>();
 			services.AddTransient<MailService>();
 			services.AddTransient<MaintenanceService>();
-			services.AddScoped<IViewRenderService, ViewRenderService>();
+			services.AddScoped<RazorViewToStringRenderer>();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
 		{
 			logger.AddNLog();
-
-			app.AddNLogWeb();
 
 			app.UseStatusCodePagesWithReExecute("/error/{0}");
 
@@ -109,20 +111,7 @@ namespace notes
 
 			app.UseStaticFiles();
 
-			app.UseCookieAuthentication(
-				new CookieAuthenticationOptions
-				{
-					AuthenticationScheme = "notes",
-					CookieName = "notes",
-					LoginPath = new PathString("/login"),
-					AccessDeniedPath = new PathString("/"),
-					AutomaticAuthenticate = true,
-					AutomaticChallenge = true,
-					Events = new CookieAuthenticationEvents
-					{
-						OnValidatePrincipal = CookieValidator.ValidateAsync
-					}
-				});
+			app.UseAuthentication();
 
 			app.UseSession();
 
