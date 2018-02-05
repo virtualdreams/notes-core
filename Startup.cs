@@ -7,10 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Mvc.RenderViewToString;
 using NLog.Extensions.Logging;
-using NLog.Web;
-using System.IO;
 using System;
+using System.IO;
 using notes.Core.Services;
 using notes.Extensions;
 using notes.ModelBinders;
@@ -91,7 +91,7 @@ namespace notes
 			services.AddTransient<UserService>();
 			services.AddTransient<MailService>();
 			services.AddTransient<MaintenanceService>();
-			services.AddScoped<IViewRenderService, ViewRenderService>();
+			services.AddScoped<RazorViewToStringRenderer>();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)

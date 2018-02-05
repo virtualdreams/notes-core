@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
+using Mvc.RenderViewToString;
 using System.Collections.Generic;
 using System.Linq;
 using notes.Core.Services;
@@ -19,11 +20,11 @@ namespace notes.Controllers
 		private readonly Settings Options;
 		private readonly UserService UserService;
 		private readonly NoteService NoteService;
-		private readonly IViewRenderService ViewRenderService;
+		private readonly RazorViewToStringRenderer ViewRenderService;
 
 		private int PageSize => UserSettings?.PageSize ?? Options.PageSize;
 
-		public NoteController(IMapper mapper, Settings settings, UserService user, NoteService note, IViewRenderService render)
+		public NoteController(IMapper mapper, Settings settings, UserService user, NoteService note, RazorViewToStringRenderer render)
 			: base(user)
 		{
 			Mapper = mapper;
@@ -170,7 +171,7 @@ namespace notes.Controllers
 					}
 				};
 
-				var _content = ViewRenderService.RenderToStringAsync("Shared/_Preview", view).Result;
+				var _content = ViewRenderService.RenderViewToStringAsync("/Views/Shared/_Preview.cshtml", view).Result;
 
 				return Json(new { Success = true, Content = _content });
 			}
