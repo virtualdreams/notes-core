@@ -22,7 +22,7 @@ namespace notes.ViewComponents
 
 		public IViewComponentResult Invoke()
 		{
-			var _notebooks = NoteService.GetMostlyUsedNotebooks(UserId);
+			var _notebooks = NoteService.GetMostUsedNotebooks(UserId);
 
 			var notebooks = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_notebooks);
 

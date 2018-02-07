@@ -29,7 +29,11 @@ namespace notes.Core.Services
 		/// <returns>A list of users.</returns>
 		public IEnumerable<User> GetUsers()
 		{
-			return Context.User.Find(_ => true).ToEnumerable().OrderBy(o => o.Role).ThenBy(o => o.Username);
+			Log.LogInformation("Get all users.");
+
+			var _result = Context.User.Find(_ => true).ToEnumerable().OrderBy(o => o.Role).ThenBy(o => o.Username);
+
+			return _result;
 		}
 
 		/// <summary>
@@ -38,7 +42,11 @@ namespace notes.Core.Services
 		/// <returns>True if any user exists.</returns>
 		public bool HasUsers()
 		{
-			return Context.User.Find(_ => true).Count() != 0;
+			var _result = Context.User.Find(_ => true).Count() != 0;
+
+			Log.LogDebug($"Test if database contains a user (Value: {_result}).");
+
+			return _result;
 		}
 
 		/// <summary>
@@ -47,7 +55,11 @@ namespace notes.Core.Services
 		/// <returns>Count if active adminsitrators</returns>
 		public long GetAdminCount()
 		{
-			return Context.User.Find(f => f.Role.Equals("Administrator") && f.Enabled == true).Count();
+			var _result = Context.User.Find(f => f.Role.Equals("Administrator") && f.Enabled == true).Count();
+
+			Log.LogDebug($"Get count of admins in database (Value: {_result}).");
+
+			return _result;
 		}
 
 		/// <summary>
@@ -57,7 +69,11 @@ namespace notes.Core.Services
 		/// <returns>True if the user is an administrator.</returns>
 		public bool IsAdmin(ObjectId user)
 		{
-			return Context.User.Find(f => f.Id == user && f.Role.Equals("Administrator")).Count() == 1;
+			var _result = Context.User.Find(f => f.Id == user && f.Role.Equals("Administrator")).Count() == 1;
+
+			Log.LogDebug($"Test if user {user} is admin (Value: {_result}).");
+
+			return _result;
 		}
 
 		/// <summary>
@@ -72,9 +88,11 @@ namespace notes.Core.Services
 
 			var _query = _id;
 
-			Log.LogDebug($"Get user by id '{user.ToString()}'.");
+			Log.LogDebug($"Get user by id {user}.");
 
-			return Context.User.Find(_query).SingleOrDefault();
+			var _result = Context.User.Find(_query).SingleOrDefault();
+
+			return _result;
 		}
 
 		/// <summary>
@@ -91,7 +109,9 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Get user by name '{username}'.");
 
-			return Context.User.Find(_query).SingleOrDefault();
+			var _result = Context.User.Find(_query).SingleOrDefault();
+
+			return _result;
 		}
 
 		/// <summary>
@@ -108,7 +128,7 @@ namespace notes.Core.Services
 
 			var _query = _nonce;
 
-			Log.LogDebug($"Get user by token '{_hash}'.");
+			Log.LogInformation($"Get user by token '{_hash}'.");
 
 			var _token = Context.Token.Find(_query).SingleOrDefault();
 			if (_token == null)
@@ -129,9 +149,11 @@ namespace notes.Core.Services
 
 			var _query = _username;
 
-			Log.LogDebug($"Get user id for username '{username}'.");
+			Log.LogDebug($"Get user id by username '{username}'.");
 
-			return Context.User.Find(_query).Project(f => f.Id).SingleOrDefault();
+			var _result = Context.User.Find(_query).Project(f => f.Id).SingleOrDefault();
+
+			return _result;
 		}
 
 		/// <summary>
@@ -147,9 +169,11 @@ namespace notes.Core.Services
 
 			var _query = _id & _active;
 
-			Log.LogDebug($"Get user settings '{user.ToString()}'.");
+			Log.LogDebug($"Get user settings {user}.");
 
-			return Context.User.Find(_query).Project(f => f.Settings).SingleOrDefault();
+			var _result = Context.User.Find(_query).Project(f => f.Settings).SingleOrDefault();
+
+			return _result;
 		}
 
 		/// <summary>
@@ -184,7 +208,7 @@ namespace notes.Core.Services
 				throw new NotesDuplicateUsernameException();
 			}
 
-			Log.LogInformation($"Create new user '{username}' with id '{_user.Id.ToString()}'.");
+			Log.LogInformation($"Create new user '{username}' with id {_user.Id}.");
 
 			return _user.Id;
 		}
@@ -205,7 +229,7 @@ namespace notes.Core.Services
 
 			if (IsAdmin(user) && GetAdminCount() < 2 && (!active || !role.Equals("Administrator")))
 			{
-				Log.LogWarning($"The user '{user.ToString()}' is the last available administrator. This account can't changed.");
+				Log.LogWarning($"The user {user} is the last available administrator. This account can't changed.");
 				throw new NotesModifyAdminException();
 			}
 
@@ -227,7 +251,7 @@ namespace notes.Core.Services
 
 			//Log.LogDebug(_set.Render(Context.User.DocumentSerializer, Context.User.Settings.SerializerRegistry).ToString());
 
-			Log.LogInformation($"Update user data for user '{user.ToString()}'.");
+			Log.LogInformation($"Update user data for user {user}.");
 
 			try
 			{
@@ -248,11 +272,11 @@ namespace notes.Core.Services
 		{
 			if (IsAdmin(user) && GetAdminCount() < 2)
 			{
-				Log.LogWarning($"The user '{user.ToString()}' is the last available administrator. This account can't deleted.");
+				Log.LogWarning($"The user {user} is the last available administrator. This account can't deleted.");
 				throw new NotesDeleteAdminException();
 			}
 
-			Log.LogInformation($"Delete user '{GetById(user).Username}' permanently.");
+			Log.LogInformation($"Delete user '{GetById(user).Username}' ({user}) permanently.");
 
 			Context.User.DeleteOne(f => f.Id == user);
 			Context.Note.DeleteMany(f => f.Owner == user);
@@ -300,7 +324,7 @@ namespace notes.Core.Services
 			var _set = _update
 				.Set(f => f.Settings.PageSize, pageSize);
 
-			Log.LogDebug($"Update settings for user '{user.ToString()}'.");
+			Log.LogInformation($"Update settings for user {user}.");
 
 			Context.User.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
 		}
@@ -323,7 +347,7 @@ namespace notes.Core.Services
 			var _set = _update
 				.Set(f => f.DisplayName, displayName);
 
-			Log.LogDebug($"Update profile for user '{user.ToString()}'.");
+			Log.LogInformation($"Update profile for user {user}.");
 
 			Context.User.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
 		}
@@ -345,7 +369,7 @@ namespace notes.Core.Services
 
 			var _query = _username & _active;
 
-			Log.LogInformation($"Login user '{username}'.");
+			Log.LogInformation($"Try to login user '{username}'.");
 
 			var _user = Context.User.Find(_query).SingleOrDefault();
 			if (_user != null && PasswordHasher.VerifyHashedPassword(_user.Password, password))
@@ -355,6 +379,7 @@ namespace notes.Core.Services
 			}
 
 			Log.LogWarning($"User '{username}' failed to log in.");
+
 			return null;
 		}
 
@@ -400,7 +425,7 @@ namespace notes.Core.Services
 
 			var _query = _nonce;
 
-			Log.LogDebug($"Delete reset token '{_hash}'.");
+			Log.LogInformation($"Delete reset token '{_hash}'.");
 
 			Context.Token.DeleteOne(_query);
 		}

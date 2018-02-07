@@ -22,7 +22,7 @@ namespace notes.ViewComponents
 
 		public IViewComponentResult Invoke()
 		{
-			var _tags = NoteService.GetMostlyUsedTags(UserId);
+			var _tags = NoteService.GetMostUsedTags(UserId);
 
 			var tags = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_tags);
 

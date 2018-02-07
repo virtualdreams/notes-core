@@ -22,6 +22,8 @@ namespace notes.Core.Services
 		/// </summary>
 		public void WipeAll()
 		{
+			Log.LogInformation("Wipe all data.");
+
 			WipeUsers();
 			WipeNotes();
 			WipeTokens();
@@ -32,6 +34,8 @@ namespace notes.Core.Services
 		/// </summary>
 		public void WipeNotes()
 		{
+			Log.LogInformation("Wipe notes.");
+
 			Context.Note.DeleteMany(_ => true);
 		}
 
@@ -40,6 +44,8 @@ namespace notes.Core.Services
 		/// </summary>
 		public void WipeUsers()
 		{
+			Log.LogInformation("Wipe users.");
+
 			Context.User.DeleteMany(_ => true);
 		}
 
@@ -48,6 +54,8 @@ namespace notes.Core.Services
 		/// </summary>
 		public void WipeTokens()
 		{
+			Log.LogInformation("Wipe tokens");
+
 			Context.Token.DeleteMany(_ => true);
 		}
 
@@ -56,6 +64,8 @@ namespace notes.Core.Services
 		/// </summary>
 		public void CreateIndexes()
 		{
+			Log.LogInformation("Create all indexes.");
+
 			CreateUserIndexes();
 			CreateNoteIndexes();
 			CreateTokenIndexes();
@@ -68,6 +78,8 @@ namespace notes.Core.Services
 		{
 			var _index = Builders<User>.IndexKeys;
 			var _name = _index.Ascending(f => f.Username);
+
+			Log.LogInformation("Create user index.");
 
 			Context.User.Indexes.DropAll();
 			Context.User.Indexes.CreateOne(_name, new CreateIndexOptions { Unique = true });
@@ -116,6 +128,8 @@ namespace notes.Core.Services
 				.Ascending(f => f.Trash)
 				.Ascending(f => f.Tags);
 
+			Log.LogInformation("Create note index.");
+
 			Context.Note.Indexes.DropAll();
 			Context.Note.Indexes.CreateOne(_text, new CreateIndexOptions
 			{
@@ -142,6 +156,8 @@ namespace notes.Core.Services
 		{
 			var _index = Builders<Token>.IndexKeys;
 			var _token = _index.Ascending(f => f.Created);
+
+			Log.LogInformation("Create token index.");
 
 			Context.Token.Indexes.DropAll();
 			Context.Token.Indexes.CreateOne(_token, new CreateIndexOptions { ExpireAfter = new TimeSpan(0, 60, 0) });

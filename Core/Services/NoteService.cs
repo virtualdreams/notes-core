@@ -43,7 +43,7 @@ namespace notes.Core.Services
 			if (next != ObjectId.Empty)
 				_query &= _next;
 
-			Log.LogDebug($"Request notes.");
+			Log.LogInformation($"Get all notes for user {user}.");
 
 			var _result = Context.Note
 				.Find(_query)
@@ -85,7 +85,7 @@ namespace notes.Core.Services
 			if (next != ObjectId.Empty)
 				_query &= _next;
 
-			Log.LogDebug($"Request notes by notebook '{notebook}'.");
+			Log.LogInformation($"Get notes by notebook '{notebook}' for user {user}.");
 
 			var _result = Context.Note
 				.Find(_query)
@@ -127,7 +127,7 @@ namespace notes.Core.Services
 			if (next != ObjectId.Empty)
 				_query &= _next;
 
-			Log.LogDebug($"Request notes by tag '{tag}'.");
+			Log.LogInformation($"Get notes by tag '{tag}' for user {user}.");
 
 			var _result = Context.Note
 				.Find(_query)
@@ -152,7 +152,7 @@ namespace notes.Core.Services
 
 			var _query = _id & _user;
 
-			Log.LogDebug($"Get note by id '{note.ToString()}'.");
+			Log.LogInformation($"Get note by id {note} for user {user}.");
 
 			var _result = Context.Note
 				.Find(_query)
@@ -167,7 +167,7 @@ namespace notes.Core.Services
 		/// <param name="user">The users notebooks.</param>
 		/// <param name="limit">Limit result to n items.</param>
 		/// <returns>A list of notebook.</returns>
-		public IEnumerable<DistinctAndCountResult> GetMostlyUsedNotebooks(ObjectId user, int limit = 10)
+		public IEnumerable<DistinctAndCountResult> GetMostUsedNotebooks(ObjectId user, int limit = 10)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _size = _filter.Size(f => f.Notebook, 0);
@@ -176,6 +176,8 @@ namespace notes.Core.Services
 			var _active = _filter.Eq(f => f.Trash, false);
 
 			var _query = _user & _active & _not;
+
+			Log.LogDebug($"Get most used notebook for user {user}.");
 
 			var _result = Context.Note
 				.Aggregate()
@@ -205,6 +207,8 @@ namespace notes.Core.Services
 
 			var _query = _user & _active & _not;
 
+			Log.LogInformation($"Get notebooks for user {user}.");
+
 			var _result = Context.Note
 				.Aggregate()
 				.Match(_query)
@@ -223,7 +227,7 @@ namespace notes.Core.Services
 		/// <param name="user">The users tags.</param>
 		/// <param name="limit">Limit result to n items.</param>
 		/// <returns>A list of tags.</returns>
-		public IEnumerable<DistinctAndCountResult> GetMostlyUsedTags(ObjectId user, int limit = 10)
+		public IEnumerable<DistinctAndCountResult> GetMostUsedTags(ObjectId user, int limit = 10)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _size = _filter.Size(f => f.Tags, 0);
@@ -232,6 +236,8 @@ namespace notes.Core.Services
 			var _active = _filter.Eq(f => f.Trash, false);
 
 			var _query = _user & _active & _not;
+
+			Log.LogDebug($"Get most used tags for user {user}.");
 
 			var _result = Context.Note
 				.Aggregate()
@@ -261,6 +267,8 @@ namespace notes.Core.Services
 			var _active = _filter.Eq(f => f.Trash, false);
 
 			var _query = _user & _active & _not;
+
+			Log.LogInformation($"Get tags for user {user}.");
 
 			var _result = Context.Note
 				.Aggregate()
@@ -303,7 +311,7 @@ namespace notes.Core.Services
 
 			Context.Note.InsertOne(_note);
 
-			Log.LogDebug($"Create new note with id '{_note.Id.ToString()}'.");
+			Log.LogInformation($"Create new note with id {_note.Id} for user {user}.");
 
 			return _note.Id;
 		}
@@ -338,7 +346,7 @@ namespace notes.Core.Services
 						.Inc(f => f.Version, 1)
 						.Set(f => f.Modified, DateTime.UtcNow);
 
-			Log.LogInformation($"Update note '{note.ToString()}'.");
+			Log.LogInformation($"Update note {note} for user {user}.");
 
 			Context.Note.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
 		}
@@ -359,7 +367,7 @@ namespace notes.Core.Services
 			var _set = _update
 				.Set(f => f.Trash, trash);
 
-			Log.LogDebug($"Mark note '{note.ToString()}' as trash/restore ({trash}).");
+			Log.LogInformation($"Mark note {note} as trash (Value: {trash}).");
 
 			Context.Note.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
 		}
@@ -377,7 +385,7 @@ namespace notes.Core.Services
 
 			var _query = _id & _user;
 
-			Log.LogDebug($"Delete note '{note.ToString()}' permanently.");
+			Log.LogInformation($"Delete note {note} for user {user} permanently.");
 
 			Context.Note.DeleteOne(_query);
 		}
@@ -413,7 +421,7 @@ namespace notes.Core.Services
 
 			var _query = _user & _text & _active;
 
-			Log.LogDebug($"Search for notes with term '{term}'.");
+			Log.LogDebug($"Search notes with term '{term}' for user {user}.");
 
 			var _result = Context.Note.Find(_query).Project<Note>(_score).Sort(_order).Limit(100);
 			if (next != ObjectId.Empty)
@@ -439,6 +447,8 @@ namespace notes.Core.Services
 			if (String.IsNullOrEmpty(term) || term.Length < 3)
 				return Enumerable.Empty<string>();
 
+			Log.LogDebug($"Get tag suggestions with term '{term}' for user {user}.");
+
 			return GetTags(user).Select(s => s.Id).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
 		}
 
@@ -454,6 +464,8 @@ namespace notes.Core.Services
 
 			if (String.IsNullOrEmpty(term) || term.Length < 3)
 				return Enumerable.Empty<string>();
+
+			Log.LogDebug($"Get notebook suggestions with term '{term}' for user {user}.");
 
 			return GetNotebooks(user).Select(s => s.Id).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
 		}
