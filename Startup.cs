@@ -96,8 +96,6 @@ namespace notes
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
 		{
-			logger.AddNLog();
-
 			app.UseStatusCodePagesWithReExecute("/error/{0}");
 
 			if (env.IsDevelopment())
