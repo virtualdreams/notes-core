@@ -25,6 +25,7 @@ namespace notes.TagHelpers
 				.UseAutoLinks()
 				.UseMediaLinks()
 				.UseBootstrap()
+				.UsePipeTables()
 				.Build();
 			var _markdown = Markdown.ToHtml(_content, _pipeline);
 
