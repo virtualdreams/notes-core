@@ -42,7 +42,9 @@
 							<ul class="dropdown-menu">
 								<li><a href="@Url.RouteUrl("notebooks")">All notebooks</a></li>
 								<li role="separator" class="divider"></li>
-							@await Component.InvokeAsync("Notebooks")
+								<li><a href="@Url.RouteUrl("notebook", new { id = String.Empty} )">Without notebook</a></li>
+								<li role="separator" class="divider"></li>
+								@await Component.InvokeAsync("Notebooks")
 							</ul>
 						</li>
 						<li class="dropdown">
@@ -50,7 +52,9 @@
 							<ul class="dropdown-menu">
 								<li><a href="@Url.RouteUrl("tags")">All tags</a></li>
 								<li role="separator" class="divider"></li>
-							@await Component.InvokeAsync("Tags")
+								<li><a href="@Url.RouteUrl("tag", new { id = String.Empty} )">Without tags</a></li>
+								<li role="separator" class="divider"></li>
+								@await Component.InvokeAsync("Tags")
 							</ul>
 						</li>
 						<li><a href="@Url.RouteUrl("trash")"><i class="fa fa-fw fa-trash"></i> Trash</a></li>

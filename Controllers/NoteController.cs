@@ -202,7 +202,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Notebook(string id, ObjectId after)
 		{
-			var _notes = NoteService.GetByNotebook(UserId, id ?? string.Empty, after, PageSize);
+			var _notes = NoteService.GetByNotebook(UserId, id, after, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
@@ -220,7 +220,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Tag(string id, ObjectId after)
 		{
-			var _notes = NoteService.GetByTag(UserId, id ?? string.Empty, after, PageSize);
+			var _notes = NoteService.GetByTag(UserId, id, after, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);

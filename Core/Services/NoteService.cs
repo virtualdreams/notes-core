@@ -66,11 +66,6 @@ namespace notes.Core.Services
 		{
 			notebook = notebook?.Trim();
 
-			if (String.IsNullOrEmpty(notebook))
-			{
-				return Enumerable.Empty<Note>();
-			}
-
 			var _filter = Builders<Note>.Filter;
 			var _notebook = _filter.Eq(f => f.Notebook, notebook);
 			var _user = _filter.Eq(f => f.Owner, user);
@@ -107,11 +102,6 @@ namespace notes.Core.Services
 		public IEnumerable<Note> GetByTag(ObjectId user, string tag, ObjectId next, int limit)
 		{
 			tag = tag?.Trim();
-
-			if (String.IsNullOrEmpty(tag))
-			{
-				return Enumerable.Empty<Note>();
-			}
 
 			var _filter = Builders<Note>.Filter;
 			var _tag = _filter.AnyEq("Tags", tag);
