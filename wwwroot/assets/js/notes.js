@@ -1,5 +1,5 @@
 var notes = notes || {};
-notes = (function($){
+notes = (function ($) {
 	function split(val) {
 		return val.split(' ');
 	}
@@ -7,12 +7,12 @@ notes = (function($){
 	function extractLast(term) {
 		return split(term).pop();
 	}
-	
+
 	$("#notebook").autocomplete({
 		source: '/search/notebook',
 		minLength: 3,
 	});
-	
+
 	$("#tags").autocomplete({
 		source: function (request, response) {
 			$.getJSON('/search/tags', {
@@ -40,13 +40,13 @@ notes = (function($){
 
 	$('[data-toggle=popover]').popover();
 
-	$('[data-href]').click(function() {
+	$('[data-href]').click(function () {
 		var href = $(this).data('href');
 		location.href = href;
 	});
-	
+
 	$('#selectAll').click(function () {
-		$('input[name=id][type=checkbox]').prop('checked', function() {
+		$('input[name=id][type=checkbox]').prop('checked', function () {
 			if ($('#selectAll').is(':checked')) {
 				return true;
 			}
@@ -54,100 +54,96 @@ notes = (function($){
 		});
 	});
 
-	$('#trashSubmit').click(function() {
+	$('#trashSubmit').click(function () {
 		var id = $('#trash').data('id');
 		$.ajax({
 			type: "POST",
 			url: '/note/remove/' + id
-		}).done(function() {
+		}).done(function () {
 			location.href = '/';
-		}).fail(function() {
+		}).fail(function () {
 			$('#error').html('<div class="alert alert-danger">Failed to delete or restore note!</div>');
 		});
 	});
 
-	$('#delAccountSubmit').click(function() {
+	$('#delAccountSubmit').click(function () {
 		var id = $('#delAccount').data('id');
 		$.ajax({
 			type: "POST",
 			url: '/admin/account/delete/' + id
-		}).done(function(data) {
-			if(data != null && data.success === false)
-			{
+		}).done(function (data) {
+			if (data != null && data.success === false) {
 				$('#error').html('<div class="alert alert-danger">' + data.error + '</div>');
 			}
-			else
-			{
+			else {
 				location.href = '/admin/account/';
 			}
-		}).fail(function() {
+		}).fail(function () {
 			$('#error').html('<div class="alert alert-danger">Failed to delete account!</div>');
 		});
 	});
 
-	function getFormData($form){
+	function getFormData($form) {
 		var unindexed_array = $form.serializeArray();
 		var indexed_array = {};
 
-		$.map(unindexed_array, function(n, i){
+		$.map(unindexed_array, function (n, i) {
 			indexed_array[n['name']] = n['value'];
 		});
 
 		return indexed_array;
 	}
 
-	$('#saveContinue').click(function() {
-		if($('#note-form').valid()) {
+	$('#saveContinue').click(function () {
+		if ($('#note-form').valid()) {
 			var data = getFormData($('#note-form'));
 			$.ajax({
 				type: "POST",
 				url: '/note/edit/',
 				dataType: 'json',
 				data: data
-			}).done(function(data) {
-				if(data != null && data.success) {
+			}).done(function (data) {
+				if (data != null && data.success) {
 					$('#id').val(data.id);
-					
-					$('#result').html('<div class="alert alert-success"><button type="button" class="close">×</button>Note has been successfully saved.</div>');
-					window.setTimeout(function() {
-						$(".alert").fadeTo(500, 0).slideUp(500, function(){
-                    		$(this).remove(); 
-                		});
-            		}, 5000);
 
-          			$('.alert .close').on("click", function(e){
-                		$(this).parent().fadeTo(500, 0).slideUp(500);
-             		});
+					$('#result').html('<div class="alert alert-success"><button type="button" class="close">×</button>Note has been successfully saved.</div>');
+					window.setTimeout(function () {
+						$(".alert").fadeTo(500, 0).slideUp(500, function () {
+							$(this).remove();
+						});
+					}, 5000);
+
+					$('.alert .close').on("click", function (e) {
+						$(this).parent().fadeTo(500, 0).slideUp(500);
+					});
 
 				} else {
 					error();
 				}
-			}).fail(function() {
+			}).fail(function () {
 				error();
 			});
 		}
 
-		var error = function() {
+		var error = function () {
 			$('#result').html('<div class="alert alert-danger"><button type="button" class="close">×</button>Failed to save note!</div>');
 
-			$('.alert .close').on("click", function(e){
+			$('.alert .close').on("click", function (e) {
 				$(this).parent().fadeTo(500, 0).slideUp(500);
 			});
 		}
 	});
 
-	$('#preview').click(function() {
-		if($('#editor-source').is(':visible'))
-		{
+	$('#preview').click(function () {
+		if ($('#editor-source').is(':visible')) {
 			var data = getFormData($('#note-form'));
 			$.ajax({
 				type: "POST",
 				url: '/note/preview/',
 				dataType: 'json',
 				data: data
-			}).done(function(d) {
-				if(data != null)
-				{
+			}).done(function (d) {
+				if (data != null) {
 					$('#editor-preview').html(d.content);
 					$('#preview').html('<i class="fa fa-pencil"></i> Edit');
 
@@ -156,20 +152,19 @@ notes = (function($){
 				} else {
 					error();
 				}
-			}).fail(function() {
+			}).fail(function () {
 				error();
 			});
 
-			var error = function() {
+			var error = function () {
 				$('#result').html('<div class="alert alert-danger"><button type="button" class="close">×</button>Failed to generate preview!</div>');
 
-				$('.alert .close').on("click", function(e){
+				$('.alert .close').on("click", function (e) {
 					$(this).parent().fadeTo(500, 0).slideUp(500);
 				});
 			}
 		}
-		else
-		{
+		else {
 			$('#preview').html('<i class="fa fa-eye"></i> Preview');
 
 			$('#editor-source').toggle();
@@ -177,25 +172,25 @@ notes = (function($){
 		}
 	});
 
-	$('#help').click(function() {
+	$('#help').click(function () {
 		$('#editor-help').slideToggle();
 	});
 
 	$.validator.setDefaults({
-		highlight: function(element) {
+		highlight: function (element) {
 			$(element).closest('.form-group').addClass('has-error');
 		},
-		unhighlight: function(element) {
+		unhighlight: function (element) {
 			$(element).closest('.form-group').removeClass('has-error');
 		}
 	});
 
 	$.validator.addMethod(
-	    "regex",
-	    function (value, element, regexp) {
-	    	return this.optional(element) || value.match(regexp);
-	    },
-	    "This field has the wrong format."
+		"regex",
+		function (value, element, regexp) {
+			return this.optional(element) || value.match(regexp);
+		},
+		"This field has the wrong format."
 	);
 
 	$.validator.addMethod(
