@@ -16,12 +16,12 @@
 		<div class="page-header">
 			<div class="btn-toolbar pull-right">
 				<div class="btn-group">
-					<button type="button" class="btn btn-default" data-href="@Url.Action("edit", "note", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })"><i class="fa fa-pencil"></i> Edit</button>
+					<button type="button" class="btn btn-default" data-href="@Url.Action("edit", "note", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })"><i class="fa fa-fw fa-pencil"></i> Edit</button>
 					<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 	    				<span class="caret"></span>
        				</button>
        				<ul class="dropdown-menu pull-right">
-						<li><a href="@Url.RouteUrl("print", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })" target="_blank"><i class="fa fa-print"></i> Print</a></li>
+						<li><a href="@Url.RouteUrl("print", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })" target="_blank"><i class="fa fa-fw fa-print"></i> Print</a></li>
 						<li class="divider"></li>
 						<li><a href="#" data-toggle="modal" data-target="#trash">
 							@if(Model.Note.Trash) {
@@ -50,10 +50,10 @@
 <div class="row tagline">
 	<div class="col-lg-12">
 		@if(!String.IsNullOrEmpty(Model.Note.Notebook)) {
-			<a class="cloud" href="@Url.RouteUrl("notebook", new { id = @Model.Note.Notebook })"><i class="fa fa-book"></i> @Model.Note.Notebook</a>
+			<a class="cloud" href="@Url.RouteUrl("notebook", new { id = @Model.Note.Notebook })"><i class="fa fa-fw fa-book"></i> @Model.Note.Notebook</a>
 		}
 		@foreach(var tag in Model.Note.Tags) {
-			<a class="cloud" href="@Url.RouteUrl("tag", new { id = tag })"><i class="fa fa-tag"></i> @tag</a>
+			<a class="cloud" href="@Url.RouteUrl("tag", new { id = tag })"><i class="fa fa-fw fa-tag"></i> @tag</a>
 		}
 	</div>
 </div>
