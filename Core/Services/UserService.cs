@@ -313,7 +313,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The user.</param>
 		/// <param name="pageSize">The new page size.</param>
-		public void UpdateSettings(ObjectId user, int pageSize)
+		public void UpdateSettings(ObjectId user, int pageSize, string frontpage)
 		{
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
@@ -322,7 +322,8 @@ namespace notes.Core.Services
 
 			var _update = Builders<User>.Update;
 			var _set = _update
-				.Set(f => f.Settings.PageSize, pageSize);
+				.Set(f => f.Settings.PageSize, pageSize)
+				.Set(f => f.Settings.Frontpage, frontpage);
 
 			Log.LogInformation($"Update settings for user {user}.");
 

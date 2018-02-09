@@ -1,3 +1,4 @@
+using MongoDB.Bson;
 using System.ComponentModel.DataAnnotations;
 
 namespace notes.Models
@@ -7,5 +8,7 @@ namespace notes.Models
 		[Required]
 		[Range(1, 100)]
 		public int Items { get; set; }
+
+		public string Frontpage { get; set; }
 	}
 }

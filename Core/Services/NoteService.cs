@@ -459,5 +459,42 @@ namespace notes.Core.Services
 
 			return GetNotebooks(user).Select(s => s.Id).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
 		}
+
+		/// <summary>
+		/// Get suggestions for notes.
+		/// </summary>
+		/// <param name="user"></param>
+		/// <param name="term"></param>
+		/// <returns></returns>
+		public IEnumerable<dynamic> NoteSuggestions(ObjectId user, string term)
+		{
+			term = term?.Trim();
+
+			if (String.IsNullOrEmpty(term) || term.Length < 3)
+				return Enumerable.Empty<dynamic>();
+
+			var _filter = Builders<Note>.Filter;
+			var _user = _filter.Eq(f => f.Owner, user);
+			var _title = _filter.Regex(f => f.Title, new BsonRegularExpression(term, "i"));
+			var _active = _filter.Eq(f => f.Trash, false);
+
+			var _sort = Builders<Note>.Sort;
+			var _order = _sort.Descending(f => f.Title);
+
+			var _query = _user & _title & _active;
+
+			var _result = Context.Note
+				.Find(_query)
+				.Sort(_order)
+				.Limit(20)
+				.ToEnumerable()
+				.Select(s => new
+				{
+					label = s.Title,
+					id = s.Id.ToString()
+				});
+
+			return _result;
+		}
 	}
 }

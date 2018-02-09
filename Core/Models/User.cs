@@ -47,5 +47,8 @@ namespace notes.Core.Models
 	{
 		[BsonElement("pagesize")]
 		public int PageSize { get; set; }
+
+		[BsonElement("frontpage")]
+		public string Frontpage { get; set; }
 	}
 }

@@ -238,7 +238,8 @@ namespace notes.Controllers
 				},
 				Settings = new UserSettingsModel
 				{
-					Items = UserSettings?.PageSize ?? Options.PageSize
+					Items = UserSettings?.PageSize ?? Options.PageSize,
+					Frontpage = UserSettings?.Frontpage
 				}
 			};
 
@@ -253,7 +254,7 @@ namespace notes.Controllers
 				return RedirectToAction("settings");
 			}
 
-			UserService.UpdateSettings(UserId, model.Items);
+			UserService.UpdateSettings(UserId, model.Items, model.Frontpage);
 
 			return RedirectToAction("settings");
 		}

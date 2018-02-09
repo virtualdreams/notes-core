@@ -33,6 +33,23 @@ namespace notes.Controllers
 		[HttpGet]
 		public IActionResult Index(ObjectId after)
 		{
+			ObjectId _id;
+			if (ObjectId.TryParse(UserSettings?.Frontpage, out _id))
+			{
+				var _frontpage = NoteService.GetById(_id, UserId);
+				if (_frontpage != null && !_frontpage.Trash)
+				{
+					var note = Mapper.Map<NoteModel>(_frontpage);
+
+					var frontview = new NoteViewContainer
+					{
+						Note = note
+					};
+
+					return View("Frontpage", frontview);
+				}
+			}
+
 			var _notes = NoteService.GetNotes(UserId, after, false, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
@@ -68,6 +85,8 @@ namespace notes.Controllers
 		[AllowAnonymous]
 		public IActionResult Error(int? code)
 		{
+			var _bool = User.Identity.IsAuthenticated;
+
 			switch (code ?? 0)
 			{
 				case 400:

@@ -289,5 +289,11 @@ namespace notes.Controllers
 		{
 			return Json(NoteService.NotebookSuggestions(UserId, term).ToArray());
 		}
+
+		[Route("search/note")]
+		public IActionResult NoteSuggestions(string term)
+		{
+			return Json(NoteService.NoteSuggestions(UserId, term).ToArray());
+		}
 	}
 }
