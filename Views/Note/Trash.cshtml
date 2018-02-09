@@ -43,13 +43,16 @@
 			@:The trash is empty.
 		}
 	</div>
+</div>
+
+@if(Model.Pager.HasNext) {
+<div class="row">
 	<div class="col-lg-12">
 		<nav>
 			<ul class="pager">
-				@if(Model.Pager.HasNext) {
 				<li><a href="@Url.RouteUrl("trash", new { after = Model.Pager.NextPage })" rel="nofollow next">Older</a></li>
-				}
 			</ul>
 		</nav>
 	</div>
 </div>
+}

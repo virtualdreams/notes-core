@@ -17,13 +17,16 @@
 			@:There are no more notes at the moment.
 		}
 	</div>
+</div>
+
+@if(Model.Pager.HasNext) {
+<div class="row">
 	<div class="col-lg-12">
 		<nav>
 			<ul class="pager">
-				@if(Model.Pager.HasNext) {
-				<li><a href="@Url.Action("index", "home", new { after = Model.Pager.NextPage })" rel="nofollow next">Older</a></li>
-				}
+				<li><a href="@Url.Action("index", "home", new { after = Model.Pager.NextPage })" rel="nofollow next">Older</a></li>		
 			</ul>
 		</nav>
 	</div>
 </div>
+}

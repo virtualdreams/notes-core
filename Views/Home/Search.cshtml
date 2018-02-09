@@ -23,13 +23,16 @@
 			@:Your search returned no matches.
 		}
 	</div>
+</div>
+
+@if(Model.Pager.HasNext) {
+<div class="row">
 	<div class="col-lg-12">
 		<nav>
 			<ul class="pager">
-				@if(Model.Pager.HasNext) {
 				<li><a href="@Url.RouteUrl("search", new { q = Model.Term, after = Model.Pager.NextPage })" rel="nofollow next">Older</a></li>
-				}
 			</ul>
 		</nav>
 	</div>
 </div>
+}
