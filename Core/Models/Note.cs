@@ -31,6 +31,10 @@ namespace notes.Core.Models
 		[BsonElement("version")]
 		public int Version { get; set; }
 
+		[BsonElement("created")]
+		[BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+		public DateTime? Created { get; set; }
+
 		[BsonElement("modified")]
 		[BsonDateTimeOptions(Kind = DateTimeKind.Local)]
 		public DateTime? Modified { get; set; }

@@ -196,7 +196,8 @@ namespace notes.Core.Services
 				Password = !String.IsNullOrEmpty(password) ? PasswordHasher.HashPassword(password) : null,
 				DisplayName = displayName,
 				Role = role,
-				Enabled = active
+				Enabled = active,
+				Created = DateTime.UtcNow
 			};
 
 			try

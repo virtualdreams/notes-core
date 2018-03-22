@@ -18,11 +18,13 @@ namespace notes.Extensions
 
 				config.CreateMap<Note, NoteModel>()
 					.ForMember(d => d.TagsString, map => map.MapFrom(s => String.Join(" ", s.Tags ?? new string[] { })))
-					.ForMember(d => d.Age, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime().ToMinutes().ToWords()))
-					.ForMember(d => d.Created, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime()));
+					.ForMember(d => d.Age, map => map.Ignore())
+					.AfterMap((s, d) =>
+					{
+						d.Age = s.Created?.ToMinutes().ToWords();
+					});
 
-				config.CreateMap<User, UserModel>()
-					.ForMember(d => d.Created, map => map.MapFrom(s => s.Id.CreationTime.ToLocalTime()));
+				config.CreateMap<User, UserModel>();
 
 				config.CreateMap<DistinctAndCountResult, DistinctAndCountModel>();
 			});

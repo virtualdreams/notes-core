@@ -1,3 +1,4 @@
+using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -36,6 +37,10 @@ namespace notes.Core.Models
 		/// </summary>
 		[BsonElement("enabled")]
 		public bool Enabled { get; set; }
+
+		[BsonElement("created")]
+		[BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+		public DateTime? Created { get; set; }
 
 		[BsonElement("settings")]
 		[BsonIgnoreIfNull]
