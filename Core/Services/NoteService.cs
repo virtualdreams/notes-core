@@ -279,6 +279,8 @@ namespace notes.Core.Services
 		/// <param name="user">The user who owns thos note.</param>
 		/// <param name="title">The note title.</param>
 		/// <param name="content">The note content.</param>
+		/// <param name="notebook">The notebook name.</param>
+		/// <param name="tags">Array of tags.</param>
 		/// <returns></returns>
 		public ObjectId Create(ObjectId user, string title, string content, string notebook, string tags)
 		{
@@ -296,7 +298,8 @@ namespace notes.Core.Services
 				Tags = _tags,
 				Notebook = notebook?.Trim(),
 				Trash = false,
-				Version = 1
+				Version = 1,
+				Created = DateTime.UtcNow
 			};
 
 			Context.Note.InsertOne(_note);
