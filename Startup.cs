@@ -28,13 +28,30 @@ namespace notes
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			var _keyStore = Configuration.GetSection("Settings")["KeyStore"];
-			if (!String.IsNullOrEmpty(_keyStore))
+			// add options to DI
+			services.AddOptions();
+			services.Configure<Settings>(Configuration.GetSection("Settings"));
+
+			// DI
+			services.AddAutoMapper();
+			services.AddScoped(cfg => cfg.GetService<IOptionsSnapshot<Settings>>().Value);
+			services.AddScoped<MongoContext>();
+			services.AddTransient<NoteService>();
+			services.AddTransient<UserService>();
+			services.AddTransient<MailService>();
+			services.AddTransient<MaintenanceService>();
+			services.AddScoped<RazorViewToStringRenderer>();
+
+			// get settings
+			var settings = services.BuildServiceProvider().GetRequiredService<Settings>();
+
+			// key ring
+			if (!String.IsNullOrEmpty(settings.KeyStore))
 			{
 				services.AddDataProtection(options =>
 				{
 					options.ApplicationDiscriminator = "notes";
-				}).PersistKeysToFileSystem(new DirectoryInfo(_keyStore));
+				}).PersistKeysToFileSystem(new DirectoryInfo(settings.KeyStore));
 			}
 
 			// IIS integration
@@ -42,10 +59,6 @@ namespace notes
 			{
 
 			});
-
-			// add options to DI
-			services.AddOptions();
-			services.Configure<Settings>(Configuration.GetSection("Settings"));
 
 			// add custom model binders
 			services.AddMvc(options =>
@@ -82,16 +95,6 @@ namespace notes
 					policy.RequireRole("Administrator");
 				});
 			});
-
-			// DI
-			services.AddAutoMapper();
-			services.AddScoped(cfg => cfg.GetService<IOptionsSnapshot<Settings>>().Value);
-			services.AddScoped<MongoContext>();
-			services.AddTransient<NoteService>();
-			services.AddTransient<UserService>();
-			services.AddTransient<MailService>();
-			services.AddTransient<MaintenanceService>();
-			services.AddScoped<RazorViewToStringRenderer>();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)

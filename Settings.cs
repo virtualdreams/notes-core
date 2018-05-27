@@ -3,6 +3,11 @@ namespace notes
 	public class Settings
 	{
 		/// <summary>
+		/// Path to keystore directory.
+		/// </summary>
+		public string KeyStore { get; set; } = "";
+
+		/// <summary>
 		/// MongoDb connection string.
 		/// </summary>
 		public string MongoDB { get; set; } = "mongodb://127.0.0.1/";
