@@ -35,10 +35,11 @@
     <Content Update="wwwroot\**\*;Views\**\*.cshtml;Areas\**\*.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-    <Content Update="wwwroot\assets\**\*;wwwroot\**\*.less;wwwroot\**\*.map;appsettings.json">
+    <Content Update="wwwroot\assets\**\*;wwwroot\**\*.less;wwwroot\**\*.map;package.json;package-lock.json">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
-    <None Include="NLog.config" CopyToPublishDirectory="PreserveNewest" />
+    <Content Update="NLog.config" CopyToPublishDirectory="Never" CopyToOutputDirectory="PreserveNewest" />
+    <Content Update="appsettings.json" CopyToPublishDirectory="Never" CopyToOutputDirectory="Never" />
   </ItemGroup>
 
   <ItemGroup>
