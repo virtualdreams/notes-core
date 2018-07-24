@@ -42,7 +42,7 @@ namespace notes.Core.Services
 		/// <returns>True if any user exists.</returns>
 		public bool HasUsers()
 		{
-			var _result = Context.User.Find(_ => true).Count() != 0;
+			var _result = Context.User.Find(_ => true).CountDocuments() != 0;
 
 			Log.LogDebug($"Test if database contains a user (Value: {_result}).");
 
@@ -55,7 +55,7 @@ namespace notes.Core.Services
 		/// <returns>Count if active adminsitrators</returns>
 		public long GetAdminCount()
 		{
-			var _result = Context.User.Find(f => f.Role.Equals("Administrator") && f.Enabled == true).Count();
+			var _result = Context.User.Find(f => f.Role.Equals("Administrator") && f.Enabled == true).CountDocuments();
 
 			Log.LogDebug($"Get count of admins in database (Value: {_result}).");
 
@@ -69,7 +69,7 @@ namespace notes.Core.Services
 		/// <returns>True if the user is an administrator.</returns>
 		public bool IsAdmin(ObjectId user)
 		{
-			var _result = Context.User.Find(f => f.Id == user && f.Role.Equals("Administrator")).Count() == 1;
+			var _result = Context.User.Find(f => f.Id == user && f.Role.Equals("Administrator")).CountDocuments() == 1;
 
 			Log.LogDebug($"Test if user {user} is admin (Value: {_result}).");
 

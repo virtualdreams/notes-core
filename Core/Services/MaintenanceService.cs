@@ -82,7 +82,7 @@ namespace notes.Core.Services
 			Log.LogInformation("Create user index.");
 
 			Context.User.Indexes.DropAll();
-			Context.User.Indexes.CreateOne(_name, new CreateIndexOptions { Unique = true });
+			Context.User.Indexes.CreateOne(new CreateIndexModel<User>(_name, new CreateIndexOptions { Unique = true }));
 		}
 
 		/// <summary>
@@ -131,7 +131,7 @@ namespace notes.Core.Services
 			Log.LogInformation("Create note index.");
 
 			Context.Note.Indexes.DropAll();
-			Context.Note.Indexes.CreateOne(_text, new CreateIndexOptions
+			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_text, new CreateIndexOptions
 			{
 				Weights = new BsonDocument
 				{
@@ -140,13 +140,13 @@ namespace notes.Core.Services
 					{ "notebook", 1 },
 					{ "tags", 1 }
 				}
-			});
-			Context.Note.Indexes.CreateOne(_owner_trash, new CreateIndexOptions { });
-			Context.Note.Indexes.CreateOne(_id_owner_trash, new CreateIndexOptions { });
-			Context.Note.Indexes.CreateOne(_owner_trash_notebook, new CreateIndexOptions { });
-			Context.Note.Indexes.CreateOne(_id_owner_trash_notebook, new CreateIndexOptions { });
-			Context.Note.Indexes.CreateOne(_owner_trash_tags, new CreateIndexOptions { });
-			Context.Note.Indexes.CreateOne(_id_owner_trash_tags, new CreateIndexOptions { });
+			}));
+			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_id_owner_trash, new CreateIndexOptions { }));
+			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_owner_trash, new CreateIndexOptions { }));
+			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_owner_trash_notebook, new CreateIndexOptions { }));
+			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_id_owner_trash_notebook, new CreateIndexOptions { }));
+			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_id_owner_trash_tags, new CreateIndexOptions { }));
+			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_owner_trash_tags, new CreateIndexOptions { }));
 		}
 
 		/// <summary>
@@ -160,7 +160,7 @@ namespace notes.Core.Services
 			Log.LogInformation("Create token index.");
 
 			Context.Token.Indexes.DropAll();
-			Context.Token.Indexes.CreateOne(_token, new CreateIndexOptions { ExpireAfter = new TimeSpan(0, 60, 0) });
+			Context.Token.Indexes.CreateOne(new CreateIndexModel<Token>(_token, new CreateIndexOptions { ExpireAfter = new TimeSpan(0, 60, 0) }));
 		}
 	}
 }
