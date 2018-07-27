@@ -3,19 +3,17 @@
 	ViewBag.Title = "Forgot Password - ";
 }
 
-<div class="row">
-	<div class="col-md-4 col-md-offset-4">
-		<div class="login-panel panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">Forgot Password</h3>
+<div class="row justify-content-center">
+	<div class="col-md-4">
+		<div class="mt-5 card">
+			<div class="card-header">
+				Forgot Password
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<div class="form-group">
 					Check your email for a link to reset your password. If it doesn't appear within a few minutes, check your spam folder.
 				</div>
-				<div class="form-group">
-					<button type="button" class="btn btn-lg btn-primary btn-block" data-href="@Url.RouteUrl("login")">Return to sign in</button>
-				</div>
+				<button type="button" class="btn btn-primary btn-block" data-href="@Url.RouteUrl("login")">Return to sign in</button>
 			</div>
 		</div>
 	</div>

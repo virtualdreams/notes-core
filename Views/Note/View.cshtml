@@ -13,30 +13,32 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<div class="page-header">
+		<div class="pb-2 mt-4 mb-2 border-bottom">
 			<div class="btn-toolbar pull-right">
-				<div class="btn-group">
-					<button type="button" class="btn btn-default" data-href="@Url.Action("edit", "note", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })"><i class="fa fa-fw fa-pencil"></i> Edit</button>
-					<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-	    				<span class="caret"></span>
-       				</button>
-       				<ul class="dropdown-menu pull-right">
-						<li><a href="@Url.RouteUrl("print", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })" target="_blank"><i class="fa fa-fw fa-print"></i> Print</a></li>
-						<li class="divider"></li>
-						<li><a href="#" data-toggle="modal" data-target="#trash">
-							@if(Model.Note.Trash) {
-							<i class="fa fa-fw fa-undo"></i> @:Restore
-							} else {
-							<i class="fa fa-fw fa-trash-o"></i> @:Delete
-							}
+				<div class="btn-group" role="group">
+					<button type="button" class="btn btn-outline-secondary" data-href="@Url.Action("edit", "note", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })">
+						<i class="fa fa-fw fa-pencil"></i> Edit
+					</button>
+					
+					<div class="btn-group" role="group">
+						<button class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"></button>
+       					<div class="dropdown-menu">
+							<a class="dropdown-item" href="@Url.RouteUrl("print", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })" target="_blank"><i class="fa fa-fw fa-print"></i> Print</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#" data-toggle="modal" data-target="#trash">
+								@if(Model.Note.Trash) {
+								<i class="fa fa-fw fa-undo"></i> @:Restore
+								} else {
+								<i class="fa fa-fw fa-trash-o"></i> @:Delete
+								}
 							</a>
-						</li>
-						<li><a href="#" data-toggle="modal" data-target="#info"><i class="fa fa-fw fa-info"></i> Info</a></li>
-	  				</ul>
+							<a class="dropdown-item" href="#" data-toggle="modal" data-target="#info"><i class="fa fa-fw fa-info"></i> Info</a>
+	  					</div>
+					</div>
      			</div>
    			</div>
    			<h1>@Model.Note.Title
-				<small>@Model.Note.Age</small>
+				<small class="text-muted">@Model.Note.Age</small>
 			</h1>
 		</div>
 	</div>
@@ -47,6 +49,7 @@
 		<markdown>@Html.Raw(Model.Note.Content)</markdown>
 	</div>
 </div>
+
 <div class="row tagline">
 	<div class="col-lg-12">
 		@if(!String.IsNullOrEmpty(Model.Note.Notebook)) {

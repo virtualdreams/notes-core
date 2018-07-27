@@ -2,5 +2,5 @@
 @using notes.Models;
 
 @foreach(var tag in Model) {
-<li><a href="@Url.RouteUrl("tag", new { id = tag.Id })">@tag.Id <span class="small text-muted">&times; @tag.Count</span></a></li>
+<a class="dropdown-item" href="@Url.RouteUrl("tag", new { id = tag.Id })">@tag.Id <span class="small text-muted">&times; @tag.Count</span></a>
 }
