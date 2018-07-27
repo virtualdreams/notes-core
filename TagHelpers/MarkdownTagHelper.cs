@@ -18,7 +18,6 @@ namespace notes.TagHelpers
 
 			var _pipeline = new MarkdownPipelineBuilder()
 				.UseNoFollowLinks()
-				.UseSoftlineBreakAsHardlineBreak()
 				.UseAbbreviations()
 				.UseEmphasisExtras()
 				.UseTaskLists()
