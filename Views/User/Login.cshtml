@@ -21,13 +21,13 @@
 
 				<form action="@Url.RouteUrl("login", new { ReturnUrl = Context.Request.Query["ReturnUrl"] })" method="post" enctype="multipart/form-data" id="login-form">
 					<div class="form-group">
-						<label for="emailLabel">E-mail address</label>
-						<input class="form-control" placeholder="E-mail" name="username" id="emailLabel" type="email" autofocus>
+						<label for="username">E-mail address</label>
+						<input class="form-control" placeholder="E-mail" name="username" id="username" type="email" autofocus>
 					</div>
 					<div class="form-group">
-						<label for="pwLabel">Password</label>
+						<label for="password">Password</label>
 						<a class="pull-right" href="@Url.RouteUrl("forgot_password")">Forgot password?</a>
-						<input class="form-control" placeholder="Password" name="password" id="pwLabel" type="password" value="">
+						<input class="form-control" placeholder="Password" name="password" id="password" type="password" value="">
 					</div>
 					<div class="form-group form-check">
 						<input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberLabel">

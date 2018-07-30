@@ -23,8 +23,8 @@
 			<div class="col-lg-4">
                 <form role="form" action="@Url.Action("profile", "user")" method="post" enctype="multipart/form-data" id="profile-form" >
                     <div class="form-group">
-                        <label>Display Name</label>
-                        <input type="text" class="form-control" placeholder="Display Name" name="displayname" value="@Model.Profile.DisplayName" />
+                        <label for="displayname">Display Name</label>
+                        <input type="text" class="form-control" placeholder="Display Name" name="displayname" id="displayname" value="@Model.Profile.DisplayName" />
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Update profile</button>
@@ -37,8 +37,8 @@
 			<div class="col-lg-4">
                 <form role="form" action="@Url.Action("settings", "user")" method="post" enctype="multipart/form-data" id="settings-form" >
                     <div class="form-group">
-                        <label>Items per page</label>
-                        <input type="number" class="form-control" name="items" value="@Model.Settings.Items" />
+                        <label for="items">Items per page</label>
+                        <input type="number" class="form-control" name="items" id="items" value="@Model.Settings.Items" />
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Update settings</button>
