@@ -13,8 +13,8 @@ Notes! is an ASP.NET Core/MongoDB based webapp to create and manage simple text 
 * [.NET Core 2.1](https://www.microsoft.com/net/core)
 * [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/)
 * [MongoDB](https://www.mongodb.com/)
-* [bootstrap 3](http://getbootstrap.com/)
-* [nodejs](https://nodejs.org/) (v8.11 LTS)
+* [bootstrap 4](http://getbootstrap.com/)
+* [nodejs](https://nodejs.org/)
 * [gulpjs](http://gulpjs.com/)
 
 ## Configuration
