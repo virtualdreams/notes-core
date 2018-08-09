@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using notes.Core.Models;
+using notes.Helper;
 
 namespace notes.Core.Services
 {
@@ -461,6 +462,44 @@ namespace notes.Core.Services
 			Log.LogDebug($"Get notebook suggestions with term '{term}' for user {user}.");
 
 			return GetNotebooks(user).Select(s => s.Id).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
+		}
+
+		/// <summary>
+		/// Get suggestions for notes.
+		/// </summary>
+		/// <param name="user">The user.</param>
+		/// <param name="term">The term to search for.</param>
+		/// <returns></returns>
+		public IEnumerable<dynamic> NoteSuggestions(ObjectId user, string term)
+		{
+			term = term?.Trim();
+
+			if (String.IsNullOrEmpty(term) || term.Length < 3)
+				return Enumerable.Empty<dynamic>();
+
+			var _filter = Builders<Note>.Filter;
+			var _user = _filter.Eq(f => f.Owner, user);
+			var _title = _filter.Regex(f => f.Title, new BsonRegularExpression(term, "i"));
+			var _active = _filter.Eq(f => f.Trash, false);
+
+			var _sort = Builders<Note>.Sort;
+			var _order = _sort.Descending(f => f.Title);
+
+			var _query = _user & _title & _active;
+
+			var _result = Context.Note
+				.Find(_query)
+				.Sort(_order)
+				.Limit(20)
+				.ToEnumerable()
+				.Select(s => new
+				{
+					name = s.Title,
+					link = s.Title.ToSlug(s.Id),
+					age = s.Id.CreationTime.ToMinutes().ToWords()
+				});
+
+			return _result;
 		}
 	}
 }

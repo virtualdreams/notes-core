@@ -176,6 +176,20 @@ notes = (function ($) {
 		$('#editor-help').slideToggle();
 	});
 
+	$('#content').atwho({
+		at: "@",
+		displayTpl: "<li><i class=\"fa fa - fw fa-file\"></i> ${name}</li>",
+		insertTpl: "[${name}](/note/${link})",
+		minLen: 3,
+		callbacks: {
+			remoteFilter: function (query, callback) {
+				$.getJSON("/search/notes", { query: query }, function (data) {
+					callback(data)
+				});
+			}
+		}
+	})
+
 	$.validator.setDefaults({
 		highlight: function (element) {
 			$(element).closest('.form-group').addClass('has-error');
