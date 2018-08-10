@@ -178,7 +178,7 @@ notes = (function ($) {
 
 	$('#content').atwho({
 		at: "@",
-		displayTpl: "<li><i class=\"fa fa - fw fa-file\"></i> ${name}</li>",
+		displayTpl: "<li><i class=\"fa fa-fw fa-file\"></i> ${name}</li>",
 		insertTpl: "[${name}](/note/${link})",
 		minLen: 3,
 		callbacks: {
