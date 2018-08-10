@@ -178,10 +178,10 @@ notes = (function ($) {
 
 	$.validator.setDefaults({
 		highlight: function (element) {
-			$(element).closest('.form-group').addClass('has-error');
+			$(element).addClass('is-invalid');
 		},
 		unhighlight: function (element) {
-			$(element).closest('.form-group').removeClass('has-error');
+			$(element).removeClass('is-invalid');
 		}
 	});
 
