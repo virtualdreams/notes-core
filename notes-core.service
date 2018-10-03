@@ -1,0 +1,18 @@
+[Unit]
+Description=dotnet notes-core
+After=network.target
+
+[Service]
+Environment=ASPNETCORE_URLS=http://127.0.0.1:5000/
+EnvironmentFile=
+;Restart=always
+;RestartSec=10
+Type=simple
+SyslogIdentifier=notes-core
+WorkingDirectory=/srv/www/notes-core
+ExecStart=/usr/local/bin/dotnet /srv/www/notes-core/notes.dll
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target
