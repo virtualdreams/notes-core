@@ -1,8 +1,9 @@
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using notes.Core.Models;
 using System;
+using System.Threading.Tasks;
+using notes.Core.Models;
 
 namespace notes.Core.Services
 {
@@ -20,75 +21,75 @@ namespace notes.Core.Services
 		/// <summary>
 		/// Wipe complete database.
 		/// </summary>
-		public void WipeAll()
+		public async Task WipeAll()
 		{
 			Log.LogInformation("Wipe all data.");
 
-			WipeUsers();
-			WipeNotes();
-			WipeTokens();
+			await WipeUsers();
+			await WipeNotes();
+			await WipeTokens();
 		}
 
 		/// <summary>
 		/// Wipe all notes from database.
 		/// </summary>
-		public void WipeNotes()
+		public async Task WipeNotes()
 		{
 			Log.LogInformation("Wipe notes.");
 
-			Context.Note.DeleteMany(_ => true);
+			await Context.Note.DeleteManyAsync(_ => true);
 		}
 
 		/// <summary>
 		/// Wipe all users from database.
 		/// </summary>
-		public void WipeUsers()
+		public async Task WipeUsers()
 		{
 			Log.LogInformation("Wipe users.");
 
-			Context.User.DeleteMany(_ => true);
+			await Context.User.DeleteManyAsync(_ => true);
 		}
 
 		/// <summary>
 		/// Wipe all tokens from database.
 		/// </summary>
-		public void WipeTokens()
+		public async Task WipeTokens()
 		{
 			Log.LogInformation("Wipe tokens");
 
-			Context.Token.DeleteMany(_ => true);
+			await Context.Token.DeleteManyAsync(_ => true);
 		}
 
 		/// <summary>
 		/// (Re)Create all necessary indexes for users, notes and tokens.
 		/// </summary>
-		public void CreateIndexes()
+		public async Task CreateIndexes()
 		{
 			Log.LogInformation("Create all indexes.");
 
-			CreateUserIndexes();
-			CreateNoteIndexes();
-			CreateTokenIndexes();
+			await CreateUserIndexes();
+			await CreateNoteIndexes();
+			await CreateTokenIndexes();
 		}
 
 		/// <summary>
 		/// (Re)Create user indexes.
 		/// </summary>
-		private void CreateUserIndexes()
+		private async Task CreateUserIndexes()
 		{
 			var _index = Builders<User>.IndexKeys;
 			var _name = _index.Ascending(f => f.Username);
 
 			Log.LogInformation("Create user index.");
 
-			Context.User.Indexes.DropAll();
-			Context.User.Indexes.CreateOne(new CreateIndexModel<User>(_name, new CreateIndexOptions { Unique = true }));
+			await Context.User.Indexes.DropAllAsync();
+			await Context.User.Indexes.CreateOneAsync(new CreateIndexModel<User>(_name, new CreateIndexOptions { Unique = true }));
 		}
 
 		/// <summary>
 		/// (Re)Create note indexes.
 		/// </summary>
-		private void CreateNoteIndexes()
+		private async Task CreateNoteIndexes()
 		{
 			var _index = Builders<Note>.IndexKeys;
 			var _text = _index
@@ -130,8 +131,8 @@ namespace notes.Core.Services
 
 			Log.LogInformation("Create note index.");
 
-			Context.Note.Indexes.DropAll();
-			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_text, new CreateIndexOptions
+			await Context.Note.Indexes.DropAllAsync();
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_text, new CreateIndexOptions
 			{
 				Weights = new BsonDocument
 				{
@@ -141,26 +142,26 @@ namespace notes.Core.Services
 					{ "tags", 1 }
 				}
 			}));
-			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_id_owner_trash, new CreateIndexOptions { }));
-			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_owner_trash, new CreateIndexOptions { }));
-			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_owner_trash_notebook, new CreateIndexOptions { }));
-			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_id_owner_trash_notebook, new CreateIndexOptions { }));
-			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_id_owner_trash_tags, new CreateIndexOptions { }));
-			Context.Note.Indexes.CreateOne(new CreateIndexModel<Note>(_owner_trash_tags, new CreateIndexOptions { }));
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_owner_trash, new CreateIndexOptions { }));
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_id_owner_trash, new CreateIndexOptions { }));
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_owner_trash_notebook, new CreateIndexOptions { }));
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_id_owner_trash_notebook, new CreateIndexOptions { }));
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_id_owner_trash_tags, new CreateIndexOptions { }));
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_owner_trash_tags, new CreateIndexOptions { }));
 		}
 
 		/// <summary>
 		/// (Re)Create token indexes.
 		/// </summary>
-		private void CreateTokenIndexes()
+		private async Task CreateTokenIndexes()
 		{
 			var _index = Builders<Token>.IndexKeys;
 			var _token = _index.Ascending(f => f.Created);
 
 			Log.LogInformation("Create token index.");
 
-			Context.Token.Indexes.DropAll();
-			Context.Token.Indexes.CreateOne(new CreateIndexModel<Token>(_token, new CreateIndexOptions { ExpireAfter = new TimeSpan(0, 60, 0) }));
+			await Context.Token.Indexes.DropAllAsync();
+			await Context.Token.Indexes.CreateOneAsync(new CreateIndexModel<Token>(_token, new CreateIndexOptions { ExpireAfter = new TimeSpan(0, 60, 0) }));
 		}
 	}
 }

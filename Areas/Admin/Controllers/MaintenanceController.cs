@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 using notes.Controllers;
 using notes.Core.Services;
 
@@ -32,9 +33,9 @@ namespace notes.Areas.Admin.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult RecreateIndexes()
+		public async Task<IActionResult> RecreateIndexes()
 		{
-			MaintenanceService.CreateIndexes();
+			await MaintenanceService.CreateIndexes();
 
 			return RedirectToAction("Index");
 		}

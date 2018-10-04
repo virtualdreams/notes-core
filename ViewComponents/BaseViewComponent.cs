@@ -10,7 +10,7 @@ namespace notes.ViewComponents
 	{
 		private readonly UserService UserService;
 
-		public ObjectId UserId => UserService.GetUserId((User as ClaimsPrincipal).GetUserName());
+		public ObjectId UserId => UserService.GetUserId((User as ClaimsPrincipal).GetUserName()).Result;
 
 		public BaseViewComponent(UserService userService)
 		{

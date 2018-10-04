@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using notes.Core.Services;
 using notes.Models;
 
@@ -20,9 +21,9 @@ namespace notes.ViewComponents
 			UserService = user;
 		}
 
-		public IViewComponentResult Invoke()
+		public async Task<IViewComponentResult> InvokeAsync()
 		{
-			var _tags = NoteService.GetMostUsedTags(UserId);
+			var _tags = await NoteService.GetMostUsedTags(UserId);
 
 			var tags = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_tags);
 

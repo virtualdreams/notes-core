@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System;
+using System.Threading.Tasks;
 
 namespace notes.Core.Services
 {
@@ -24,7 +25,7 @@ namespace notes.Core.Services
 		/// <param name="mail">The email address.</param>
 		/// <param name="origin">The origin from where the user has the passswors reset requested.</param>
 		/// <param name="token">The token to reset the password.</param>
-		public void SendResetPasswordMail(string username, string mail, string origin, string token)
+		public async Task SendResetPasswordMail(string username, string mail, string origin, string token)
 		{
 			var message = new MimeMessage();
 			message.From.Add(new MailboxAddress(Options.Smtp.From));
@@ -47,14 +48,14 @@ The {Options.SiteName} Team
 {Options.SiteName} ({origin})"
 			};
 
-			SendMail(message);
+			await SendMail(message);
 		}
 
 		/// <summary>
 		/// Send a message.
 		/// </summary>
 		/// <param name="message">The message to send.</param>
-		private void SendMail(MimeMessage message)
+		private async Task SendMail(MimeMessage message)
 		{
 			if (Options.Smtp.Enabled)
 			{
@@ -73,8 +74,8 @@ The {Options.SiteName} Team
 					if (!String.IsNullOrEmpty(Options.Smtp.Username) && !String.IsNullOrEmpty(Options.Smtp.Passwd))
 						client.Authenticate(Options.Smtp.Username, Options.Smtp.Passwd);
 
-					client.Send(message);
-					client.Disconnect(true);
+					await client.SendAsync(message);
+					await client.DisconnectAsync(true);
 				}
 			}
 			else

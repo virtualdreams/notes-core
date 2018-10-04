@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using notes.Core.Services;
 using notes.Helper;
 using notes.Models;
-using System.Collections.Generic;
-using System.Security.Claims;
 
 namespace notes.Controllers
 {
@@ -38,7 +39,7 @@ namespace notes.Controllers
 
 		[AllowAnonymous]
 		[HttpPost]
-		public IActionResult Login(LoginModel model, string returnUrl)
+		public async Task<IActionResult> Login(LoginModel model, string returnUrl)
 		{
 			if (ModelState.IsValid)
 			{
@@ -46,12 +47,12 @@ namespace notes.Controllers
 				{
 					// if no accounts exists, create the first user as administrator.
 					// HACK!
-					if (!UserService.HasUsers())
+					if (!(await UserService.HasUsers()))
 					{
-						UserService.Create(model.Username, model.Password, "Administrator", "Administrator", true);
+						await UserService.Create(model.Username, model.Password, "Administrator", "Administrator", true);
 					}
 
-					var _user = UserService.Login(model.Username, model.Password);
+					var _user = await UserService.Login(model.Username, model.Password);
 					if (_user == null || !_user.Enabled)
 						throw new NotesLoginFailedException();
 
@@ -64,13 +65,13 @@ namespace notes.Controllers
 					var _identity = new ClaimsIdentity(claims, "local");
 					var _principal = new ClaimsPrincipal(_identity);
 
-					AuthenticationHttpContextExtensions.SignInAsync(HttpContext, _principal,
+					await AuthenticationHttpContextExtensions.SignInAsync(HttpContext, _principal,
 						new AuthenticationProperties
 						{
 							IsPersistent = model.Remember,
 							AllowRefresh = model.Remember
 						}
-					).Wait();
+					);
 
 					// return to target page.
 					if (Url.IsLocalUrl(returnUrl))
@@ -96,13 +97,13 @@ namespace notes.Controllers
 
 		[HttpPost]
 		[AllowAnonymous]
-		public IActionResult ForgotPassword(PasswdForgotPostModel model)
+		public async Task<IActionResult> ForgotPassword(PasswdForgotPostModel model)
 		{
 			if (ModelState.IsValid)
 			{
 				try
 				{
-					UserService.ForgotPassword(model.Username, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}");
+					await UserService.ForgotPassword(model.Username, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}");
 
 					return View("Forgot_Confirmation");
 				}
@@ -117,11 +118,11 @@ namespace notes.Controllers
 
 		[HttpGet]
 		[AllowAnonymous]
-		public IActionResult ResetPassword(string id)
+		public async Task<IActionResult> ResetPassword(string id)
 		{
 			try
 			{
-				var _user = UserService.GetByToken(id);
+				var _user = await UserService.GetByToken(id);
 				if (_user == null)
 					throw new NotesInvalidTokenException();
 
@@ -142,21 +143,21 @@ namespace notes.Controllers
 
 		[HttpPost]
 		[AllowAnonymous]
-		public IActionResult ResetPassword(string id, PasswdResetPostModel model)
+		public async Task<IActionResult> ResetPassword(string id, PasswdResetPostModel model)
 		{
 			if (ModelState.IsValid)
 			{
 				try
 				{
-					var _user = UserService.GetByToken(id);
+					var _user = await UserService.GetByToken(id);
 					if (_user == null)
 						throw new NotesInvalidTokenException();
 
 					if (!model.NewPassword.Equals(model.ConfirmPassword))
 						throw new NotesPasswordMismatchException();
 
-					UserService.UpdatePassword(_user.Id, model.NewPassword);
-					UserService.RemoveToken(id);
+					await UserService.UpdatePassword(_user.Id, model.NewPassword);
+					await UserService.RemoveToken(id);
 
 					return RedirectToAction("Login");
 				}
@@ -183,9 +184,9 @@ namespace notes.Controllers
 		#region User
 		[Authorize]
 		[HttpGet]
-		public IActionResult Logout()
+		public async Task<IActionResult> Logout()
 		{
-			AuthenticationHttpContextExtensions.SignOutAsync(HttpContext);
+			await AuthenticationHttpContextExtensions.SignOutAsync(HttpContext);
 
 			return RedirectToAction("index", "home");
 		}
@@ -199,20 +200,20 @@ namespace notes.Controllers
 
 		[Authorize]
 		[HttpPost]
-		public IActionResult Security(PasswdChangePostModel model)
+		public async Task<IActionResult> Security(PasswdChangePostModel model)
 		{
 			if (ModelState.IsValid)
 			{
 				try
 				{
-					var _user = UserService.Login(User.GetUserName(), model.OldPassword);
+					var _user = await UserService.Login(User.GetUserName(), model.OldPassword);
 					if (_user == null)
 						throw new NotesPasswordIncorrectException();
 
 					if (!model.NewPassword.Equals(model.ConfirmPassword))
 						throw new NotesPasswordMismatchException();
 
-					UserService.UpdatePassword(UserId, model.NewPassword);
+					await UserService.UpdatePassword(UserId, model.NewPassword);
 
 					// redirect to home
 					return RedirectToAction("settings", "user");
@@ -228,13 +229,13 @@ namespace notes.Controllers
 
 		[Authorize]
 		[HttpGet]
-		public IActionResult Settings()
+		public async Task<IActionResult> Settings()
 		{
 			var view = new UserSettingsEditContainer
 			{
 				Profile = new UserProfileModel
 				{
-					DisplayName = UserService.GetById(UserId)?.DisplayName
+					DisplayName = (await UserService.GetById(UserId))?.DisplayName
 				},
 				Settings = new UserSettingsModel
 				{
@@ -246,27 +247,27 @@ namespace notes.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Settings(UserSettingsPostModel model)
+		public async Task<IActionResult> Settings(UserSettingsPostModel model)
 		{
 			if (!ModelState.IsValid)
 			{
 				return RedirectToAction("settings");
 			}
 
-			UserService.UpdateSettings(UserId, model.Items);
+			await UserService.UpdateSettings(UserId, model.Items);
 
 			return RedirectToAction("settings");
 		}
 
 		[HttpPost]
-		public IActionResult Profile(UserProfilePostModel model)
+		public async Task<IActionResult> Profile(UserProfilePostModel model)
 		{
 			if (!ModelState.IsValid)
 			{
 				return RedirectToAction("settings");
 			}
 
-			UserService.UpdateProfile(UserId, model.DisplayName);
+			await UserService.UpdateProfile(UserId, model.DisplayName);
 
 			return RedirectToAction("settings");
 		}

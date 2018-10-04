@@ -1,9 +1,10 @@
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using System.Threading.Tasks;
 using notes.Core.Models;
 using notes.Encryption;
 using notes.Helper;
@@ -27,11 +28,12 @@ namespace notes.Core.Services
 		/// Get all available users.
 		/// </summary>
 		/// <returns>A list of users.</returns>
-		public IEnumerable<User> GetUsers()
+		public async Task<IEnumerable<User>> GetUsers()
 		{
 			Log.LogInformation("Get all users.");
 
-			var _result = Context.User.Find(_ => true).ToEnumerable().OrderBy(o => o.Role).ThenBy(o => o.Username);
+			var _task = await Context.User.Find(_ => true).ToListAsync();
+			var _result = _task.OrderBy(o => o.Role).ThenBy(o => o.Username);
 
 			return _result;
 		}
@@ -40,24 +42,24 @@ namespace notes.Core.Services
 		/// Test, if the database has users.
 		/// </summary>
 		/// <returns>True if any user exists.</returns>
-		public bool HasUsers()
+		public async Task<bool> HasUsers()
 		{
-			var _result = Context.User.Find(_ => true).CountDocuments() != 0;
+			var _result = await Context.User.Find(_ => true).CountDocumentsAsync();
 
-			Log.LogDebug($"Test if database contains a user (Value: {_result}).");
+			Log.LogDebug($"Database contains {_result} users.");
 
-			return _result;
+			return _result != 0;
 		}
 
 		/// <summary>
 		/// Get count of available administrators.
 		/// </summary>
 		/// <returns>Count if active adminsitrators</returns>
-		public long GetAdminCount()
+		public async Task<long> GetAdminCount()
 		{
-			var _result = Context.User.Find(f => f.Role.Equals("Administrator") && f.Enabled == true).CountDocuments();
+			var _result = await Context.User.Find(f => f.Role.Equals("Administrator") && f.Enabled == true).CountDocumentsAsync();
 
-			Log.LogDebug($"Get count of admins in database (Value: {_result}).");
+			Log.LogDebug($"Database contains {_result} admins.");
 
 			return _result;
 		}
@@ -67,13 +69,13 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The user.</param>
 		/// <returns>True if the user is an administrator.</returns>
-		public bool IsAdmin(ObjectId user)
+		public async Task<bool> IsAdmin(ObjectId user)
 		{
-			var _result = Context.User.Find(f => f.Id == user && f.Role.Equals("Administrator")).CountDocuments() == 1;
+			var _result = await Context.User.Find(f => f.Id == user && f.Role.Equals("Administrator")).CountDocumentsAsync();
 
-			Log.LogDebug($"Test if user {user} is admin (Value: {_result}).");
+			Log.LogDebug($"User {user} is admin: {_result == 1}.");
 
-			return _result;
+			return _result == 1;
 		}
 
 		/// <summary>
@@ -81,16 +83,16 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The user id.</param>
 		/// <returns>The user if exists or null.</returns>
-		public User GetById(ObjectId user)
+		public async Task<User> GetById(ObjectId user)
 		{
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
 
 			var _query = _id;
 
-			Log.LogDebug($"Get user by id {user}.");
+			Log.LogDebug($"Get user by id: {user}.");
 
-			var _result = Context.User.Find(_query).SingleOrDefault();
+			var _result = await Context.User.Find(_query).SingleOrDefaultAsync();
 
 			return _result;
 		}
@@ -100,16 +102,16 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="username">The username.</param>
 		/// <returns>The user if exists or null.</returns>
-		public User GetByName(string username)
+		public async Task<User> GetByName(string username)
 		{
 			var _filter = Builders<User>.Filter;
 			var _username = _filter.Eq(f => f.Username, username);
 
 			var _query = _username;
 
-			Log.LogDebug($"Get user by name '{username}'.");
+			Log.LogDebug($"Get user by name: '{username}'.");
 
-			var _result = Context.User.Find(_query).SingleOrDefault();
+			var _result = await Context.User.Find(_query).SingleOrDefaultAsync();
 
 			return _result;
 		}
@@ -119,7 +121,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		public User GetByToken(string token)
+		public async Task<User> GetByToken(string token)
 		{
 			var _hash = new ResetToken(token).PrivateKey();
 
@@ -128,13 +130,13 @@ namespace notes.Core.Services
 
 			var _query = _nonce;
 
-			Log.LogInformation($"Get user by token '{_hash}'.");
+			Log.LogInformation($"Get user by token: '{_hash}'.");
 
-			var _token = Context.Token.Find(_query).SingleOrDefault();
+			var _token = await Context.Token.Find(_query).SingleOrDefaultAsync();
 			if (_token == null)
 				return null;
 
-			return GetById(_token.User);
+			return await GetById(_token.User);
 		}
 
 		/// <summary>
@@ -142,16 +144,16 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="username">The username.</param>
 		/// <returns></returns>
-		public ObjectId GetUserId(string username)
+		public async Task<ObjectId> GetUserId(string username)
 		{
 			var _filter = Builders<User>.Filter;
 			var _username = _filter.Eq(f => f.Username, username);
 
 			var _query = _username;
 
-			Log.LogDebug($"Get user id by username '{username}'.");
+			Log.LogDebug($"Get user id by username: '{username}'.");
 
-			var _result = Context.User.Find(_query).Project(f => f.Id).SingleOrDefault();
+			var _result = await Context.User.Find(_query).Project(f => f.Id).SingleOrDefaultAsync();
 
 			return _result;
 		}
@@ -161,7 +163,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="username">The username.</param>
 		/// <returns></returns>
-		public UserSettings GetUserSettings(ObjectId user)
+		public async Task<UserSettings> GetUserSettings(ObjectId user)
 		{
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
@@ -171,7 +173,7 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Get user settings {user}.");
 
-			var _result = Context.User.Find(_query).Project(f => f.Settings).SingleOrDefault();
+			var _result = await Context.User.Find(_query).Project(f => f.Settings).SingleOrDefaultAsync();
 
 			return _result;
 		}
@@ -184,7 +186,7 @@ namespace notes.Core.Services
 		/// <param name="role">The role. Can be "User" or "Administrator".</param>
 		/// <param name="active">User account active.</param>
 		/// <returns>The new ObjectId.</returns>
-		public ObjectId Create(string username, string password, string displayName, string role, bool active)
+		public async Task<ObjectId> Create(string username, string password, string displayName, string role, bool active)
 		{
 			username = username?.Trim()?.ToLower();
 			password = password?.Trim();
@@ -202,7 +204,7 @@ namespace notes.Core.Services
 
 			try
 			{
-				Context.User.InsertOne(_user);
+				await Context.User.InsertOneAsync(_user);
 			}
 			catch (MongoWriteException ex) when (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
 			{
@@ -222,13 +224,13 @@ namespace notes.Core.Services
 		/// <param name="password">The paramref name="password". Leave empty if you don't want to change.</param>
 		/// <param name="role">The user role. Can be "User" or "Administrator".</param>
 		/// <param name="active">User account active.</param>
-		public void Update(ObjectId user, string username, string password, string displayName, string role, bool active)
+		public async Task<bool> Update(ObjectId user, string username, string password, string displayName, string role, bool active)
 		{
 			username = username?.Trim()?.ToLower();
 			password = password?.Trim();
 			displayName = displayName?.Trim();
 
-			if (IsAdmin(user) && GetAdminCount() < 2 && (!active || !role.Equals("Administrator")))
+			if (await IsAdmin(user) && await GetAdminCount() < 2 && (!active || !role.Equals("Administrator")))
 			{
 				Log.LogWarning($"The user {user} is the last available administrator. This account can't changed.");
 				throw new NotesModifyAdminException();
@@ -256,7 +258,8 @@ namespace notes.Core.Services
 
 			try
 			{
-				Context.User.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
+				var _result = await Context.User.UpdateOneAsync(_query, _set, new UpdateOptions { IsUpsert = true });
+				return _result.IsAcknowledged && _result.ModifiedCount > 0;
 			}
 			catch (MongoWriteException ex) when (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
 			{
@@ -269,18 +272,20 @@ namespace notes.Core.Services
 		/// Delete a user permanently.
 		/// </summary>
 		/// <param name="user">The user id.</param>
-		public void Delete(ObjectId user)
+		public async Task<bool> Delete(ObjectId user)
 		{
-			if (IsAdmin(user) && GetAdminCount() < 2)
+			if (await IsAdmin(user) && await GetAdminCount() < 2)
 			{
 				Log.LogWarning($"The user {user} is the last available administrator. This account can't deleted.");
 				throw new NotesDeleteAdminException();
 			}
 
-			Log.LogInformation($"Delete user '{GetById(user).Username}' ({user}) permanently.");
+			Log.LogInformation($"Delete user '{(await GetById(user)).Username}' ({user}) permanently.");
 
-			Context.User.DeleteOne(f => f.Id == user);
-			Context.Note.DeleteMany(f => f.Owner == user);
+			var _result = await Context.User.DeleteOneAsync(f => f.Id == user);
+			await Context.Note.DeleteManyAsync(f => f.Owner == user);
+
+			return _result.IsAcknowledged && _result.DeletedCount > 0;
 		}
 
 		/// <summary>
@@ -288,7 +293,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The user id.</param>
 		/// <param name="password">The new password.</param>
-		public void UpdatePassword(ObjectId user, string password)
+		public async Task<bool> UpdatePassword(ObjectId user, string password)
 		{
 			password = password?.Trim();
 
@@ -304,9 +309,11 @@ namespace notes.Core.Services
 			var _update = Builders<User>.Update;
 			var _set = _update.Set(f => f.Password, PasswordHasher.HashPassword(password));
 
-			Log.LogInformation($"Update password for user '{GetById(user).Username}'.");
+			Log.LogInformation($"Update password for user '{(await GetById(user)).Username}'.");
 
-			Context.User.UpdateOne(_query, _set);
+			var _result = await Context.User.UpdateOneAsync(_query, _set);
+
+			return _result.IsAcknowledged && _result.ModifiedCount > 0;
 		}
 
 		/// <summary>
@@ -314,7 +321,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The user.</param>
 		/// <param name="pageSize">The new page size.</param>
-		public void UpdateSettings(ObjectId user, int pageSize)
+		public async Task<bool> UpdateSettings(ObjectId user, int pageSize)
 		{
 			var _filter = Builders<User>.Filter;
 			var _id = _filter.Eq(f => f.Id, user);
@@ -327,7 +334,9 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Update settings for user {user}.");
 
-			Context.User.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
+			var _result = await Context.User.UpdateOneAsync(_query, _set, new UpdateOptions { IsUpsert = true });
+
+			return _result.IsAcknowledged && _result.ModifiedCount > 0;
 		}
 
 		/// <summary>
@@ -335,7 +344,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The user.</param>
 		/// <param name="displayName">The new display name.</param>
-		public void UpdateProfile(ObjectId user, string displayName)
+		public async Task<bool> UpdateProfile(ObjectId user, string displayName)
 		{
 			displayName = displayName?.Trim();
 
@@ -350,7 +359,9 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Update profile for user {user}.");
 
-			Context.User.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
+			var _result = await Context.User.UpdateOneAsync(_query, _set, new UpdateOptions { IsUpsert = true });
+
+			return _result.IsAcknowledged && _result.ModifiedCount > 0;
 		}
 
 		/// <summary>
@@ -359,7 +370,7 @@ namespace notes.Core.Services
 		/// <param name="username">The username.</param>
 		/// <param name="password">The paramref name="password".</param>
 		/// <returns>The user if authenticated or null.</returns>
-		public User Login(string username, string password)
+		public async Task<User> Login(string username, string password)
 		{
 			username = username?.Trim()?.ToLower();
 			password = password?.Trim();
@@ -372,7 +383,7 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Try to login user '{username}'.");
 
-			var _user = Context.User.Find(_query).SingleOrDefault();
+			var _user = await Context.User.Find(_query).SingleOrDefaultAsync();
 			if (_user != null && PasswordHasher.VerifyHashedPassword(_user.Password, password))
 			{
 				Log.LogInformation($"User '{username}' has been authenticated.");
@@ -390,12 +401,12 @@ namespace notes.Core.Services
 		/// <param name="username">The username.</param>
 		/// <param name="origin">The origon url.</param>
 		/// <returns></returns>
-		public void ForgotPassword(string username, string origin)
+		public async Task ForgotPassword(string username, string origin)
 		{
 			username = username?.Trim()?.ToLower();
 
 			// get user from database
-			var _user = GetByName(username);
+			var _user = await GetByName(username);
 			if (_user == null || !_user.Enabled)
 				return;
 
@@ -403,21 +414,21 @@ namespace notes.Core.Services
 
 			// create reset token
 			var _token = ResetToken.CreateNew();
-			Context.Token.InsertOne(new Token
+			await Context.Token.InsertOneAsync(new Token
 			{
 				Created = DateTime.Now,
 				User = _user.Id,
 				Nonce = _token.PrivateKey() // save token as sha512
 			});
 
-			Mail.SendResetPasswordMail(!String.IsNullOrEmpty(_user.DisplayName) ? _user.DisplayName : _user.Username, _user.Username, origin, _token.PublicKey()); // send the non hashed token as email
+			await Mail.SendResetPasswordMail(!String.IsNullOrEmpty(_user.DisplayName) ? _user.DisplayName : _user.Username, _user.Username, origin, _token.PublicKey()); // send the non hashed token as email
 		}
 
 		/// <summary>
 		/// Remove the reset token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		public void RemoveToken(string token)
+		public async Task<bool> RemoveToken(string token)
 		{
 			var _hash = new ResetToken(token).PrivateKey();
 
@@ -428,7 +439,9 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Delete reset token '{_hash}'.");
 
-			Context.Token.DeleteOne(_query);
+			var _result = await Context.Token.DeleteOneAsync(_query);
+
+			return _result.IsAcknowledged && _result.DeletedCount > 0;
 		}
 	}
 }

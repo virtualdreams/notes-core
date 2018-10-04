@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using notes.Areas.Admin.Models;
 using notes.Controllers;
 using notes.Core.Services;
@@ -28,9 +29,9 @@ namespace notes.Areas.Admin.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			var _users = UserService.GetUsers();
+			var _users = await UserService.GetUsers();
 
 			var users = Mapper.Map<IEnumerable<UserModel>>(_users);
 
@@ -54,9 +55,9 @@ namespace notes.Areas.Admin.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Edit(ObjectId id)
+		public async Task<IActionResult> Edit(ObjectId id)
 		{
-			var _user = UserService.GetById(id);
+			var _user = await UserService.GetById(id);
 			if (_user == null)
 				return NotFound();
 
@@ -71,7 +72,7 @@ namespace notes.Areas.Admin.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Edit(UserPostModel model)
+		public async Task<IActionResult> Edit(UserPostModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -79,11 +80,11 @@ namespace notes.Areas.Admin.Controllers
 				{
 					if (model.Id == ObjectId.Empty)
 					{
-						UserService.Create(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
+						await UserService.Create(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
 					}
 					else
 					{
-						UserService.Update(model.Id, model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
+						await UserService.Update(model.Id, model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
 					}
 
 					return RedirectToAction("Index");
@@ -111,15 +112,15 @@ namespace notes.Areas.Admin.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Delete(ObjectId id)
+		public async Task<IActionResult> Delete(ObjectId id)
 		{
-			var _user = UserService.GetById(id);
+			var _user = await UserService.GetById(id);
 			if (_user == null)
 				return NotFound();
 
 			try
 			{
-				UserService.Delete(id);
+				await UserService.Delete(id);
 			}
 			catch (NotesException ex)
 			{

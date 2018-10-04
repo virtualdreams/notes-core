@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using Mvc.RenderViewToString;
+using notes.Core.Services;
 using System.Collections.Generic;
 using System.Linq;
-using notes.Core.Services;
+using System.Threading.Tasks;
 using notes.Extensions;
 using notes.Helper;
 using notes.Models;
@@ -35,9 +36,9 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult View(ObjectId id)
+		public async Task<IActionResult> View(ObjectId id)
 		{
-			var _note = NoteService.GetById(id, UserId);
+			var _note = await NoteService.GetById(id, UserId);
 			if (_note == null)
 				return NotFound();
 
@@ -52,9 +53,9 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Print(ObjectId id)
+		public async Task<IActionResult> Print(ObjectId id)
 		{
-			var _note = NoteService.GetById(id, UserId);
+			var _note = await NoteService.GetById(id, UserId);
 			if (_note == null)
 				return NotFound();
 
@@ -80,9 +81,9 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Edit(ObjectId id)
+		public async Task<IActionResult> Edit(ObjectId id)
 		{
-			var _note = NoteService.GetById(id, UserId);
+			var _note = await NoteService.GetById(id, UserId);
 			if (_note == null)
 				return NotFound();
 
@@ -97,7 +98,7 @@ namespace notes.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Edit(NotePostModel model)
+		public async Task<IActionResult> Edit(NotePostModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -106,11 +107,11 @@ namespace notes.Controllers
 					var _id = ObjectId.Empty;
 					if (model.Id == ObjectId.Empty)
 					{
-						_id = NoteService.Create(UserId, model.Title, model.Content, model.Notebook, model.Tags);
+						_id = await NoteService.Create(UserId, model.Title, model.Content, model.Notebook, model.Tags);
 					}
 					else
 					{
-						NoteService.Update(model.Id, UserId, model.Title, model.Content, model.Notebook, model.Tags);
+						await NoteService.Update(model.Id, UserId, model.Title, model.Content, model.Notebook, model.Tags);
 						_id = model.Id;
 					}
 
@@ -153,7 +154,7 @@ namespace notes.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Preview(NotePostModel model)
+		public async Task<IActionResult> Preview(NotePostModel model)
 		{
 			// remove title related error messages, because is not needed for preview mode
 			ModelState.Remove("title");
@@ -171,7 +172,7 @@ namespace notes.Controllers
 					}
 				};
 
-				var _content = ViewRenderService.RenderViewToStringAsync("/Views/Shared/_Preview.cshtml", view).Result;
+				var _content = await ViewRenderService.RenderViewToStringAsync("/Views/Shared/_Preview.cshtml", view);
 
 				return Json(new { Success = true, Content = _content });
 			}
@@ -180,9 +181,9 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Notebooks()
+		public async Task<IActionResult> Notebooks()
 		{
-			var _notebooks = NoteService.GetNotebooks(UserId);
+			var _notebooks = await NoteService.GetNotebooks(UserId);
 
 			var notebooks = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_notebooks);
 
@@ -190,9 +191,9 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Tags()
+		public async Task<IActionResult> Tags()
 		{
-			var _tags = NoteService.GetTags(UserId);
+			var _tags = await NoteService.GetTags(UserId);
 
 			var tags = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_tags);
 
@@ -200,9 +201,9 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Notebook(string id, ObjectId after)
+		public async Task<IActionResult> Notebook(string id, ObjectId after)
 		{
-			var _notes = NoteService.GetByNotebook(UserId, id, after, PageSize);
+			var _notes = await NoteService.GetByNotebook(UserId, id, after, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
@@ -218,9 +219,9 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Tag(string id, ObjectId after)
+		public async Task<IActionResult> Tag(string id, ObjectId after)
 		{
-			var _notes = NoteService.GetByTag(UserId, id, after, PageSize);
+			var _notes = await NoteService.GetByTag(UserId, id, after, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
@@ -236,21 +237,21 @@ namespace notes.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Remove(ObjectId id)
+		public async Task<IActionResult> Remove(ObjectId id)
 		{
-			var _note = NoteService.GetById(id, UserId);
+			var _note = await NoteService.GetById(id, UserId);
 			if (_note == null)
 				return NotFound();
 
-			NoteService.Trash(id, !_note.Trash);
+			await NoteService.Trash(id, !_note.Trash);
 
 			return new NoContentResult();
 		}
 
 		[HttpGet]
-		public IActionResult Trash(ObjectId after)
+		public async Task<IActionResult> Trash(ObjectId after)
 		{
-			var _notes = NoteService.GetNotes(UserId, after, true, PageSize);
+			var _notes = await NoteService.GetNotes(UserId, after, true, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
@@ -265,13 +266,13 @@ namespace notes.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Delete(NoteDeleteModel model)
+		public async Task<IActionResult> Delete(NoteDeleteModel model)
 		{
 			if (ModelState.IsValid)
 			{
 				foreach (var note in model.Id)
 				{
-					NoteService.Delete(note, UserId);
+					await NoteService.Delete(note, UserId);
 				}
 			}
 
@@ -279,15 +280,15 @@ namespace notes.Controllers
 		}
 
 		[Route("search/tags")]
-		public IActionResult TagSuggestions(string term)
+		public async Task<IActionResult> TagSuggestions(string term)
 		{
-			return Json(NoteService.TagSuggestions(UserId, term).ToArray());
+			return Json((await NoteService.TagSuggestions(UserId, term)).ToArray());
 		}
 
 		[Route("search/notebook")]
-		public IActionResult NotebookSuggestions(string term)
+		public async Task<IActionResult> NotebookSuggestions(string term)
 		{
-			return Json(NoteService.NotebookSuggestions(UserId, term).ToArray());
+			return Json((await NoteService.NotebookSuggestions(UserId, term)).ToArray());
 		}
 	}
 }

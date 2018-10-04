@@ -1,10 +1,11 @@
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using System.Threading.Tasks;
 using notes.Core.Models;
 
 namespace notes.Core.Services
@@ -28,7 +29,7 @@ namespace notes.Core.Services
 		/// <param name="trashed">Request trashed items or not.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public IEnumerable<Note> GetNotes(ObjectId user, ObjectId next, bool trashed, int limit)
+		public async Task<IEnumerable<Note>> GetNotes(ObjectId user, ObjectId next, bool trashed, int limit)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _user = _filter.Eq(f => f.Owner, user);
@@ -45,11 +46,11 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Get all notes for user {user}.");
 
-			var _result = Context.Note
+			var _result = await Context.Note
 				.Find(_query)
 				.Sort(_order)
 				.Limit(limit)
-				.ToEnumerable();
+				.ToListAsync();
 
 			return _result;
 		}
@@ -62,7 +63,7 @@ namespace notes.Core.Services
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public IEnumerable<Note> GetByNotebook(ObjectId user, string notebook, ObjectId next, int limit)
+		public async Task<IEnumerable<Note>> GetByNotebook(ObjectId user, string notebook, ObjectId next, int limit)
 		{
 			notebook = notebook?.Trim();
 
@@ -82,11 +83,11 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Get notes by notebook '{notebook}' for user {user}.");
 
-			var _result = Context.Note
+			var _result = await Context.Note
 				.Find(_query)
 				.Sort(_order)
 				.Limit(limit)
-				.ToEnumerable();
+				.ToListAsync();
 
 			return _result;
 		}
@@ -95,11 +96,11 @@ namespace notes.Core.Services
 		/// Get a list of notes by tag.
 		/// </summary>
 		/// <param name="user">The user who owns the notes.</param>
-		/// <param name="tag"></param>
+		/// <param name="tag">The tag name.</param>
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public IEnumerable<Note> GetByTag(ObjectId user, string tag, ObjectId next, int limit)
+		public async Task<IEnumerable<Note>> GetByTag(ObjectId user, string tag, ObjectId next, int limit)
 		{
 			tag = tag?.Trim();
 
@@ -119,11 +120,11 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Get notes by tag '{tag}' for user {user}.");
 
-			var _result = Context.Note
+			var _result = await Context.Note
 				.Find(_query)
 				.Sort(_order)
 				.Limit(limit)
-				.ToEnumerable();
+				.ToListAsync();
 
 			return _result;
 		}
@@ -134,7 +135,7 @@ namespace notes.Core.Services
 		/// <param name="note">The note id.</param>
 		/// <param name="user">The user id.</param>
 		/// <returns></returns>
-		public Note GetById(ObjectId note, ObjectId user)
+		public async Task<Note> GetById(ObjectId note, ObjectId user)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Id, note);
@@ -144,9 +145,9 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Get note by id {note} for user {user}.");
 
-			var _result = Context.Note
+			var _result = await Context.Note
 				.Find(_query)
-				.SingleOrDefault();
+				.SingleOrDefaultAsync();
 
 			return _result;
 		}
@@ -157,7 +158,7 @@ namespace notes.Core.Services
 		/// <param name="user">The users notebooks.</param>
 		/// <param name="limit">Limit result to n items.</param>
 		/// <returns>A list of notebook.</returns>
-		public IEnumerable<DistinctAndCountResult> GetMostUsedNotebooks(ObjectId user, int limit = 10)
+		public async Task<IEnumerable<DistinctAndCountResult>> GetMostUsedNotebooks(ObjectId user, int limit = 10)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _size = _filter.Size(f => f.Notebook, 0);
@@ -169,7 +170,7 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Get most used notebook for user {user}.");
 
-			var _result = Context.Note
+			var _result = await Context.Note
 				.Aggregate()
 				.Match(_query)
 				.Group(new BsonDocument { { "_id", "$notebook" }, { "count", new BsonDocument { { "$sum", 1 } } } })
@@ -177,7 +178,7 @@ namespace notes.Core.Services
 				.Sort(new BsonDocument { { "count", -1 } })
 				.Limit(limit)
 				.As<DistinctAndCountResult>()
-				.ToEnumerable();
+				.ToListAsync();
 
 			return _result;
 		}
@@ -187,7 +188,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The users notebooks.</param>
 		/// <returns>A list of notebook.</returns>
-		public IEnumerable<DistinctAndCountResult> GetNotebooks(ObjectId user)
+		public async Task<IEnumerable<DistinctAndCountResult>> GetNotebooks(ObjectId user)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _size = _filter.Size(f => f.Notebook, 0);
@@ -199,14 +200,14 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Get notebooks for user {user}.");
 
-			var _result = Context.Note
+			var _result = await Context.Note
 				.Aggregate()
 				.Match(_query)
 				.Group(new BsonDocument { { "_id", "$notebook" }, { "count", new BsonDocument { { "$sum", 1 } } } })
 				.Match(new BsonDocument { { "count", new BsonDocument { { "$gte", 1 } } }, { "_id", new BsonDocument { { "$nin", new BsonArray { BsonNull.Value, "" } } } } })
 				.Sort(new BsonDocument { { "_id", 1 } })
 				.As<DistinctAndCountResult>()
-				.ToEnumerable();
+				.ToListAsync();
 
 			return _result;
 		}
@@ -217,7 +218,7 @@ namespace notes.Core.Services
 		/// <param name="user">The users tags.</param>
 		/// <param name="limit">Limit result to n items.</param>
 		/// <returns>A list of tags.</returns>
-		public IEnumerable<DistinctAndCountResult> GetMostUsedTags(ObjectId user, int limit = 10)
+		public async Task<IEnumerable<DistinctAndCountResult>> GetMostUsedTags(ObjectId user, int limit = 10)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _size = _filter.Size(f => f.Tags, 0);
@@ -229,7 +230,7 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Get most used tags for user {user}.");
 
-			var _result = Context.Note
+			var _result = await Context.Note
 				.Aggregate()
 				.Match(_query)
 				.Unwind(f => f.Tags)
@@ -238,7 +239,7 @@ namespace notes.Core.Services
 				.Sort(new BsonDocument { { "count", -1 } })
 				.Limit(limit)
 				.As<DistinctAndCountResult>()
-				.ToEnumerable();
+				.ToListAsync();
 
 			return _result;
 		}
@@ -248,7 +249,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="user">The users tags.</param>
 		/// <returns>A list of tags.</returns>
-		public IEnumerable<DistinctAndCountResult> GetTags(ObjectId user)
+		public async Task<IEnumerable<DistinctAndCountResult>> GetTags(ObjectId user)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _size = _filter.Size(f => f.Tags, 0);
@@ -260,7 +261,7 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Get tags for user {user}.");
 
-			var _result = Context.Note
+			var _result = await Context.Note
 				.Aggregate()
 				.Match(_query)
 				.Unwind(f => f.Tags)
@@ -268,7 +269,7 @@ namespace notes.Core.Services
 				.Match(new BsonDocument { { "count", new BsonDocument { { "$gte", 1 } } }, { "_id", new BsonDocument { { "$nin", new BsonArray { BsonNull.Value, "" } } } } })
 				.Sort(new BsonDocument { { "_id", 1 } })
 				.As<DistinctAndCountResult>()
-				.ToEnumerable();
+				.ToListAsync();
 
 			return _result;
 		}
@@ -282,7 +283,7 @@ namespace notes.Core.Services
 		/// <param name="notebook">The notebook name.</param>
 		/// <param name="tags">Array of tags.</param>
 		/// <returns></returns>
-		public ObjectId Create(ObjectId user, string title, string content, string notebook, string tags)
+		public async Task<ObjectId> Create(ObjectId user, string title, string content, string notebook, string tags)
 		{
 			var _tags = tags?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
 				.Select(s => s.Trim())
@@ -302,7 +303,7 @@ namespace notes.Core.Services
 				Created = DateTime.UtcNow
 			};
 
-			Context.Note.InsertOne(_note);
+			await Context.Note.InsertOneAsync(_note);
 
 			Log.LogInformation($"Create new note with id {_note.Id} for user {user}.");
 
@@ -316,7 +317,7 @@ namespace notes.Core.Services
 		/// <param name="title">The new title.</param>
 		/// <param name="content">The new content.</param>
 		/// <returns></returns>
-		public void Update(ObjectId note, ObjectId user, string title, string content, string notebook, string tags)
+		public async Task<bool> Update(ObjectId note, ObjectId user, string title, string content, string notebook, string tags)
 		{
 			var _tags = tags?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
 				.Select(s => s.Trim())
@@ -341,7 +342,9 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Update note {note} for user {user}.");
 
-			Context.Note.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
+			var _result = await Context.Note.UpdateOneAsync(_query, _set, new UpdateOptions { IsUpsert = true });
+
+			return _result.IsAcknowledged && _result.ModifiedCount > 0;
 		}
 
 		/// <summary>
@@ -349,7 +352,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="note"></param>
 		/// <param name="user"></param>
-		public void Trash(ObjectId note, bool trash)
+		public async Task<bool> Trash(ObjectId note, bool trash)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Id, note);
@@ -362,7 +365,9 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Mark note {note} as trash (Value: {trash}).");
 
-			Context.Note.UpdateOne(_query, _set, new UpdateOptions { IsUpsert = true });
+			var _result = await Context.Note.UpdateOneAsync(_query, _set, new UpdateOptions { IsUpsert = true });
+
+			return _result.IsAcknowledged && _result.ModifiedCount > 0;
 		}
 
 		/// <summary>
@@ -370,7 +375,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="note">The note id.</param>
 		/// <param name="user">The user who own this note.</param>
-		public void Delete(ObjectId note, ObjectId user)
+		public async Task<bool> Delete(ObjectId note, ObjectId user)
 		{
 			var _filter = Builders<Note>.Filter;
 			var _id = _filter.Eq(f => f.Id, note);
@@ -380,7 +385,9 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Delete note {note} for user {user} permanently.");
 
-			Context.Note.DeleteOne(_query);
+			var _result = await Context.Note.DeleteOneAsync(_query);
+
+			return _result.IsAcknowledged && _result.DeletedCount > 0;
 		}
 
 		/// <summary>
@@ -392,7 +399,7 @@ namespace notes.Core.Services
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public IEnumerable<Note> Search(ObjectId user, string term, ObjectId next, int limit)
+		public async Task<IEnumerable<Note>> Search(ObjectId user, string term, ObjectId next, int limit)
 		{
 			term = term?.Trim();
 
@@ -416,15 +423,13 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Search notes with term '{term}' for user {user}.");
 
-			var _result = Context.Note.Find(_query).Project<Note>(_score).Sort(_order).Limit(100);
+			var _result = await Context.Note.Find(_query).Project<Note>(_score).Sort(_order).Limit(100).ToListAsync();
 			if (next != ObjectId.Empty)
 			{
-				var _skip = _result.ToEnumerable().SkipWhile(condition => condition.Id != next).Skip(1);
-
-				return _skip.Take(limit);
+				return _result.SkipWhile(condition => condition.Id != next).Skip(1).Take(limit);
 			}
 
-			return _result.ToEnumerable().Take(limit);
+			return _result.Take(limit);
 		}
 
 		/// <summary>
@@ -433,7 +438,7 @@ namespace notes.Core.Services
 		/// <param name="user">The user.</param>
 		/// <param name="term">The term to search for.</param>
 		/// <returns></returns>
-		public IEnumerable<string> TagSuggestions(ObjectId user, string term)
+		public async Task<IEnumerable<string>> TagSuggestions(ObjectId user, string term)
 		{
 			term = term?.Trim();
 
@@ -442,7 +447,9 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Get tag suggestions with term '{term}' for user {user}.");
 
-			return GetTags(user).Select(s => s.Id).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
+			var _result = await GetTags(user);
+
+			return _result.Select(s => s.Id).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
 		}
 
 		/// <summary>
@@ -451,7 +458,7 @@ namespace notes.Core.Services
 		/// <param name="user">The user.</param>
 		/// <param name="term">The term to serach for.</param>
 		/// <returns></returns>
-		public IEnumerable<string> NotebookSuggestions(ObjectId user, string term)
+		public async Task<IEnumerable<string>> NotebookSuggestions(ObjectId user, string term)
 		{
 			term = term?.Trim();
 
@@ -460,7 +467,9 @@ namespace notes.Core.Services
 
 			Log.LogDebug($"Get notebook suggestions with term '{term}' for user {user}.");
 
-			return GetNotebooks(user).Select(s => s.Id).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
+			var _result = await GetNotebooks(user);
+
+			return _result.Select(s => s.Id).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
 		}
 	}
 }

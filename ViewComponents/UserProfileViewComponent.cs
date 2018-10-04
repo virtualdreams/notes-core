@@ -1,5 +1,6 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 using notes.Core.Services;
 
 namespace notes.ViewComponents
@@ -14,9 +15,9 @@ namespace notes.ViewComponents
 			UserService = user;
 		}
 
-		public IViewComponentResult Invoke()
+		public async Task<IViewComponentResult> InvokeAsync()
 		{
-			var _user = UserService.GetById(UserId);
+			var _user = await UserService.GetById(UserId);
 			if (_user == null)
 				return Content("unknown");
 

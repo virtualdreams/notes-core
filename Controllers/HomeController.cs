@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using System.Threading.Tasks;
 using notes.Core.Services;
 using notes.Models;
 
@@ -31,9 +32,9 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Index(ObjectId after)
+		public async Task<IActionResult> Index(ObjectId after)
 		{
-			var _notes = NoteService.GetNotes(UserId, after, false, PageSize);
+			var _notes = await NoteService.GetNotes(UserId, after, false, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
@@ -48,9 +49,9 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult Search(string q, ObjectId after)
+		public async Task<IActionResult> Search(string q, ObjectId after)
 		{
-			var _notes = NoteService.Search(UserId, q ?? String.Empty, after, PageSize);
+			var _notes = await NoteService.Search(UserId, q ?? String.Empty, after, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
