@@ -13,9 +13,9 @@
 
 		<title>@ViewBag.Title@Options.SiteName - Administration</title>
 		
-		@await Html.PartialAsync("_StylesPartial")
+		@await Html.PartialAsync("_PartialStyles")
 
-		@await Html.PartialAsync("_IconPartial")
+		@await Html.PartialAsync("_PartialIcons")
 	</head>
 	<body>
 		<!-- Navigation -->
@@ -54,7 +54,7 @@
 			</footer>
 		</div>
 
-		@await Html.PartialAsync("_ScriptsPartial")
+		@await Html.PartialAsync("_PartialScripts")
 
 		@RenderSection("script", required: false)
 	</body>

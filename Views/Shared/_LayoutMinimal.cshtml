@@ -13,16 +13,16 @@
 
 		<title>@ViewBag.Title@Options.SiteName</title>
 
-		@await Html.PartialAsync("_StylesPartial")
+		@await Html.PartialAsync("_PartialStyles")
 
-		@await Html.PartialAsync("_IconPartial")
+		@await Html.PartialAsync("_PartialIcons")
 	</head>
 	<body>
 		<div class="container">
 			@RenderBody()
 		</div>
 
-		@await Html.PartialAsync("_ScriptsPartial")
+		@await Html.PartialAsync("_PartialScripts")
 
 		@RenderSection("script", required: false)
 	</body>
