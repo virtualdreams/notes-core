@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using notes.Core.Services;
+using notes.Helper;
 
 namespace notes.ViewComponents
 {
@@ -13,6 +14,6 @@ namespace notes.ViewComponents
 			UserService = user;
 		}
 
-		public IViewComponentResult Invoke() => Content($"{System.Reflection.Assembly.GetEntryAssembly().GetName().Version}");
+		public IViewComponentResult Invoke() => Content($"{ApplicationVersion.InfoVersion()}");
 	}
 }

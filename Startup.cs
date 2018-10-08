@@ -13,6 +13,7 @@ using System;
 using System.IO;
 using notes.Core.Services;
 using notes.Extensions;
+using notes.Helper;
 using notes.ModelBinders;
 
 namespace notes
@@ -28,7 +29,7 @@ namespace notes
 			Log = log;
 			Configuration = configuration;
 
-			Log.LogInformation($"Application notes v{System.Reflection.Assembly.GetEntryAssembly().GetName().Version} started.");
+			Log.LogInformation($"Application notes {ApplicationVersion.InfoVersion()} started.");
 		}
 
 		public void ConfigureServices(IServiceCollection services)
