@@ -3,7 +3,7 @@ Description=dotnet notes-core
 After=network.target
 
 [Service]
-Environment=ASPNETCORE_URLS=http://127.0.0.1:5000/
+;Environment=ASPNETCORE_URLS=http://127.0.0.1:5000/
 EnvironmentFile=
 ;Restart=always
 ;RestartSec=10

@@ -6,25 +6,44 @@ Notes! is an ASP.NET Core/MongoDB based webapp to create and manage simple text 
 
 * Markdown support
 * Tags and Notebooks
-* Syntax highligting for code blocks
+* Syntax highlighting
 
 ## Technology
 
 * [.NET Core 2.1](https://www.microsoft.com/net/core)
-* [ASP.NET Core 2.1.5](https://docs.microsoft.com/en-us/aspnet/core/)
+* [ASP.NET Core 2.1](https://docs.microsoft.com/en-us/aspnet/core/)
 * [MongoDB](https://www.mongodb.com/)
 * [bootstrap 4](http://getbootstrap.com/)
 * [fontawesome 4](https://fontawesome.com/)
 * [nodejs](https://nodejs.org/)
 * [gulpjs](http://gulpjs.com/)
 
-## Configuration
+## How to run
 
 You need the latest **.NET Core**, **ASP.NET Core** and **MongoDB** to run this application.
 
-### Application
+### Build
 
-Configure application in `appsettings.json` and copy to publish directory.
+**Build to run on local**
+
+```sh
+dotnet restore
+dotnet build
+dotnet run
+```
+
+**Build and publish**
+
+Run in PowerShell or bash:
+
+```sh
+dotnet publish -c Release /p:Version=1.0-$(git rev-parse --short HEAD)
+dotnet /path/to/notes.dll
+```
+
+### Configuration
+
+Configure application in `appsettings.json` and copy this file to publish directory.
 
 ```json
 {
@@ -43,27 +62,43 @@ Configure application in `appsettings.json` and copy to publish directory.
 		}
 	},
 	"Settings": {
-		"KeyStore": "",                    // directory to store encryption key files (leave empty to use memory)					
-		"MongoDB": "mongodb://127.0.0.1/", // mongodb connection string
-		"Database": "notes",               // collection name to use
-		"SiteName": "Notes!",              // site name
-		"PageSize": 10,                    // items per page
+		"KeyStore": "",
+		"MongoDB": "mongodb://127.0.0.1/",
+		"Database": "notes",
+		"SiteName": "Notes!",
+		"PageSize": 10,
 		"Smtp": {
-			"Enabled": false,              // enable sending mails
-			"Server": "localhost",         // mail server
-			"Port": 25,                    // mail port
-			"From": "admin@localhost",     // from mail
-			"Username": "",                // mail username
-			"Passwd": "",                  // mail password
-			"SkipVerify": false            // verify SSL certificates
+			"Enabled": false,
+			"Server": "localhost",
+			"Port": 25,
+			"From": "admin@localhost",
+			"Username": "",
+			"Passwd": "",
+			"SkipVerify": false
 		}
 	}
 }
 ```
 
+#### Options
+
+* **KeyStore**: Directory to store encryption key files (leave empty to use memory)
+* **MongoDB**: MongoDB connection string
+* **Database**: MongoDB collection name
+* **SiteName**: Site name
+* **PageSize**: Items per page (live)
+* **Smtp**
+	* **Enabled**: Enable sending mails
+	* **Server**: Mail server
+	* **Port**: Smtp port
+	* **From**: From mail
+	* **Username**: Mail username
+	* **Passwd**: Mail password
+	* **SkipVerify**: Verify SSL certificates
+
 ### Logging
 
-Configure logging in `NLog.config` and copy to publish directory.
+Configure logging in `NLog.config` and copy this file to publish directory.
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
