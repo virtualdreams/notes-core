@@ -11,8 +11,7 @@
 			"cwd": "${workspaceRoot}",
 			"stopAtEntry": false,
 			"env": {
-				"ASPNETCORE_ENVIRONMENT": "Development",
-				"ASPNETCORE_URLS": "http://*:5002"
+				"ASPNETCORE_ENVIRONMENT": "Development"
 			},
 			"sourceFileMap": {
 				"/Views": "${workspaceRoot}/Views"
