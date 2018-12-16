@@ -83,7 +83,7 @@ Configure application in `appsettings.json` and copy this file to publish direct
 #### Options
 
 * **KeyStore**: Directory to store encryption key files (leave empty to use memory)
-* **MongoDB**: MongoDB connection string
+* **MongoDB**: MongoDB connection string `mongodb://[user:passwd]@host/[authdb]`
 * **Database**: MongoDB collection name
 * **SiteName**: Site name
 * **PageSize**: Items per page (live)
