@@ -23,7 +23,7 @@ namespace notes.ViewComponents
 
 		public async Task<IViewComponentResult> InvokeAsync()
 		{
-			var _notebooks = await NoteService.GetMostUsedNotebooks(UserId);
+			var _notebooks = await NoteService.GetMostUsedNotebooks();
 
 			var notebooks = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_notebooks);
 

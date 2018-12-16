@@ -38,7 +38,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> View(ObjectId id)
 		{
-			var _note = await NoteService.GetById(id, UserId);
+			var _note = await NoteService.GetById(id);
 			if (_note == null)
 				return NotFound();
 
@@ -55,7 +55,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Print(ObjectId id)
 		{
-			var _note = await NoteService.GetById(id, UserId);
+			var _note = await NoteService.GetById(id);
 			if (_note == null)
 				return NotFound();
 
@@ -83,7 +83,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Edit(ObjectId id)
 		{
-			var _note = await NoteService.GetById(id, UserId);
+			var _note = await NoteService.GetById(id);
 			if (_note == null)
 				return NotFound();
 
@@ -183,7 +183,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Notebooks()
 		{
-			var _notebooks = await NoteService.GetNotebooks(UserId);
+			var _notebooks = await NoteService.GetNotebooks();
 
 			var notebooks = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_notebooks);
 
@@ -193,7 +193,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Tags()
 		{
-			var _tags = await NoteService.GetTags(UserId);
+			var _tags = await NoteService.GetTags();
 
 			var tags = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_tags);
 
@@ -203,7 +203,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Notebook(string id, ObjectId after)
 		{
-			var _notes = await NoteService.GetByNotebook(UserId, id, after, PageSize);
+			var _notes = await NoteService.GetByNotebook(id, after, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
@@ -221,7 +221,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Tag(string id, ObjectId after)
 		{
-			var _notes = await NoteService.GetByTag(UserId, id, after, PageSize);
+			var _notes = await NoteService.GetByTag(id, after, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
@@ -239,7 +239,7 @@ namespace notes.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Remove(ObjectId id)
 		{
-			var _note = await NoteService.GetById(id, UserId);
+			var _note = await NoteService.GetById(id);
 			if (_note == null)
 				return NotFound();
 
@@ -251,7 +251,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Trash(ObjectId after)
 		{
-			var _notes = await NoteService.GetNotes(UserId, after, true, PageSize);
+			var _notes = await NoteService.GetNotes(after, true, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
@@ -272,7 +272,7 @@ namespace notes.Controllers
 			{
 				foreach (var note in model.Id)
 				{
-					await NoteService.Delete(note, UserId);
+					await NoteService.Delete(note);
 				}
 			}
 
@@ -282,13 +282,13 @@ namespace notes.Controllers
 		[Route("search/tags")]
 		public async Task<IActionResult> TagSuggestions(string term)
 		{
-			return Json((await NoteService.TagSuggestions(UserId, term)).ToArray());
+			return Json((await NoteService.TagSuggestions(term)).ToArray());
 		}
 
 		[Route("search/notebook")]
 		public async Task<IActionResult> NotebookSuggestions(string term)
 		{
-			return Json((await NoteService.NotebookSuggestions(UserId, term)).ToArray());
+			return Json((await NoteService.NotebookSuggestions(term)).ToArray());
 		}
 	}
 }

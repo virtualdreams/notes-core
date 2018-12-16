@@ -23,7 +23,7 @@ namespace notes.ViewComponents
 
 		public async Task<IViewComponentResult> InvokeAsync()
 		{
-			var _tags = await NoteService.GetMostUsedTags(UserId);
+			var _tags = await NoteService.GetMostUsedTags();
 
 			var tags = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_tags);
 
