@@ -49,7 +49,7 @@ namespace notes.Controllers
 					// HACK!
 					if (!(await UserService.HasUsers()))
 					{
-						await UserService.Create(model.Username, model.Password, "Administrator", "Administrator", true);
+						await UserService.Create(model.Username, model.Password, "Administrator", "Administrator", true, Options.PageSize);
 					}
 
 					var _user = await UserService.Login(model.Username, model.Password);
@@ -239,7 +239,7 @@ namespace notes.Controllers
 				},
 				Settings = new UserSettingsModel
 				{
-					Items = UserSettings?.PageSize ?? Options.PageSize
+					Items = PageSize
 				}
 			};
 

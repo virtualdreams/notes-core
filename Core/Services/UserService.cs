@@ -185,8 +185,9 @@ namespace notes.Core.Services
 		/// <param name="password">The password.</param>
 		/// <param name="role">The role. Can be "User" or "Administrator".</param>
 		/// <param name="active">User account active.</param>
+		/// <param name="pageSize">Default page size.</param>
 		/// <returns>The new ObjectId.</returns>
-		public async Task<ObjectId> Create(string username, string password, string displayName, string role, bool active)
+		public async Task<ObjectId> Create(string username, string password, string displayName, string role, bool active, int pageSize)
 		{
 			username = username?.Trim()?.ToLower();
 			password = password?.Trim();
@@ -199,7 +200,11 @@ namespace notes.Core.Services
 				DisplayName = displayName,
 				Role = role,
 				Enabled = active,
-				Created = DateTime.UtcNow
+				Created = DateTime.UtcNow,
+				Settings = new UserSettings
+				{
+					PageSize = pageSize
+				}
 			};
 
 			try

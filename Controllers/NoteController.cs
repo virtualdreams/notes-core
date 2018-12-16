@@ -23,8 +23,6 @@ namespace notes.Controllers
 		private readonly NoteService NoteService;
 		private readonly RazorViewToStringRenderer ViewRenderService;
 
-		private int PageSize => UserSettings?.PageSize ?? Options.PageSize;
-
 		public NoteController(IMapper mapper, Settings settings, UserService user, NoteService note, RazorViewToStringRenderer render)
 			: base(user)
 		{

@@ -80,7 +80,7 @@ namespace notes.Areas.Admin.Controllers
 				{
 					if (model.Id == ObjectId.Empty)
 					{
-						await UserService.Create(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
+						await UserService.Create(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled, Options.PageSize);
 					}
 					else
 					{

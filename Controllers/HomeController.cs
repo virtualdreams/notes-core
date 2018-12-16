@@ -20,8 +20,6 @@ namespace notes.Controllers
 		private readonly UserService UserService;
 		private readonly NoteService NoteService;
 
-		private int PageSize => UserSettings?.PageSize ?? Options.PageSize;
-
 		public HomeController(IMapper mapper, Settings settings, UserService user, NoteService note)
 			: base(user)
 		{
