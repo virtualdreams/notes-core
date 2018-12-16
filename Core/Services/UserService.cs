@@ -283,7 +283,6 @@ namespace notes.Core.Services
 			Log.LogInformation($"Delete user '{(await GetById(user)).Username}' ({user}) permanently.");
 
 			var _result = await Context.User.DeleteOneAsync(f => f.Id == user);
-			await Context.Note.DeleteManyAsync(f => f.Owner == user);
 
 			return _result.IsAcknowledged && _result.DeletedCount > 0;
 		}
