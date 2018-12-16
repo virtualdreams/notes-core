@@ -266,6 +266,7 @@ namespace notes.Controllers
 		}
 
 		[HttpPost]
+		[Authorize(Policy = "AdministratorOnly")]
 		public async Task<IActionResult> Delete(NoteDeleteModel model)
 		{
 			if (ModelState.IsValid)
