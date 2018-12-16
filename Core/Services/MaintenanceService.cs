@@ -80,9 +80,10 @@ namespace notes.Core.Services
 			var _index = Builders<User>.IndexKeys;
 			var _name = _index.Ascending(f => f.Username);
 
-			Log.LogInformation("Create user index.");
-
+			Log.LogInformation("Drop user index.");
 			await Context.User.Indexes.DropAllAsync();
+
+			Log.LogInformation("Create user index.");
 			await Context.User.Indexes.CreateOneAsync(new CreateIndexModel<User>(_name, new CreateIndexOptions { Unique = true }));
 		}
 
@@ -98,40 +99,35 @@ namespace notes.Core.Services
 				.Text(f => f.Notebook)
 				.Text(f => f.Tags);
 
-			var _owner_trash = _index
-				.Ascending(f => f.Owner)
+			var _trash = _index
 				.Ascending(f => f.Trash);
 
-			var _id_owner_trash = _index
+			var _id_trash = _index
 				.Ascending(f => f.Id)
-				.Ascending(f => f.Owner)
 				.Ascending(f => f.Trash);
 
-			var _owner_trash_notebook = _index
-				.Ascending(f => f.Owner)
+			var _trash_notebook = _index
 				.Ascending(f => f.Trash)
 				.Ascending(f => f.Notebook);
 
-			var _id_owner_trash_notebook = _index
+			var _id_trash_notebook = _index
 				.Ascending(f => f.Id)
-				.Ascending(f => f.Owner)
 				.Ascending(f => f.Trash)
 				.Ascending(f => f.Notebook);
 
-			var _owner_trash_tags = _index
-				.Ascending(f => f.Owner)
+			var _trash_tags = _index
 				.Ascending(f => f.Trash)
 				.Ascending(f => f.Tags);
 
-			var _id_owner_trash_tags = _index
+			var _id_trash_tags = _index
 				.Ascending(f => f.Id)
-				.Ascending(f => f.Owner)
 				.Ascending(f => f.Trash)
 				.Ascending(f => f.Tags);
 
-			Log.LogInformation("Create note index.");
-
+			Log.LogInformation("Drop note indexes.");
 			await Context.Note.Indexes.DropAllAsync();
+
+			Log.LogInformation("Create note indexes.");
 			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_text, new CreateIndexOptions
 			{
 				Weights = new BsonDocument
@@ -142,12 +138,12 @@ namespace notes.Core.Services
 					{ "tags", 1 }
 				}
 			}));
-			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_owner_trash, new CreateIndexOptions { }));
-			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_id_owner_trash, new CreateIndexOptions { }));
-			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_owner_trash_notebook, new CreateIndexOptions { }));
-			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_id_owner_trash_notebook, new CreateIndexOptions { }));
-			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_id_owner_trash_tags, new CreateIndexOptions { }));
-			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_owner_trash_tags, new CreateIndexOptions { }));
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_trash, new CreateIndexOptions { }));
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_id_trash, new CreateIndexOptions { }));
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_trash_notebook, new CreateIndexOptions { }));
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_id_trash_notebook, new CreateIndexOptions { }));
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_id_trash_tags, new CreateIndexOptions { }));
+			await Context.Note.Indexes.CreateOneAsync(new CreateIndexModel<Note>(_trash_tags, new CreateIndexOptions { }));
 		}
 
 		/// <summary>
@@ -158,9 +154,10 @@ namespace notes.Core.Services
 			var _index = Builders<Token>.IndexKeys;
 			var _token = _index.Ascending(f => f.Created);
 
-			Log.LogInformation("Create token index.");
-
+			Log.LogInformation("Drop token index.");
 			await Context.Token.Indexes.DropAllAsync();
+
+			Log.LogInformation("Create token index.");
 			await Context.Token.Indexes.CreateOneAsync(new CreateIndexModel<Token>(_token, new CreateIndexOptions { ExpireAfter = new TimeSpan(0, 60, 0) }));
 		}
 	}
