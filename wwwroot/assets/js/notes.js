@@ -262,6 +262,10 @@ notes = (function ($) {
 
 	$("#settings-form").validate({
 		rules: {
+			'displayname': {
+				nowhitespace: true,
+				maxlength: 50
+			},
 			'items': {
 				required: true,
 				nowhitespace: true,
@@ -307,7 +311,8 @@ notes = (function ($) {
 				minlength: 8
 			},
 			'displayname': {
-				nowhitespace: true
+				nowhitespace: true,
+				maxlength: 50
 			}
 		}
 	});

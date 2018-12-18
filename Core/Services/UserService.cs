@@ -324,31 +324,9 @@ namespace notes.Core.Services
 		/// Update user settings.
 		/// </summary>
 		/// <param name="user">The user.</param>
-		/// <param name="pageSize">The new page size.</param>
-		public async Task<bool> UpdateSettings(ObjectId user, int pageSize)
-		{
-			var _filter = Builders<User>.Filter;
-			var _id = _filter.Eq(f => f.Id, user);
-
-			var _query = _id;
-
-			var _update = Builders<User>.Update;
-			var _set = _update
-				.Set(f => f.Settings.PageSize, pageSize);
-
-			Log.LogInformation($"Update settings for user {user}.");
-
-			var _result = await Context.User.UpdateOneAsync(_query, _set, new UpdateOptions { IsUpsert = true });
-
-			return _result.IsAcknowledged && _result.ModifiedCount > 0;
-		}
-
-		/// <summary>
-		/// Update user profile.
-		/// </summary>
-		/// <param name="user">The user.</param>
-		/// <param name="displayName">The new display name.</param>
-		public async Task<bool> UpdateProfile(ObjectId user, string displayName)
+		/// <param name="displayName">The display name.</param>
+		/// <param name="pageSize">The page size.</param>
+		public async Task<bool> UpdateSettings(ObjectId user, string displayName, int pageSize)
 		{
 			displayName = displayName?.Trim();
 
@@ -359,9 +337,10 @@ namespace notes.Core.Services
 
 			var _update = Builders<User>.Update;
 			var _set = _update
-				.Set(f => f.DisplayName, displayName);
+				.Set(f => f.DisplayName, displayName)
+				.Set(f => f.Settings.PageSize, pageSize);
 
-			Log.LogInformation($"Update profile for user {user}.");
+			Log.LogInformation($"Update settings for user {user}.");
 
 			var _result = await Context.User.UpdateOneAsync(_query, _set, new UpdateOptions { IsUpsert = true });
 

@@ -5,7 +5,6 @@ namespace notes.Models
 {
 	public class NotePostModel
 	{
-
 		public ObjectId Id { get; set; }
 
 		[Required]

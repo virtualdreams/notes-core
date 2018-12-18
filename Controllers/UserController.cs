@@ -233,12 +233,9 @@ namespace notes.Controllers
 		{
 			var view = new UserSettingsEditContainer
 			{
-				Profile = new UserProfileModel
-				{
-					DisplayName = (await UserService.GetById(UserId))?.DisplayName
-				},
 				Settings = new UserSettingsModel
 				{
+					DisplayName = (await UserService.GetById(UserId))?.DisplayName,
 					Items = PageSize
 				}
 			};
@@ -254,20 +251,7 @@ namespace notes.Controllers
 				return RedirectToAction("settings");
 			}
 
-			await UserService.UpdateSettings(UserId, model.Items);
-
-			return RedirectToAction("settings");
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> Profile(UserProfilePostModel model)
-		{
-			if (!ModelState.IsValid)
-			{
-				return RedirectToAction("settings");
-			}
-
-			await UserService.UpdateProfile(UserId, model.DisplayName);
+			await UserService.UpdateSettings(UserId, model.DisplayName, model.Items);
 
 			return RedirectToAction("settings");
 		}

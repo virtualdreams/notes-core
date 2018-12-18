@@ -21,27 +21,17 @@
 	<div class="col-lg-12">
         <div class="row">
 			<div class="col-lg-4">
-                <form role="form" action="@Url.Action("profile", "user")" method="post" enctype="multipart/form-data" id="profile-form" >
+                <form role="form" action="@Url.Action("settings", "user")" method="post" enctype="multipart/form-data" id="settings-form" >
                     <div class="form-group">
                         <label for="displayname">Display Name</label>
-                        <input type="text" class="form-control" placeholder="Display Name" name="displayname" id="displayname" value="@Model.Profile.DisplayName" />
+                        <input type="text" class="form-control" placeholder="Display Name" name="displayname" id="displayname" value="@Model.Settings.DisplayName" />
                     </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Update profile</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-			<div class="col-lg-4">
-                <form role="form" action="@Url.Action("settings", "user")" method="post" enctype="multipart/form-data" id="settings-form" >
                     <div class="form-group">
                         <label for="items">Items per page</label>
                         <input type="number" class="form-control" name="items" id="items" value="@Model.Settings.Items" />
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Update settings</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>
