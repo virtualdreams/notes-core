@@ -242,9 +242,9 @@ namespace notes.Core.Services
 
 			Context.Add(_note);
 
-			Log.LogInformation($"Create new note with id {_note.Id}.");
-
 			await Context.SaveChangesAsync();
+
+			Log.LogInformation($"Create new note with id {_note.Id}.");
 
 			return _note;
 		}
@@ -286,9 +286,9 @@ namespace notes.Core.Services
 
 			_note.Modified = DateTime.UtcNow;
 
-			Log.LogInformation($"Update note {id}.");
-
 			await Context.SaveChangesAsync();
+
+			Log.LogInformation($"Update note {id}.");
 		}
 
 		/// <summary>
