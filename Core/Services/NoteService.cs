@@ -276,7 +276,7 @@ namespace notes.Core.Services
 			_note.Notebook = notebook?.Trim();
 
 			var _tagsEqual = _tags != null ? _note.Tags.Select(s => s.Name).SequenceEqual(_tags) : false;
-			Log.LogInformation($"Tag array comparision result: {_tagsEqual}");
+			Log.LogInformation($"Tags update needed: {!_tagsEqual}");
 
 			if (!_tagsEqual)
 			{
