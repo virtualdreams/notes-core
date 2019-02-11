@@ -51,14 +51,20 @@ namespace notes.Extensions
 				);
 
 				routes.MapRoute(
+					name: "edit",
+					template: "/note/edit/{id?}/{slug?}",
+					defaults: new { controller = "Note", action = "Edit" }
+				);
+
+				routes.MapRoute(
 					name: "view",
-					template: "note/{id?}",
+					template: "note/{id?}/{slug?}",
 					defaults: new { controller = "Note", action = "View" }
 				);
 
 				routes.MapRoute(
 					name: "print",
-					template: "print/{id?}",
+					template: "print/{id?}/{slug?}",
 					defaults: new { controller = "Note", action = "Print" }
 				);
 

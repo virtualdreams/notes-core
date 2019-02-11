@@ -1,4 +1,3 @@
-using MongoDB.Bson;
 using System.Collections.Generic;
 using System;
 
@@ -6,7 +5,7 @@ namespace notes.Models
 {
 	public class NoteModel
 	{
-		public ObjectId Id { get; set; }
+		public int Id { get; set; }
 
 		public string Age { get; set; }
 
@@ -27,7 +26,5 @@ namespace notes.Models
 		public DateTime? Created { get; set; }
 
 		public DateTime? Modified { get; set; }
-
-		public double? Score { get; set; }
 	}
 }

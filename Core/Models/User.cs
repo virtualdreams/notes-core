@@ -1,56 +1,56 @@
 using System;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace notes.Core.Models
 {
-	[BsonIgnoreExtraElements]
+	[Table("user")]
 	public class User
 	{
-		[BsonId]
-		[BsonIgnoreIfDefault]
-		public ObjectId Id { get; set; }
+		[Column("id")]
+		public int Id { get; set; }
 
 		/// <summary>
 		/// The username/loginname
 		/// </summary>
-		[BsonElement("username")]
+		[Column("username")]
+		[MaxLength(100)]
 		public string Username { get; set; }
 
 		/// <summary>
 		/// The encrypted password
 		/// </summary>
-		[BsonElement("password")]
+		[Column("password")]
+		[MaxLength(100)]
 		public string Password { get; set; }
 
-		[BsonElement("displayname")]
+		[Column("displayname")]
+		[MaxLength(50)]
 		public string DisplayName { get; set; }
 
 		/// <summary>
 		/// The user role.
 		/// </summary>
-		[BsonElement("role")]
+		[Column("role")]
+		[MaxLength(50)]
 		public string Role { get; set; }
 
 		/// <summary>
 		/// User is active
 		/// </summary>
-		[BsonElement("enabled")]
+		[Column("enabled")]
 		public bool Enabled { get; set; }
 
-		[BsonElement("created")]
-		[BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+		/// <summary>
+		/// Created
+		/// </summary>
+		[Column("created")]
 		public DateTime? Created { get; set; }
 
-		[BsonElement("settings")]
-		[BsonIgnoreIfNull]
-		public UserSettings Settings { get; set; }
-	}
-
-	[BsonIgnoreExtraElements]
-	public class UserSettings
-	{
-		[BsonElement("pagesize")]
-		public int PageSize { get; set; }
+		/// <summary>
+		/// Page size for user.
+		/// </summary>
+		[Column("items")]
+		public int Items { get; set; }
 	}
 }

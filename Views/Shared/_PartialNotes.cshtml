@@ -11,9 +11,9 @@
         </thead>
         <tbody>
             @foreach(var note in Model) {
-            <tr data-score="@note.Score">
+            <tr>
                 <td>
-                    <a href="@Url.RouteUrl("view", new { id = note.Title.ToSlug(note.Id) })">@note.Title</a>
+                    <a href="@Url.RouteUrl("view", new { id = note.Id, slug = note.Title.ToSlug() })">@note.Title</a>
                 </td>
                 <td><span class="pull-right text-muted small"><em>@note.Age</em></span></td>
             </tr>

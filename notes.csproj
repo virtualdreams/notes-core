@@ -44,7 +44,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" />
-    <PackageReference Include="MongoDB.Driver" Version="2.7.2" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.4" />
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="Markdig" Version="0.15.5" />
     <PackageReference Include="MailKit" Version="2.0.7" />

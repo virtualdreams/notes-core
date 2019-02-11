@@ -16,14 +16,14 @@
 		<div class="pb-2 mt-4 mb-2 border-bottom">
 			<div class="btn-toolbar pull-right">
 				<div class="btn-group" role="group">
-					<button type="button" class="btn btn-outline-secondary" data-href="@Url.Action("edit", "note", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })">
+					<button type="button" class="btn btn-outline-secondary" data-href="@Url.RouteUrl("edit", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })">
 						<i class="fa fa-fw fa-pencil"></i> Edit
 					</button>
 					
 					<div class="btn-group" role="group">
 						<button class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"></button>
        					<div class="dropdown-menu">
-							<a class="dropdown-item" href="@Url.RouteUrl("print", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })" target="_blank"><i class="fa fa-fw fa-print"></i> Print</a>
+							<a class="dropdown-item" href="@Url.RouteUrl("print", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })" target="_blank"><i class="fa fa-fw fa-print"></i> Print</a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="#" data-toggle="modal" data-target="#trash">
 								@if(Model.Note.Trash) {
@@ -117,9 +117,9 @@
 					<div class="col-sm-12">
 						<b>Modified on:</b> @FormatDate(Model.Note.Modified)
 					</div>
-					<div class="col-sm-12">
-						<b>Version:</b> @Model.Note.Version
-					</div>
+					@*<div class="col-sm-12">
+						<b>Version:</b> 0
+					</div>*@
 				</div>
 			</div>
 			<div class="modal-footer">

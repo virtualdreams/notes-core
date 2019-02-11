@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -193,7 +192,7 @@ namespace notes.Controllers
 
 		[Authorize]
 		[HttpGet]
-		public IActionResult Security(ObjectId id)
+		public IActionResult Security(int id)
 		{
 			return View();
 		}
@@ -213,7 +212,7 @@ namespace notes.Controllers
 					if (!model.NewPassword.Equals(model.ConfirmPassword))
 						throw new NotesPasswordMismatchException();
 
-					await UserService.UpdatePassword(UserId, model.NewPassword);
+					await UserService.UpdatePassword(CurrentUser.Id, model.NewPassword);
 
 					// redirect to home
 					return RedirectToAction("settings", "user");
@@ -229,13 +228,13 @@ namespace notes.Controllers
 
 		[Authorize]
 		[HttpGet]
-		public async Task<IActionResult> Settings()
+		public IActionResult Settings()
 		{
 			var view = new UserSettingsEditContainer
 			{
 				Settings = new UserSettingsModel
 				{
-					DisplayName = (await UserService.GetById(UserId))?.DisplayName,
+					DisplayName = CurrentUser.DisplayName,
 					Items = PageSize
 				}
 			};
@@ -251,7 +250,7 @@ namespace notes.Controllers
 				return RedirectToAction("settings");
 			}
 
-			await UserService.UpdateSettings(UserId, model.DisplayName, model.Items);
+			await UserService.UpdateSettings(CurrentUser.Id, model.DisplayName, model.Items);
 
 			return RedirectToAction("settings");
 		}

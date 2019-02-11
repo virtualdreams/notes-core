@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using MongoDB.Bson;
 
 namespace notes.Models
 {
 	public class NotePostModel
 	{
-		public ObjectId Id { get; set; }
+		public int Id { get; set; }
 
 		[Required]
 		public string Title { get; set; }

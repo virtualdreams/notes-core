@@ -15,13 +15,9 @@ namespace notes.ViewComponents
 			UserService = user;
 		}
 
-		public async Task<IViewComponentResult> InvokeAsync()
+		public IViewComponentResult Invoke()
 		{
-			var _user = await UserService.GetById(UserId);
-			if (_user == null)
-				return Content("unknown");
-
-			var _displayName = String.IsNullOrEmpty(_user.DisplayName) ? _user.Username : _user.DisplayName;
+			var _displayName = String.IsNullOrEmpty(CurrentUser.DisplayName) ? CurrentUser.Username : CurrentUser.DisplayName;
 
 			return Content($"{_displayName}");
 		}

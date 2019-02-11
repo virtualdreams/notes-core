@@ -2,7 +2,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,10 +29,10 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Index(ObjectId after)
+		public async Task<IActionResult> Index(int after)
 		{
 			var _notes = await NoteService.GetNotes(after, false, PageSize);
-			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
+			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? 0, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 
@@ -47,10 +46,10 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Search(string q, ObjectId after)
+		public async Task<IActionResult> Search(string q, int after)
 		{
 			var _notes = await NoteService.Search(q ?? String.Empty, after, PageSize);
-			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
+			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? 0, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 

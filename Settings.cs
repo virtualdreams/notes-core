@@ -8,14 +8,9 @@ namespace notes
 		public string KeyStore { get; set; } = "";
 
 		/// <summary>
-		/// MongoDb connection string.
+		/// MySql connection string.
 		/// </summary>
-		public string MongoDB { get; set; } = "mongodb://127.0.0.1/";
-
-		/// <summary>
-		/// MongoDb database name.
-		/// </summary>
-		public string Database { get; set; } = "notes";
+		public string ConnectionString { get; set; } = "Server=localhost;Database=notes;User=notes;Password=notes";
 
 		/// <summary>
 		/// Site name.

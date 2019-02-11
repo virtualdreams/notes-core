@@ -64,4 +64,25 @@ namespace notes
 			: base("It looks like you clicked on an invalid password reset link. Please try again.")
 		{ }
 	}
+
+	public class NotesNoteNotFoundException : NotesException
+	{
+		public NotesNoteNotFoundException()
+			: base("Note not found!")
+		{ }
+	}
+
+	public class NotesUserNotFoundException : NotesException
+	{
+		public NotesUserNotFoundException()
+			: base("User not found!")
+		{ }
+	}
+
+	public class NotesTokenNotFoundException : NotesException
+	{
+		public NotesTokenNotFoundException()
+			: base("Token not found!")
+		{ }
+	}
 }

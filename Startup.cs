@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -38,18 +39,25 @@ namespace notes
 			services.AddOptions();
 			services.Configure<Settings>(Configuration.GetSection("Settings"));
 
-			// DI
-			services.AddAutoMapper();
+			// get settings
 			services.AddScoped(cfg => cfg.GetService<IOptionsSnapshot<Settings>>().Value);
-			services.AddScoped<MongoContext>();
+			var settings = services.BuildServiceProvider().GetRequiredService<Settings>();
+
+			// database context
+			services.AddDbContext<MySqlContext>(options =>
+			{
+				options.UseMySql(settings.ConnectionString, mySqlOptions => { });
+				//options.EnableSensitiveDataLogging(true);
+			},
+			ServiceLifetime.Scoped
+			);
+
+			// dependency injection
+			services.AddAutoMapper();
 			services.AddTransient<NoteService>();
 			services.AddTransient<UserService>();
 			services.AddTransient<MailService>();
-			services.AddTransient<MaintenanceService>();
 			services.AddScoped<RazorViewToStringRenderer>();
-
-			// get settings
-			var settings = services.BuildServiceProvider().GetRequiredService<Settings>();
 
 			// key ring
 			if (!String.IsNullOrEmpty(settings.KeyStore))
@@ -61,16 +69,13 @@ namespace notes
 			}
 
 			// IIS integration
-			services.Configure<IISOptions>(options =>
-			{
-
-			});
+			services.Configure<IISOptions>(options => { });
 
 			// add custom model binders
 			services.AddMvc(options =>
 			{
-				options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
-			});
+				// options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
+			}).AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 			// add sessions
 			services.AddDistributedMemoryCache();

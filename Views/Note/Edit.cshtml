@@ -1,16 +1,15 @@
 @model notes.Models.NoteEditContainer
 @using notes.Helper;
-@using MongoDB.Bson;
 
 @{
-	ViewBag.Title = $"{(Model.Note.Id != ObjectId.Empty ? Model.Note.Title : "Create new note")} - ";
+	ViewBag.Title = $"{(Model.Note.Id != 0 ? Model.Note.Title : "Create new note")} - ";
 }
 
 <div class="row">
 	<div class="col-lg-12">
 		<div class="pb-2 mt-4 mb-2 border-bottom">
 			<h1>
-				@if(Model.Note.Id != ObjectId.Empty) {
+				@if(Model.Note.Id != 0) {
 				@:Edit note
 				} else {
 				@:Create new note
@@ -76,8 +75,8 @@
 						<input type="hidden" name="id" id="id" value="@Model.Note.Id" />
 						<button type="submit" class="btn btn-primary">Save</button>
 						<button type="button" class="btn btn-primary" id="saveContinue">Save and continue</button>
-						@if(Model.Note.Id != ObjectId.Empty) {
-						<button type="button" class="btn btn-primary" data-href="@Url.RouteUrl("view", new { id = Model.Note.Title.ToSlug(Model.Note.Id) })">Cancel</button>
+						@if(Model.Note.Id != 0) {
+						<button type="button" class="btn btn-primary" data-href="@Url.RouteUrl("view", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })">Cancel</button>
 						}
 					</div>
 				</div>

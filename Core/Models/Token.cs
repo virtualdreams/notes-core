@@ -1,23 +1,22 @@
 using System;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace notes.Core.Models
 {
-	[BsonIgnoreExtraElements]
+	[Table("token")]
 	public class Token
 	{
-		[BsonIdAttribute]
-		public ObjectId Id { get; set; }
+		[Column("id")]
+		public int Id { get; set; }
 
-		[BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-		[BsonElement("created")]
+		[Column("created")]
 		public DateTime Created { get; set; }
 
-		[BsonElement("nonce")]
+		[Column("nonce")]
 		public string Nonce { get; set; }
 
-		[BsonElement("user")]
-		public ObjectId User { get; set; }
+		[Column("userid")]
+		public User User { get; set; }
 	}
 }

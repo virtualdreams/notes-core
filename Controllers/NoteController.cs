@@ -2,7 +2,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 using Mvc.RenderViewToString;
 using notes.Core.Services;
 using System.Collections.Generic;
@@ -34,7 +33,7 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> View(ObjectId id)
+		public async Task<IActionResult> View(int id)
 		{
 			var _note = await NoteService.GetById(id);
 			if (_note == null)
@@ -51,7 +50,7 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Print(ObjectId id)
+		public async Task<IActionResult> Print(int id)
 		{
 			var _note = await NoteService.GetById(id);
 			if (_note == null)
@@ -79,7 +78,7 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Edit(ObjectId id)
+		public async Task<IActionResult> Edit(int id)
 		{
 			var _note = await NoteService.GetById(id);
 			if (_note == null)
@@ -102,24 +101,25 @@ namespace notes.Controllers
 			{
 				try
 				{
-					var _id = ObjectId.Empty;
-					if (model.Id == ObjectId.Empty)
+					var _id = 0;
+					if (model.Id == 0)
 					{
-						_id = await NoteService.Create(UserId, model.Title, model.Content, model.Notebook, model.Tags);
+						var _note = await NoteService.Create(model.Title, model.Content, model.Notebook, model.Tags);
+						_id = _note.Id;
 					}
 					else
 					{
-						await NoteService.Update(model.Id, UserId, model.Title, model.Content, model.Notebook, model.Tags);
+						await NoteService.Update(model.Id, model.Title, model.Content, model.Notebook, model.Tags);
 						_id = model.Id;
 					}
 
 					if (Request.IsAjaxRequest())
 					{
-						return Json(new { Success = true, Id = _id.ToString(), Error = "" });
+						return Json(new { Success = true, Id = _id, Error = "" });
 					}
 					else
 					{
-						return RedirectToAction("view", "note", new { id = model.Title.ToSlug(_id) });
+						return RedirectToAction("view", "note", new { id = _id, slug = model.Title.ToSlug() });
 					}
 				}
 				catch (NotesException ex)
@@ -199,10 +199,10 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Notebook(string id, ObjectId after)
+		public async Task<IActionResult> Notebook(string id, int after)
 		{
 			var _notes = await NoteService.GetByNotebook(id, after, PageSize);
-			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
+			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? 0, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 
@@ -217,10 +217,10 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Tag(string id, ObjectId after)
+		public async Task<IActionResult> Tag(string id, int after)
 		{
 			var _notes = await NoteService.GetByTag(id, after, PageSize);
-			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
+			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? 0, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 
@@ -235,7 +235,7 @@ namespace notes.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Remove(ObjectId id)
+		public async Task<IActionResult> Remove(int id)
 		{
 			var _note = await NoteService.GetById(id);
 			if (_note == null)
@@ -247,10 +247,10 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Trash(ObjectId after)
+		public async Task<IActionResult> Trash(int after)
 		{
 			var _notes = await NoteService.GetNotes(after, true, PageSize);
-			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? ObjectId.Empty, _notes.Count() >= PageSize);
+			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? 0, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
 

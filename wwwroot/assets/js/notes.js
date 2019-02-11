@@ -201,6 +201,20 @@ notes = (function ($) {
 		'This field is required.'
 	);
 
+	$.validator.addMethod(
+		'inarraymaxlength',
+		function (value, element, length) {
+			var array = value.split(' ');
+			for (var i = 0; i < array.length; i++) {
+				if (array[i].trim().length > length) {
+					return false;
+				}
+			}
+			return true;
+		},
+		'Length of word too long.'
+	);
+
 	$("#login-form").validate({
 		rules: {
 			'username': {
@@ -251,11 +265,23 @@ notes = (function ($) {
 		rules: {
 			'title': {
 				required: true,
-				nowhitespace: true
+				nowhitespace: true,
+				maxlength: 100
 			},
 			'content': {
 				required: true,
 				nowhitespace: true
+			},
+			'notebook': {
+				maxlength: 50
+			},
+			'tags': {
+				inarraymaxlength: 50
+			}
+		},
+		messages: {
+			'tags': {
+				inarraymaxlength: "Tag too long."
 			}
 		}
 	});

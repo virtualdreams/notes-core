@@ -1,11 +1,9 @@
-using MongoDB.Bson;
-
 namespace notes.Models
 {
 	public class Pager
 	{
 		public bool HasNext { get; set; }
-		public ObjectId NextPage { get; set; }
+		public int NextPage { get; set; }
 
 		/// <summary>
 		/// Initialize pager.
@@ -19,7 +17,7 @@ namespace notes.Models
 		/// <param name="next">Next page id.</param>
 		/// <param name="previous">Previous page id.</param>
 		/// <param name="pageSize">Items per page.</param>
-		public Pager(ObjectId next, bool hasNext)
+		public Pager(int next, bool hasNext)
 		{
 			HasNext = hasNext;
 

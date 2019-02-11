@@ -1,6 +1,6 @@
 # Notes!
 
-Notes! is an ASP.NET Core/MongoDB based webapp to create and manage simple text notes.
+Notes! is an ASP.NET Core/MariaDB based webapp to create and manage simple text notes.
 
 ## Features
 
@@ -10,9 +10,9 @@ Notes! is an ASP.NET Core/MongoDB based webapp to create and manage simple text 
 
 ## Technology
 
-* [.NET Core 2.1](https://www.microsoft.com/net/core)
-* [ASP.NET Core 2.1](https://docs.microsoft.com/en-us/aspnet/core/)
-* [MongoDB](https://www.mongodb.com/)
+* [.NET Core 2.2](https://www.microsoft.com/net/core)
+* [ASP.NET Core 2.2](https://docs.microsoft.com/en-us/aspnet/core/)
+* [MariaDB](https://mariadb.org/)
 * [bootstrap 4](http://getbootstrap.com/)
 * [fontawesome 4](https://fontawesome.com/)
 * [nodejs](https://nodejs.org/)
@@ -20,7 +20,7 @@ Notes! is an ASP.NET Core/MongoDB based webapp to create and manage simple text 
 
 ## How to run
 
-You need the latest **.NET Core**, **ASP.NET Core** and **MongoDB** to run this application.
+You need the latest **.NET Core**, **ASP.NET Core** and **MariaDB** to run this application.
 
 ### Build
 
@@ -47,44 +47,42 @@ Configure application in `appsettings.json` and copy this file to publish direct
 
 ```json
 {
-	"Kestrel": {
-		"EndPoints": {
-			"Http": {
-				"Url": "http://127.0.0.1:5000"
-			},
-			"Https": {
-				"Url": "https://127.0.0.1:5001",
-				"Certificate": {
-					"Path": "/foo/bar/cert.p12|pfx",
-					"Password": "cert_password"
-				}
-			}
-		}
-	},
-	"Settings": {
-		"KeyStore": "",
-		"MongoDB": "mongodb://127.0.0.1/",
-		"Database": "notes",
-		"SiteName": "Notes!",
-		"PageSize": 10,
-		"Smtp": {
-			"Enabled": false,
-			"Server": "localhost",
-			"Port": 25,
-			"From": "admin@localhost",
-			"Username": "",
-			"Passwd": "",
-			"SkipVerify": false
-		}
-	}
+    "Kestrel": {
+        "EndPoints": {
+            "Http": {
+                "Url": "http://127.0.0.1:5000"
+            },
+            "Https": {
+                "Url": "https://127.0.0.1:5001",
+                "Certificate": {
+                    "Path": "/foo/bar/cert.p12|pfx",
+                    "Password": "cert_password"
+                }
+            }
+        }
+    },
+    "Settings": {
+        "KeyStore": "",
+        "ConnectionString": "Server=localhost;Database=notes;User=notes;Password=notes",
+        "SiteName": "Notes!",
+        "PageSize": 10,
+        "Smtp": {
+        "Enabled": false,
+            "Server": "localhost",
+            "Port": 25,
+            "From": "admin@localhost",
+            "Username": "",
+            "Passwd": "",
+            "SkipVerify": false
+       }
+    }
 }
 ```
 
 #### Options
 
 * **KeyStore**: Directory to store encryption key files (leave empty to use memory)
-* **MongoDB**: MongoDB connection string `mongodb://[user:passwd]@host/[authdb]`
-* **Database**: MongoDB collection name
+* **ConnectionString**: MariaDB/MySQL connection string `Server=[host];Database=[database];User=[username];Password=[password]`
 * **SiteName**: Site name
 * **PageSize**: Items per page (live)
 * **Smtp**
@@ -128,6 +126,8 @@ Configure logging in `NLog.config` and copy this file to publish directory.
   <!-- rules to map from logger name to target -->
   <rules>
     <logger name="notes.*" minlevel="Info" writeTo="console" />
+	<!-- Optional if you want to log sql statements -->
+    <logger name="Microsoft.EntityFrameworkCore.*" minLevel="Debug" writeTo="file" />
     <logger name="Microsoft.*" minlevel="Trace" writeTo="blackhole" final="true" />
     <logger name="*" minlevel="Debug" writeTo="file" />
   </rules>
@@ -138,12 +138,12 @@ Additionally review `logsettings.Production.json`.
 
 ```json
 {
-	"Logging": {
-		"Console": {
-			"LogLevel": {
-				"Default": "None"
-			}
-		}
-	}
+    "Logging": {
+        "Console": {
+            "LogLevel": {
+                "Default": "None"
+            }
+        }
+    }
 }
 ```

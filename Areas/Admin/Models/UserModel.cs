@@ -1,11 +1,10 @@
-using MongoDB.Bson;
 using System;
 
 namespace notes.Areas.Admin.Models
 {
 	public class UserModel
 	{
-		public ObjectId Id { get; set; }
+		public int Id { get; set; }
 
 		public string Username { get; set; }
 

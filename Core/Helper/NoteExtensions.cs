@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MongoDB.Bson;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -7,7 +6,7 @@ using System;
 
 namespace notes.Helper
 {
-    static public class NoteExtensions
+	static public class NoteExtensions
 	{
 		/// <summary>
 		/// Slugify the string.
@@ -17,7 +16,7 @@ namespace notes.Helper
 		/// <returns>Slugified string.</returns>
 		static public string ToSlug(this string value, int maxLength = 100)
 		{
-			if(String.IsNullOrEmpty(value))
+			if (String.IsNullOrEmpty(value))
 				return String.Empty;
 
 			// convert to lower case
@@ -37,7 +36,7 @@ namespace notes.Helper
 			value = value.Replace("ä", "ae").Replace("ö", "oe").Replace("ü", "ue").Replace("ß", "ss");
 
 			// remove invalid chars
-			value = Regex.Replace(value, @"[^a-z0-9\s-]", "");
+			value = Regex.Replace(value, @"[^a-z0-9\s-]", "-");
 
 			// trim dashes from end
 			value = value.Trim('-');
@@ -50,31 +49,10 @@ namespace notes.Helper
 		}
 
 		/// <summary>
-		/// Extended slug with id at the end.
+		/// Convert datetime to minutes.
 		/// </summary>
-		/// <param name="value">The string to slugify.</param>
-		/// <param name="id"></param>
-		/// <param name="maxLength">Max length of text.</param>
+		/// <param name="dt">The datetime.</param>
 		/// <returns></returns>
-		static public string ToSlug(this string value, ObjectId id, int maxLength = 100)
-		{
-			return $"{value.ToSlug(maxLength)}-{id.ToString()}";
-		}
-
-		/// <summary>
-		/// Get last n characters.
-		/// </summary>
-		/// <param name="value">The value.</param>
-		/// <param name="len">Max length.</param>
-		/// <returns></returns>
-		static public string GetLast(this string value, int len)
-		{
-			if(String.IsNullOrEmpty(value) || len >= value.Length)
-				return value;
-
-			return value.Substring(value.Length - len);
-		}
-
 		static public int ToMinutes(this DateTime dt)
 		{
 			var _diff = DateTime.Now - dt;
@@ -82,25 +60,30 @@ namespace notes.Helper
 			return (int)_diff.TotalMinutes;
 		}
 
+		/// <summary>
+		/// Convert minutes to words.
+		/// </summary>
+		/// <param name="minutes">The minutes.</param>
+		/// <returns></returns>
 		static public string ToWords(this int minutes)
 		{
 			// stolen from reddit https://github.com/reddit/reddit/blob/bd922104b971a5c6794b199f364a06fdf61359a2/r2/r2/public/static/js/timetext.js
-			var chunks = new Chunk[]
+			var chunks = new TimeChunk[]
 			{
-				new Chunk{ Val = 60 * 24 * 365, S1 = "a year ago", S2 = "{0} years ago" },
-				new Chunk{ Val = 60 * 24 * 30, S1 = "a month ago", S2 = "{0} months ago" },
-				new Chunk{ Val = 60 * 24, S1 = "a day ago", S2 = "{0} days ago" },
-				new Chunk{ Val = 60, S1 = "an hour ago", S2 = "{0} hours ago" },
-				new Chunk{ Val = 1, S1 = "a minute ago", S2 = "{0} minutes ago" },
+				new TimeChunk{ Val = 60 * 24 * 365, S1 = "a year ago", S2 = "{0} years ago" },
+				new TimeChunk{ Val = 60 * 24 * 30, S1 = "a month ago", S2 = "{0} months ago" },
+				new TimeChunk{ Val = 60 * 24, S1 = "a day ago", S2 = "{0} days ago" },
+				new TimeChunk{ Val = 60, S1 = "an hour ago", S2 = "{0} hours ago" },
+				new TimeChunk{ Val = 1, S1 = "a minute ago", S2 = "{0} minutes ago" },
 			};
 
-			foreach(var chunk in chunks)
+			foreach (var chunk in chunks)
 			{
 				var count = (int)Math.Floor((double)minutes / (double)chunk.Val);
 
-				if(count > 0)
+				if (count > 0)
 				{
-					if(count == 1)
+					if (count == 1)
 						return String.Format(chunk.S1, count);
 					else
 						return String.Format(chunk.S2, count);
@@ -109,6 +92,11 @@ namespace notes.Helper
 			return "just now";
 		}
 
+		/// <summary>
+		/// Extract username from principal.
+		/// </summary>
+		/// <param name="principal">The principal.</param>
+		/// <returns>The username.</returns>
 		static public string GetUserName(this ClaimsPrincipal principal)
 		{
 			if (principal == null)
@@ -117,6 +105,11 @@ namespace notes.Helper
 			return principal.FindFirst(ClaimTypes.Name)?.Value;
 		}
 
+		/// <summary>
+		/// Extract the role from principal.
+		/// </summary>
+		/// <param name="principal">The principal.</param>
+		/// <returns>The role.</returns>
 		static public string GetUserRole(this ClaimsPrincipal principal)
 		{
 			if (principal == null)
@@ -130,7 +123,7 @@ namespace notes.Helper
 	{
 		static public bool HasError(this IHtmlHelper helper, string modelName)
 		{
-			if(helper.ViewData.ModelState.ContainsKey(modelName))
+			if (helper.ViewData.ModelState.ContainsKey(modelName))
 			{
 				return helper.ViewData.ModelState[modelName].Errors.Count > 0;
 			}
@@ -140,7 +133,7 @@ namespace notes.Helper
 
 		static public string ErrorMessage(this IHtmlHelper helper, string modelName)
 		{
-			if(helper.ViewData.ModelState.ContainsKey(modelName))
+			if (helper.ViewData.ModelState.ContainsKey(modelName))
 			{
 				return helper.ViewData.ModelState[modelName].Errors.FirstOrDefault()?.ErrorMessage;
 			}
@@ -149,7 +142,7 @@ namespace notes.Helper
 		}
 	}
 
-	class Chunk
+	class TimeChunk
 	{
 		public int Val;
 		public string S1;

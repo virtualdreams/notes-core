@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using notes.Core.Models;
 using notes.Core.Services;
 using notes.Helper;
@@ -10,9 +9,9 @@ namespace notes.Controllers
 	{
 		private readonly UserService UserService;
 
-		public ObjectId UserId => UserService.GetUserId(User.GetUserName()).Result;
-		private UserSettings UserSettings => UserService.GetUserSettings(UserId).Result;
-		public int PageSize => UserSettings.PageSize;
+		public User CurrentUser => UserService.GetByName(User.GetUserName()).Result;
+
+		public int PageSize => CurrentUser.Items;
 
 		public BaseController(UserService userService)
 		{

@@ -1,8 +1,9 @@
-namespace notes.Models
+namespace notes.Core.Models
 {
-	public class DistinctAndCountModel
+	public class DistinctAndCount
 	{
 		public string Name { get; set; }
+
 		public int Count { get; set; }
 	}
 }

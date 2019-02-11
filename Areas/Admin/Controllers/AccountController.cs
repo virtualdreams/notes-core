@@ -2,7 +2,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using notes.Areas.Admin.Models;
@@ -55,7 +54,7 @@ namespace notes.Areas.Admin.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Edit(ObjectId id)
+		public async Task<IActionResult> Edit(int id)
 		{
 			var _user = await UserService.GetById(id);
 			if (_user == null)
@@ -78,7 +77,7 @@ namespace notes.Areas.Admin.Controllers
 			{
 				try
 				{
-					if (model.Id == ObjectId.Empty)
+					if (model.Id == 0)
 					{
 						await UserService.Create(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled, Options.PageSize);
 					}
@@ -112,7 +111,7 @@ namespace notes.Areas.Admin.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Delete(ObjectId id)
+		public async Task<IActionResult> Delete(int id)
 		{
 			var _user = await UserService.GetById(id);
 			if (_user == null)

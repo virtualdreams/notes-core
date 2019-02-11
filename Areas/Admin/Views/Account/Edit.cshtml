@@ -1,16 +1,15 @@
 @model notes.Areas.Admin.Models.UserEditContainer
-@using MongoDB.Bson;
 @using notes.Helper;
 
 @{
-	ViewBag.Title = $"{(Model.User.Id != ObjectId.Empty ? Model.User.Username : "Create new user")} - ";
+	ViewBag.Title = $"{(Model.User.Id != 0 ? Model.User.Username : "Create new user")} - ";
 }
 
 <div class="row">
 	<div class="col-lg-12">
 		<div class="pb-2 mt-4 mb-2 border-bottom">
 			<div class="btn-toolbar pull-right">
-				@if(Model.User.Id != ObjectId.Empty) {
+				@if(Model.User.Id != 0) {
 				<div class="btn-group">
 					<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delAccount"><i class="fa fa-fw fa-user"></i> Delete</button>
 				</div>
@@ -18,7 +17,7 @@
 			</div>
 			<h1>
 				<i class="fa fa-fw fa-user"></i> 
-				@if(Model.User.Id != ObjectId.Empty) {
+				@if(Model.User.Id != 0) {
 				@:Edit user
 				} else {
 				@:Create new user

@@ -1,45 +1,37 @@
 using System;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace notes.Core.Models
 {
-	[BsonIgnoreExtraElements]
+	[Table("note")]
 	public class Note
 	{
-		[BsonIdAttribute]
-		public ObjectId Id { get; set; }
+		[Column("id")]
+		public int Id { get; set; }
 
-		[BsonElement("owner")]
-		public ObjectId Owner { get; set; }
-
-		[BsonElement("title")]
+		[Column("title")]
+		[MaxLength(100)]
 		public string Title { get; set; }
 
-		[BsonElement("content")]
+		[Column("content")]
 		public string Content { get; set; }
 
-		[BsonElement("tags")]
-		public string[] Tags { get; set; }
-
-		[BsonElement("notebook")]
+		[Column("notebook")]
+		[MaxLength(50)]
 		public string Notebook { get; set; }
 
-		[BsonElement("trash")]
+		[Column("tags")]
+		public ICollection<Tag> Tags { get; set; }
+
+		[Column("trash")]
 		public bool Trash { get; set; }
 
-		[BsonElement("version")]
-		public int Version { get; set; }
-
-		[BsonElement("created")]
-		[BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+		[Column("created")]
 		public DateTime? Created { get; set; }
 
-		[BsonElement("modified")]
-		[BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+		[Column("modified")]
 		public DateTime? Modified { get; set; }
-
-		[BsonIgnoreIfNull]
-		public double? Score { get; set; }
 	}
 }
