@@ -1,31 +1,15 @@
 {
-	// See https://go.microsoft.com/fwlink/?LinkId=733558
-	// for the documentation about the tasks.json format
-	"version": "0.1.0",
-	"command": "dotnet",
-	"isShellCommand": true,
-	"args": [],
+	"version": "2.0.0",
 	"tasks": [
 		{
-			"taskName": "build",
+			"label": "build",
+			"command": "dotnet",
+			"type": "process",
 			"args": [
-                "${workspaceRoot}\\notes.csproj"
-            ],
-			"isBuildCommand": true,
-			"problemMatcher": "$msCompile",
-			"showOutput": "always",
-			"echoCommand": true
-		},
-		{
-            "taskName": "publish",
-            "args": [
-                "--configuration",
-                "Release",
-                "${workspaceRoot}\\notes.csproj"
-            ],
-            "isBuildCommand": false,
-            "showOutput": "always",
-            "echoCommand": true
-        }
+				"build",
+				"${workspaceFolder}/notes.csproj"
+			],
+			"problemMatcher": "$msCompile"
+		}
 	]
 }
