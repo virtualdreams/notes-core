@@ -75,7 +75,10 @@ namespace notes
 			services.AddMvc(options =>
 			{
 				// options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
-			}).AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+			}).AddJsonOptions(options =>
+			{
+				options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+			});
 
 			// add sessions
 			services.AddDistributedMemoryCache();
