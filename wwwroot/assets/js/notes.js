@@ -202,7 +202,7 @@ notes = (function ($) {
 	);
 
 	$.validator.addMethod(
-		'inarraymaxlength',
+		'stringarrayitemmaxlength',
 		function (value, element, length) {
 			var array = value.split(' ');
 			for (var i = 0; i < array.length; i++) {
@@ -276,12 +276,12 @@ notes = (function ($) {
 				maxlength: 50
 			},
 			'tags': {
-				inarraymaxlength: 50
+				stringarrayitemmaxlength: 50
 			}
 		},
 		messages: {
 			'tags': {
-				inarraymaxlength: "Tag too long."
+				stringarrayitemmaxlength: "Tag too long."
 			}
 		}
 	});

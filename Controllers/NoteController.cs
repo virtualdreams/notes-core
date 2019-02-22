@@ -154,8 +154,10 @@ namespace notes.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Preview(NotePostModel model)
 		{
-			// remove title related error messages, because is not needed for preview mode
+			// remove some error messages, because is not needed for preview mode
 			ModelState.Remove("title");
+			ModelState.Remove("notebook");
+			ModelState.Remove("tags");
 			if (ModelState.IsValid)
 			{
 				var view = new NoteViewContainer
