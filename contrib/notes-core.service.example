@@ -1,16 +1,17 @@
 [Unit]
 Description=dotnet notes-core
 After=network.target
+After=mariadb.service
 
 [Service]
-;Environment=ASPNETCORE_URLS=http://127.0.0.1:5000/
+;Environment=ASPNETCORE_URLS=http://127.0.0.1:5001/
 EnvironmentFile=
 ;Restart=always
 ;RestartSec=10
 Type=simple
 SyslogIdentifier=notes-core
-WorkingDirectory=/srv/www/notes-core
-ExecStart=/usr/local/bin/dotnet /srv/www/notes-core/notes.dll
+WorkingDirectory=/foo/bar
+ExecStart=/usr/local/bin/dotnet /foo/bar/notes.dll
 User=www-data
 Group=www-data
 

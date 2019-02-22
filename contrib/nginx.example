@@ -1,0 +1,53 @@
+server {
+	listen 80;
+	listen [::]:80;
+
+	server_name foobar.com;
+	
+	# access_log /var/log/nginx/notes.access.log;
+	# error_log /var/log/nginx/notes.error.log;
+	
+	server_tokens off;
+	
+	return 301 https://$host$request_uri;
+}
+
+server {
+	listen 443 ssl http2;
+	listen [::]:443 ssl http2;
+	
+	server_name foobar.com;
+	
+	# access_log /var/log/nginx/notes.access.log;
+	# error_log /var/log/nginx/notes.error.log;
+	
+	ssl_certificate /etc/nginx/cert/foobar.com.crt;
+	ssl_certificate_key /etc/nginx/cert/foobar.com.key;
+	
+	server_tokens off;
+
+	add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload";
+	add_header Content-Security-Policy "default-src 'self' 'unsafe-inline'; frame-ancestors 'self'";
+	add_header X-Frame-Options SAMEORIGIN;
+	add_header X-Content-Type-Options nosniff;
+	add_header X-XSS-Protection "1; mode=block";
+	add_header Referrer-Policy origin;
+	
+	root /foo/bar/wwwroot;
+	
+	location ~ ^/(css|fonts|js|lib)/ {
+		expires 30d;
+		add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload";
+		add_header Pragma public;
+		add_header Cache-Control "public";
+	}
+	
+	location / {
+		proxy_pass http://127.0.0.1:5001;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection keep-alive;
+		proxy_set_header Host $host;
+		proxy_cache_bypass $http_upgrade;
+	}
+}
