@@ -267,7 +267,6 @@ namespace notes.Core.Services
 				.ToArray();
 
 			var _note = await GetById(id);
-
 			if (_note == null)
 				throw new NotesNoteNotFoundException();
 
@@ -299,7 +298,6 @@ namespace notes.Core.Services
 		public async Task Trash(int id, bool trash)
 		{
 			var _note = await GetById(id);
-
 			if (_note == null)
 				throw new NotesNoteNotFoundException();
 
@@ -317,7 +315,6 @@ namespace notes.Core.Services
 		public async Task Delete(int id)
 		{
 			var _note = await GetById(id);
-
 			if (_note == null)
 				throw new NotesNoteNotFoundException();
 

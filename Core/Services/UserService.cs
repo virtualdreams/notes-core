@@ -15,13 +15,13 @@ namespace notes.Core.Services
 	{
 		private readonly ILogger<UserService> Log;
 		private readonly MySqlContext Context;
-		private readonly MailService Mail;
+		private readonly MailService MailService;
 
 		public UserService(ILogger<UserService> log, MySqlContext context, MailService mail)
 		{
 			Log = log;
 			Context = context;
-			Mail = mail;
+			MailService = mail;
 		}
 
 		/// <summary>
@@ -361,7 +361,7 @@ namespace notes.Core.Services
 
 			await Context.SaveChangesAsync();
 
-			await Mail.SendResetPasswordMail(!String.IsNullOrEmpty(_user.DisplayName) ? _user.DisplayName : _user.Username, _user.Username, origin, _rtoken.PublicKey()); // send the non hashed token as email
+			await MailService.SendResetPasswordMail(!String.IsNullOrEmpty(_user.DisplayName) ? _user.DisplayName : _user.Username, _user.Username, origin, _rtoken.PublicKey()); // send the non hashed token as email
 		}
 
 		/// <summary>
