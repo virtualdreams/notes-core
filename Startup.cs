@@ -59,6 +59,7 @@ namespace notes
 			services.AddTransient<NoteService>();
 			services.AddTransient<UserService>();
 			services.AddTransient<MailService>();
+			services.AddTransient<RevisionService>();
 			services.AddScoped<RazorViewToStringRenderer>();
 
 			// key ring

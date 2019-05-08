@@ -1,0 +1,46 @@
+@model notes.Models.RevisionListContainer
+
+@{
+	ViewBag.Title = $"Revisions - ";
+}
+
+@functions{
+	public string FormatDate(DateTime? dt) {
+		return String.Format(new System.Globalization.CultureInfo("en-US"), "{0:MMM dd, yyyy HH:mm:ss}", dt);
+	}
+}
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="pb-2 mt-4 mb-2 border-bottom">
+			<h1>
+				<i class="fa fa-fw fa-history"></i> Revisions
+			</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="table-responsive">
+    		<table class="table">
+				<thead>
+					<tr>
+						<th style="width: 200px;">Date</th>
+						<th>Title</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach(var note in Model.Revisions) {
+					<tr>
+						<td>
+							<a href="@Url.Action("view", "revision", new { id = note.Id })">@FormatDate(note.Dt)</a>
+						</td>
+						<td>@note.Title</td>
+					</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

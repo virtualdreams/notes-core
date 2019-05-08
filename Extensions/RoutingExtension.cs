@@ -69,6 +69,12 @@ namespace notes.Extensions
 				);
 
 				routes.MapRoute(
+					name: "revisions",
+					template: "revision/{id?}",
+					defaults: new { controller = "Revision", action = "Index" }
+				);
+
+				routes.MapRoute(
 					name: "login",
 					template: "login",
 					defaults: new { controller = "user", action = "login" }

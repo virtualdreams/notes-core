@@ -35,6 +35,14 @@ namespace notes.Extensions
 						d.Created = s.Created?.ToLocalTime();
 					});
 
+				config.CreateMap<Revision, RevisionModel>()
+					.AfterMap((s, d) =>
+					{
+						d.Dt = s.Dt.ToLocalTime();
+						d.Created = s.Created?.ToLocalTime();
+						d.Modified = s.Modified?.ToLocalTime();
+					});
+
 				config.CreateMap<DistinctAndCount, DistinctAndCountModel>();
 			});
 

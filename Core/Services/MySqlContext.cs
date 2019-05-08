@@ -20,5 +20,7 @@ namespace notes.Core.Services
 		public DbSet<User> User { get; set; }
 
 		public DbSet<Token> Token { get; set; }
+
+		public DbSet<Revision> Revision { get; set; }
 	}
 }

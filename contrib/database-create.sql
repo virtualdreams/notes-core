@@ -46,3 +46,43 @@ CREATE TABLE `token` (
   PRIMARY KEY (`id`),
   KEY `ix_nonce` (`nonce`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `revision`;
+CREATE TABLE `revision` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dt` datetime NOT NULL,
+  `noteid` int(11) NOT NULL,
+  `title` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `content` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notebook` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `trash` tinyint(1) NOT NULL DEFAULT 0,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TRIGGER IF EXISTS `update_note`;
+CREATE TRIGGER
+    `update_note`
+before update on
+    `note`
+for each row
+insert into revision (
+    dt,
+    noteid,
+    title,
+    content,
+    notebook,
+    trash,
+    created,
+    modified
+) values(
+    utc_timestamp(),
+    old.id,
+    old.title,
+    old.content,
+    old.notebook,
+    old.trash,
+    old.created,
+    old.modified
+);

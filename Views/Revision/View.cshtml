@@ -1,0 +1,55 @@
+@model notes.Models.RevisionViewContainer
+
+@{
+	ViewBag.Title = $"Revision - ";
+}
+
+@functions{
+	public string FormatDate(DateTime? dt) {
+		return String.Format(new System.Globalization.CultureInfo("en-US"), "{0:MMM dd, yyyy HH:mm:ss}", dt);
+	}
+}
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="pb-2 mt-4 mb-2 border-bottom">
+			<div class="btn-toolbar pull-right">
+				<div class="btn-group">
+					<button type="button" class="btn btn-outline-secondary" data-href="@Url.Action("restore", "revision", new { id = @Model.Revision.Id })"><i class="fa fa-fw fa-history"></i> Restore</button>
+     			</div>
+   			</div>
+			<h1>
+				Revision as of @FormatDate(Model.Revision.Dt)
+			</h1>
+		</div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-lg-12">
+		<p>
+			<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#diffOutput" aria-expanded="false" aria-controls="diffOutput">Show differences to current version.</button>
+		</p>
+		<div class="collapse" id="diffOutput">
+			<pre class="diff hljs"><code>@Model.Diff</code></pre>
+		</div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="pb-2 mt-4 mb-2 border-bottom">
+			<h1>
+				@Model.Revision.Title
+			</h1>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<markdown>@Html.Raw(Model.Revision.Content)</markdown>
+	</div>
+</div>

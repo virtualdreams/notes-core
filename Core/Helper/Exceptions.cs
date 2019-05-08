@@ -85,4 +85,11 @@ namespace notes
 			: base("Token not found!")
 		{ }
 	}
+
+	public class NotesRevisionNotFoundException : NotesException
+	{
+		public NotesRevisionNotFoundException()
+			: base("Revision not found!")
+		{ }
+	}
 }
