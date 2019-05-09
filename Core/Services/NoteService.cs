@@ -230,6 +230,8 @@ namespace notes.Core.Services
 				.Distinct()
 				.ToArray();
 
+			var _dt = DateTime.UtcNow;
+
 			var _note = new Note
 			{
 				Title = title?.Trim(),
@@ -237,7 +239,8 @@ namespace notes.Core.Services
 				Notebook = notebook?.Trim(),
 				Tags = _tags?.Select(t => new Tag { Name = t }).ToList(),
 				Trash = false,
-				Created = DateTime.UtcNow
+				Created = _dt,
+				Modified = _dt
 			};
 
 			Context.Add(_note);
