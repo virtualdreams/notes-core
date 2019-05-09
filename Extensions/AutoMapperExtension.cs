@@ -21,7 +21,6 @@ namespace notes.Extensions
 					.ForMember(d => d.Tags, map => map.MapFrom(s => s.Tags.Select(i => i.Name)))
 					.ForMember(d => d.TagsString, map => map.MapFrom(s => String.Join(" ", s.Tags.Select(i => i.Name))))
 					.ForMember(d => d.Age, map => map.Ignore())
-					.ForMember(d => d.Version, map => map.Ignore())
 					.AfterMap((s, d) =>
 					{
 						d.Created = s.Created?.ToLocalTime();

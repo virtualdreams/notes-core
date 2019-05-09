@@ -21,8 +21,6 @@ namespace notes.Models
 
 		public bool Trash { get; set; }
 
-		public int Version { get; set; }
-
 		public DateTime? Created { get; set; }
 
 		public DateTime? Modified { get; set; }
