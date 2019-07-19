@@ -17,6 +17,8 @@ namespace notes.Core.Models
 		public string Nonce { get; set; }
 
 		[Column("userid")]
+		public int UserId { get; set; }
+
 		public User User { get; set; }
 	}
 }
