@@ -4,7 +4,7 @@
     <Version>1.0.0</Version>
     <Description>notes</Description>
     <AssemblyTitle>notes</AssemblyTitle>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <DebugType>portable</DebugType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>notes</AssemblyName>
@@ -43,7 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.6" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Markdig" Version="0.18.0" />

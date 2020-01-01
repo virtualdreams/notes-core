@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Hosting;
 using Mvc.RenderViewToString;
 using NLog.Extensions.Logging;
 using System;
@@ -25,7 +26,7 @@ namespace notes
 
 		public IConfiguration Configuration { get; set; }
 
-		public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> log)
+		public Startup(IConfiguration configuration, IWebHostEnvironment env, ILogger<Startup> log)
 		{
 			Log = log;
 			Configuration = configuration;
@@ -41,9 +42,11 @@ namespace notes
 			// .ValidateDataAnnotations()
 			// .Validate(v => { return true; }, "Error Message"); // https://github.com/stevejgordon/OptionsValidationSample
 
+#pragma warning disable ASP0000
 			// get settings
 			services.AddScoped(cfg => cfg.GetService<IOptionsSnapshot<Settings>>().Value);
 			var settings = services.BuildServiceProvider().GetRequiredService<Settings>();
+#pragma warning restore
 
 			// database context
 			services.AddDbContext<MySqlContext>(options =>
@@ -77,10 +80,11 @@ namespace notes
 			// add custom model binders
 			services.AddMvc(options =>
 			{
+				options.EnableEndpointRouting = false;
 				// options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
 			}).AddJsonOptions(options =>
 			{
-				options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+				// options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 			});
 
 			// add sessions
@@ -114,7 +118,7 @@ namespace notes
 			});
 		}
 
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory logger)
 		{
 			app.UseStatusCodePagesWithReExecute("/error/{0}");
 
