@@ -10,28 +10,21 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Hosting;
 using Mvc.RenderViewToString;
-using NLog.Extensions.Logging;
 using System;
 using System.IO;
 using notes.Core.Services;
 using notes.Extensions;
-using notes.Helper;
 using notes.ModelBinders;
 
 namespace notes
 {
 	public class Startup
 	{
-		private readonly ILogger<Startup> Log;
-
 		public IConfiguration Configuration { get; set; }
 
-		public Startup(IConfiguration configuration, IWebHostEnvironment env, ILogger<Startup> log)
+		public Startup(IConfiguration configuration)
 		{
-			Log = log;
 			Configuration = configuration;
-
-			Log.LogInformation($"Application notes {ApplicationVersion.InfoVersion()} started.");
 		}
 
 		public void ConfigureServices(IServiceCollection services)

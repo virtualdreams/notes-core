@@ -11,7 +11,6 @@
     <OutputType>Exe</OutputType>
     <PackageId>notes-core</PackageId>
     <!--
-    <AssetTargetFallback>$(PackageTargetFallback);dnxcore50</AssetTargetFallback>
     <RuntimeFrameworkVersion>2.0</RuntimeFrameworkVersion>
     -->
   </PropertyGroup>
