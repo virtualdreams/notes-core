@@ -72,9 +72,9 @@ namespace notes
 			{
 				options.EnableEndpointRouting = false;
 				// options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
-			}).AddJsonOptions(options =>
+			}).AddNewtonsoftJson(options =>
 			{
-				// options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+				options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 			});
 
 			// add sessions
