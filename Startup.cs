@@ -67,12 +67,12 @@ namespace notes
 			// IIS integration
 			services.Configure<IISOptions>(options => { });
 
-			// add custom model binders
+			// mvc
 			services.AddMvc(options =>
 			{
-				options.EnableEndpointRouting = false;
 				// options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
-			}).AddNewtonsoftJson(options =>
+			})
+			.AddNewtonsoftJson(options =>
 			{
 				options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 			});
@@ -123,11 +123,16 @@ namespace notes
 
 			app.UseStaticFiles();
 
+			app.UseRouting();
+
+			//app.UseCors();
+
 			app.UseAuthentication();
+			app.UseAuthorization();
 
 			app.UseSession();
 
-			app.AddRoutes();
+			app.AddEndpoints();
 		}
 	}
 }

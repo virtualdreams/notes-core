@@ -2,116 +2,121 @@ using Microsoft.AspNetCore.Builder;
 
 namespace notes.Extensions
 {
-	static public class RoutingExtensions
+	static public class EndpointsExtensions
 	{
-		static public IApplicationBuilder AddRoutes(this IApplicationBuilder app)
+		/// <summary>
+		/// Adds endpoints.
+		/// </summary>
+		/// <param name="app">IApplicationBuilder</param>
+		/// <returns></returns>
+		static public IApplicationBuilder AddEndpoints(this IApplicationBuilder app)
 		{
-			app.UseMvc(routes =>
+			app.UseEndpoints(endpoints =>
 			{
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "search",
-					template: "search",
+					pattern: "search",
 					defaults: new { controller = "Home", action = "Search" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "tags",
-					template: "tags",
+					pattern: "tags",
 					defaults: new { controller = "Note", action = "Tags" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "notebooks",
-					template: "notebooks",
+					pattern: "notebooks",
 					defaults: new { controller = "Note", action = "Notebooks" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "tag",
-					template: "tag/{id?}",
+					pattern: "tag/{id?}",
 					defaults: new { controller = "Note", action = "Tag" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "notebook",
-					template: "notebook/{id?}",
+					pattern: "notebook/{id?}",
 					defaults: new { controller = "Note", action = "Notebook" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "trash",
-					template: "trash",
+					pattern: "trash",
 					defaults: new { controller = "Note", action = "Trash" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "create",
-					template: "create",
+					pattern: "create",
 					defaults: new { controller = "Note", action = "Create" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "edit",
-					template: "/note/edit/{id?}/{slug?}",
+					pattern: "/note/edit/{id?}/{slug?}",
 					defaults: new { controller = "Note", action = "Edit" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "view",
-					template: "note/{id?}/{slug?}",
+					pattern: "note/{id?}/{slug?}",
 					defaults: new { controller = "Note", action = "View" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "print",
-					template: "print/{id?}/{slug?}",
+					pattern: "print/{id?}/{slug?}",
 					defaults: new { controller = "Note", action = "Print" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "revisions",
-					template: "revision/{id?}",
+					pattern: "revision/{id?}",
 					defaults: new { controller = "Revision", action = "Index" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "login",
-					template: "login",
+					pattern: "login",
 					defaults: new { controller = "user", action = "login" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "logout",
-					template: "logout",
+					pattern: "logout",
 					defaults: new { controller = "user", action = "logout" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "forgot_password",
-					template: "reset_password",
+					pattern: "reset_password",
 					defaults: new { controller = "user", action = "forgotpassword" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "reset_password",
-					template: "reset_password/{id?}",
+					pattern: "reset_password/{id?}",
 					defaults: new { controller = "user", action = "resetpassword" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "error",
-					template: "error/{code?}",
+					pattern: "error/{code?}",
 					defaults: new { controller = "home", action = "error" }
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "areaRoute",
-					template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+					pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
 				);
 
-				routes.MapRoute(
+				endpoints.MapControllerRoute(
 					name: "default",
-					template: "{controller=Home}/{action=Index}/{id?}"
+					pattern: "{controller=Home}/{action=Index}/{id?}"
 				);
 			});
 
