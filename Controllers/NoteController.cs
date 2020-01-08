@@ -22,11 +22,11 @@ namespace notes.Controllers
 		private readonly NoteService NoteService;
 		private readonly RazorViewToStringRenderer ViewRenderService;
 
-		public NoteController(IMapper mapper, Settings settings, UserService user, NoteService note, RazorViewToStringRenderer render)
+		public NoteController(IMapper mapper, IOptionsSnapshot<Settings> settings, UserService user, NoteService note, RazorViewToStringRenderer render)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = settings;
+			Options = settings.Value;
 			UserService = user;
 			NoteService = note;
 			ViewRenderService = render;

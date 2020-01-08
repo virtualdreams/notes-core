@@ -12,9 +12,9 @@ namespace notes.Core.Services
 		private readonly Settings Options;
 		private readonly ILogger<MailService> Log;
 
-		public MailService(Settings settings, ILogger<MailService> log)
+		public MailService(IOptionsSnapshot<Settings> settings, ILogger<MailService> log)
 		{
-			Options = settings;
+			Options = settings.Value;
 			Log = log;
 		}
 

@@ -19,11 +19,11 @@ namespace notes.Controllers
 		private readonly UserService UserService;
 		private readonly NoteService NoteService;
 
-		public HomeController(IMapper mapper, Settings settings, UserService user, NoteService note)
+		public HomeController(IMapper mapper, IOptionsSnapshot<Settings> settings, UserService user, NoteService note)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = settings;
+			Options = settings.Value;
 			UserService = user;
 			NoteService = note;
 		}

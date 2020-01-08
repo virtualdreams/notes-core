@@ -19,11 +19,11 @@ namespace notes.Controllers
 		private readonly Settings Options;
 		private readonly UserService UserService;
 
-		public UserController(IMapper mapper, Settings settings, UserService user)
+		public UserController(IMapper mapper, IOptionsSnapshot<Settings> settings, UserService user)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = settings;
+			Options = settings.Value;
 			UserService = user;
 		}
 

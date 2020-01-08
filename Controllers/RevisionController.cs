@@ -21,11 +21,11 @@ namespace notes.Controllers
 		private readonly NoteService NoteService;
 		private readonly RevisionService RevisionService;
 
-		public RevisionController(IMapper mapper, Settings settings, UserService user, NoteService note, RevisionService revision)
+		public RevisionController(IMapper mapper, IOptionsSnapshot<Settings> settings, UserService user, NoteService note, RevisionService revision)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = settings;
+			Options = settings.Value;
 			UserService = user;
 			NoteService = note;
 			RevisionService = revision;

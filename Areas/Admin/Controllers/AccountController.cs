@@ -19,11 +19,11 @@ namespace notes.Areas.Admin.Controllers
 		private readonly Settings Options;
 		private readonly UserService UserService;
 
-		public AccountController(IMapper mapper, Settings settings, UserService user)
+		public AccountController(IMapper mapper, IOptionsSnapshot<Settings> settings, UserService user)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = settings;
+			Options = settings.Value;
 			UserService = user;
 		}
 

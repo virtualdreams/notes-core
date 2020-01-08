@@ -30,16 +30,13 @@ namespace notes
 		public void ConfigureServices(IServiceCollection services)
 		{
 			// add options to DI
-			services.AddOptions<Settings>()
-				.Bind(Configuration.GetSection("Settings"));
-			// .ValidateDataAnnotations()
-			// .Validate(v => { return true; }, "Error Message"); // https://github.com/stevejgordon/OptionsValidationSample
+			services.AddOptions();
+			services.Configure<Settings>(Configuration.GetSection("Settings"));
+			// services.Configure<Smtp>(Configuration.GetSection("Settings.Smtp"));
 
-#pragma warning disable ASP0000
-			// get settings
-			services.AddScoped(cfg => cfg.GetService<IOptionsSnapshot<Settings>>().Value);
-			var settings = services.BuildServiceProvider().GetRequiredService<Settings>();
-#pragma warning restore
+			// get settings for local usage
+			var settings = new Settings();
+			Configuration.GetSection("Settings").Bind(settings);
 
 			// database context
 			services.AddDbContext<MySqlContext>(options =>
