@@ -2,11 +2,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using notes.Core.Services;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using notes.Extensions;
+using notes.Core.Services;
 using notes.Helper;
 using notes.Models;
 

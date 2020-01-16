@@ -2,8 +2,8 @@ using MailKit.Net.Smtp;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using System;
 using System.Threading.Tasks;
+using System;
 
 namespace notes.Core.Services
 {

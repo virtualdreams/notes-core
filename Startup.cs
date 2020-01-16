@@ -6,15 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Hosting;
 using Mvc.RenderViewToString;
-using System;
 using System.IO;
+using System;
 using notes.Core.Services;
 using notes.Extensions;
-using notes.ModelBinders;
 
 namespace notes
 {
@@ -44,8 +41,7 @@ namespace notes
 				options.UseMySql(settings.ConnectionString, mySqlOptions => { });
 				//options.EnableSensitiveDataLogging(true);
 			},
-			ServiceLifetime.Scoped
-			);
+			ServiceLifetime.Scoped);
 
 			// dependency injection
 			services.AddAutoMapper();
@@ -108,7 +104,7 @@ namespace notes
 			});
 		}
 
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory logger)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			app.UseStatusCodePagesWithReExecute("/error/{0}");
 
@@ -125,7 +121,7 @@ namespace notes
 
 			app.UseRouting();
 
-			//app.UseCors();
+			// app.UseCors();
 
 			app.UseAuthentication();
 			app.UseAuthorization();

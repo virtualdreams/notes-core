@@ -1,11 +1,11 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 using System;
 using notes.Areas.Admin.Models;
 using notes.Core.Models;
 using notes.Helper;
 using notes.Models;
-using System.Linq;
 
 namespace notes.Extensions
 {

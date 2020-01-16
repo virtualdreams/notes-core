@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Threading.Tasks;
 using notes.Core.Services;
 
 namespace notes.ViewComponents

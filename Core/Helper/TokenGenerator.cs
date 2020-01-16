@@ -1,6 +1,6 @@
-using System;
 using System.Security.Cryptography;
-using Base62;
+using System;
+using notes.Helper.Base62;
 
 namespace notes.Helper
 {

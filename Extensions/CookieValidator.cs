@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using notes.Core.Services;
 using notes.Helper;
-using Microsoft.AspNetCore.Authentication;
 
 namespace notes.Extensions
 {

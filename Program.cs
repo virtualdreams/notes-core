@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
-using notes.Helper;
-using System;
 using System.IO;
+using System;
+using notes.Helper;
 
 namespace notes
 {

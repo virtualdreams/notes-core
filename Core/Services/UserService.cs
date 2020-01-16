@@ -1,13 +1,13 @@
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using System;
+using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 using notes.Core.Models;
 using notes.Encryption;
 using notes.Helper;
-using MySql.Data.MySqlClient;
 
 namespace notes.Core.Services
 {

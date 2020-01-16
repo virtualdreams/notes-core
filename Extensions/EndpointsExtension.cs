@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 
 namespace notes.Extensions
 {
-	static public class EndpointsExtensions
+	static public class EndpointsExtension
 	{
 		/// <summary>
 		/// Adds endpoints.
