@@ -346,11 +346,11 @@ namespace notes.Core.Services
 				return Enumerable.Empty<Note>();
 			}
 
-			var _query = Context.Note.AsQueryable();
+			IQueryable<Note> _query = null;
 
 			if (next > 0)
 			{
-				_query = _query.FromSql($@"
+				_query = Context.Note.FromSqlInterpolated($@"
 					select
 						f.id,
 						f.content,
@@ -381,7 +381,7 @@ namespace notes.Core.Services
 			}
 			else
 			{
-				_query = _query.FromSql($@"
+				_query = Context.Note.FromSqlInterpolated($@"
 					select
 						f.id,
 						f.content,
