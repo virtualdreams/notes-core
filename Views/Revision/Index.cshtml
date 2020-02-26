@@ -6,7 +6,7 @@
 
 @functions{
 	public string FormatDate(DateTime? dt) {
-		return String.Format(new System.Globalization.CultureInfo("en-US"), "{0:MMM dd, yyyy HH:mm:ss}", dt);
+		return String.Format(new System.Globalization.CultureInfo("en-US"), "{0:ddd, dd MMM yyyy HH:mm:ss}", dt);
 	}
 }
 
@@ -26,7 +26,7 @@
     		<table class="table">
 				<thead>
 					<tr>
-						<th style="width: 200px;">Date</th>
+						<th style="width: 250px;">Date</th>
 						<th>Title</th>
 					</tr>
 				</thead>
