@@ -25,7 +25,7 @@ namespace notes.Extensions
 					{
 						d.Created = s.Created?.ToLocalTime();
 						d.Modified = s.Modified?.ToLocalTime();
-						d.Age = s.Created?.ToLocalTime().ToMinutes().ToWords();
+						d.Age = s.Modified?.ToLocalTime().ToMinutes().ToWords();
 					});
 
 				config.CreateMap<User, UserModel>()
