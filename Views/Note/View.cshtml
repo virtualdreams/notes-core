@@ -25,20 +25,20 @@
        					<div class="dropdown-menu">
 							<a class="dropdown-item" href="@Url.RouteUrl("print", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })" target="_blank"><i class="fa fa-fw fa-print"></i> Print</a>
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#" data-toggle="modal" data-target="#trash">
-								@if(Model.Note.Trash) {
-								<i class="fa fa-fw fa-undo"></i> @:Restore
-								} else {
-								<i class="fa fa-fw fa-trash-o"></i> @:Delete
-								}
-							</a>
+							@if(!Model.Note.Trash) {
+							<a class="dropdown-item" href="#" data-toggle="modal" data-target="#trash"><i class="fa fa-fw fa-trash-o"></i> Delete</a>
+							}
 							<a class="dropdown-item" href="#" data-toggle="modal" data-target="#info"><i class="fa fa-fw fa-info"></i> Info</a>
 							<a class="dropdown-item" href="@Url.RouteUrl("revisions", new { id = Model.Note.Id })"><i class="fa fa-fw fa-history"></i> Revisions</a>
 	  					</div>
 					</div>
      			</div>
    			</div>
-   			<h1>@Model.Note.Title</h1>
+   			<h1>@Model.Note.Title
+				@if(Model.Note.Trash) {
+				<small class="text-muted">(deleted)</small>
+				}
+			</h1>
 		</div>
 	</div>
 </div>
@@ -66,11 +66,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="trashLabel">
-					@if(Model.Note.Trash) {
-					@:Restore note
-					} else {
-					@:Delete note
-					}
+					Delete note
 				</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					<span aria-hidden="true">&times;</span>
@@ -82,11 +78,7 @@
 						<div id="error"></div>
 					</div>
 					<div class="col-sm-12">
-					@if(Model.Note.Trash) {
-						@:Restore note &quot;@Model.Note.Title&quot;?
-					} else {
-						@:Delete note &quot;@Model.Note.Title&quot;?
-					}
+						Delete note &quot;@Model.Note.Title&quot;?
 					</div>
 				</div>
 			</div>

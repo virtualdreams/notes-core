@@ -3,7 +3,7 @@ using notes.Helper;
 
 namespace notes.Models
 {
-	public class NoteDeleteModel
+	public class NoteTrashPostModel
 	{
 		[ArrayNotEmpty]
 		public IEnumerable<int> Id { get; set; }

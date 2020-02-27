@@ -237,19 +237,19 @@ namespace notes.Controllers
 		}
 
 		[HttpPost]
+		[SkipStatusCodePages]
 		public async Task<IActionResult> Remove(int id)
 		{
 			var _note = await NoteService.GetById(id);
-			if (_note == null)
+			if (_note == null || _note.Trash == true)
 				return NotFound();
 
-			await NoteService.Trash(id, !_note.Trash);
+			await NoteService.Trash(id, true);
 
-			return new NoContentResult();
+			return Ok();
 		}
 
 		[HttpGet]
-		[Authorize(Policy = "AdministratorOnly")]
 		public async Task<IActionResult> Trash(int after)
 		{
 			var _notes = await NoteService.GetNotes(after, true, PageSize);
@@ -268,13 +268,31 @@ namespace notes.Controllers
 
 		[HttpPost]
 		[Authorize(Policy = "AdministratorOnly")]
-		public async Task<IActionResult> Delete(NoteDeleteModel model)
+		public async Task<IActionResult> Delete(NoteTrashPostModel model)
 		{
 			if (ModelState.IsValid)
 			{
 				foreach (var note in model.Id)
 				{
 					await NoteService.Delete(note);
+				}
+			}
+
+			return RedirectToAction("trash");
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Restore(NoteTrashPostModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				foreach (var note in model.Id)
+				{
+					var _note = await NoteService.GetById(note);
+					if (_note != null)
+					{
+						await NoteService.Trash(note, false);
+					}
 				}
 			}
 
