@@ -249,6 +249,7 @@ namespace notes.Controllers
 		}
 
 		[HttpGet]
+		[Authorize(Policy = "AdministratorOnly")]
 		public async Task<IActionResult> Trash(int after)
 		{
 			var _notes = await NoteService.GetNotes(after, true, PageSize);
