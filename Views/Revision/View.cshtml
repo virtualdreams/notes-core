@@ -1,4 +1,6 @@
 @model notes.Models.RevisionViewContainer
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 @{
 	ViewBag.Title = $"Revision - ";
@@ -13,11 +15,13 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="pb-2 mt-4 mb-2 border-bottom">
+			@if((await AuthorizationService.AuthorizeAsync(User, "AdministratorOnly")).Succeeded) {
 			<div class="btn-toolbar pull-right">
 				<div class="btn-group">
 					<button type="button" class="btn btn-outline-secondary" data-href="@Url.Action("restore", "revision", new { id = @Model.Revision.Id })"><i class="fa fa-fw fa-history"></i> Restore</button>
      			</div>
    			</div>
+			}
 			<h1>
 				Revision as of @FormatDate(Model.Revision.Dt)
 			</h1>
