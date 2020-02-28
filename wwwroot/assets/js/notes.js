@@ -38,7 +38,9 @@ notes = (function ($) {
 		}
 	});
 
-	$('[data-toggle=popover]').popover();
+	$('[data-toggle="popover"]').popover();
+
+	$('[data-toggle="tooltip"]').tooltip({ boundary: 'window' })
 
 	$('[data-href]').click(function () {
 		var href = $(this).data('href');

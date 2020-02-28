@@ -1,6 +1,12 @@
 @model IEnumerable<notes.Models.NoteModel>
 @using notes.Helper
 
+@functions{
+	public string FormatDate(DateTime? dt) {
+		return String.Format(new System.Globalization.CultureInfo("en-US"), "{0:ddd, dd MMM yyyy HH:mm:ss}", dt);
+	}
+}
+
 <div class="table-responsive">
     <table class="table">
         <thead>
@@ -15,7 +21,7 @@
                 <td>
                     <a href="@Url.RouteUrl("view", new { id = note.Id, slug = note.Title.ToSlug() })">@note.Title</a>
                 </td>
-                <td><span class="pull-right text-muted small"><em>@note.Age</em></span></td>
+                <td><span data-toggle="tooltip" data-placement="top" title="@FormatDate(note.Modified)" class="pull-right text-muted small"><em>@note.Age</em></span></td>
             </tr>
             }
         </tbody>
