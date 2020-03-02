@@ -8,7 +8,7 @@
 }
 
 @functions{
-	public string FormatDate(DateTime? dt) {
+	public string FormatDate(DateTime dt) {
 		return String.Format(new System.Globalization.CultureInfo("en-US"), "{0:ddd, dd MMM yyyy HH:mm:ss}", dt);
 	}
 }
@@ -41,7 +41,7 @@
 							<tr>
 								<td><input type="checkbox" name="id" value="@note.Id" /></td>
 								<td><a href="@Url.RouteUrl("view", new { id = note.Id, slug = note.Title.ToSlug() })">@note.Title</a></td>
-								<td><span data-toggle="tooltip" data-placement="top" title="@FormatDate(note.Modified)" class="pull-right text-muted small"><em>@note.Age</em></span></td>
+								<td><span data-toggle="tooltip" data-placement="top" title="@FormatDate(note.Modified)" class="pull-right text-muted small"><em>@note.Modified.ToAge()</em></span></td>
 							</tr>
 							}
 						</tbody>

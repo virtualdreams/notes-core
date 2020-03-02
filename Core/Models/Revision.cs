@@ -35,10 +35,10 @@ namespace notes.Core.Models
 		public bool Trash { get; set; }
 
 		[Column("created")]
-		public DateTime? Created { get; set; }
+		public DateTime Created { get; set; }
 
 		[Column("modified")]
-		public DateTime? Modified { get; set; }
+		public DateTime Modified { get; set; }
 
 		// Backreference
 		public Note Note { get; set; }

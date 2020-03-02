@@ -93,6 +93,16 @@ namespace notes.Helper
 		}
 
 		/// <summary>
+		/// Convert datetime to words.
+		/// </summary>
+		/// <param name="dt">The datetime to convert.</param>
+		/// <returns></returns>
+		static public string ToAge(this DateTime dt)
+		{
+			return dt.ToMinutes().ToWords();
+		}
+
+		/// <summary>
 		/// Extract username from principal.
 		/// </summary>
 		/// <param name="principal">The principal.</param>

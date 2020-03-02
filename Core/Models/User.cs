@@ -45,7 +45,7 @@ namespace notes.Core.Models
 		/// Created
 		/// </summary>
 		[Column("created")]
-		public DateTime? Created { get; set; }
+		public DateTime Created { get; set; }
 
 		/// <summary>
 		/// Page size for user.
