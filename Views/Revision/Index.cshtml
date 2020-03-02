@@ -4,12 +4,6 @@
 	ViewBag.Title = $"Revisions - ";
 }
 
-@functions{
-	public string FormatDate(DateTime dt) {
-		return String.Format(new System.Globalization.CultureInfo("en-US"), "{0:ddd, dd MMM yyyy HH:mm:ss}", dt);
-	}
-}
-
 <div class="row">
 	<div class="col-lg-12">
 		<div class="pb-2 mt-4 mb-2 border-bottom">
@@ -34,7 +28,7 @@
 					@foreach(var note in Model.Revisions) {
 					<tr>
 						<td>
-							<a href="@Url.Action("view", "revision", new { id = note.Id })">@FormatDate(note.Dt)</a>
+							<a href="@Url.Action("view", "revision", new { id = note.Id })">@await Component.InvokeAsync("FormatDate", new { date = note.Dt })</a>
 						</td>
 						<td>@note.Title</td>
 					</tr>

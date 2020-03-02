@@ -5,12 +5,6 @@
 	ViewBag.Title = $"{Model.Note.Title} - ";
 }
 
-@functions{
-	public string FormatDate(DateTime dt) {
-		return String.Format(new System.Globalization.CultureInfo("en-US"), "{0:ddd, dd MMM yyyy HH:mm:ss}", dt);
-	}
-}
-
 <div class="row">
 	<div class="col-lg-12">
 		<div class="pb-2 mt-4 mb-2 border-bottom">
@@ -103,10 +97,10 @@
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-sm-12">
-						<b>Created on:</b> @FormatDate(Model.Note.Created)
+						<b>Created on:</b> @await Component.InvokeAsync("FormatDate", new { date = Model.Note.Created })
 					</div>
 					<div class="col-sm-12">
-						<b>Modified on:</b> @FormatDate(Model.Note.Modified)
+						<b>Modified on:</b> @await Component.InvokeAsync("FormatDate", new { date = Model.Note.Modified })
 					</div>
 				</div>
 			</div>
