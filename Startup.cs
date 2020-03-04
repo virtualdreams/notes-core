@@ -49,6 +49,7 @@ namespace notes
 			services.AddTransient<UserService>();
 			services.AddTransient<MailService>();
 			services.AddTransient<RevisionService>();
+			services.AddScoped<CookieValidator>();
 			services.AddScoped<RazorViewToStringRenderer>();
 
 			// key ring
@@ -88,10 +89,7 @@ namespace notes
 					options.Cookie.Name = "notes";
 					options.LoginPath = new PathString("/login");
 					options.AccessDeniedPath = new PathString("/");
-					options.Events = new CookieAuthenticationEvents
-					{
-						OnValidatePrincipal = CookieValidator.ValidateAsync
-					};
+					options.EventsType = typeof(CookieValidator);
 				});
 
 			// authorization policies

@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -61,10 +62,10 @@ namespace notes.Controllers
 						new Claim(ClaimTypes.Role, _user.Role, ClaimValueTypes.String)
 					};
 
-					var _identity = new ClaimsIdentity(claims, "local");
+					var _identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 					var _principal = new ClaimsPrincipal(_identity);
 
-					await AuthenticationHttpContextExtensions.SignInAsync(HttpContext, _principal,
+					await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, _principal,
 						new AuthenticationProperties
 						{
 							IsPersistent = model.Remember,
@@ -185,7 +186,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Logout()
 		{
-			await AuthenticationHttpContextExtensions.SignOutAsync(HttpContext);
+			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
 			return RedirectToAction("index", "home");
 		}
