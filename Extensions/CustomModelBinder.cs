@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using System;
 
-namespace notes.ModelBinders
+namespace notes.Extensions
 {
 	public class DateTimeModelBinder : IModelBinder
 	{
