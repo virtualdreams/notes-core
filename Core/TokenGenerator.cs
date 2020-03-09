@@ -1,9 +1,8 @@
 using System.Security.Cryptography;
 using System;
-using notes.Core;
 using notes.Helper.Base62;
 
-namespace notes.Helper
+namespace notes.Core
 {
 	public class ResetToken
 	{
