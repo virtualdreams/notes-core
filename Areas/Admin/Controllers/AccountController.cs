@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using notes.Areas.Admin.Models;
 using notes.Controllers;
 using notes.Core.Services;
+using notes.Core;
 
 namespace notes.Areas.Admin.Controllers
 {

@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using notes.Core.Services;
+using notes.Core;
 using notes.Extensions;
-using notes.Helper;
 using notes.Models;
 
 namespace notes.Controllers
