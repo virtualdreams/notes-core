@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 using System;
-using notes.Helper.Base62;
+using notes.Core.Internal;
 
 namespace notes.Core
 {

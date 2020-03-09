@@ -2,7 +2,7 @@ using System.IO;
 using System.Text;
 using System;
 
-namespace notes.Helper.Base62
+namespace notes.Core.Internal
 {
 	/// <summary>
 	/// Utility that read and write bits in byte array

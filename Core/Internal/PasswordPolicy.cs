@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace notes.Helper
+namespace notes.Core.Internal
 {
 	/// <summary>
 	/// Simple password policy.

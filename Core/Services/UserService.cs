@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using notes.Core.Internal;
 using notes.Core.Models;
-using notes.Encryption;
-using notes.Helper;
 
 namespace notes.Core.Services
 {
