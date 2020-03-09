@@ -6,12 +6,12 @@ using notes.Core.Services;
 
 namespace notes.Extensions
 {
-	public class CookieValidator : CookieAuthenticationEvents
+	public class CustomCookieEvents : CookieAuthenticationEvents
 	{
-		private readonly ILogger<CookieValidator> Log;
+		private readonly ILogger<CustomCookieEvents> Log;
 		private readonly UserService UserService;
 
-		public CookieValidator(ILogger<CookieValidator> log, UserService user)
+		public CustomCookieEvents(ILogger<CustomCookieEvents> log, UserService user)
 		{
 			Log = log;
 			UserService = user;
