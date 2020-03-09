@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System;
+using System.Collections;
 
 namespace notes.Extensions
 {
@@ -43,6 +44,24 @@ namespace notes.Extensions
 				}
 			}
 			return true;
+		}
+	}
+
+	/// <summary>
+	/// Custom validation for array not empty.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+	public class ArrayNotEmptyAttribute : ValidationAttribute
+	{
+		public override bool IsValid(object value)
+		{
+			var _list = value as IList;
+			if (_list != null)
+			{
+				return _list.Count > 0;
+			}
+
+			return false;
 		}
 	}
 }

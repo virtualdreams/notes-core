@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using notes.Helper;
+using notes.Extensions;
 
 namespace notes.Models
 {
