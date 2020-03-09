@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using NLog.Web;
 using System.IO;
 using System;
-using notes.Helper;
+using notes.Extensions;
 
 namespace notes
 {
