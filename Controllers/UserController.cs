@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using notes.Core.Services;
-using notes.Helper;
+using notes.Extensions;
 using notes.Models;
 
 namespace notes.Controllers

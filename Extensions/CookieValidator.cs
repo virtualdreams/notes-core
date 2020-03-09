@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using notes.Core.Services;
-using notes.Helper;
 
 namespace notes.Extensions
 {

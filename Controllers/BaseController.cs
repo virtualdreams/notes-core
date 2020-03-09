@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using notes.Core.Models;
 using notes.Core.Services;
-using notes.Helper;
+using notes.Extensions;
 
 namespace notes.Controllers
 {

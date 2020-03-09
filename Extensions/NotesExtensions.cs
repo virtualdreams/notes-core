@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System;
 
-namespace notes.Helper
+namespace notes.Extensions
 {
 	static public class NoteExtensions
 	{

@@ -1,5 +1,5 @@
 @model notes.Areas.Admin.Models.UserEditContainer
-@using notes.Helper;
+@using notes.Extensions;
 
 @{
 	ViewBag.Title = $"{(Model.User.Id != 0 ? Model.User.Username : "Create new user")} - ";
