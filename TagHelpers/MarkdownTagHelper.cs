@@ -1,5 +1,5 @@
-using Markdig;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using notes.Extensions;
 
 namespace notes.TagHelpers
 {
@@ -16,17 +16,7 @@ namespace notes.TagHelpers
 
 			var _content = output.GetChildContentAsync().Result.GetContent();
 
-			var _pipeline = new MarkdownPipelineBuilder()
-				.UseNoFollowLinks()
-				.UseAbbreviations()
-				.UseEmphasisExtras()
-				.UseTaskLists()
-				.UseAutoLinks()
-				.UseMediaLinks()
-				.UseBootstrap()
-				.UsePipeTables()
-				.Build();
-			var _markdown = Markdown.ToHtml(_content, _pipeline);
+			var _markdown = _content.ToMarkdown();
 
 			output.Content.SetHtmlContent(_markdown ?? string.Empty);
 		}

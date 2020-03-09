@@ -1,3 +1,4 @@
+using Markdig;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using System.Security.Claims;
@@ -126,6 +127,28 @@ namespace notes.Extensions
 				throw new ArgumentNullException(nameof(principal));
 
 			return principal.FindFirst(ClaimTypes.Role)?.Value;
+		}
+
+		/// <summary>
+		/// Render markdown to html5.
+		/// </summary>
+		/// <param name="source">The markdown source.</param>
+		/// <returns>The render output.</returns>
+		static public string ToMarkdown(this string source)
+		{
+			var _pipeline = new MarkdownPipelineBuilder()
+				.UseNoFollowLinks()
+				.UseAbbreviations()
+				.UseEmphasisExtras()
+				.UseTaskLists()
+				.UseAutoLinks()
+				.UseMediaLinks()
+				.UseBootstrap()
+				.UsePipeTables()
+				.Build();
+			var _markdown = Markdown.ToHtml(source, _pipeline);
+
+			return _markdown;
 		}
 	}
 
