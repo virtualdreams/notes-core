@@ -42,7 +42,7 @@
 					</table>
 				</div>
 				@if((await AuthorizationService.AuthorizeAsync(User, "AdministratorOnly")).Succeeded) {
-				<button type="submit" class="btn btn-primary"><i class="fa fa-fw fa-check-square-o"></i> Delete</button>
+				<button type="submit" class="btn btn-danger"><i class="fa fa-fw fa-check-square-o"></i> Delete</button>
 				}
 				<button type="submit" formaction="@Url.Action("restore", "note")" class="btn btn-success"><i class="fa fa-fw fa-check-square-o"></i> Restore</button>
 			</form>
