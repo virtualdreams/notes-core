@@ -146,7 +146,7 @@ notes = (function ($) {
 				data: data
 			}).done(function (d) {
 				if (data != null) {
-					$('#editor-preview').html(d.content);
+					$('#preview-content').html(d.content);
 					$('#preview').html('<i class="fa fa-pencil"></i> Edit');
 
 					$('#editor-source').toggle();

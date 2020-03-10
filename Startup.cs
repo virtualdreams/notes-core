@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Mvc.RenderViewToString;
 using System.IO;
 using System;
 using notes.Core.Services;
@@ -50,7 +49,6 @@ namespace notes
 			services.AddTransient<MailService>();
 			services.AddTransient<RevisionService>();
 			services.AddScoped<CustomCookieEvents>();
-			services.AddScoped<RazorViewToStringRenderer>();
 
 			// key ring
 			if (!String.IsNullOrEmpty(settings.KeyStore))

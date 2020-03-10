@@ -2,7 +2,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Mvc.RenderViewToString;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,16 +19,14 @@ namespace notes.Controllers
 		private readonly Settings Options;
 		private readonly UserService UserService;
 		private readonly NoteService NoteService;
-		private readonly RazorViewToStringRenderer ViewRenderService;
 
-		public NoteController(IMapper mapper, IOptionsSnapshot<Settings> settings, UserService user, NoteService note, RazorViewToStringRenderer render)
+		public NoteController(IMapper mapper, IOptionsSnapshot<Settings> settings, UserService user, NoteService note)
 			: base(user)
 		{
 			Mapper = mapper;
 			Options = settings.Value;
 			UserService = user;
 			NoteService = note;
-			ViewRenderService = render;
 		}
 
 		[HttpGet]
@@ -154,10 +151,11 @@ namespace notes.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Preview(NotePostModel model)
 		{
-			// remove some error messages, because is not needed for preview mode
+			// remove some error messages, because they are not needed for preview mode
 			ModelState.Remove("title");
 			ModelState.Remove("notebook");
 			ModelState.Remove("tags");
+
 			if (ModelState.IsValid)
 			{
 				var view = new NoteViewContainer
@@ -172,7 +170,7 @@ namespace notes.Controllers
 					}
 				};
 
-				var _content = await ViewRenderService.RenderViewToStringAsync("/Views/Shared/_Preview.cshtml", view);
+				var _content = await Task.Run(() => view.Note.Content.ToMarkdown());
 
 				return Json(new { Success = true, Content = _content });
 			}
