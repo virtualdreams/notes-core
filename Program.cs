@@ -41,6 +41,7 @@ namespace notes
 							config.Sources.Clear();
 							config.SetBasePath(Directory.GetCurrentDirectory());
 							config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+							config.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 							config.AddJsonFile($"logsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 							config.AddEnvironmentVariables();
 						})
