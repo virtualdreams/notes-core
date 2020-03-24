@@ -16,6 +16,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
+		@if(Model.Revisions.Count() > 0) {
 		<div class="table-responsive">
     		<table class="table">
 				<thead>
@@ -36,5 +37,8 @@
 				</tbody>
 			</table>
 		</div>
+		} else {
+			@:No revisions are available.
+		}
 	</div>
 </div>
