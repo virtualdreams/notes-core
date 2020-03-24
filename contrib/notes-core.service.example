@@ -4,14 +4,13 @@ After=network.target
 After=mariadb.service
 
 [Service]
-;Environment=ASPNETCORE_URLS=http://127.0.0.1:5001/
 EnvironmentFile=
-;Restart=always
-;RestartSec=10
-Type=simple
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
 SyslogIdentifier=notes-core
 WorkingDirectory=/foo/bar
-ExecStart=/usr/local/bin/dotnet /foo/bar/notes.dll
+ExecStart=/usr/local/bin/dotnet /foo/bar/notes-core/notes.dll
 User=www-data
 Group=www-data
 
