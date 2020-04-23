@@ -1,7 +1,7 @@
 var gulp = require("gulp"),
 	concat = require("gulp-concat"),
 	rename = require("gulp-rename"),
-	cssmin = require("gulp-cssmin"),
+	cssmin = require("gulp-clean-css"),
 	less = require("gulp-less"),
 	uglify = require("gulp-uglify")
 
