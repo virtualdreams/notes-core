@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -12,6 +13,7 @@ using System.IO;
 using System;
 using notes.Core.Services;
 using notes.Extensions;
+using notes.Filter;
 
 namespace notes
 {
@@ -66,11 +68,17 @@ namespace notes
 			// mvc
 			services.AddMvc(options =>
 			{
+				options.Filters.Add<ModelStateDebugFilter>();
 				// options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
 			})
 			.AddNewtonsoftJson(options =>
 			{
 				options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+			})
+			.AddFluentValidation(options =>
+			{
+				options.RegisterValidatorsFromAssemblyContaining<Startup>();
+				options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
 			});
 
 			// add sessions

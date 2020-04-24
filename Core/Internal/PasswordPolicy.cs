@@ -10,27 +10,27 @@ namespace notes.Core.Internal
 		/// <summary>
 		/// Minimum password length.
 		/// </summary>
-		public int MinLength = 8;
+		public int MinLength { get; set; } = 8;
 
 		/// <summary>
 		/// Minimum upper case length.
 		/// </summary>
-		public int UpperCaseLength = 1;
+		public int UpperCaseLength { get; set; } = 1;
 
 		/// <summary>
 		/// Minimum lower case length.
 		/// </summary>
-		public int LowerCaseLength = 1;
+		public int LowerCaseLength { get; set; } = 1;
 
 		/// <summary>
 		/// Minimum non alpha-numeric characters length.
 		/// </summary>
-		public int NonAlphaLength = 1;
+		public int NonAlphaLength { get; set; } = 1;
 
 		/// <summary>
 		/// Minimum digits length.
 		/// </summary>
-		public int DigitsLength = 1;
+		public int DigitsLength { get; set; } = 1;
 
 		/// <summary>
 		/// Test if the password is valid.
