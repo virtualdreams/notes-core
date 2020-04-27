@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 using System;
+using notes.Core.Internal;
 using notes.Core.Services;
 using notes.Extensions;
 using notes.Filter;
@@ -52,6 +53,7 @@ namespace notes
 			services.AddTransient<MailService>();
 			services.AddTransient<RevisionService>();
 			services.AddScoped<CustomCookieEvents>();
+			services.AddSingleton(new PasswordPolicy { MinimumNonAlphaCharacters = 0, MinimumUpperCaseCharacters = 0 });
 
 			// key ring
 			if (!String.IsNullOrEmpty(settings.KeyStore))

@@ -11,7 +11,7 @@ namespace notes.Validators
 			RuleFor(r => r.Username)
 				.NotEmpty()
 				.WithMessage("Please fill in a username.")
-				.EmailAddress(EmailValidationMode.Net4xRegex)
+				.EmailAddress()
 				.WithMessage("Please enter a valid e-mail address.");
 		}
 	}

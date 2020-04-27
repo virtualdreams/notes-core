@@ -13,24 +13,24 @@ namespace notes.Core.Internal
 		public int MinLength { get; set; } = 8;
 
 		/// <summary>
-		/// Minimum upper case length.
+		/// Minimum upper case characters.
 		/// </summary>
-		public int UpperCaseLength { get; set; } = 1;
+		public int MinimumUpperCaseCharacters { get; set; } = 1;
 
 		/// <summary>
-		/// Minimum lower case length.
+		/// Minimum lower case characters.
 		/// </summary>
-		public int LowerCaseLength { get; set; } = 1;
+		public int MinimumLowerCaseCharacters { get; set; } = 1;
 
 		/// <summary>
-		/// Minimum non alpha-numeric characters length.
+		/// Minimum non alpha-numeric characters.
 		/// </summary>
-		public int NonAlphaLength { get; set; } = 1;
+		public int MinimumNonAlphaCharacters { get; set; } = 1;
 
 		/// <summary>
-		/// Minimum digits length.
+		/// Minimum digits characters.
 		/// </summary>
-		public int DigitsLength { get; set; } = 1;
+		public int MinimumDigitCharacters { get; set; } = 1;
 
 		/// <summary>
 		/// Test if the password is valid.
@@ -42,16 +42,16 @@ namespace notes.Core.Internal
 			if (password.Length < MinLength)
 				return false;
 
-			if (UpperCaseCount(password) < UpperCaseLength)
+			if (UpperCaseCount(password) < MinimumUpperCaseCharacters)
 				return false;
 
-			if (LowerCaseCount(password) < LowerCaseLength)
+			if (LowerCaseCount(password) < MinimumLowerCaseCharacters)
 				return false;
 
-			if (NonAlphaCount(password) < NonAlphaLength)
+			if (NonAlphaCount(password) < MinimumNonAlphaCharacters)
 				return false;
 
-			if (DigitsCount(password) < DigitsLength)
+			if (DigitsCount(password) < MinimumDigitCharacters)
 				return false;
 
 			return true;

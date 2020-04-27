@@ -1,7 +1,6 @@
 using FluentValidation;
-using notes.Core.Internal;
 using System;
-using System.Collections.Generic;
+using notes.Core.Internal;
 
 namespace notes.Validators
 {
@@ -13,6 +12,7 @@ namespace notes.Validators
 				.Must((rootObject, str, context) =>
 				{
 					context.MessageFormatter.AppendArgument("MaxLength", length);
+
 					if (str != null)
 					{
 						var list = str.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
@@ -29,24 +29,14 @@ namespace notes.Validators
 				.WithMessage("The length of an item of '{PropertyName}' must be {MaxLength} characters or fewer.");
 		}
 
-		public static IRuleBuilderOptions<T, IList<TElement>> ListMustNotEmpty<T, TElement>(this IRuleBuilder<T, IList<TElement>> ruleBuilder)
-		{
-			return ruleBuilder
-				.Must((objectRoot, list, context) =>
-				{
-					return list.Count != 0;
-				})
-				.WithMessage("List must not empty.");
-		}
-
-		public static IRuleBuilderOptions<T, string> PasswordPolicy<T>(this IRuleBuilder<T, string> ruleBuilder, PasswordPolicy policy)
+		public static IRuleBuilderOptions<T, string> ValidatePasswordPolicy<T>(this IRuleBuilder<T, string> ruleBuilder, PasswordPolicy policy)
 		{
 			return ruleBuilder
 				.Must((objectRoot, str, context) =>
 				{
 					return policy.IsValid(str);
 				})
-				.WithMessage("The password does not meet the password policy requirements.");
+				.WithMessage("The '{PropertyName}' does not meet the password policy requirements.");
 		}
 	}
 }

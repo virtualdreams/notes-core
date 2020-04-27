@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace notes.Models
 {
 	public class PasswdResetPostModel

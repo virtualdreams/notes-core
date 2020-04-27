@@ -8,7 +8,7 @@ namespace notes.Validators
 		public NoteTrashPostModelValidator()
 		{
 			RuleFor(r => r.Id)
-				.ListMustNotEmpty()
+				.NotEmpty()
 				.WithMessage("Selection must not empty.");
 		}
 	}

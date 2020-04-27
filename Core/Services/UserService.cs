@@ -259,7 +259,7 @@ namespace notes.Core.Services
 		{
 			password = password?.Trim();
 
-			if (!new PasswordPolicy { NonAlphaLength = 0, UpperCaseLength = 0 }.IsValid(password))
+			if (!new PasswordPolicy { MinimumNonAlphaCharacters = 0, MinimumUpperCaseCharacters = 0 }.IsValid(password))
 				throw new NotesWeakPasswordException();
 
 			var _user = await Context.User
