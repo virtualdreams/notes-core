@@ -154,9 +154,6 @@ namespace notes.Controllers
 					if (_user == null)
 						throw new NotesInvalidTokenException();
 
-					if (!model.NewPassword.Equals(model.ConfirmPassword))
-						throw new NotesPasswordMismatchException();
-
 					await UserService.UpdatePassword(_user.Id, model.NewPassword);
 					await UserService.RemoveToken(id);
 
@@ -210,9 +207,6 @@ namespace notes.Controllers
 					var _user = await UserService.Login(User.GetUserName(), model.OldPassword);
 					if (_user == null)
 						throw new NotesPasswordIncorrectException();
-
-					if (!model.NewPassword.Equals(model.ConfirmPassword))
-						throw new NotesPasswordMismatchException();
 
 					await UserService.UpdatePassword(CurrentUser.Id, model.NewPassword);
 

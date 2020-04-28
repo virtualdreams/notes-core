@@ -37,24 +37,10 @@ namespace notes.Core
 		{ }
 	}
 
-	public class NotesPasswordMismatchException : NotesException
-	{
-		public NotesPasswordMismatchException()
-			: base("Password doesn't match the confirmation!")
-		{ }
-	}
-
 	public class NotesLoginFailedException : NotesException
 	{
 		public NotesLoginFailedException()
 			: base("Incorrect username or password!")
-		{ }
-	}
-
-	public class NotesWeakPasswordException : NotesException
-	{
-		public NotesWeakPasswordException()
-			: base("The new password is too weak!")
 		{ }
 	}
 
