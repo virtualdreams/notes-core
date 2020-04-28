@@ -27,11 +27,12 @@ namespace notes.Core.Services
 		/// Get all available users.
 		/// </summary>
 		/// <returns>A list of users.</returns>
-		public async Task<IEnumerable<User>> GetUsers()
+		public async Task<List<User>> GetUsersAsync()
 		{
 			Log.LogInformation("Get all users.");
 
 			var _result = await Context.User
+				.AsNoTracking()
 				.OrderBy(o => o.Role)
 				.ThenBy(o => o.Username)
 				.ToListAsync();
@@ -43,9 +44,10 @@ namespace notes.Core.Services
 		/// Test, if the database has users.
 		/// </summary>
 		/// <returns>True if any user exists.</returns>
-		public async Task<bool> HasUsers()
+		public async Task<bool> HasUsersAsync()
 		{
 			var _result = await Context.User
+				.AsNoTracking()
 				.CountAsync();
 
 			Log.LogDebug($"Database contains {_result} users.");
@@ -57,9 +59,10 @@ namespace notes.Core.Services
 		/// Get count of available administrators.
 		/// </summary>
 		/// <returns>Count if active adminsitrators</returns>
-		public async Task<long> GetAdminCount()
+		public async Task<long> GetAdminCountAsync()
 		{
 			var _result = await Context.User
+				.AsNoTracking()
 				.Where(f => f.Role == "Administrator" && f.Enabled == true)
 				.CountAsync();
 
@@ -73,9 +76,10 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="id">The user id.</param>
 		/// <returns>True if the user is an administrator.</returns>
-		public async Task<bool> IsAdmin(int id)
+		public async Task<bool> IsAdminAsync(int id)
 		{
 			var _result = await Context.User
+				.AsNoTracking()
 				.Where(f => f.Id == id && f.Role == "Administrator")
 				.CountAsync();
 
@@ -89,7 +93,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="id">The user id.</param>
 		/// <returns>The user if exists or null.</returns>
-		public async Task<User> GetById(int id)
+		public async Task<User> GetByIdAsync(int id)
 		{
 			var _result = await Context.User
 				.Where(f => f.Id == id)
@@ -103,7 +107,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="username">The username.</param>
 		/// <returns>The user if exists or null.</returns>
-		public async Task<User> GetByName(string username)
+		public async Task<User> GetByNameAsync(string username)
 		{
 			Log.LogDebug($"Get user by name: '{username}'.");
 
@@ -119,7 +123,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		public async Task<User> GetByToken(string token)
+		public async Task<User> GetByTokenAsync(string token)
 		{
 			var _hash = new ResetToken(token).PrivateKey();
 
@@ -145,7 +149,7 @@ namespace notes.Core.Services
 		/// <param name="active">User account active.</param>
 		/// <param name="pageSize">Default page size.</param>
 		/// <returns>The new user.</returns>
-		public async Task<User> Create(string username, string password, string displayName, string role, bool active, int pageSize)
+		public async Task<User> CreateAsync(string username, string password, string displayName, string role, bool active, int pageSize)
 		{
 			username = username?.Trim()?.ToLower();
 			password = password?.Trim();
@@ -185,13 +189,13 @@ namespace notes.Core.Services
 		/// <param name="password">The paramref name="password". Leave empty if you don't want to change.</param>
 		/// <param name="role">The user role. Can be "User" or "Administrator".</param>
 		/// <param name="active">User account active.</param>
-		public async Task Update(int id, string username, string password, string displayName, string role, bool active)
+		public async Task UpdateAsync(int id, string username, string password, string displayName, string role, bool active)
 		{
 			username = username?.Trim()?.ToLower();
 			password = password?.Trim();
 			displayName = displayName?.Trim();
 
-			if (await IsAdmin(id) && await GetAdminCount() < 2 && (!active || !role.Equals("Administrator")))
+			if (await IsAdminAsync(id) && await GetAdminCountAsync() < 2 && (!active || !role.Equals("Administrator")))
 			{
 				Log.LogWarning($"The user {id} is the last available administrator. This account can't changed.");
 				throw new NotesModifyAdminException();
@@ -228,9 +232,9 @@ namespace notes.Core.Services
 		/// Delete a user permanently.
 		/// </summary>
 		/// <param name="id">The user id.</param>
-		public async Task Delete(int id)
+		public async Task DeleteAsync(int id)
 		{
-			if (await IsAdmin(id) && await GetAdminCount() < 2)
+			if (await IsAdminAsync(id) && await GetAdminCountAsync() < 2)
 			{
 				Log.LogWarning($"The user {id} is the last available administrator. This account can't deleted.");
 				throw new NotesDeleteAdminException();
@@ -245,7 +249,7 @@ namespace notes.Core.Services
 
 			Context.User.Remove(_user);
 
-			Log.LogInformation($"Delete user '{(await GetById(id)).Username}' ({id}) permanently.");
+			Log.LogInformation($"Delete user '{(await GetByIdAsync(id)).Username}' ({id}) permanently.");
 
 			await Context.SaveChangesAsync();
 		}
@@ -255,7 +259,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="id">The user id.</param>
 		/// <param name="password">The new password.</param>
-		public async Task UpdatePassword(int id, string password)
+		public async Task UpdatePasswordAsync(int id, string password)
 		{
 			password = password?.Trim();
 
@@ -279,7 +283,7 @@ namespace notes.Core.Services
 		/// <param name="user">The user.</param>
 		/// <param name="displayName">The display name.</param>
 		/// <param name="pageSize">The page size.</param>
-		public async Task UpdateSettings(int id, string displayName, int pageSize)
+		public async Task UpdateSettingsAsync(int id, string displayName, int pageSize)
 		{
 			displayName = displayName?.Trim();
 
@@ -304,7 +308,7 @@ namespace notes.Core.Services
 		/// <param name="username">The username.</param>
 		/// <param name="password">The paramref name="password".</param>
 		/// <returns>The user if authenticated or null.</returns>
-		public async Task<User> Login(string username, string password)
+		public async Task<User> LoginAsync(string username, string password)
 		{
 			username = username?.Trim()?.ToLower();
 			password = password?.Trim();
@@ -330,7 +334,7 @@ namespace notes.Core.Services
 		/// <param name="username">The username.</param>
 		/// <param name="origin">The origon url.</param>
 		/// <returns></returns>
-		public async Task ForgotPassword(string username, string origin)
+		public async Task ForgotPasswordAsync(string username, string origin)
 		{
 			username = username?.Trim()?.ToLower();
 
@@ -364,7 +368,7 @@ namespace notes.Core.Services
 		/// Remove the reset token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		public async Task RemoveToken(string token)
+		public async Task RemoveTokenAsync(string token)
 		{
 			var _hash = new ResetToken(token).PrivateKey();
 

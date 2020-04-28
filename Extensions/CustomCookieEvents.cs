@@ -25,7 +25,7 @@ namespace notes.Extensions
 			var _username = _principal.GetUserName();
 
 			// get the user object from database.
-			var _user = await UserService.GetByName(_username);
+			var _user = await UserService.GetByNameAsync(_username);
 
 			// if the user not exists or the user is disabled or his role has changed, reject his login
 			if (_user == null || !_user.Enabled || !_user.Role.Equals(context.Principal.GetUserRole()))

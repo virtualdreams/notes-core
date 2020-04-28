@@ -48,12 +48,12 @@ namespace notes.Controllers
 				{
 					// if no accounts exists, create the first user as administrator.
 					// HACK!
-					if (!(await UserService.HasUsers()))
+					if (!(await UserService.HasUsersAsync()))
 					{
-						await UserService.Create(model.Username, model.Password, "Administrator", "Administrator", true, Options.PageSize);
+						await UserService.CreateAsync(model.Username, model.Password, "Administrator", "Administrator", true, Options.PageSize);
 					}
 
-					var _user = await UserService.Login(model.Username, model.Password);
+					var _user = await UserService.LoginAsync(model.Username, model.Password);
 					if (_user == null || !_user.Enabled)
 						throw new NotesLoginFailedException();
 
@@ -104,7 +104,7 @@ namespace notes.Controllers
 			{
 				try
 				{
-					await UserService.ForgotPassword(model.Username, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}");
+					await UserService.ForgotPasswordAsync(model.Username, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}");
 
 					return View("Forgot_Confirmation");
 				}
@@ -123,7 +123,7 @@ namespace notes.Controllers
 		{
 			try
 			{
-				var _user = await UserService.GetByToken(id);
+				var _user = await UserService.GetByTokenAsync(id);
 				if (_user == null)
 					throw new NotesInvalidTokenException();
 
@@ -150,12 +150,12 @@ namespace notes.Controllers
 			{
 				try
 				{
-					var _user = await UserService.GetByToken(id);
+					var _user = await UserService.GetByTokenAsync(id);
 					if (_user == null)
 						throw new NotesInvalidTokenException();
 
-					await UserService.UpdatePassword(_user.Id, model.NewPassword);
-					await UserService.RemoveToken(id);
+					await UserService.UpdatePasswordAsync(_user.Id, model.NewPassword);
+					await UserService.RemoveTokenAsync(id);
 
 					return RedirectToAction("Login");
 				}
@@ -204,11 +204,11 @@ namespace notes.Controllers
 			{
 				try
 				{
-					var _user = await UserService.Login(User.GetUserName(), model.OldPassword);
+					var _user = await UserService.LoginAsync(User.GetUserName(), model.OldPassword);
 					if (_user == null)
 						throw new NotesPasswordIncorrectException();
 
-					await UserService.UpdatePassword(CurrentUser.Id, model.NewPassword);
+					await UserService.UpdatePasswordAsync(CurrentUser.Id, model.NewPassword);
 
 					// redirect to home
 					return RedirectToAction("settings", "user");
@@ -256,7 +256,7 @@ namespace notes.Controllers
 				// return RedirectToAction("settings");
 			}
 
-			await UserService.UpdateSettings(CurrentUser.Id, model.DisplayName, model.Items);
+			await UserService.UpdateSettingsAsync(CurrentUser.Id, model.DisplayName, model.Items);
 
 			return RedirectToAction("settings", "user");
 		}

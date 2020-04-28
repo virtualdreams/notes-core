@@ -30,7 +30,7 @@ namespace notes.Areas.Admin.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Index()
 		{
-			var _users = await UserService.GetUsers();
+			var _users = await UserService.GetUsersAsync();
 
 			var users = Mapper.Map<IEnumerable<UserModel>>(_users);
 
@@ -56,7 +56,7 @@ namespace notes.Areas.Admin.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Edit(int id)
 		{
-			var _user = await UserService.GetById(id);
+			var _user = await UserService.GetByIdAsync(id);
 			if (_user == null)
 				return NotFound();
 
@@ -79,11 +79,11 @@ namespace notes.Areas.Admin.Controllers
 				{
 					if (model.Id == 0)
 					{
-						await UserService.Create(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled, Options.PageSize);
+						await UserService.CreateAsync(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled, Options.PageSize);
 					}
 					else
 					{
-						await UserService.Update(model.Id, model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
+						await UserService.UpdateAsync(model.Id, model.Username, model.Password, model.DisplayName, model.Role, model.Enabled);
 					}
 
 					return RedirectToAction("Index");
@@ -113,13 +113,13 @@ namespace notes.Areas.Admin.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Delete(int id)
 		{
-			var _user = await UserService.GetById(id);
+			var _user = await UserService.GetByIdAsync(id);
 			if (_user == null)
 				return NotFound();
 
 			try
 			{
-				await UserService.Delete(id);
+				await UserService.DeleteAsync(id);
 			}
 			catch (NotesException ex)
 			{
