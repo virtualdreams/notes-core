@@ -249,12 +249,22 @@ namespace notes.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return RedirectToAction("settings");
+				var view = new UserSettingsEditContainer
+				{
+					Settings = new UserSettingsModel
+					{
+						DisplayName = model.DisplayName,
+						Items = model.Items
+					}
+				};
+
+				return View(view);
+				// return RedirectToAction("settings");
 			}
 
 			await UserService.UpdateSettings(CurrentUser.Id, model.DisplayName, model.Items);
 
-			return RedirectToAction("settings");
+			return RedirectToAction("settings", "user");
 		}
 		#endregion
 	}

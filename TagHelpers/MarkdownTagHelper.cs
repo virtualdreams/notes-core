@@ -4,9 +4,12 @@ using notes.Extensions;
 
 namespace notes.TagHelpers
 {
-	[HtmlTargetElement("markdown", Attributes = "content")]
+	[HtmlTargetElement("markdown", Attributes = ContentAttributeName)]
 	public class MarkdownTagHelper : TagHelper
 	{
+		private const string ContentAttributeName = "content";
+
+		[HtmlAttributeName(ContentAttributeName)]
 		public string Content { get; set; }
 
 		public override void Process(TagHelperContext context, TagHelperOutput output)
