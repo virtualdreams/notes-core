@@ -32,7 +32,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> View(int id)
 		{
-			var _note = await NoteService.GetById(id);
+			var _note = await NoteService.GetByIdAsync(id);
 			if (_note == null)
 				return NotFound();
 
@@ -49,7 +49,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Print(int id)
 		{
-			var _note = await NoteService.GetById(id);
+			var _note = await NoteService.GetByIdAsync(id);
 			if (_note == null)
 				return NotFound();
 
@@ -77,7 +77,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Edit(int id)
 		{
-			var _note = await NoteService.GetById(id);
+			var _note = await NoteService.GetByIdAsync(id);
 			if (_note == null)
 				return NotFound();
 
@@ -101,12 +101,12 @@ namespace notes.Controllers
 					var _id = 0;
 					if (model.Id == 0)
 					{
-						var _note = await NoteService.Create(model.Title, model.Content, model.Notebook, model.Tags);
+						var _note = await NoteService.CreateAsync(model.Title, model.Content, model.Notebook, model.Tags);
 						_id = _note.Id;
 					}
 					else
 					{
-						await NoteService.Update(model.Id, model.Title, model.Content, model.Notebook, model.Tags);
+						await NoteService.UpdateAsync(model.Id, model.Title, model.Content, model.Notebook, model.Tags);
 						_id = model.Id;
 					}
 
@@ -181,7 +181,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Notebooks()
 		{
-			var _notebooks = await NoteService.GetNotebooks();
+			var _notebooks = await NoteService.GetNotebooksAsync();
 
 			var notebooks = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_notebooks);
 
@@ -191,7 +191,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Tags()
 		{
-			var _tags = await NoteService.GetTags();
+			var _tags = await NoteService.GetTagsAsync();
 
 			var tags = Mapper.Map<IEnumerable<DistinctAndCountModel>>(_tags);
 
@@ -201,7 +201,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Notebook(string id, int after)
 		{
-			var _notes = await NoteService.GetByNotebook(id, after, PageSize);
+			var _notes = await NoteService.GetByNotebookAsync(id, after, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? 0, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
@@ -219,7 +219,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Tag(string id, int after)
 		{
-			var _notes = await NoteService.GetByTag(id, after, PageSize);
+			var _notes = await NoteService.GetByTagAsync(id, after, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? 0, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
@@ -238,11 +238,11 @@ namespace notes.Controllers
 		[SkipStatusCodePages]
 		public async Task<IActionResult> Remove(int id)
 		{
-			var _note = await NoteService.GetById(id);
+			var _note = await NoteService.GetByIdAsync(id);
 			if (_note == null || _note.Trash == true)
 				return NotFound();
 
-			await NoteService.Trash(id, true);
+			await NoteService.TrashAsync(id, true);
 
 			return Ok();
 		}
@@ -250,7 +250,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Trash(int after)
 		{
-			var _notes = await NoteService.GetNotes(after, true, PageSize);
+			var _notes = await NoteService.GetNotesAsync(after, true, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? 0, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
@@ -272,7 +272,7 @@ namespace notes.Controllers
 			{
 				foreach (var note in model.Id)
 				{
-					await NoteService.Delete(note);
+					await NoteService.DeleteAsync(note);
 				}
 			}
 
@@ -286,10 +286,10 @@ namespace notes.Controllers
 			{
 				foreach (var note in model.Id)
 				{
-					var _note = await NoteService.GetById(note);
+					var _note = await NoteService.GetByIdAsync(note);
 					if (_note != null)
 					{
-						await NoteService.Trash(note, false);
+						await NoteService.TrashAsync(note, false);
 					}
 				}
 			}
@@ -300,13 +300,13 @@ namespace notes.Controllers
 		[Route("search/tags")]
 		public async Task<IActionResult> TagSuggestions(string term)
 		{
-			return Json((await NoteService.TagSuggestions(term)).ToArray());
+			return Json((await NoteService.TagSuggestionsAsync(term)).ToArray());
 		}
 
 		[Route("search/notebook")]
 		public async Task<IActionResult> NotebookSuggestions(string term)
 		{
-			return Json((await NoteService.NotebookSuggestions(term)).ToArray());
+			return Json((await NoteService.NotebookSuggestionsAsync(term)).ToArray());
 		}
 	}
 }

@@ -357,7 +357,7 @@ namespace notes.Core.Services
 
 			await Context.SaveChangesAsync();
 
-			await MailService.SendResetPasswordMail(!String.IsNullOrEmpty(_user.DisplayName) ? _user.DisplayName : _user.Username, _user.Username, origin, _rtoken.PublicKey()); // send the non hashed token as email
+			await MailService.SendResetPasswordMailAsync(!String.IsNullOrEmpty(_user.DisplayName) ? _user.DisplayName : _user.Username, _user.Username, origin, _rtoken.PublicKey()); // send the non hashed token as email
 		}
 
 		/// <summary>

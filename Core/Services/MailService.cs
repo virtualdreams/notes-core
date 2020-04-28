@@ -25,7 +25,7 @@ namespace notes.Core.Services
 		/// <param name="mail">The email address.</param>
 		/// <param name="origin">The origin from where the user has the passswors reset requested.</param>
 		/// <param name="token">The token to reset the password.</param>
-		public async Task SendResetPasswordMail(string username, string mail, string origin, string token)
+		public async Task SendResetPasswordMailAsync(string username, string mail, string origin, string token)
 		{
 			var message = new MimeMessage();
 			message.From.Add(new MailboxAddress(Options.Smtp.From));
@@ -48,14 +48,14 @@ The {Options.SiteName} Team
 {Options.SiteName} ({origin})"
 			};
 
-			await SendMail(message);
+			await SendMailAsync(message);
 		}
 
 		/// <summary>
 		/// Send a message.
 		/// </summary>
 		/// <param name="message">The message to send.</param>
-		private async Task SendMail(MimeMessage message)
+		private async Task SendMailAsync(MimeMessage message)
 		{
 			if (Options.Smtp.Enabled)
 			{

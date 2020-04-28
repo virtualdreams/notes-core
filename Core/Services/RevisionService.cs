@@ -29,11 +29,12 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="id">The note id.</param>
 		/// <returns>List of revisions.</returns>
-		public async Task<IEnumerable<Revision>> GetRevisions(int id)
+		public async Task<List<Revision>> GetRevisionsAsync(int id)
 		{
 			Log.LogInformation($"Get revisions for note {id}.");
 
 			var _query = Context.Revision
+				.AsNoTracking()
 				.Where(f => f.NoteId == id)
 				.OrderByDescending(o => o.Dt);
 
@@ -45,11 +46,12 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="id">The revision id.</param>
 		/// <returns></returns>
-		public async Task<Revision> GetRevision(int id)
+		public async Task<Revision> GetRevisionAsync(int id)
 		{
 			Log.LogInformation($"Get revison {id}.");
 
 			var _query = Context.Revision
+				.AsNoTracking()
 				.Where(f => f.Id == id);
 
 			return await _query.SingleOrDefaultAsync();
@@ -60,13 +62,13 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="id">The revision id.</param>
 		/// <returns></returns>
-		public async Task Restore(int id)
+		public async Task RestoreAsync(int id)
 		{
-			var _revision = await GetRevision(id);
+			var _revision = await GetRevisionAsync(id);
 			if (_revision == null)
 				throw new NotesRevisionNotFoundException();
 
-			var _note = await NoteService.GetById(_revision.NoteId);
+			var _note = await NoteService.GetByIdAsync(_revision.NoteId);
 			if (_note == null)
 				throw new NotesNoteNotFoundException();
 
@@ -87,13 +89,13 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="id">The revision id.</param>
 		/// <returns>The diff.</returns>
-		public async Task<string> GetDiff(int id)
+		public async Task<string> GetDiffAsync(int id)
 		{
-			var _revision = await GetRevision(id);
+			var _revision = await GetRevisionAsync(id);
 			if (_revision == null)
 				throw new NotesRevisionNotFoundException();
 
-			var _note = await NoteService.GetById(_revision.NoteId);
+			var _note = await NoteService.GetByIdAsync(_revision.NoteId);
 			if (_revision == null)
 				throw new NotesNoteNotFoundException();
 

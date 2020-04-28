@@ -32,11 +32,11 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Index(int id)
 		{
-			var _note = await NoteService.GetById(id);
+			var _note = await NoteService.GetByIdAsync(id);
 			if (_note == null)
 				return NotFound();
 
-			var _revisions = await RevisionService.GetRevisions(id);
+			var _revisions = await RevisionService.GetRevisionsAsync(id);
 
 			var revisions = Mapper.Map<IEnumerable<RevisionModel>>(_revisions);
 
@@ -51,11 +51,11 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> View(int id, int diff)
 		{
-			var _revision = await RevisionService.GetRevision(id);
+			var _revision = await RevisionService.GetRevisionAsync(id);
 			if (_revision == null)
 				return NotFound();
 
-			var _diff = await RevisionService.GetDiff(_revision.Id);
+			var _diff = await RevisionService.GetDiffAsync(_revision.Id);
 
 			var revision = Mapper.Map<RevisionModel>(_revision);
 
@@ -72,11 +72,11 @@ namespace notes.Controllers
 		[Authorize(Policy = "AdministratorOnly")]
 		public async Task<IActionResult> Restore(int id)
 		{
-			var _revision = await RevisionService.GetRevision(id);
+			var _revision = await RevisionService.GetRevisionAsync(id);
 			if (_revision == null)
 				return NotFound();
 
-			await RevisionService.Restore(_revision.Id);
+			await RevisionService.RestoreAsync(_revision.Id);
 
 			return RedirectToAction("view", "note", new { id = _revision.NoteId, slug = _revision.Title.ToSlug() });
 		}

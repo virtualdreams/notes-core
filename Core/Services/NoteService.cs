@@ -26,11 +26,12 @@ namespace notes.Core.Services
 		/// <param name="trashed">Request trashed items or not.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns>List of notes.</returns>
-		public async Task<IEnumerable<Note>> GetNotes(int next, bool trashed, int limit)
+		public async Task<List<Note>> GetNotesAsync(int next, bool trashed, int limit)
 		{
 			Log.LogInformation($"Get all notes.");
 
 			var _query = Context.Note
+				.AsNoTracking()
 				.Where(f => f.Trash == trashed);
 
 			if (next > 0)
@@ -52,13 +53,14 @@ namespace notes.Core.Services
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public async Task<IEnumerable<Note>> GetByNotebook(string notebook, int next, int limit)
+		public async Task<List<Note>> GetByNotebookAsync(string notebook, int next, int limit)
 		{
 			notebook = notebook?.Trim();
 
 			Log.LogInformation($"Get notes by notebook '{notebook}'.");
 
 			var _query = Context.Note
+				.AsNoTracking()
 				.Where(f => f.Notebook == notebook && f.Trash == false);
 
 			if (next > 0)
@@ -81,13 +83,15 @@ namespace notes.Core.Services
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public async Task<IEnumerable<Note>> GetByTag(string tag, int next, int limit)
+		public async Task<List<Note>> GetByTagAsync(string tag, int next, int limit)
 		{
 			tag = tag?.Trim();
 
 			Log.LogInformation($"Get notes by tag '{tag}'.");
 
-			var _query = Context.Note.AsQueryable();
+			var _query = Context.Note
+				.AsNoTracking()
+				.AsQueryable();
 
 			if (!String.IsNullOrEmpty(tag))
 			{
@@ -115,7 +119,7 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="id">The note id.</param>
 		/// <returns></returns>
-		public async Task<Note> GetById(int id)
+		public async Task<Note> GetByIdAsync(int id)
 		{
 			Log.LogInformation($"Get note by id {id}.");
 
@@ -131,11 +135,12 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="limit">Limit result to n items.</param>
 		/// <returns>A list of notebook.</returns>
-		public async Task<IEnumerable<DistinctAndCount>> GetMostUsedNotebooks(int limit)
+		public async Task<List<DistinctAndCount>> GetMostUsedNotebooksAsync(int limit)
 		{
 			Log.LogDebug($"Get the {limit} most used notebooks.");
 
 			var _query = Context.Note
+				.AsNoTracking()
 				.Where(f => f.Trash == false && f.Notebook != null)
 				.GroupBy(g => g.Notebook)
 				.Select(s => new DistinctAndCount
@@ -153,11 +158,12 @@ namespace notes.Core.Services
 		/// Get a list of all notebooks.
 		/// </summary>
 		/// <returns>A list of notebook.</returns>
-		public async Task<IEnumerable<DistinctAndCount>> GetNotebooks()
+		public async Task<List<DistinctAndCount>> GetNotebooksAsync()
 		{
 			Log.LogInformation($"Get the full list of notebooks.");
 
 			var _query = Context.Note
+				.AsNoTracking()
 				.Where(f => f.Trash == false && f.Notebook != null)
 				.GroupBy(g => g.Notebook)
 				.Select(s => new DistinctAndCount
@@ -175,11 +181,12 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="limit">Limit result to n items.</param>
 		/// <returns>A list of tags.</returns>
-		public async Task<IEnumerable<DistinctAndCount>> GetMostUsedTags(int limit)
+		public async Task<List<DistinctAndCount>> GetMostUsedTagsAsync(int limit)
 		{
 			Log.LogDebug($"Get the {limit} most used tags.");
 
 			var _query = Context.Tag
+				.AsNoTracking()
 				.Where(f => f.Note.Trash == false)
 				.GroupBy(g => g.Name)
 				.Select(s => new DistinctAndCount
@@ -197,11 +204,12 @@ namespace notes.Core.Services
 		/// Get a list of all tags,
 		/// </summary>
 		/// <returns>A list of tags.</returns>
-		public async Task<IEnumerable<DistinctAndCount>> GetTags()
+		public async Task<List<DistinctAndCount>> GetTagsAsync()
 		{
 			Log.LogInformation($"Get the full list of tags.");
 
 			var _query = Context.Tag
+				.AsNoTracking()
 				.Where(f => f.Note.Trash == false)
 				.GroupBy(g => g.Name)
 				.Select(s => new DistinctAndCount
@@ -222,7 +230,7 @@ namespace notes.Core.Services
 		/// <param name="notebook">The notebook name.</param>
 		/// <param name="tags">The note tags.</param>
 		/// <returns>The created note.</returns>
-		public async Task<Note> Create(string title, string content, string notebook, string tags)
+		public async Task<Note> CreateAsync(string title, string content, string notebook, string tags)
 		{
 			var _tags = tags?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
 				.Select(s => s.Trim())
@@ -261,7 +269,7 @@ namespace notes.Core.Services
 		/// <param name="notebook">The note notebook.</param>
 		/// <param name="tags">The note tags.</param>
 		/// <returns></returns>
-		public async Task Update(int id, string title, string content, string notebook, string tags)
+		public async Task UpdateAsync(int id, string title, string content, string notebook, string tags)
 		{
 			var _tags = tags?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
 				.Select(s => s.Trim())
@@ -269,7 +277,7 @@ namespace notes.Core.Services
 				.Distinct()
 				.ToArray();
 
-			var _note = await GetById(id);
+			var _note = await GetByIdAsync(id);
 			if (_note == null)
 				throw new NotesNoteNotFoundException();
 
@@ -298,9 +306,9 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="id">The note id.</param>
 		/// <param name="trash">Set trash flag for the note.</param>
-		public async Task Trash(int id, bool trash)
+		public async Task TrashAsync(int id, bool trash)
 		{
-			var _note = await GetById(id);
+			var _note = await GetByIdAsync(id);
 			if (_note == null)
 				throw new NotesNoteNotFoundException();
 
@@ -315,9 +323,9 @@ namespace notes.Core.Services
 		/// Remove the note permanently.
 		/// </summary>
 		/// <param name="id">The note id.</param>
-		public async Task Delete(int id)
+		public async Task DeleteAsync(int id)
 		{
-			var _note = await GetById(id);
+			var _note = await GetByIdAsync(id);
 			if (_note == null)
 				throw new NotesNoteNotFoundException();
 
@@ -337,13 +345,13 @@ namespace notes.Core.Services
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public async Task<IEnumerable<Note>> Search(string term, int next, int limit)
+		public async Task<List<Note>> SearchAsync(string term, int next, int limit)
 		{
 			term = term?.Trim();
 
 			if (String.IsNullOrEmpty(term))
 			{
-				return Enumerable.Empty<Note>();
+				return new List<Note>();
 			}
 
 			IQueryable<Note> _query = null;
@@ -418,18 +426,18 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="term">The term to search for.</param>
 		/// <returns></returns>
-		public async Task<IEnumerable<string>> TagSuggestions(string term)
+		public async Task<List<string>> TagSuggestionsAsync(string term)
 		{
 			term = term?.Trim();
 
 			if (String.IsNullOrEmpty(term) || term.Length < 3)
-				return Enumerable.Empty<string>();
+				return new List<string>();
 
 			Log.LogDebug($"Get tag suggestions for term '{term}'.");
 
-			var _result = await GetTags();
+			var _result = await GetTagsAsync();
 
-			return _result.Select(s => s.Name).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
+			return _result.Select(s => s.Name).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1).ToList();
 		}
 
 		/// <summary>
@@ -437,18 +445,18 @@ namespace notes.Core.Services
 		/// </summary>
 		/// <param name="term">The term to search for.</param>
 		/// <returns></returns>
-		public async Task<IEnumerable<string>> NotebookSuggestions(string term)
+		public async Task<List<string>> NotebookSuggestionsAsync(string term)
 		{
 			term = term?.Trim();
 
 			if (String.IsNullOrEmpty(term) || term.Length < 3)
-				return Enumerable.Empty<string>();
+				return new List<string>();
 
 			Log.LogDebug($"Get notebook suggestions for term '{term}'.");
 
-			var _result = await GetNotebooks();
+			var _result = await GetNotebooksAsync();
 
-			return _result.Select(s => s.Name).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1);
+			return _result.Select(s => s.Name).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1).ToList();
 		}
 	}
 }
