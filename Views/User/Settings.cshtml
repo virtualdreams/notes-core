@@ -24,11 +24,11 @@
                 <form role="form" action="@Url.Action("settings", "user")" method="post" enctype="multipart/form-data" id="settings-form" >
                     <div class="form-group">
                         <label for="displayname">Display Name</label>
-                        <input type="text" class="form-control" placeholder="Display Name" name="displayname" id="displayname" value="@Model.Settings.DisplayName" />
+                        <input type="text" class="form-control" placeholder="Display Name" name="displayname" id="displayname" value="@Model.Settings.DisplayName" validation-for="displayname" />
                     </div>
                     <div class="form-group">
                         <label for="items">Items per page</label>
-                        <input type="number" class="form-control" name="items" id="items" value="@Model.Settings.Items" />
+                        <input type="number" class="form-control" name="items" id="items" value="@Model.Settings.Items" validation-for="items" />
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Save</button>

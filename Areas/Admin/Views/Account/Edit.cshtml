@@ -41,20 +41,20 @@
 				<form role="form" action="@Url.Action("edit", "account", new { area = "admin" })" method="post" enctype="multipart/form-data" id="account-form" >
 					<div class="form-group">
 						<label for="username">Username</label>
-						<input type="email" class="form-control" placeholder="E-mail" name="username" id="username" value="@Model.User.Username" />
+						<input type="email" class="form-control" placeholder="E-mail" name="username" id="username" value="@Model.User.Username" validation-for="username" />
 					</div>
 					<div class="form-group">
 						<label for="password">Password</label>
-						<input type="password" class="form-control" placeholder="Password" name="password" id="password" value="" />
+						<input type="password" class="form-control" placeholder="Password" name="password" id="password" value="" validation-for="password" />
 						<small id="passwordHelp" class="form-text text-muted">Leave this field blank if you don't want to change the password.</small>
 					</div>
 					<div class="form-group">
 						<label for="displayname">Display Name</label>
-						<input type="text" class="form-control" placeholder="Display Name" name="displayname" id="displayname" value="@Model.User.DisplayName" />
+						<input type="text" class="form-control" placeholder="Display Name" name="displayname" id="displayname" value="@Model.User.DisplayName" validation-for="displayname" />
 					</div>
 					<div class="form-group">
 						<label for="role">Role</label>
-						<select class="form-control" name="role" id="role">
+						<select class="form-control" name="role" id="role" validation-for="role">
 							<option value="User">User</option>
 							<option value="Administrator">Administrator</option>
 						</select>

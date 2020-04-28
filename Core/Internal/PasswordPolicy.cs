@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using System;
 
 namespace notes.Core.Internal
 {
@@ -39,6 +40,9 @@ namespace notes.Core.Internal
 		/// <returns>True on success.</returns>
 		public bool IsValid(string password)
 		{
+			if (String.IsNullOrEmpty(password))
+				return false;
+
 			if (password.Length < MinLength)
 				return false;
 
