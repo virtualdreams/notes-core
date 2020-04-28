@@ -226,8 +226,7 @@ notes = (function ($) {
 			},
 			'password': {
 				required: true,
-				nowhitespace: true,
-				minlength: 8
+				nowhitespace: true
 			}
 		}
 	});
@@ -246,13 +245,11 @@ notes = (function ($) {
 		rules: {
 			'newpassword': {
 				required: true,
-				nowhitespace: true,
-				minlength: 8
+				nowhitespace: true
 			},
 			'confirmpassword': {
 				required: true,
 				nowhitespace: true,
-				minlength: 8,
 				equalTo: '#newpassword'
 			}
 		},
@@ -307,18 +304,15 @@ notes = (function ($) {
 		rules: {
 			'oldpassword': {
 				required: true,
-				nowhitespace: true,
-				minlength: 8
+				nowhitespace: true
 			},
 			'newpassword': {
 				required: true,
-				nowhitespace: true,
-				minlength: 8
+				nowhitespace: true
 			},
 			'confirmpassword': {
 				required: true,
 				nowhitespace: true,
-				minlength: 8,
 				equalTo: '#newpassword'
 			}
 		},
@@ -334,9 +328,6 @@ notes = (function ($) {
 			'username': {
 				required: true,
 				email: true
-			},
-			'password': {
-				minlength: 8
 			},
 			'displayname': {
 				nowhitespace: true,
