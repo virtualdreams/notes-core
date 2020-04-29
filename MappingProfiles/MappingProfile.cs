@@ -5,7 +5,7 @@ using notes.Areas.Admin.Models;
 using notes.Core.Models;
 using notes.Models;
 
-namespace note.MappingProfiles
+namespace notes.MappingProfiles
 {
 	public class MappingProfile : Profile
 	{
