@@ -60,7 +60,7 @@ namespace notes.Core.Internal
 			return AreHashesEqual(_currentHashBytes, _passwordHashBytes);
 		}
 
-		static private bool AreHashesEqual(byte[] firstHash, byte[] secondHash)
+		private static bool AreHashesEqual(byte[] firstHash, byte[] secondHash)
 		{
 			int _minHashLength = firstHash.Length <= secondHash.Length ? firstHash.Length : secondHash.Length;
 			var xor = firstHash.Length ^ secondHash.Length;
