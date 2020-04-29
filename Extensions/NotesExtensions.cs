@@ -1,7 +1,3 @@
-using Markdig;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Linq;
-using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System;
 
@@ -9,6 +5,13 @@ namespace notes.Extensions
 {
 	public static class NoteExtensions
 	{
+		private class TimeChunk
+		{
+			public int Val;
+			public string S1;
+			public string S2;
+		}
+
 		/// <summary>
 		/// Slugify the string.
 		/// </summary>
@@ -102,83 +105,5 @@ namespace notes.Extensions
 		{
 			return dt.ToMinutes().ToWords();
 		}
-
-		/// <summary>
-		/// Extract username from principal.
-		/// </summary>
-		/// <param name="principal">The principal.</param>
-		/// <returns>The username.</returns>
-		public static string GetUserName(this ClaimsPrincipal principal)
-		{
-			if (principal == null)
-				throw new ArgumentNullException(nameof(principal));
-
-			return principal.FindFirst(ClaimTypes.Name)?.Value;
-		}
-
-		/// <summary>
-		/// Extract the role from principal.
-		/// </summary>
-		/// <param name="principal">The principal.</param>
-		/// <returns>The role.</returns>
-		public static string GetUserRole(this ClaimsPrincipal principal)
-		{
-			if (principal == null)
-				throw new ArgumentNullException(nameof(principal));
-
-			return principal.FindFirst(ClaimTypes.Role)?.Value;
-		}
-
-		/// <summary>
-		/// Render markdown to html5.
-		/// </summary>
-		/// <param name="source">The markdown source.</param>
-		/// <returns>The render output.</returns>
-		public static string ToMarkdown(this string source)
-		{
-			var _pipeline = new MarkdownPipelineBuilder()
-				.UseNoFollowLinks()
-				.UseAbbreviations()
-				.UseEmphasisExtras()
-				.UseTaskLists()
-				.UseAutoLinks()
-				.UseMediaLinks()
-				.UseBootstrap()
-				.UsePipeTables()
-				.Build();
-			var _markdown = Markdown.ToHtml(source, _pipeline);
-
-			return _markdown;
-		}
-	}
-
-	public static class HtmlHelperExtensions
-	{
-		public static bool HasError(this IHtmlHelper helper, string modelName)
-		{
-			if (helper.ViewData.ModelState.ContainsKey(modelName))
-			{
-				return helper.ViewData.ModelState[modelName].Errors.Count > 0;
-			}
-
-			return false;
-		}
-
-		public static string ErrorMessage(this IHtmlHelper helper, string modelName)
-		{
-			if (helper.ViewData.ModelState.ContainsKey(modelName))
-			{
-				return helper.ViewData.ModelState[modelName].Errors.FirstOrDefault()?.ErrorMessage;
-			}
-
-			return String.Empty;
-		}
-	}
-
-	class TimeChunk
-	{
-		public int Val;
-		public string S1;
-		public string S2;
 	}
 }
