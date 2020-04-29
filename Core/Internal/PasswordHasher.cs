@@ -3,13 +3,13 @@ using System.Security.Cryptography;
 
 namespace notes.Core.Internal
 {
-	static public class PasswordHasher
+	public static class PasswordHasher
 	{
 		private const int SaltByteSize = 24;
 		private const int HashByteSize = 24;
 		private const int HashingIterationsCount = 10101;
 
-		static public string HashPassword(string password)
+		public static string HashPassword(string password)
 		{
 			// http://stackoverflow.com/questions/19957176/asp-net-identity-password-hashing
 
@@ -30,7 +30,7 @@ namespace notes.Core.Internal
 			return Convert.ToBase64String(dst);
 		}
 
-		static public bool VerifyHashedPassword(string hashedPassword, string password)
+		public static bool VerifyHashedPassword(string hashedPassword, string password)
 		{
 			byte[] _passwordHashBytes;
 			int _arrayLen = (SaltByteSize + HashByteSize) + 1;

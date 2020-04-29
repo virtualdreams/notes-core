@@ -3,14 +3,14 @@ using System;
 
 namespace notes.Extensions
 {
-	static public class HttpRequestExtensions
+	public static class HttpRequestExtensions
 	{
 		/// <summary>
 		/// Determines whether the specified HTTP request is an AJAX request.
 		/// </summary>
 		/// <param name="request">The HTTP request.</param>
 		/// <returns>True if the specified HTTP request is an AJAX request; otherwise, false.</returns>
-		static public bool IsAjaxRequest(this HttpRequest request)
+		public static bool IsAjaxRequest(this HttpRequest request)
 		{
 			if (request == null)
 			{

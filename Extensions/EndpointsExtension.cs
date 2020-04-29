@@ -2,14 +2,14 @@ using Microsoft.AspNetCore.Builder;
 
 namespace notes.Extensions
 {
-	static public class EndpointsExtension
+	public static class EndpointsExtension
 	{
 		/// <summary>
 		/// Adds endpoints.
 		/// </summary>
 		/// <param name="app">IApplicationBuilder</param>
 		/// <returns></returns>
-		static public IApplicationBuilder AddEndpoints(this IApplicationBuilder app)
+		public static IApplicationBuilder AddEndpoints(this IApplicationBuilder app)
 		{
 			app.UseEndpoints(endpoints =>
 			{

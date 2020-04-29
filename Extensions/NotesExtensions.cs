@@ -7,7 +7,7 @@ using System;
 
 namespace notes.Extensions
 {
-	static public class NoteExtensions
+	public static class NoteExtensions
 	{
 		/// <summary>
 		/// Slugify the string.
@@ -15,7 +15,7 @@ namespace notes.Extensions
 		/// <param name="value">The string to slugify.</param>
 		/// <param name="maxLength">Max length of text.</param>
 		/// <returns>Slugified string.</returns>
-		static public string ToSlug(this string value, int maxLength = 100)
+		public static string ToSlug(this string value, int maxLength = 100)
 		{
 			if (String.IsNullOrEmpty(value))
 				return String.Empty;
@@ -54,7 +54,7 @@ namespace notes.Extensions
 		/// </summary>
 		/// <param name="dt">The datetime.</param>
 		/// <returns></returns>
-		static public int ToMinutes(this DateTime dt)
+		public static int ToMinutes(this DateTime dt)
 		{
 			var _diff = DateTime.Now - dt;
 
@@ -66,7 +66,7 @@ namespace notes.Extensions
 		/// </summary>
 		/// <param name="minutes">The minutes.</param>
 		/// <returns></returns>
-		static public string ToWords(this int minutes)
+		public static string ToWords(this int minutes)
 		{
 			// stolen from reddit https://github.com/reddit/reddit/blob/bd922104b971a5c6794b199f364a06fdf61359a2/r2/r2/public/static/js/timetext.js
 			var chunks = new TimeChunk[]
@@ -98,7 +98,7 @@ namespace notes.Extensions
 		/// </summary>
 		/// <param name="dt">The datetime to convert.</param>
 		/// <returns></returns>
-		static public string ToAge(this DateTime dt)
+		public static string ToAge(this DateTime dt)
 		{
 			return dt.ToMinutes().ToWords();
 		}
@@ -108,7 +108,7 @@ namespace notes.Extensions
 		/// </summary>
 		/// <param name="principal">The principal.</param>
 		/// <returns>The username.</returns>
-		static public string GetUserName(this ClaimsPrincipal principal)
+		public static string GetUserName(this ClaimsPrincipal principal)
 		{
 			if (principal == null)
 				throw new ArgumentNullException(nameof(principal));
@@ -121,7 +121,7 @@ namespace notes.Extensions
 		/// </summary>
 		/// <param name="principal">The principal.</param>
 		/// <returns>The role.</returns>
-		static public string GetUserRole(this ClaimsPrincipal principal)
+		public static string GetUserRole(this ClaimsPrincipal principal)
 		{
 			if (principal == null)
 				throw new ArgumentNullException(nameof(principal));
@@ -134,7 +134,7 @@ namespace notes.Extensions
 		/// </summary>
 		/// <param name="source">The markdown source.</param>
 		/// <returns>The render output.</returns>
-		static public string ToMarkdown(this string source)
+		public static string ToMarkdown(this string source)
 		{
 			var _pipeline = new MarkdownPipelineBuilder()
 				.UseNoFollowLinks()
@@ -152,9 +152,9 @@ namespace notes.Extensions
 		}
 	}
 
-	static public class HtmlHelperExtensions
+	public static class HtmlHelperExtensions
 	{
-		static public bool HasError(this IHtmlHelper helper, string modelName)
+		public static bool HasError(this IHtmlHelper helper, string modelName)
 		{
 			if (helper.ViewData.ModelState.ContainsKey(modelName))
 			{
@@ -164,7 +164,7 @@ namespace notes.Extensions
 			return false;
 		}
 
-		static public string ErrorMessage(this IHtmlHelper helper, string modelName)
+		public static string ErrorMessage(this IHtmlHelper helper, string modelName)
 		{
 			if (helper.ViewData.ModelState.ContainsKey(modelName))
 			{

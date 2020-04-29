@@ -36,7 +36,7 @@ namespace notes.Core
 		/// </summary>
 		/// <param name="length"></param>
 		/// <returns></returns>
-		static public ResetToken CreateNew(uint length = 60)
+		public static ResetToken CreateNew(uint length = 60)
 		{
 			if (length <= 0)
 				throw new ArgumentOutOfRangeException("length", "Value must be greater than zero.");

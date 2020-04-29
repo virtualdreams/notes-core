@@ -3,9 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace notes.Extensions
 {
-	static public class AutoMapperExtensions
+	public static class AutoMapperExtensions
 	{
-		static public IServiceCollection AddAutoMapper(this IServiceCollection services)
+		public static IServiceCollection AddAutoMapper(this IServiceCollection services)
 		{
 			var mappingConfiguration = new MapperConfiguration(config =>
 			{
