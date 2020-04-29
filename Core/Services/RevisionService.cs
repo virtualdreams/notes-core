@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using notes.Core.Data;
 using notes.Core.Models;
 
 namespace notes.Core.Services
@@ -14,10 +15,10 @@ namespace notes.Core.Services
 	public class RevisionService
 	{
 		private readonly ILogger<NoteService> Log;
-		private readonly MySqlContext Context;
+		private readonly DataContext Context;
 		private readonly NoteService NoteService;
 
-		public RevisionService(ILogger<NoteService> log, MySqlContext context, NoteService note)
+		public RevisionService(ILogger<NoteService> log, DataContext context, NoteService note)
 		{
 			Log = log;
 			Context = context;

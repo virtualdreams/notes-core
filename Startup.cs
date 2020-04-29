@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 using System;
+using notes.Core.Data;
 using notes.Core.Internal;
 using notes.Core.Services;
 using notes.Extensions;
@@ -39,7 +40,7 @@ namespace notes
 			Configuration.GetSection("Settings").Bind(settings);
 
 			// database context
-			services.AddDbContext<MySqlContext>(options =>
+			services.AddDbContext<DataContext>(options =>
 			{
 				options.UseMySql(settings.ConnectionString, mySqlOptions => { });
 				//options.EnableSensitiveDataLogging(true);

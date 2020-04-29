@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using notes.Core.Data;
 using notes.Core.Models;
 
 namespace notes.Core.Services
@@ -11,9 +12,9 @@ namespace notes.Core.Services
 	public class NoteService
 	{
 		private readonly ILogger<NoteService> Log;
-		private readonly MySqlContext Context;
+		private readonly DataContext Context;
 
-		public NoteService(ILogger<NoteService> log, MySqlContext context)
+		public NoteService(ILogger<NoteService> log, DataContext context)
 		{
 			Log = log;
 			Context = context;

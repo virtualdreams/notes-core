@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using notes.Core.Data;
 using notes.Core.Internal;
 using notes.Core.Models;
 
@@ -13,10 +14,10 @@ namespace notes.Core.Services
 	public class UserService
 	{
 		private readonly ILogger<UserService> Log;
-		private readonly MySqlContext Context;
+		private readonly DataContext Context;
 		private readonly MailService MailService;
 
-		public UserService(ILogger<UserService> log, MySqlContext context, MailService mail)
+		public UserService(ILogger<UserService> log, DataContext context, MailService mail)
 		{
 			Log = log;
 			Context = context;

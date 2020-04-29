@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using notes.Core.Models;
 
-namespace notes.Core.Services
+namespace notes.Core.Data
 {
-	public class MySqlContext : DbContext
+	public class DataContext : DbContext
 	{
-		public MySqlContext(DbContextOptions options)
+		public DataContext(DbContextOptions options)
 			: base(options)
 		{ }
 
