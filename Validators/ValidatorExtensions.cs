@@ -4,7 +4,7 @@ using notes.Core.Internal;
 
 namespace notes.Validators
 {
-	public static class CustomValidators
+	public static class ValidatorExtensions
 	{
 		public static IRuleBuilderOptions<T, string> MaximumLengthInArrayString<T>(this IRuleBuilder<T, string> ruleBuilder, int length, char separator)
 		{
