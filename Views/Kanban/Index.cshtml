@@ -1,0 +1,38 @@
+<style>
+	#todo-input {
+  display: inline-block;
+  width: auto;
+  vertical-align: middle;
+}
+</style>
+
+<div class="page-header mt-4 mb-4">
+	<h1>Kanban Board</h1>
+</div>
+
+<input id="todo-input" type="text" class="form-control" placeholder="What needs to be done?">
+<button id="todo-button" type="button" class="btn btn-primary">Add</button>
+
+<div class="row mt-4">
+	<div class="col-md-4">
+		<h2><i class="fa fa-fw fa-list"></i> Todo</h2>
+		<div id="todo-list" class="list-group mt-3 mb-4">
+			<a class="list-group-item list-group-item-action" href="#">Mein erster Eintrag</a>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<h2><i class="fa fa-fw fa-cog"></i> Started</h2>
+		<div id="doing-list" class="list-group mt-3 mb-4">
+			<a class="list-group-item list-group-item-action" href="#">Updates auf Suse Manager und deren Test im Anschluss. Fehlersuche: Warum wird nicht synchronisiert?</a>
+			<a class="list-group-item list-group-item-action" href="#">Update repo01</a>
+			<a class="list-group-item list-group-item-action" href="#">Icinga Test auf dem jus-srv-test55</a>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<h2><i class="fa fa-fw fa-check-square-o"></i> Completed</h2>
+		<div id="done-list" class="list-group mt-3 mb-4">
+			<a class="list-group-item list-group-item-action" href="#">Migration von Debian 9 auf Debian 10 abgeschlossen.</a>
+			<a class="list-group-item list-group-item-action" href="#">You've reached the website for Arch Linux, a lightweight and flexible Linux® distribution that tries to Keep It Simple.</a>
+		</div>
+	</div>
+</div>
