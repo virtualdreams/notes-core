@@ -28,8 +28,8 @@ namespace notes.Core.Services
 		public async Task SendResetPasswordMailAsync(string username, string mail, string origin, string token)
 		{
 			var message = new MimeMessage();
-			message.From.Add(new MailboxAddress(Options.Smtp.From));
-			message.To.Add(new MailboxAddress(mail));
+			message.From.Add(MailboxAddress.Parse(Options.Smtp.From));
+			message.To.Add(MailboxAddress.Parse(mail));
 			message.Subject = $"[{Options.SiteName}] - Reset Password";
 			message.Body = new TextPart("plain")
 			{

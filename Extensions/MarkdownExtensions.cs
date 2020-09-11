@@ -12,7 +12,7 @@ namespace notes.Extensions
 		public static string ToMarkdown(this string source)
 		{
 			var _pipeline = new MarkdownPipelineBuilder()
-				.UseNoFollowLinks()
+				.UseReferralLinks("nofollow")
 				.UseAbbreviations()
 				.UseEmphasisExtras()
 				.UseTaskLists()
