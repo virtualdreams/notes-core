@@ -14,6 +14,7 @@ using System;
 using notes.Core.Data;
 using notes.Core.Internal;
 using notes.Core.Services;
+using notes.Events;
 using notes.Extensions;
 using notes.Filter;
 
@@ -53,7 +54,7 @@ namespace notes
 			services.AddTransient<UserService>();
 			services.AddTransient<MailService>();
 			services.AddTransient<RevisionService>();
-			services.AddScoped<CustomCookieEvents>();
+			services.AddScoped<CustomCookieAuthenticationEvents>();
 			services.AddSingleton(new PasswordPolicy { MinimumNonAlphaCharacters = 0, MinimumUpperCaseCharacters = 0 });
 
 			// key ring
@@ -99,7 +100,7 @@ namespace notes
 					options.Cookie.Name = "notes";
 					options.LoginPath = new PathString("/login");
 					options.AccessDeniedPath = new PathString("/");
-					options.EventsType = typeof(CustomCookieEvents);
+					options.EventsType = typeof(CustomCookieAuthenticationEvents);
 				});
 
 			// authorization policies

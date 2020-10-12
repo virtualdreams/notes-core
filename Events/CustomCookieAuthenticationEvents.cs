@@ -3,15 +3,16 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using notes.Core.Services;
+using notes.Extensions;
 
-namespace notes.Extensions
+namespace notes.Events
 {
-	public class CustomCookieEvents : CookieAuthenticationEvents
+	public class CustomCookieAuthenticationEvents : CookieAuthenticationEvents
 	{
-		private readonly ILogger<CustomCookieEvents> Log;
+		private readonly ILogger<CustomCookieAuthenticationEvents> Log;
 		private readonly UserService UserService;
 
-		public CustomCookieEvents(ILogger<CustomCookieEvents> log, UserService user)
+		public CustomCookieAuthenticationEvents(ILogger<CustomCookieAuthenticationEvents> log, UserService user)
 		{
 			Log = log;
 			UserService = user;
@@ -20,9 +21,7 @@ namespace notes.Extensions
 		public override async Task ValidatePrincipal(CookieValidatePrincipalContext context)
 		{
 			var _principal = context.Principal;
-
-			// get username from claims.
-			var _username = _principal.GetUserName();
+			var _username = _principal.Identity.Name;
 
 			// get the user object from database.
 			var _user = await UserService.GetByNameAsync(_username);
