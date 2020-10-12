@@ -1,16 +1,15 @@
+//using System.ComponentModel.DataAnnotations;
+
 namespace notes
 {
 	public class Settings
 	{
+		public const string SettingsName = "Settings";
+
 		/// <summary>
 		/// Path to keystore directory.
 		/// </summary>
 		public string KeyStore { get; set; } = "";
-
-		/// <summary>
-		/// MySql connection string.
-		/// </summary>
-		public string ConnectionString { get; set; } = "Server=localhost;Database=notes;User=notes;Password=notes";
 
 		/// <summary>
 		/// Site name.

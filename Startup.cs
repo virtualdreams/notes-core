@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using System.IO;
 using System;
 using notes.Core.Data;
@@ -31,20 +32,24 @@ namespace notes
 
 		public void ConfigureServices(IServiceCollection services)
 		{
+#if DEBUG
+			IdentityModelEventSource.ShowPII = true;
+#endif
 			// add options to DI
-			services.AddOptions();
-			services.Configure<Settings>(Configuration.GetSection("Settings"));
-			// services.Configure<Smtp>(Configuration.GetSection("Settings.Smtp"));
+			services.AddOptions<Settings>()
+				.Bind(Configuration.GetSection(Settings.SettingsName));
+			//.ValidateDataAnnotations();
 
 			// get settings for local usage
-			var settings = new Settings();
-			Configuration.GetSection("Settings").Bind(settings);
+			var settings = Configuration.GetSection(Settings.SettingsName).Get<Settings>();
 
 			// database context
 			services.AddDbContext<DataContext>(options =>
 			{
-				options.UseMySql(settings.ConnectionString, mySqlOptions => { });
-				//options.EnableSensitiveDataLogging(true);
+				options.UseMySql(Configuration.GetConnectionString("Default"), mySqlOptions => { });
+#if DEBUG
+				options.EnableSensitiveDataLogging(true);
+#endif
 			},
 			ServiceLifetime.Scoped);
 

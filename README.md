@@ -47,7 +47,7 @@ use `make`.
 
 ```sh
 $ make publish
-$ dotnet /path/to/ltbdb2.dll
+$ dotnet /path/to/notes.dll
 ```
 
 ## Configuration
@@ -70,9 +70,11 @@ Configure application in `appsettings.json` and copy this file to publish direct
             }
         }
     },
+    "ConnectionStrings": {
+		"Default": "Server=localhost;Database=notes;User=notes;Password=notes"
+	},
     "Settings": {
         "KeyStore": "",
-        "ConnectionString": "Server=localhost;Database=notes;User=notes;Password=notes",
         "SiteName": "Notes!",
         "PageSize": 10,
         "Smtp": {
@@ -88,13 +90,18 @@ Configure application in `appsettings.json` and copy this file to publish direct
 }
 ```
 
-## Options
+## Options (appsettings.json)
+
+**Section: ConnectionStrings**
+
+* **Default**  
+MariaDB/MySQL connection string.  
+`Server=[host];Database=[database];User=[username];Password=[password]`
+
+**Section: Settings**
 
 * **KeyStore**:  
 Directory to store encryption key files (leave empty to use in-memory).
-* **ConnectionString**:  
-MariaDB/MySQL connection string.  
-`Server=[host];Database=[database];User=[username];Password=[password]`
 * **SiteName**:  
 Site name.
 * **PageSize**:  
@@ -115,6 +122,6 @@ Items per page to display. Default 10.
 	* **SkipVerify**:  
     Verify SSL certificates.
 
-### Logging
+## Logging
 
 Configure logging in `NLog.config` and copy this file to publish directory. Also check `logsettings.Production.json` and set the appropriate values.
