@@ -280,7 +280,7 @@ namespace notes.Core.Services
 			_user.DisplayName = displayName?.Trim();
 			_user.Items = pageSize;
 
-			Log.LogInformation($"Update settings for user {_user.Username}.");
+			Log.LogInformation($"Update settings for user '{_user.Username}'.");
 
 			await Context.SaveChangesAsync();
 		}
