@@ -3,11 +3,13 @@ using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System;
 using notes.Core.Data;
 using notes.Core.Internal;
 using notes.Core.Models;
+using notes.Services;
 
 namespace notes.Core.Services
 {
@@ -16,12 +18,14 @@ namespace notes.Core.Services
 		private readonly ILogger<UserService> Log;
 		private readonly DataContext Context;
 		private readonly MailService MailService;
+		private readonly TokenService TokenService;
 
-		public UserService(ILogger<UserService> log, DataContext context, MailService mail)
+		public UserService(ILogger<UserService> log, DataContext context, MailService mail, TokenService token)
 		{
 			Log = log;
 			Context = context;
 			MailService = mail;
+			TokenService = token;
 		}
 
 		/// <summary>
@@ -120,28 +124,6 @@ namespace notes.Core.Services
 		}
 
 		/// <summary>
-		/// Get a user by reset token.
-		/// </summary>
-		/// <param name="token">The token.</param>
-		/// <returns></returns>
-		public async Task<User> GetByTokenAsync(string token)
-		{
-			var _hash = new ResetToken(token).PrivateKey();
-
-			Log.LogInformation($"Get user by token: '{_hash}'.");
-
-			var _result = await Context.Token
-				.Include(i => i.User)
-				.Where(f => f.Nonce == _hash)
-				.SingleOrDefaultAsync();
-
-			if (_result == null)
-				return null;
-
-			return _result.User;
-		}
-
-		/// <summary>
 		/// Create a new user with username, password and role.
 		/// </summary>
 		/// <param name="username">The username.</param>
@@ -159,7 +141,7 @@ namespace notes.Core.Services
 			var _user = new User
 			{
 				Username = username?.Trim()?.ToLower(),
-				Password = !String.IsNullOrEmpty(password) ? PasswordHasher.HashPassword(password) : null,
+				Password = !String.IsNullOrEmpty(password) ? PasswordHasher.HashPassword(password) : PasswordHasher.HashPassword(GenerateRandomPassword()),
 				DisplayName = displayName?.Trim(),
 				Role = role,
 				Enabled = active,
@@ -333,7 +315,7 @@ namespace notes.Core.Services
 		/// Create a reset token and send an email to the user.
 		/// </summary>
 		/// <param name="username">The username.</param>
-		/// <param name="origin">The origon url.</param>
+		/// <param name="origin">The origin url.</param>
 		/// <returns></returns>
 		public async Task ForgotPasswordAsync(string username, string origin)
 		{
@@ -344,47 +326,71 @@ namespace notes.Core.Services
 				.SingleOrDefaultAsync();
 
 			if (_user == null || !_user.Enabled)
-				return;
-
-			// create reset token
-			var _rtoken = ResetToken.CreateNew();
-
-			var _token = new Token
 			{
-				Created = DateTime.UtcNow,
-				User = _user,
-				Nonce = _rtoken.PrivateKey()
-			};
+				Log.LogInformation($"User '{username}' does not exist.");
+				return;
+			}
 
-			Context.Token.Add(_token);
+			var _passwordResetToken = TokenService.GeneratePasswordResetToken(_user.Password, _user.Username, 60);
 
 			Log.LogInformation($"Create password reset token for user '{_user.Username}'.");
 
-			await Context.SaveChangesAsync();
-
-			await MailService.SendResetPasswordMailAsync(!String.IsNullOrEmpty(_user.DisplayName) ? _user.DisplayName : _user.Username, _user.Username, origin, _rtoken.PublicKey()); // send the non hashed token as email
+			await MailService.SendResetPasswordMailAsync(!String.IsNullOrEmpty(_user.DisplayName) ? _user.DisplayName : _user.Username, _user.Username, origin, _passwordResetToken);
 		}
 
 		/// <summary>
-		/// Remove the reset token.
+		/// Get a user by reset token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		public async Task RemoveTokenAsync(string token)
+		/// <returns></returns>
+		public async Task<User> GetByTokenAsync(string token)
 		{
-			var _hash = new ResetToken(token).PrivateKey();
+			try
+			{
+				var _username = TokenService.GetUsernameFromRefreshToken(token);
 
-			var _token = await Context.Token
-				.Where(f => f.Nonce == _hash)
-				.SingleOrDefaultAsync();
+				Log.LogInformation($"Get user from from password reset token: '{_username}'.");
 
-			if (_token == null)
-				throw new NotesTokenNotFoundException();
+				var _user = await Context.User
+					.Where(f => f.Username == _username)
+					.SingleOrDefaultAsync();
 
-			Context.Token.Remove(_token);
+				if (_user == null || !_user.Enabled)
+				{
+					Log.LogInformation($"User '{_username}' does not exist.");
+					return null;
+				}
 
-			Log.LogInformation($"Delete reset token '{_hash}'.");
+				Log.LogInformation($"Validate password reset token for user '{_user.Username}'.");
 
-			await Context.SaveChangesAsync();
+				TokenService.GetPrincipalFromRefreshToken(token, _user.Password);
+				// TODO check _username and _user.Username
+
+				Log.LogInformation($"Validation of the password reset token for user '{_user.Username}' passed.");
+
+				return _user;
+			}
+			catch (Exception ex)
+			{
+				Log.LogError($"Validate password reset token failed: '{ex.Message}'.");
+
+				throw new NotesInvalidTokenException();
+			}
+		}
+
+		/// <summary>
+		/// Generate a random password.
+		/// </summary>
+		/// <returns>Random password.</returns>
+		private string GenerateRandomPassword()
+		{
+			var _buffer = new byte[20];
+			using (var rng = RandomNumberGenerator.Create())
+			{
+				rng.GetNonZeroBytes(_buffer);
+			}
+
+			return Convert.ToBase64String(_buffer);
 		}
 	}
 }

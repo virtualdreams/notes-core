@@ -124,6 +124,7 @@ namespace notes.Controllers
 			try
 			{
 				var _user = await UserService.GetByTokenAsync(id);
+
 				if (_user == null)
 					throw new NotesInvalidTokenException();
 
@@ -151,11 +152,11 @@ namespace notes.Controllers
 				try
 				{
 					var _user = await UserService.GetByTokenAsync(id);
+
 					if (_user == null)
 						throw new NotesInvalidTokenException();
 
 					await UserService.UpdatePasswordAsync(_user.Id, model.NewPassword);
-					await UserService.RemoveTokenAsync(id);
 
 					return RedirectToAction("Login");
 				}

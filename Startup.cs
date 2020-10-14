@@ -18,6 +18,7 @@ using notes.Core.Services;
 using notes.Events;
 using notes.Extensions;
 using notes.Filter;
+using notes.Services;
 
 namespace notes
 {
@@ -59,6 +60,7 @@ namespace notes
 			services.AddTransient<UserService>();
 			services.AddTransient<MailService>();
 			services.AddTransient<RevisionService>();
+			services.AddTransient<TokenService>();
 			services.AddScoped<CustomCookieAuthenticationEvents>();
 			services.AddSingleton(new PasswordPolicy { MinimumNonAlphaCharacters = 0, MinimumUpperCaseCharacters = 0 });
 

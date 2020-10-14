@@ -37,16 +37,6 @@ CREATE TABLE `user` (
   UNIQUE KEY `uq_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `token`;
-CREATE TABLE `token` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nonce` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created` datetime NOT NULL,
-  `userid` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `ix_nonce` (`nonce`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 DROP TABLE IF EXISTS `revision`;
 CREATE TABLE `revision` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

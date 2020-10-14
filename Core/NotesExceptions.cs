@@ -65,13 +65,6 @@ namespace notes.Core
 		{ }
 	}
 
-	public class NotesTokenNotFoundException : NotesException
-	{
-		public NotesTokenNotFoundException()
-			: base("Token not found!")
-		{ }
-	}
-
 	public class NotesRevisionNotFoundException : NotesException
 	{
 		public NotesRevisionNotFoundException()
