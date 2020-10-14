@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS `note`;
 CREATE TABLE `note` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `content` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `notebook` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `trash` tinyint(1) NOT NULL DEFAULT 0,
   `created` datetime NOT NULL,
@@ -16,8 +16,8 @@ CREATE TABLE `note` (
 DROP TABLE IF EXISTS `tag`;
 CREATE TABLE `tag` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `noteid` int(11) DEFAULT NULL,
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `noteid` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ix_noteid` (`noteid`),
   FULLTEXT KEY `ft_name` (`name`)
@@ -26,10 +26,10 @@ CREATE TABLE `tag` (
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `username` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `displayname` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `role` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `role` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT 0,
   `created` datetime NOT NULL,
   `items` int(11) NOT NULL DEFAULT 10,
@@ -42,8 +42,8 @@ CREATE TABLE `revision` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `dt` datetime NOT NULL,
   `noteid` int(11) NOT NULL,
-  `title` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `content` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `notebook` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `trash` tinyint(1) NOT NULL DEFAULT 0,
   `created` datetime NOT NULL,
