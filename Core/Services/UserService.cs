@@ -327,7 +327,7 @@ namespace notes.Core.Services
 
 			if (_user == null || !_user.Enabled)
 			{
-				Log.LogInformation($"User '{username}' does not exist.");
+				Log.LogWarning($"User '{username}' does not exist. No mail sent.");
 				return;
 			}
 
