@@ -149,6 +149,7 @@ namespace notes.Core.Services
 				Enabled = active,
 				Created = _currentDate,
 				Modified = _currentDate,
+				Version = 1,
 				Items = pageSize
 			};
 
@@ -203,6 +204,7 @@ namespace notes.Core.Services
 			_user.Role = role;
 			_user.Enabled = active;
 			_user.Modified = _currentDate;
+			_user.Version += 1;
 
 			Log.LogInformation($"Update user data for user {id}.");
 
@@ -262,6 +264,7 @@ namespace notes.Core.Services
 
 			_user.Password = PasswordHasher.HashPassword(password);
 			_user.Modified = _currentDate;
+			_user.Version += 1;
 
 			Log.LogInformation($"Update password for user '{_user.Username}'.");
 

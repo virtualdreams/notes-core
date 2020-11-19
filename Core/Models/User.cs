@@ -54,6 +54,12 @@ namespace notes.Core.Models
 		public DateTime Modified { get; set; }
 
 		/// <summary>
+		/// Serial
+		/// </summary>
+		[Column("version")]
+		public int Version { get; set; }
+
+		/// <summary>
 		/// Page size for user.
 		/// </summary>
 		[Column("items")]

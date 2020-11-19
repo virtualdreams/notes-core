@@ -60,7 +60,8 @@ namespace notes.Controllers
 					var claims = new List<Claim>
 					{
 						new Claim(ClaimTypes.Name, _user.Username, ClaimValueTypes.String),
-						new Claim(ClaimTypes.Role, _user.Role, ClaimValueTypes.String)
+						new Claim(ClaimTypes.Role, _user.Role, ClaimValueTypes.String),
+						new Claim(ClaimTypes.SerialNumber, _user.Version.ToString())
 					};
 
 					var _identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

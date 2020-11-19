@@ -33,6 +33,7 @@ CREATE TABLE `user` (
   `enabled` tinyint(1) NOT NULL DEFAULT 0,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
+  `version` int(11) NOT NULL DEFAULT 0,
   `items` int(11) NOT NULL DEFAULT 10,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_username` (`username`)

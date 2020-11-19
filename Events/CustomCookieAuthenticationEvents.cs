@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using notes.Core.Services;
-using notes.Extensions;
 
 namespace notes.Events
 {
@@ -22,12 +22,14 @@ namespace notes.Events
 		{
 			var _principal = context.Principal;
 			var _username = _principal.Identity.Name;
+			var _serialString = _principal.FindFirst(ClaimTypes.SerialNumber)?.Value;
+			int.TryParse(_serialString, out var _serial);
 
 			// get the user object from database.
 			var _user = await UserService.GetByNameAsync(_username);
 
 			// if the user not exists or the user is disabled or his role has changed, reject his login
-			if (_user == null || !_user.Enabled || !_user.Role.Equals(context.Principal.GetUserRole()))
+			if (_user == null || _user.Version != _serial)
 			{
 				Log.LogInformation($"User {_username} rejected.");
 
