@@ -32,6 +32,7 @@ CREATE TABLE `user` (
   `role` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT 0,
   `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `items` int(11) NOT NULL DEFAULT 10,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_username` (`username`)

@@ -138,6 +138,8 @@ namespace notes.Core.Services
 			password = password?.Trim();
 			displayName = displayName?.Trim();
 
+			var _currentDate = DateTime.UtcNow;
+
 			var _user = new User
 			{
 				Username = username?.Trim()?.ToLower(),
@@ -145,7 +147,8 @@ namespace notes.Core.Services
 				DisplayName = displayName?.Trim(),
 				Role = role,
 				Enabled = active,
-				Created = DateTime.UtcNow,
+				Created = _currentDate,
+				Modified = _currentDate,
 				Items = pageSize
 			};
 
@@ -191,13 +194,15 @@ namespace notes.Core.Services
 			if (_user == null)
 				throw new NotesUserNotFoundException();
 
-			_user.Username = username?.Trim()?.ToLower();
+			var _currentDate = DateTime.UtcNow;
+
 			// set a new password if password not empty
 			if (!String.IsNullOrEmpty(password))
 				_user.Password = PasswordHasher.HashPassword(password);
 			_user.DisplayName = displayName?.Trim();
 			_user.Role = role;
 			_user.Enabled = active;
+			_user.Modified = _currentDate;
 
 			Log.LogInformation($"Update user data for user {id}.");
 
@@ -253,7 +258,10 @@ namespace notes.Core.Services
 			if (_user == null)
 				throw new NotesUserNotFoundException();
 
+			var _currentDate = DateTime.UtcNow;
+
 			_user.Password = PasswordHasher.HashPassword(password);
+			_user.Modified = _currentDate;
 
 			Log.LogInformation($"Update password for user '{_user.Username}'.");
 

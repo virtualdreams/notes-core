@@ -15,5 +15,7 @@ namespace notes.Areas.Admin.Models
 		public bool Enabled { get; set; }
 
 		public DateTime Created { get; set; }
+
+		public DateTime Modified { get; set; }
 	}
 }

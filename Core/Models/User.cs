@@ -48,6 +48,12 @@ namespace notes.Core.Models
 		public DateTime Created { get; set; }
 
 		/// <summary>
+		/// Modified
+		/// </summary>
+		[Column("modified")]
+		public DateTime Modified { get; set; }
+
+		/// <summary>
 		/// Page size for user.
 		/// </summary>
 		[Column("items")]
