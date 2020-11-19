@@ -197,6 +197,7 @@ namespace notes.Core.Services
 
 			var _currentDate = DateTime.UtcNow;
 
+			_user.Username = username;
 			// set a new password if password not empty
 			if (!String.IsNullOrEmpty(password))
 				_user.Password = PasswordHasher.HashPassword(password);
