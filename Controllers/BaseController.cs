@@ -9,9 +9,9 @@ namespace notes.Controllers
 	{
 		private readonly UserService UserService;
 
-		public User CurrentUser => UserService.GetByNameAsync(User.GetUserName()).Result;
+		protected User CurrentUser => UserService.GetByNameAsync(User.GetUserName()).Result;
 
-		public int PageSize => CurrentUser.Items;
+		protected int PageSize => CurrentUser.Items;
 
 		public BaseController(UserService userService)
 		{
