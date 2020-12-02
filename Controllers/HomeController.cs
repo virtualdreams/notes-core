@@ -31,7 +31,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Index(int after)
 		{
-			var _notes = await NoteService.GetNotesAsync(after, false, PageSize);
+			var _notes = await NoteService.GetNotesAsync(after, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? 0, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);

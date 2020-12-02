@@ -4,9 +4,10 @@ using notes.Core.Models;
 
 public interface INoteService
 {
-	Task<List<Note>> GetNotesAsync(int next, bool trashed, int limit);
+	Task<List<Note>> GetNotesAsync(int next, int limit);
 	Task<List<Note>> GetByNotebookAsync(string notebook, int next, int limit);
 	Task<List<Note>> GetByTagAsync(string tag, int next, int limit);
+	Task<List<Note>> GetDeletedNotes(int next, int limit);
 	Task<Note> GetByIdAsync(int id);
 	Task<List<DistinctAndCount>> GetMostUsedNotebooksAsync(int limit);
 	Task<List<DistinctAndCount>> GetNotebooksAsync();

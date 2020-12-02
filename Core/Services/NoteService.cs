@@ -24,16 +24,15 @@ namespace notes.Core.Services
 		/// Get a list of notes.
 		/// </summary>
 		/// <param name="next">The next id.</param>
-		/// <param name="trashed">Request trashed items or not.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns>List of notes.</returns>
-		public async Task<List<Note>> GetNotesAsync(int next, bool trashed, int limit)
+		public async Task<List<Note>> GetNotesAsync(int next, int limit)
 		{
 			Log.LogInformation($"Get all notes.");
 
 			var _query = Context.Note
 				.AsNoTracking()
-				.Where(f => f.Trash == trashed);
+				.Where(f => f.Trash == false);
 
 			if (next > 0)
 			{
@@ -102,6 +101,32 @@ namespace notes.Core.Services
 			{
 				_query = _query.Where(f => f.Trash == false && !f.Tags.Any());
 			}
+
+			if (next > 0)
+			{
+				_query = _query.Where(f => f.Id < next);
+			}
+
+			_query = _query
+				.OrderByDescending(o => o.Id)
+				.Take(limit);
+
+			return await _query.ToListAsync();
+		}
+
+		/// <summary>
+		/// Get a list of deleted notes.
+		/// </summary>
+		/// <param name="next">The next id.</param>
+		/// <param name="limit">Limit the result.</param>
+		/// <returns>List of notes.</returns>
+		public async Task<List<Note>> GetDeletedNotes(int next, int limit)
+		{
+			Log.LogInformation($"Get all notes.");
+
+			var _query = Context.Note
+				.AsNoTracking()
+				.Where(f => f.Trash == true);
 
 			if (next > 0)
 			{

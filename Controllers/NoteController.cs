@@ -250,7 +250,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Trash(int after)
 		{
-			var _notes = await NoteService.GetNotesAsync(after, true, PageSize);
+			var _notes = await NoteService.GetDeletedNotes(after, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? 0, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);
