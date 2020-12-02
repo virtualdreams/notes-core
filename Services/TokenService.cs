@@ -7,7 +7,7 @@ using System;
 
 namespace notes.Services
 {
-	public class TokenService
+	public class TokenService : ITokenService
 	{
 		public TokenService()
 		{ }

@@ -56,13 +56,13 @@ namespace notes
 
 			// dependency injection
 			services.AddAutoMapper();
-			services.AddTransient<NoteService>();
-			services.AddTransient<UserService>();
-			services.AddTransient<MailService>();
-			services.AddTransient<RevisionService>();
-			services.AddTransient<TokenService>();
+			services.AddTransient<INoteService, NoteService>();
+			services.AddTransient<IUserService, UserService>();
+			services.AddTransient<IMailService, MailService>();
+			services.AddTransient<IRevisionService, RevisionService>();
+			services.AddTransient<ITokenService, TokenService>();
 			services.AddScoped<CustomCookieAuthenticationEvents>();
-			services.AddSingleton(new PasswordPolicy { MinimumNonAlphaCharacters = 0, MinimumUpperCaseCharacters = 0 });
+			services.AddSingleton<IPasswordPolicy>(new PasswordPolicy { MinimumNonAlphaCharacters = 0, MinimumUpperCaseCharacters = 0 });
 
 			// key ring
 			if (!String.IsNullOrEmpty(settings.KeyStore))

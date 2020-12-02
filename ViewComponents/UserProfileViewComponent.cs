@@ -6,9 +6,9 @@ namespace notes.ViewComponents
 {
 	public class DisplayNameViewComponent : BaseViewComponent
 	{
-		private readonly UserService UserService;
+		private readonly IUserService UserService;
 
-		public DisplayNameViewComponent(UserService user)
+		public DisplayNameViewComponent(IUserService user)
 			: base(user)
 		{
 			UserService = user;

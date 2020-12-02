@@ -1,14 +1,13 @@
 using FluentValidation;
-using notes.Core.Internal;
 using notes.Models;
 
 namespace notes.Validators
 {
 	public class PasswdChangePostModelValidator : AbstractValidator<PasswdChangePostModel>
 	{
-		private readonly PasswordPolicy PasswordPolicy;
+		private readonly IPasswordPolicy PasswordPolicy;
 
-		public PasswdChangePostModelValidator(PasswordPolicy passwordPolicy)
+		public PasswdChangePostModelValidator(IPasswordPolicy passwordPolicy)
 		{
 			PasswordPolicy = passwordPolicy;
 

@@ -7,13 +7,13 @@ namespace notes.ViewComponents
 {
 	public abstract class BaseViewComponent : ViewComponent
 	{
-		private readonly UserService UserService;
+		private readonly IUserService UserService;
 
-		public User CurrentUser => UserService.GetByNameAsync(UserClaimsPrincipal.GetUserName()).Result;
+		protected User CurrentUser => UserService.GetByNameAsync(UserClaimsPrincipal.GetUserName()).Result;
 
-		public BaseViewComponent(UserService userService)
+		public BaseViewComponent(IUserService user)
 		{
-			UserService = userService;
+			UserService = user;
 		}
 	}
 }

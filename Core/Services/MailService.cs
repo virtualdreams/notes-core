@@ -7,7 +7,7 @@ using System;
 
 namespace notes.Core.Services
 {
-	public class MailService
+	public class MailService : IMailService
 	{
 		private readonly Settings Options;
 		private readonly ILogger<MailService> Log;

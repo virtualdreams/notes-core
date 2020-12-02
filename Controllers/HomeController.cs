@@ -16,10 +16,10 @@ namespace notes.Controllers
 	{
 		private readonly IMapper Mapper;
 		private readonly Settings Options;
-		private readonly UserService UserService;
-		private readonly NoteService NoteService;
+		private readonly IUserService UserService;
+		private readonly INoteService NoteService;
 
-		public HomeController(IMapper mapper, IOptionsSnapshot<Settings> settings, UserService user, NoteService note)
+		public HomeController(IMapper mapper, IOptionsSnapshot<Settings> settings, IUserService user, INoteService note)
 			: base(user)
 		{
 			Mapper = mapper;

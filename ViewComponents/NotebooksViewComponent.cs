@@ -10,10 +10,10 @@ namespace notes.ViewComponents
 	public class NotebooksViewComponent : BaseViewComponent
 	{
 		private IMapper Mapper;
-		private readonly NoteService NoteService;
-		private readonly UserService UserService;
+		private readonly INoteService NoteService;
+		private readonly IUserService UserService;
 
-		public NotebooksViewComponent(IMapper mapper, NoteService note, UserService user)
+		public NotebooksViewComponent(IMapper mapper, INoteService note, IUserService user)
 			: base(user)
 		{
 			Mapper = mapper;

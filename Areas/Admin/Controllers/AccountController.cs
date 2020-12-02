@@ -17,9 +17,9 @@ namespace notes.Areas.Admin.Controllers
 	{
 		private readonly IMapper Mapper;
 		private readonly Settings Options;
-		private readonly UserService UserService;
+		private readonly IUserService UserService;
 
-		public AccountController(IMapper mapper, IOptionsSnapshot<Settings> settings, UserService user)
+		public AccountController(IMapper mapper, IOptionsSnapshot<Settings> settings, IUserService user)
 			: base(user)
 		{
 			Mapper = mapper;

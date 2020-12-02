@@ -12,13 +12,13 @@ using notes.Core.Models;
 
 namespace notes.Core.Services
 {
-	public class RevisionService
+	public class RevisionService : IRevisionService
 	{
 		private readonly ILogger<NoteService> Log;
 		private readonly DataContext Context;
-		private readonly NoteService NoteService;
+		private readonly INoteService NoteService;
 
-		public RevisionService(ILogger<NoteService> log, DataContext context, NoteService note)
+		public RevisionService(ILogger<NoteService> log, DataContext context, INoteService note)
 		{
 			Log = log;
 			Context = context;

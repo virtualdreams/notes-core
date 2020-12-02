@@ -19,9 +19,9 @@ namespace notes.Controllers
 	{
 		private readonly IMapper Mapper;
 		private readonly Settings Options;
-		private readonly UserService UserService;
+		private readonly IUserService UserService;
 
-		public UserController(IMapper mapper, IOptionsSnapshot<Settings> settings, UserService user)
+		public UserController(IMapper mapper, IOptionsSnapshot<Settings> settings, IUserService user)
 			: base(user)
 		{
 			Mapper = mapper;

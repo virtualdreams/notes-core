@@ -1,6 +1,5 @@
 using FluentValidation;
 using System;
-using notes.Core.Internal;
 
 namespace notes.Validators
 {
@@ -29,7 +28,7 @@ namespace notes.Validators
 				.WithMessage("The length of an item of '{PropertyName}' must be {MaxLength} characters or fewer.");
 		}
 
-		public static IRuleBuilderOptions<T, string> ValidatePasswordPolicy<T>(this IRuleBuilder<T, string> ruleBuilder, PasswordPolicy policy)
+		public static IRuleBuilderOptions<T, string> ValidatePasswordPolicy<T>(this IRuleBuilder<T, string> ruleBuilder, IPasswordPolicy policy)
 		{
 			return ruleBuilder
 				.Must((objectRoot, str, context) =>

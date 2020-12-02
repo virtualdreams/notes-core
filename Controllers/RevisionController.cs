@@ -15,11 +15,11 @@ namespace notes.Controllers
 	{
 		private readonly IMapper Mapper;
 		private readonly Settings Options;
-		private readonly UserService UserService;
-		private readonly NoteService NoteService;
-		private readonly RevisionService RevisionService;
+		private readonly IUserService UserService;
+		private readonly INoteService NoteService;
+		private readonly IRevisionService RevisionService;
 
-		public RevisionController(IMapper mapper, IOptionsSnapshot<Settings> settings, UserService user, NoteService note, RevisionService revision)
+		public RevisionController(IMapper mapper, IOptionsSnapshot<Settings> settings, IUserService user, INoteService note, IRevisionService revision)
 			: base(user)
 		{
 			Mapper = mapper;

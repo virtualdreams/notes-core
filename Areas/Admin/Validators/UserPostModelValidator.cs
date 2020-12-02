@@ -1,16 +1,13 @@
 using FluentValidation;
-using FluentValidation.Validators;
 using notes.Areas.Admin.Models;
-using notes.Core.Internal;
-using notes.Validators;
 
 namespace notes.Areas.Admin.Validators
 {
 	public class UserPostModelValidator : AbstractValidator<UserPostModel>
 	{
-		private readonly PasswordPolicy PasswordPolicy;
+		private readonly IPasswordPolicy PasswordPolicy;
 
-		public UserPostModelValidator(PasswordPolicy passwordPolicy)
+		public UserPostModelValidator(IPasswordPolicy passwordPolicy)
 		{
 			PasswordPolicy = passwordPolicy;
 

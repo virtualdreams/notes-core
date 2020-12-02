@@ -7,13 +7,13 @@ namespace notes.Controllers
 {
 	public abstract class BaseController : Controller
 	{
-		private readonly UserService UserService;
+		private readonly IUserService UserService;
 
 		protected User CurrentUser => UserService.GetByNameAsync(User.GetUserName()).Result;
 
 		protected int PageSize => CurrentUser.Items;
 
-		public BaseController(UserService userService)
+		public BaseController(IUserService userService)
 		{
 			UserService = userService;
 		}

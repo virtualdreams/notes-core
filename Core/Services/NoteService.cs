@@ -9,7 +9,7 @@ using notes.Core.Models;
 
 namespace notes.Core.Services
 {
-	public class NoteService
+	public class NoteService : INoteService
 	{
 		private readonly ILogger<NoteService> Log;
 		private readonly DataContext Context;

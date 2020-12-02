@@ -6,7 +6,7 @@ namespace notes.Core.Internal
 	/// <summary>
 	/// Simple password policy.
 	/// </summary>
-	public class PasswordPolicy
+	public class PasswordPolicy : IPasswordPolicy
 	{
 		/// <summary>
 		/// Minimum password length.

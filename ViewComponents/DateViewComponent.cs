@@ -6,9 +6,9 @@ namespace notes.ViewComponents
 {
 	public class FormatDateViewComponent : BaseViewComponent
 	{
-		private readonly UserService UserService;
+		private readonly IUserService UserService;
 
-		public FormatDateViewComponent(UserService user)
+		public FormatDateViewComponent(IUserService user)
 			: base(user)
 		{
 			UserService = user;
