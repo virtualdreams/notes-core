@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -9,7 +8,6 @@ using System;
 using notes.Core.Data;
 using notes.Core.Internal;
 using notes.Core.Models;
-using notes.Services;
 
 namespace notes.Core.Services
 {
@@ -138,6 +136,12 @@ namespace notes.Core.Services
 			password = password?.Trim();
 			displayName = displayName?.Trim();
 
+			var _checkUser = await GetByNameAsync(username);
+			if (_checkUser != null)
+			{
+				throw new NotesDuplicateUsernameException();
+			}
+
 			var _currentDate = DateTime.UtcNow;
 
 			var _user = new User
@@ -153,15 +157,8 @@ namespace notes.Core.Services
 				Items = pageSize
 			};
 
-			try
-			{
-				Context.Add(_user);
-				await Context.SaveChangesAsync();
-			}
-			catch (DbUpdateException ex) when ((ex.InnerException as MySqlException)?.Number == 1062)
-			{
-				throw new NotesDuplicateUsernameException();
-			}
+			Context.Add(_user);
+			await Context.SaveChangesAsync();
 
 			Log.LogInformation($"Create new user '{username}' with id {_user.Id}.");
 
@@ -188,12 +185,18 @@ namespace notes.Core.Services
 				throw new NotesModifyAdminException();
 			}
 
-			var _user = await Context.User
-				.Where(f => f.Id == id)
-				.SingleOrDefaultAsync();
+			var _checkUser = await GetByNameAsync(username);
 
+			var _user = await GetByIdAsync(id);
 			if (_user == null)
+			{
 				throw new NotesUserNotFoundException();
+			}
+
+			if (!(_checkUser == null) && _user.Id != _checkUser?.Id)
+			{
+				throw new NotesDuplicateUsernameException();
+			}
 
 			var _currentDate = DateTime.UtcNow;
 
@@ -209,14 +212,7 @@ namespace notes.Core.Services
 
 			Log.LogInformation($"Update user data for user {id}.");
 
-			try
-			{
-				await Context.SaveChangesAsync();
-			}
-			catch (DbUpdateException ex) when ((ex.InnerException as MySqlException)?.Number == 1062)
-			{
-				throw new NotesDuplicateUsernameException();
-			}
+			await Context.SaveChangesAsync();
 		}
 
 		/// <summary>
