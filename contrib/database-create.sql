@@ -10,7 +10,9 @@ CREATE TABLE `note` (
   PRIMARY KEY (`id`),
   KEY `ix_trash` (`trash`),
   KEY `ix_notebook` (`notebook`),
-  FULLTEXT KEY `ft_title_content_notebook` (`title`,`content`,`notebook`)
+  FULLTEXT KEY `ft_title` (`title`),
+  FULLTEXT KEY `ft_content` (`content`),
+  FULLTEXT KEY `ft_notebook` (`notebook`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `tag`;

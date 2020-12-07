@@ -380,71 +380,31 @@ namespace notes.Core.Services
 				return new List<Note>();
 			}
 
-			IQueryable<Note> _query = null;
+			var _query = Context.Note
+				.AsNoTracking()
+				.Where(f =>
+					f.Trash == false &&
+					(
+						EF.Functions.Match(f.Title, term, MySqlMatchSearchMode.NaturalLanguage) ||
+						EF.Functions.Match(f.Content, term, MySqlMatchSearchMode.NaturalLanguage) ||
+						EF.Functions.Match(f.Notebook, term, MySqlMatchSearchMode.NaturalLanguage) ||
+						f.Tags.Any(a => EF.Functions.Match(a.Name, term, MySqlMatchSearchMode.NaturalLanguage))
+					)
+				);
 
 			if (next > 0)
 			{
-				_query = Context.Note.FromSqlInterpolated($@"
-					select
-						f.id,
-						f.content,
-						f.created,
-						f.modified,
-						f.notebook,
-						f.title,
-						f.trash
-					from
-						note as f 
-					left join
-						tag as a 
-					on
-						a.noteid = f.id
-					where
-						f.trash = {false} and
-						f.id < {next} and
-						(
-							match(f.title, f.content, f.notebook) against({term} in natural language mode) or
-							match(a.name) against({term} in natural language mode)
-						)
-					group by
-						f.id
-					order by
-						f.id desc
-					limit {limit};
-				");
-			}
-			else
-			{
-				_query = Context.Note.FromSqlInterpolated($@"
-					select
-						f.id,
-						f.content,
-						f.created,
-						f.modified,
-						f.notebook,
-						f.title,
-						f.trash
-					from
-						note as f 
-					left join
-						tag as a 
-					on
-						a.noteid = f.id
-					where
-						f.trash = {false} and
-						(
-							match(f.title, f.content, f.notebook) against({term} in natural language mode) or
-							match(a.name) against({term} in natural language mode)
-						)
-					group by
-						f.id
-					order by
-						f.id desc
-					limit {limit};
-				");
+				_query = _query
+					.Where(f => f.Id < next);
 			}
 
+			_query = _query
+				.OrderByDescending(o => o.Id)
+				.Take(limit);
+
 			return await _query.ToListAsync();
+
+
 		}
 
 		/// <summary>
