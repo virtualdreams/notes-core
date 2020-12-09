@@ -72,6 +72,9 @@ Configure application in `appsettings.json` and copy this file to publish direct
     },
     "ConnectionStrings": {
 		"Default": "Server=localhost;Database=notes;User=notes;Password=notes"
+    },
+    "FeatureManagement": {
+		"ModelStateDebug": false
 	},
     "Settings": {
         "KeyStore": "",
@@ -97,6 +100,11 @@ Configure application in `appsettings.json` and copy this file to publish direct
 * **Default**  
 MariaDB/MySQL connection string.  
 `Server=[host];Database=[database];User=[username];Password=[password]`
+
+**Section: FeatureManagement**
+
+* **ModelStateDebug**:  
+Enable ModelState filter when loglevel is set to Debug.
 
 **Section: Settings**
 

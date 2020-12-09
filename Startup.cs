@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Logging;
 using System.IO;
 using System;
@@ -36,6 +37,10 @@ namespace notes
 #if DEBUG
 			IdentityModelEventSource.ShowPII = true;
 #endif
+
+			// features
+			services.AddFeatureManagement();
+
 			// add options to DI
 			services.AddOptions<Settings>()
 				.Bind(Configuration.GetSection(Settings.SettingsName));
@@ -79,7 +84,8 @@ namespace notes
 			// mvc
 			services.AddMvc(options =>
 			{
-				options.Filters.Add<ModelStateDebugFilter>();
+				options.Filters.AddForFeature<ModelStateDebugFilter>(nameof(FeatureFlags.ModelStateDebug));
+				// options.Filters.Add<ModelStateDebugFilter>();
 				// options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider());
 			})
 			.AddNewtonsoftJson(options =>
