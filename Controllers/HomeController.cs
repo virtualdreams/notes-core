@@ -18,14 +18,16 @@ namespace notes.Controllers
 		private readonly Settings Options;
 		private readonly IUserService UserService;
 		private readonly INoteService NoteService;
+		private readonly ISearchService SearchService;
 
-		public HomeController(IMapper mapper, IOptionsSnapshot<Settings> settings, IUserService user, INoteService note)
+		public HomeController(IMapper mapper, IOptionsSnapshot<Settings> settings, IUserService user, INoteService note, ISearchService search)
 			: base(user)
 		{
 			Mapper = mapper;
 			Options = settings.Value;
 			UserService = user;
 			NoteService = note;
+			SearchService = search;
 		}
 
 		[HttpGet]
@@ -48,7 +50,7 @@ namespace notes.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Search(string q, int after)
 		{
-			var _notes = await NoteService.SearchAsync(q ?? String.Empty, after, PageSize);
+			var _notes = await SearchService.SearchAsync(q ?? String.Empty, after, PageSize);
 			var _pager = new Pager(_notes.LastOrDefault()?.Id ?? 0, _notes.Count() >= PageSize);
 
 			var notes = Mapper.Map<IEnumerable<NoteModel>>(_notes);

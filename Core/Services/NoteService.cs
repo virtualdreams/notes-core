@@ -365,49 +365,6 @@ namespace notes.Core.Services
 		}
 
 		/// <summary>
-		/// Search for a term.
-		/// </summary>
-		/// <param name="term">The term to search for.</param>
-		/// <param name="next">The next cursor.</param>
-		/// <param name="limit">Limit the result.</param>
-		/// <returns></returns>
-		public async Task<List<Note>> SearchAsync(string term, int next, int limit)
-		{
-			term = term?.Trim();
-
-			if (String.IsNullOrEmpty(term))
-			{
-				return new List<Note>();
-			}
-
-			var _query = Context.Note
-				.AsNoTracking()
-				.Where(f =>
-					f.Trash == false &&
-					(
-						EF.Functions.Match(f.Title, term, MySqlMatchSearchMode.NaturalLanguage) ||
-						EF.Functions.Match(f.Content, term, MySqlMatchSearchMode.NaturalLanguage) ||
-						EF.Functions.Match(f.Notebook, term, MySqlMatchSearchMode.NaturalLanguage) ||
-						f.Tags.Any(a => EF.Functions.Match(a.Name, term, MySqlMatchSearchMode.NaturalLanguage))
-					)
-				);
-
-			if (next > 0)
-			{
-				_query = _query
-					.Where(f => f.Id < next);
-			}
-
-			_query = _query
-				.OrderByDescending(o => o.Id)
-				.Take(limit);
-
-			return await _query.ToListAsync();
-
-
-		}
-
-		/// <summary>
 		/// Get suggestions for tags.
 		/// </summary>
 		/// <param name="term">The term to search for.</param>

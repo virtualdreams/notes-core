@@ -17,7 +17,6 @@ public interface INoteService
 	Task UpdateAsync(int id, string title, string content, string notebook, string tags);
 	Task TrashAsync(int id, bool trash);
 	Task DeleteAsync(int id);
-	Task<List<Note>> SearchAsync(string term, int next, int limit);
 	Task<List<string>> TagSuggestionsAsync(string term);
 	Task<List<string>> NotebookSuggestionsAsync(string term);
 }

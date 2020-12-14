@@ -63,6 +63,8 @@ namespace notes
 			services.AddAutoMapper();
 			services.AddTransient<INoteService, NoteService>();
 			services.AddTransient<IUserService, UserService>();
+			services.AddTransient<IRevisionService, RevisionService>();
+			services.AddTransient<ISearchService, SearchService>();
 			services.AddTransient<IMailService, MailService>();
 			services.AddTransient<IRevisionService, RevisionService>();
 			services.AddTransient<ITokenService, TokenService>();
