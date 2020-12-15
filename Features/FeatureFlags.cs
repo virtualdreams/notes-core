@@ -1,4 +1,7 @@
-public enum FeatureFlags
+namespace notes.Features
 {
-	ModelStateDebug
+	public enum FeatureFlags
+	{
+		ModelStateDebug
+	}
 }

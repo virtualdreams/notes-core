@@ -18,6 +18,7 @@ using notes.Core.Internal;
 using notes.Core.Services;
 using notes.Events;
 using notes.Extensions;
+using notes.Features;
 using notes.Filter;
 using notes.Services;
 
