@@ -4,8 +4,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System;
+using notes.Core.Interfaces;
 
-namespace notes.Services
+namespace notes.Core.Services
 {
 	public class TokenService : ITokenService
 	{

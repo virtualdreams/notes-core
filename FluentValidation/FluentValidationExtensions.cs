@@ -1,9 +1,9 @@
 using FluentValidation;
 using System;
 
-namespace notes.Validators
+namespace notes.FluentValidation
 {
-	public static class ValidatorExtensions
+	public static class FluentValidationExtensions
 	{
 		public static IRuleBuilderOptions<T, string> MaximumLengthInArrayString<T>(this IRuleBuilder<T, string> ruleBuilder, int length, char separator)
 		{

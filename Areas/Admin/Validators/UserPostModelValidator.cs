@@ -1,5 +1,6 @@
 using FluentValidation;
 using notes.Areas.Admin.Models;
+using notes.FluentValidation;
 
 namespace notes.Areas.Admin.Validators
 {

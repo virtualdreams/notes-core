@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using notes.Core.Services;
+using notes.Core.Interfaces;
 using notes.Extensions;
 using notes.Models;
 

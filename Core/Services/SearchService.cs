@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using notes.Core.Data;
+using notes.Core.Interfaces;
 using notes.Core.Models;
 
 namespace notes.Core.Services

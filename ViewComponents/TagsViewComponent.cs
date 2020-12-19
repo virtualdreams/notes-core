@@ -2,7 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using notes.Core.Services;
+using notes.Core.Interfaces;
 using notes.Models;
 
 namespace notes.ViewComponents

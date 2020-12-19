@@ -1,4 +1,5 @@
 using FluentValidation;
+using notes.FluentValidation;
 using notes.Models;
 
 namespace notes.Validators

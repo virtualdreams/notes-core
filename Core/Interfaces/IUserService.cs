@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using notes.Core.Models;
 
-namespace notes.Core.Services
+namespace notes.Core.Interfaces
 {
 	public interface IUserService
 	{

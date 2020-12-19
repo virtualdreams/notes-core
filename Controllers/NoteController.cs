@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using notes.Core.Services;
+using notes.Core.Interfaces;
 using notes.Core;
 using notes.Extensions;
 using notes.Models;

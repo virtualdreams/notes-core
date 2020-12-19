@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System;
 using notes.Core.Data;
+using notes.Core.Interfaces;
 using notes.Core.Internal;
 using notes.Core.Models;
 

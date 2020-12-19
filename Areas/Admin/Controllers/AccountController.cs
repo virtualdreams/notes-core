@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using notes.Areas.Admin.Models;
 using notes.Controllers;
-using notes.Core.Services;
+using notes.Core.Interfaces;
 using notes.Core;
 
 namespace notes.Areas.Admin.Controllers

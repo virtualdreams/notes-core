@@ -14,13 +14,11 @@ using Microsoft.IdentityModel.Logging;
 using System.IO;
 using System;
 using notes.Core.Data;
-using notes.Core.Internal;
-using notes.Core.Services;
+using notes.Core;
 using notes.Events;
 using notes.Extensions;
 using notes.Features;
 using notes.Filter;
-using notes.Services;
 
 namespace notes
 {
@@ -48,7 +46,7 @@ namespace notes
 			//.ValidateDataAnnotations();
 
 			// get settings for local usage
-			var settings = Configuration.GetSection(Settings.SettingsName).Get<Settings>();
+			var _settings = Configuration.GetSection(Settings.SettingsName).Get<Settings>();
 
 			// database context
 			services.AddDbContext<DataContext>(options =>
@@ -62,23 +60,16 @@ namespace notes
 
 			// dependency injection
 			services.AddAutoMapper();
-			services.AddTransient<INoteService, NoteService>();
-			services.AddTransient<IUserService, UserService>();
-			services.AddTransient<IRevisionService, RevisionService>();
-			services.AddTransient<ISearchService, SearchService>();
-			services.AddTransient<IMailService, MailService>();
-			services.AddTransient<IRevisionService, RevisionService>();
-			services.AddTransient<ITokenService, TokenService>();
+			services.AddNoteServices();
 			services.AddScoped<CustomCookieAuthenticationEvents>();
-			services.AddSingleton<IPasswordPolicy>(new PasswordPolicy { MinimumNonAlphaCharacters = 0, MinimumUpperCaseCharacters = 0 });
 
 			// key ring
-			if (!String.IsNullOrEmpty(settings.KeyStore))
+			if (!String.IsNullOrEmpty(_settings.KeyStore))
 			{
 				services.AddDataProtection(options =>
 				{
 					options.ApplicationDiscriminator = "notes";
-				}).PersistKeysToFileSystem(new DirectoryInfo(settings.KeyStore));
+				}).PersistKeysToFileSystem(new DirectoryInfo(_settings.KeyStore));
 			}
 
 			// IIS integration

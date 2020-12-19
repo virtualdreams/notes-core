@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace notes.Core.Services
+namespace notes.Core.Interfaces
 {
 	public interface IMailService
 	{

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Threading.Tasks;
 using System;
+using notes.Core.Interfaces;
 
 namespace notes.Core.Services
 {

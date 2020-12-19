@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using notes.Core.Services;
+using notes.Core.Interfaces;
 
 namespace notes.Events
 {
