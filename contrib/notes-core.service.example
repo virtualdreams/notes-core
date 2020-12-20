@@ -4,6 +4,7 @@ After=network.target
 After=mariadb.service
 
 [Service]
+Environment=COMPlus_EnableDiagnostics=0
 EnvironmentFile=
 Restart=always
 RestartSec=10
