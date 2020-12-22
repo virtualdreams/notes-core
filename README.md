@@ -13,6 +13,7 @@ Notes! is an ASP.NET Core/MariaDB based webapp to create and manage text notes.
 * [.NET Core 3.1](https://www.microsoft.com/net/core)
 * [ASP.NET Core 3.1](https://docs.microsoft.com/en-us/aspnet/core/)
 * [MariaDB](https://mariadb.org/)
+* [PostgreSQL](https://www.postgresql.org/)
 * [bootstrap 4](http://getbootstrap.com/)
 * [fontawesome 4](https://fontawesome.com/)
 * [nodejs](https://nodejs.org/)
@@ -20,7 +21,7 @@ Notes! is an ASP.NET Core/MariaDB based webapp to create and manage text notes.
 
 ## How to run
 
-You need the latest **.NET Core**, **ASP.NET Core** and **MariaDB** to run this application.
+You need the latest **.NET Core**, **ASP.NET Core** and **MariaDB** or **PostgreSQL** to run this application.
 
 ## Build
 
@@ -73,6 +74,9 @@ Configure application in `appsettings.json` and copy this file to publish direct
     "ConnectionStrings": {
 		"Default": "Server=localhost;Database=notes;User=notes;Password=notes"
     },
+    "Database": {
+        "Provider": "MySql"
+    },
     "FeatureManagement": {
 		"ModelStateDebug": false
 	},
@@ -99,7 +103,14 @@ Configure application in `appsettings.json` and copy this file to publish direct
 
 * **Default**  
 MariaDB/MySQL connection string.  
-`Server=[host];Database=[database];User=[username];Password=[password]`
+`Server=[host];Database=[database];User=[username];Password=[password]`  
+PosgreSQL connection string.  
+`Host=[host];Database=[database];Username=[username];Password=[password]`
+
+**Section: Database**
+
+* **Provider**:  
+Set database provider. Default: MySql. Values: MySql, PgSql
 
 **Section: FeatureManagement**
 

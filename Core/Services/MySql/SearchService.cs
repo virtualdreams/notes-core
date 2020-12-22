@@ -8,7 +8,7 @@ using notes.Core.Data;
 using notes.Core.Interfaces;
 using notes.Core.Models;
 
-namespace notes.Core.Services
+namespace notes.Core.Services.MySql
 {
 	public class SearchService : ISearchService
 	{

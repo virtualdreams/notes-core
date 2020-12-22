@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,12 +12,12 @@ using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Logging;
 using System.IO;
 using System;
-using notes.Core.Data;
 using notes.Core;
 using notes.Events;
 using notes.Extensions;
 using notes.Features;
 using notes.Filter;
+using notes.Provider;
 
 namespace notes
 {
@@ -47,20 +46,14 @@ namespace notes
 
 			// get settings for local usage
 			var _settings = Configuration.GetSection(Settings.SettingsName).Get<Settings>();
+			var _provider = Configuration.GetSection("Database").GetValue<DatabaseProvider>("Provider");
 
 			// database context
-			services.AddDbContext<DataContext>(options =>
-			{
-				options.UseMySql(Configuration.GetConnectionString("Default"), mySqlOptions => { });
-#if DEBUG
-				options.EnableSensitiveDataLogging(true);
-#endif
-			},
-			ServiceLifetime.Scoped);
+			services.AddDatabaseContext(Configuration.GetConnectionString("Default"), _provider);
 
 			// dependency injection
 			services.AddAutoMapper();
-			services.AddNoteServices();
+			services.AddNoteServices(_provider);
 			services.AddScoped<CustomCookieAuthenticationEvents>();
 
 			// key ring
