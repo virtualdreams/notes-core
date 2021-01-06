@@ -105,7 +105,7 @@ Configure application in `appsettings.json` and copy this file to publish direct
 MariaDB/MySQL connection string.  
 `Server=[host];Database=[database];User=[username];Password=[password]`  
 PosgreSQL connection string.  
-`Host=[host];Database=[database];Username=[username];Password=[password]`
+`Host=[host];Database=[database];Username=[username];Password=[password][;SearchPath=schema,public]`
 
 **Section: Database**
 
