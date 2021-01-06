@@ -1,4 +1,4 @@
--- create note table
+-- note table
 create table note (
   id serial primary key,
   title varchar(100) not null,
@@ -9,14 +9,14 @@ create table note (
   modified timestamptz 
 );
 
--- create tag table
+-- tag table
 create table tag (
   id serial primary key,
   name varchar(50) not null,
   noteid int not null
 );
 
--- create user table
+-- user table
 create table "user" (
   id serial primary key,
   username varchar(100) unique not null,
@@ -30,7 +30,7 @@ create table "user" (
   items int not null default 10
 );
 
--- create revision table
+-- revision table
 create table revision (
   id serial primary key,
   dt timestamptz not null,
