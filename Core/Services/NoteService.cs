@@ -364,43 +364,5 @@ namespace notes.Core.Services
 
 			await Context.SaveChangesAsync();
 		}
-
-		/// <summary>
-		/// Get suggestions for tags.
-		/// </summary>
-		/// <param name="term">The term to search for.</param>
-		/// <returns></returns>
-		public async Task<List<string>> TagSuggestionsAsync(string term)
-		{
-			term = term?.Trim();
-
-			if (String.IsNullOrEmpty(term) || term.Length < 3)
-				return new List<string>();
-
-			Log.LogDebug($"Get tag suggestions for term '{term}'.");
-
-			var _result = await GetTagsAsync();
-
-			return _result.Select(s => s.Name).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1).ToList();
-		}
-
-		/// <summary>
-		/// Get suggestions for notebooks.
-		/// </summary>
-		/// <param name="term">The term to search for.</param>
-		/// <returns></returns>
-		public async Task<List<string>> NotebookSuggestionsAsync(string term)
-		{
-			term = term?.Trim();
-
-			if (String.IsNullOrEmpty(term) || term.Length < 3)
-				return new List<string>();
-
-			Log.LogDebug($"Get notebook suggestions for term '{term}'.");
-
-			var _result = await GetNotebooksAsync();
-
-			return _result.Select(s => s.Name).Where(w => w.IndexOf(term, StringComparison.OrdinalIgnoreCase) != -1).ToList();
-		}
 	}
 }

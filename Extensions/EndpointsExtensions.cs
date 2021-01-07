@@ -16,7 +16,7 @@ namespace notes.Extensions
 				endpoints.MapControllerRoute(
 					name: "search",
 					pattern: "search",
-					defaults: new { controller = "Home", action = "Search" }
+					defaults: new { controller = "Search", action = "Search" }
 				);
 
 				endpoints.MapControllerRoute(

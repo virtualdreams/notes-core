@@ -296,17 +296,5 @@ namespace notes.Controllers
 
 			return RedirectToAction("trash");
 		}
-
-		[Route("search/tags")]
-		public async Task<IActionResult> TagSuggestions(string term)
-		{
-			return Json((await NoteService.TagSuggestionsAsync(term)).ToArray());
-		}
-
-		[Route("search/notebook")]
-		public async Task<IActionResult> NotebookSuggestions(string term)
-		{
-			return Json((await NoteService.NotebookSuggestionsAsync(term)).ToArray());
-		}
 	}
 }
