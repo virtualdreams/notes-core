@@ -2,12 +2,24 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "build",
+			"label": "build (Debug)",
 			"command": "dotnet",
 			"type": "process",
 			"args": [
 				"build",
 				"${workspaceFolder}/notes.csproj"
+			],
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "build (Release)",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"build",
+				"${workspaceFolder}/notes.csproj",
+				"-c",
+				"Release"
 			],
 			"problemMatcher": "$msCompile"
 		}
