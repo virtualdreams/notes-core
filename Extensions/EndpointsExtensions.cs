@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 
-namespace notes.Extensions
+namespace Notes.Extensions
 {
 	public static class EndpointsExtensions
 	{

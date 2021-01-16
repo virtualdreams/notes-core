@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using System;
 
-namespace notes.Extensions
+namespace Notes.Extensions
 {
 	public static class NoteExtensions
 	{

@@ -1,8 +1,8 @@
 using FluentValidation;
-using notes.Areas.Admin.Models;
-using notes.FluentValidation;
+using Notes.Areas.Admin.Models;
+using Notes.FluentValidation;
 
-namespace notes.Areas.Admin.Validators
+namespace Notes.Areas.Admin.Validators
 {
 	public class UserPostModelValidator : AbstractValidator<UserPostModel>
 	{

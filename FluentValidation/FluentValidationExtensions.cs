@@ -1,7 +1,7 @@
 using FluentValidation;
 using System;
 
-namespace notes.FluentValidation
+namespace Notes.FluentValidation
 {
 	public static class FluentValidationExtensions
 	{

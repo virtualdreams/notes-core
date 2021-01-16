@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace notes
+namespace Notes
 {
 	/// <summary>
 	/// Get assembly version informations.

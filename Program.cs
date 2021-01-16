@@ -5,9 +5,8 @@ using Microsoft.Extensions.Logging;
 using NLog.Web;
 using System.IO;
 using System;
-using notes.Extensions;
 
-namespace notes
+namespace Notes
 {
 	public class Program
 	{

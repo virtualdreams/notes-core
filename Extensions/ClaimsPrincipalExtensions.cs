@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using System;
 
-namespace notes.Extensions
+namespace Notes.Extensions
 {
 	public static class ClaimsPrincipalExtensions
 	{

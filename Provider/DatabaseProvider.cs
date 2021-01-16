@@ -1,4 +1,4 @@
-namespace notes.Provider
+namespace Notes.Provider
 {
 	public enum DatabaseProvider
 	{

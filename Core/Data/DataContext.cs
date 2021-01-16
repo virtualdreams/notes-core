@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using notes.Core.Models;
+using Notes.Core.Models;
 
-namespace notes.Core.Data
+namespace Notes.Core.Data
 {
 	public class DataContext : DbContext
 	{

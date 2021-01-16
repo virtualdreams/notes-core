@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Notes.Extensions;
 using System;
-using notes.Extensions;
 
-namespace notes.TagHelpers
+namespace Notes.TagHelpers
 {
 	[HtmlTargetElement("markdown", Attributes = ContentAttributeName)]
 	public class MarkdownTagHelper : TagHelper

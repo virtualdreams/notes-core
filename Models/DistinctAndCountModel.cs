@@ -1,4 +1,4 @@
-namespace notes.Models
+namespace Notes.Models
 {
 	public class DistinctAndCountModel
 	{

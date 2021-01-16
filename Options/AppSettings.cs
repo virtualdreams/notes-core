@@ -1,6 +1,6 @@
 //using System.ComponentModel.DataAnnotations;
 
-namespace notes.Options
+namespace Notes.Options
 {
 	public class AppSettings
 	{

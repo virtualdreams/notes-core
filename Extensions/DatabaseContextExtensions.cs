@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using notes.Core.Data;
-using notes.Provider;
+using Notes.Core.Data;
+using Notes.Provider;
 
-namespace notes.Extensions
+namespace Notes.Extensions
 {
 	public static class DatabaseContextExtensions
 	{

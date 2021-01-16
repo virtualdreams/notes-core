@@ -4,16 +4,16 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Notes.Core.Interfaces;
+using Notes.Core;
+using Notes.Extensions;
+using Notes.Models;
+using Notes.Options;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using notes.Core.Interfaces;
-using notes.Core;
-using notes.Extensions;
-using notes.Models;
-using notes.Options;
 
-namespace notes.Controllers
+namespace Notes.Controllers
 {
 	[Authorize]
 	public class UserController : BaseController

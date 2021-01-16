@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace notes.Core.Models
+namespace Notes.Core.Models
 {
 	[Table("tag")]
 	public class Tag

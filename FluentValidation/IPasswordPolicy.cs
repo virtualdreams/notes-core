@@ -1,4 +1,4 @@
-namespace notes.FluentValidation
+namespace Notes.FluentValidation
 {
 	public interface IPasswordPolicy
 	{

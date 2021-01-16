@@ -1,12 +1,12 @@
 using Microsoft.IdentityModel.Tokens;
+using Notes.Core.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System;
-using notes.Core.Interfaces;
 
-namespace notes.Core.Services
+namespace Notes.Core.Services
 {
 	public class TokenService : ITokenService
 	{

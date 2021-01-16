@@ -1,6 +1,6 @@
 using System;
 
-namespace notes.Core
+namespace Notes.Core
 {
 	public class NotesException : Exception
 	{

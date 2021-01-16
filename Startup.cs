@@ -10,17 +10,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Logging;
+using Notes.Core;
+using Notes.Events;
+using Notes.Extensions;
+using Notes.Features;
+using Notes.Filter;
+using Notes.Options;
+using Notes.Provider;
 using System.IO;
 using System;
-using notes.Core;
-using notes.Events;
-using notes.Extensions;
-using notes.Features;
-using notes.Filter;
-using notes.Options;
-using notes.Provider;
 
-namespace notes
+namespace Notes
 {
 	public class Startup
 	{

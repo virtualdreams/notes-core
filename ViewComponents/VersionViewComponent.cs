@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using notes.Core.Interfaces;
+using Notes.Core.Interfaces;
 
-namespace notes.ViewComponents
+namespace Notes.ViewComponents
 {
 	public class VersionViewComponent : BaseViewComponent
 	{

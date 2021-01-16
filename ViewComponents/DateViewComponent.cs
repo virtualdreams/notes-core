@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Notes.Core.Interfaces;
 using System;
-using notes.Core.Interfaces;
 
-namespace notes.ViewComponents
+namespace Notes.ViewComponents
 {
 	public class FormatDateViewComponent : BaseViewComponent
 	{

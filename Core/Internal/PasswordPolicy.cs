@@ -1,8 +1,8 @@
+using Notes.FluentValidation;
 using System.Text.RegularExpressions;
 using System;
-using notes.FluentValidation;
 
-namespace notes.Core.Internal
+namespace Notes.Core.Internal
 {
 	/// <summary>
 	/// Simple password policy.

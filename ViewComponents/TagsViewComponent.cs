@@ -1,11 +1,11 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Notes.Core.Interfaces;
+using Notes.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using notes.Core.Interfaces;
-using notes.Models;
 
-namespace notes.ViewComponents
+namespace Notes.ViewComponents
 {
 	public class TagsViewComponent : BaseViewComponent
 	{

@@ -1,7 +1,7 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace notes.Extensions
+namespace Notes.Extensions
 {
 	public static class AutoMapperExtensions
 	{

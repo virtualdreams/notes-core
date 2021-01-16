@@ -1,7 +1,7 @@
 using FluentValidation;
-using notes.Models;
+using Notes.Models;
 
-namespace notes.Validators
+namespace Notes.Validators
 {
 	public class LoginModelValidator : AbstractValidator<LoginModel>
 	{

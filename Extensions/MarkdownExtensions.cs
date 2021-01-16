@@ -1,6 +1,6 @@
 using Markdig;
 
-namespace notes.Extensions
+namespace Notes.Extensions
 {
 	public static class MarkdownExtensions
 	{

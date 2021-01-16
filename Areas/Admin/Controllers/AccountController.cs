@@ -2,15 +2,15 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Notes.Areas.Admin.Models;
+using Notes.Controllers;
+using Notes.Core.Interfaces;
+using Notes.Core;
+using Notes.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using notes.Areas.Admin.Models;
-using notes.Controllers;
-using notes.Core.Interfaces;
-using notes.Core;
-using notes.Options;
 
-namespace notes.Areas.Admin.Controllers
+namespace Notes.Areas.Admin.Controllers
 {
 	[Area("Admin")]
 	[Authorize(Policy = "AdministratorOnly")]

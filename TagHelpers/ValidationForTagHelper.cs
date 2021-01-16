@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System;
 
-namespace notes.TagHelpers
+namespace Notes.TagHelpers
 {
 	[HtmlTargetElement("input", Attributes = ValidationForAttributeName)]
 	[HtmlTargetElement("textarea", Attributes = ValidationForAttributeName)]

@@ -39,7 +39,7 @@ Run in PowerShell or bash:
 
 ```sh
 dotnet publish -c Release /p:Version=1.0-$(git rev-parse --short HEAD)
-dotnet /path/to/notes.dll
+dotnet /path/to/Notes.dll
 ```
 
 **or**
@@ -48,7 +48,7 @@ use `make`.
 
 ```sh
 $ make publish
-$ dotnet /path/to/notes.dll
+$ dotnet /path/to/Notes.dll
 ```
 
 ## Configuration

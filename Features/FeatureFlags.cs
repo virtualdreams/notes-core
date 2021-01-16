@@ -1,4 +1,4 @@
-namespace notes.Features
+namespace Notes.Features
 {
 	public enum FeatureFlags
 	{

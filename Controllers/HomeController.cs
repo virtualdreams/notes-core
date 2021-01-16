@@ -2,14 +2,14 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Notes.Core.Interfaces;
+using Notes.Models;
+using Notes.Options;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using notes.Core.Interfaces;
-using notes.Models;
-using notes.Options;
 
-namespace notes.Controllers
+namespace Notes.Controllers
 {
 	[Authorize]
 	public class HomeController : BaseController

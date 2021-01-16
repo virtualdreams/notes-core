@@ -1,7 +1,7 @@
-using System;
 using System.Security.Cryptography;
+using System;
 
-namespace notes.Core.Internal
+namespace Notes.Core.Internal
 {
 	public static class PasswordHasher
 	{

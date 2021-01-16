@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace notes.Filter
+namespace Notes.Filter
 {
 	public class ModelStateDebugFilter : IAsyncActionFilter
 	{

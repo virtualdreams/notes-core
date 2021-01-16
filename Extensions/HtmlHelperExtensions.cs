@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using System;
 
-namespace notes.Extensions
+namespace Notes.Extensions
 {
 	public static class HtmlHelperExtensions
 	{

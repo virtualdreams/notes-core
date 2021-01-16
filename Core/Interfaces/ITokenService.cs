@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace notes.Core.Interfaces
+namespace Notes.Core.Interfaces
 {
 	public interface ITokenService
 	{

@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
+using Notes.Core.Interfaces;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using notes.Core.Interfaces;
 
-namespace notes.Events
+namespace Notes.Events
 {
 	public class CustomCookieAuthenticationEvents : CookieAuthenticationEvents
 	{

@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using notes.Core.Interfaces;
-using notes.Core.Models;
-using notes.Extensions;
+using Notes.Core.Interfaces;
+using Notes.Core.Models;
+using Notes.Extensions;
 
-namespace notes.Controllers
+namespace Notes.Controllers
 {
 	public abstract class BaseController : Controller
 	{

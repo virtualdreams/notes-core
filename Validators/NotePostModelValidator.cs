@@ -1,8 +1,8 @@
 using FluentValidation;
-using notes.FluentValidation;
-using notes.Models;
+using Notes.FluentValidation;
+using Notes.Models;
 
-namespace notes.Validators
+namespace Notes.Validators
 {
 	public class NotePostModelValidator : AbstractValidator<NotePostModel>
 	{

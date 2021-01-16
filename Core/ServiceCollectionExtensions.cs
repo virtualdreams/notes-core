@@ -1,11 +1,11 @@
 using Microsoft.Extensions.DependencyInjection;
-using notes.Core.Interfaces;
-using notes.Core.Internal;
-using notes.Core.Services;
-using notes.FluentValidation;
-using notes.Provider;
+using Notes.Core.Interfaces;
+using Notes.Core.Internal;
+using Notes.Core.Services;
+using Notes.FluentValidation;
+using Notes.Provider;
 
-namespace notes.Core
+namespace Notes.Core
 {
 	public static class ServiceCollectionExtensions
 	{

@@ -2,12 +2,12 @@ using MailKit.Net.Smtp;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using Notes.Core.Interfaces;
+using Notes.Options;
 using System.Threading.Tasks;
 using System;
-using notes.Core.Interfaces;
-using notes.Options;
 
-namespace notes.Core.Services
+namespace Notes.Core.Services
 {
 	public class MailService : IMailService
 	{

@@ -1,6 +1,6 @@
 using System;
 
-namespace notes.Models
+namespace Notes.Models
 {
 	public class RevisionModel
 	{

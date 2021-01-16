@@ -1,8 +1,8 @@
+using Notes.Core.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using notes.Core.Models;
 
-namespace notes.Core.Interfaces
+namespace Notes.Core.Interfaces
 {
 	public interface IRevisionService
 	{

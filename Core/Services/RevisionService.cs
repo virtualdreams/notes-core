@@ -3,15 +3,15 @@ using DiffPlex.DiffBuilder;
 using DiffPlex;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Notes.Core.Data;
+using Notes.Core.Interfaces;
+using Notes.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using notes.Core.Data;
-using notes.Core.Interfaces;
-using notes.Core.Models;
 
-namespace notes.Core.Services
+namespace Notes.Core.Services
 {
 	public class RevisionService : IRevisionService
 	{

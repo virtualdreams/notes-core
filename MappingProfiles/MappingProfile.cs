@@ -1,11 +1,11 @@
 using AutoMapper;
+using Notes.Areas.Admin.Models;
+using Notes.Core.Models;
+using Notes.Models;
 using System.Linq;
 using System;
-using notes.Areas.Admin.Models;
-using notes.Core.Models;
-using notes.Models;
 
-namespace notes.MappingProfiles
+namespace Notes.MappingProfiles
 {
 	public class MappingProfile : Profile
 	{

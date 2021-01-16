@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System;
 
-namespace notes.Models
+namespace Notes.Models
 {
 	public class NoteModel
 	{

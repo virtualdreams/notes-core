@@ -1,16 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Notes.Core.Data;
+using Notes.Core.Interfaces;
+using Notes.Core.Internal;
+using Notes.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System;
-using notes.Core.Data;
-using notes.Core.Interfaces;
-using notes.Core.Internal;
-using notes.Core.Models;
 
-namespace notes.Core.Services
+namespace Notes.Core.Services
 {
 	public class UserService : IUserService
 	{

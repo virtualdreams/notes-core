@@ -1,4 +1,4 @@
-namespace notes.Options
+namespace Notes.Options
 {
 	public class MailSettings
 	{

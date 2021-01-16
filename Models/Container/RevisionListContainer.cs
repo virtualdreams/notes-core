@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace notes.Models
+namespace Notes.Models
 {
 	public class RevisionListContainer
 	{
