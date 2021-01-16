@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System;
 using notes.Core.Interfaces;
 using notes.Models;
+using notes.Options;
 
 namespace notes.Controllers
 {
@@ -15,15 +16,15 @@ namespace notes.Controllers
 	public class SearchController : BaseController
 	{
 		private readonly IMapper Mapper;
-		private readonly Settings Options;
+		private readonly AppSettings AppSettings;
 		private readonly IUserService UserService;
 		private readonly ISearchService SearchService;
 
-		public SearchController(IMapper mapper, IOptionsSnapshot<Settings> settings, IUserService user, ISearchService search)
+		public SearchController(IMapper mapper, IOptionsSnapshot<AppSettings> settings, IUserService user, ISearchService search)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = settings.Value;
+			AppSettings = settings.Value;
 			UserService = user;
 			SearchService = search;
 		}

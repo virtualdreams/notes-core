@@ -17,6 +17,7 @@ using notes.Events;
 using notes.Extensions;
 using notes.Features;
 using notes.Filter;
+using notes.Options;
 using notes.Provider;
 
 namespace notes
@@ -40,12 +41,15 @@ namespace notes
 			services.AddFeatureManagement();
 
 			// add options to DI
-			services.AddOptions<Settings>()
-				.Bind(Configuration.GetSection(Settings.SettingsName));
+			services.AddOptions<AppSettings>()
+				.Bind(Configuration.GetSection(AppSettings.AppSettingsName));
+			//.ValidateDataAnnotations();
+			services.AddOptions<MailSettings>()
+				.Bind(Configuration.GetSection(MailSettings.MailSettingsName));
 			//.ValidateDataAnnotations();
 
 			// get settings for local usage
-			var _settings = Configuration.GetSection(Settings.SettingsName).Get<Settings>();
+			var _settings = Configuration.GetSection(AppSettings.AppSettingsName).Get<AppSettings>();
 			var _provider = Configuration.GetSection("Database").GetValue<DatabaseProvider>("Provider");
 
 			// database context

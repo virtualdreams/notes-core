@@ -5,17 +5,20 @@ using MimeKit;
 using System.Threading.Tasks;
 using System;
 using notes.Core.Interfaces;
+using notes.Options;
 
 namespace notes.Core.Services
 {
 	public class MailService : IMailService
 	{
-		private readonly Settings Options;
+		private readonly AppSettings AppSettings;
+		private readonly MailSettings MailSettings;
 		private readonly ILogger<MailService> Log;
 
-		public MailService(IOptionsSnapshot<Settings> settings, ILogger<MailService> log)
+		public MailService(IOptionsSnapshot<AppSettings> settings, IOptionsSnapshot<MailSettings> mail, ILogger<MailService> log)
 		{
-			Options = settings.Value;
+			AppSettings = settings.Value;
+			MailSettings = mail.Value;
 			Log = log;
 		}
 
@@ -29,24 +32,24 @@ namespace notes.Core.Services
 		public async Task SendResetPasswordMailAsync(string username, string mail, string origin, string token)
 		{
 			var message = new MimeMessage();
-			message.From.Add(MailboxAddress.Parse(Options.Smtp.From));
+			message.From.Add(MailboxAddress.Parse(MailSettings.From));
 			message.To.Add(MailboxAddress.Parse(mail));
-			message.Subject = $"[{Options.SiteName}] - Reset Password";
+			message.Subject = $"[{AppSettings.SiteName}] - Reset Password";
 			message.Body = new TextPart("plain")
 			{
 				Text =
 $@"Hi {username},
 
-You recently requested to reset your password for your ""{Options.SiteName}"" account. Use the link below to reset it. This password reset is only valid for the next 1 hour.
+You recently requested to reset your password for your ""{AppSettings.SiteName}"" account. Use the link below to reset it. This password reset is only valid for the next 1 hour.
 
 {origin}/reset_password/{token}
 
 If you did not request a password reset, please ignore this email or contact support if you have questions.
 
 Thanks,
-The {Options.SiteName} Team
+The {AppSettings.SiteName} Team
 
-{Options.SiteName} ({origin})"
+{AppSettings.SiteName} ({origin})"
 			};
 
 			await SendMailAsync(message);
@@ -58,22 +61,22 @@ The {Options.SiteName} Team
 		/// <param name="message">The message to send.</param>
 		private async Task SendMailAsync(MimeMessage message)
 		{
-			if (Options.Smtp.Enabled)
+			if (MailSettings.Enabled)
 			{
 				Log.LogInformation($"Send mail...");
 				// send e-mail
 				using (var client = new SmtpClient())
 				{
 					// accept all SSL certificates (in case the server supports STARTTLS)
-					if (Options.Smtp.SkipVerify)
+					if (MailSettings.SkipVerify)
 						client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
 					// connect to given host and port
-					client.Connect(Options.Smtp.Server, Options.Smtp.Port, false);
+					client.Connect(MailSettings.Server, MailSettings.Port, false);
 
 					// disable authentication if username or password is empty
-					if (!String.IsNullOrEmpty(Options.Smtp.Username) && !String.IsNullOrEmpty(Options.Smtp.Passwd))
-						client.Authenticate(Options.Smtp.Username, Options.Smtp.Passwd);
+					if (!String.IsNullOrEmpty(MailSettings.Username) && !String.IsNullOrEmpty(MailSettings.Passwd))
+						client.Authenticate(MailSettings.Username, MailSettings.Passwd);
 
 					await client.SendAsync(message);
 					await client.DisconnectAsync(true);

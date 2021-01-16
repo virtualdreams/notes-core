@@ -9,6 +9,7 @@ using notes.Core.Interfaces;
 using notes.Core;
 using notes.Extensions;
 using notes.Models;
+using notes.Options;
 
 namespace notes.Controllers
 {
@@ -16,15 +17,15 @@ namespace notes.Controllers
 	public class NoteController : BaseController
 	{
 		private readonly IMapper Mapper;
-		private readonly Settings Options;
+		private readonly AppSettings AppSettings;
 		private readonly IUserService UserService;
 		private readonly INoteService NoteService;
 
-		public NoteController(IMapper mapper, IOptionsSnapshot<Settings> settings, IUserService user, INoteService note)
+		public NoteController(IMapper mapper, IOptionsSnapshot<AppSettings> settings, IUserService user, INoteService note)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = settings.Value;
+			AppSettings = settings.Value;
 			UserService = user;
 			NoteService = note;
 		}

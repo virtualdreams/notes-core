@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using notes.Core.Interfaces;
 using notes.Models;
+using notes.Options;
 
 namespace notes.Controllers
 {
@@ -14,15 +15,15 @@ namespace notes.Controllers
 	public class HomeController : BaseController
 	{
 		private readonly IMapper Mapper;
-		private readonly Settings Options;
+		private readonly AppSettings AppSettings;
 		private readonly IUserService UserService;
 		private readonly INoteService NoteService;
 
-		public HomeController(IMapper mapper, IOptionsSnapshot<Settings> settings, IUserService user, INoteService note)
+		public HomeController(IMapper mapper, IOptionsSnapshot<AppSettings> settings, IUserService user, INoteService note)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = settings.Value;
+			AppSettings = settings.Value;
 			UserService = user;
 			NoteService = note;
 		}

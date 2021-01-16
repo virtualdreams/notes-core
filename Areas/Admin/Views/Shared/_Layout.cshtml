@@ -1,6 +1,6 @@
-@using notes
+@using notes.Options
 @using Microsoft.Extensions.Options
-@inject IOptionsSnapshot<Settings> Options
+@inject IOptionsSnapshot<AppSettings> AppSettings
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,12 +8,12 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="@Options.Value.SiteName">
+		<meta name="description" content="@AppSettings.Value.SiteName">
 		<meta name="author" content="">
 		<meta name="version" content="@await Component.InvokeAsync("Version")">
 
-		<title>@ViewBag.Title@Options.Value.SiteName - Administration</title>
-		
+		<title>@ViewBag.Title@AppSettings.Value.SiteName - Administration</title>
+
 		@await Html.PartialAsync("_PartialStyles")
 
 		@await Html.PartialAsync("_PartialIcons")
@@ -27,7 +27,7 @@
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				
+
 				<!-- top menu items -->
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav mr-auto">

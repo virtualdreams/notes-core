@@ -8,6 +8,7 @@ using notes.Areas.Admin.Models;
 using notes.Controllers;
 using notes.Core.Interfaces;
 using notes.Core;
+using notes.Options;
 
 namespace notes.Areas.Admin.Controllers
 {
@@ -16,14 +17,14 @@ namespace notes.Areas.Admin.Controllers
 	public class AccountController : BaseController
 	{
 		private readonly IMapper Mapper;
-		private readonly Settings Options;
+		private readonly AppSettings AppSetings;
 		private readonly IUserService UserService;
 
-		public AccountController(IMapper mapper, IOptionsSnapshot<Settings> settings, IUserService user)
+		public AccountController(IMapper mapper, IOptionsSnapshot<AppSettings> settings, IUserService user)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = settings.Value;
+			AppSetings = settings.Value;
 			UserService = user;
 		}
 
@@ -79,7 +80,7 @@ namespace notes.Areas.Admin.Controllers
 				{
 					if (model.Id == 0)
 					{
-						await UserService.CreateAsync(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled, Options.PageSize);
+						await UserService.CreateAsync(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled, AppSetings.PageSize);
 					}
 					else
 					{

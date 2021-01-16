@@ -11,6 +11,7 @@ using notes.Core.Interfaces;
 using notes.Core;
 using notes.Extensions;
 using notes.Models;
+using notes.Options;
 
 namespace notes.Controllers
 {
@@ -18,14 +19,14 @@ namespace notes.Controllers
 	public class UserController : BaseController
 	{
 		private readonly IMapper Mapper;
-		private readonly Settings Options;
+		private readonly AppSettings AppSettings;
 		private readonly IUserService UserService;
 
-		public UserController(IMapper mapper, IOptionsSnapshot<Settings> settings, IUserService user)
+		public UserController(IMapper mapper, IOptionsSnapshot<AppSettings> settings, IUserService user)
 			: base(user)
 		{
 			Mapper = mapper;
-			Options = settings.Value;
+			AppSettings = settings.Value;
 			UserService = user;
 		}
 
@@ -50,7 +51,7 @@ namespace notes.Controllers
 					// HACK!
 					if (!(await UserService.HasUsersAsync()))
 					{
-						await UserService.CreateAsync(model.Username, model.Password, "Administrator", "Administrator", true, Options.PageSize);
+						await UserService.CreateAsync(model.Username, model.Password, "Administrator", "Administrator", true, AppSettings.PageSize);
 					}
 
 					var _user = await UserService.LoginAsync(model.Username, model.Password);

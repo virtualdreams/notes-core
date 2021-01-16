@@ -83,16 +83,17 @@ Configure application in `appsettings.json` and copy this file to publish direct
     "Settings": {
         "KeyStore": "",
         "SiteName": "Notes!",
-        "PageSize": 10,
-        "Smtp": {
-            "Enabled": false,
-            "Server": "localhost",
-            "Port": 25,
-            "From": "admin@localhost",
-            "Username": "",
-            "Passwd": "",
-            "SkipVerify": false
-       }
+        "PageSize": 10
+        
+    },
+    "Mail": {
+        "Enabled": false,
+        "Server": "localhost",
+        "Port": 25,
+        "From": "admin@localhost",
+        "Username": "",
+        "Passwd": "",
+        "SkipVerify": false
     }
 }
 ```
@@ -101,7 +102,7 @@ Configure application in `appsettings.json` and copy this file to publish direct
 
 **Section: ConnectionStrings**
 
-* **Default**  
+* **Default**:  
 MariaDB/MySQL connection string.  
 `Server=[host];Database=[database];User=[username];Password=[password]`  
 PosgreSQL connection string.  
@@ -110,36 +111,37 @@ PosgreSQL connection string.
 **Section: Database**
 
 * **Provider**:  
-Set database provider. Default: MySql. Values: MySql, PgSql
+Set database provider. Default: `MySql`. Values: `MySql`, `PgSql`.
 
 **Section: FeatureManagement**
 
 * **ModelStateDebug**:  
-Enable ModelState filter when loglevel is set to Debug.
+Enable ModelState filter when loglevel is set to Debug. Default: `false`.
 
 **Section: Settings**
 
 * **KeyStore**:  
 Directory to store encryption key files (leave empty to use in-memory).
 * **SiteName**:  
-Site name.
+Site name. Default: `Notes!`.
 * **PageSize**:  
-Items per page to display. Default 10.
-* ***Smtp***
-	* **Enabled**:  
-    Enable sending mails.
-	* **Server**:  
-    Mail server.
-	* **Port**:  
-    Smtp port.
-	* **From**:  
-    From mail.
-	* **Username**:  
-    Mail username (optional).
-	* **Passwd**:  
-    Mail password (optional).
-	* **SkipVerify**:  
-    Verify SSL certificates.
+Items per page to display. Default `10`.
+
+**Section: Mail**
+* **Enabled**:  
+Enable sending mails. Default: `false`.
+* **Server**:  
+Mail server. Default: `localhost`.
+* **Port**:  
+Smtp port. Default `25`.
+* **From**:  
+From mail.
+* **Username**:  
+Mail username (optional). Default: `admin@localhost`.
+* **Passwd**:  
+Mail password (optional).
+* **SkipVerify**:  
+Verify SSL certificates. Default: `false`.
 
 ## Logging
 
