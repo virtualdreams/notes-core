@@ -11,7 +11,7 @@ RestartSec=10
 KillSignal=SIGINT
 SyslogIdentifier=notes-core
 WorkingDirectory=/foo/bar
-ExecStart=/usr/local/bin/dotnet /foo/bar/notes-core/notes.dll
+ExecStart=/usr/local/bin/dotnet /foo/bar/notes-core/Notes.dll
 User=www-data
 Group=www-data
 
