@@ -1,6 +1,2 @@
-/bin
-/obj
-/project.lock.json
-/wwwroot/images
-/node_modules
 *.log
+publish/

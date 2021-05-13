@@ -1,27 +1,35 @@
-all: restore clean-publish publish
+project = src/Notes
 
+.PHONY: all
+all: clean restore publish
+
+.PHONY: install-npm
 install-npm: clean-npm
-	npm ci
+	cd $(project) && npm ci
 
+.PHONY: clean-npm
 clean-npm:
-	rm -rf node_modules
+	cd $(project) && rm -rf node_modules
 
+.PHONY: gulp
 gulp:
-	./node_modules/gulp/bin/gulp.js
+	cd $(project) && ./node_modules/gulp/bin/gulp.js
 
+.PHONY: restore
 restore:
 	dotnet restore
 
+.PHONY: build
 build:
 	dotnet build -c Release
 
+.PHONY: publish
 publish:
-	dotnet publish -c Release /p:Version=1.0-$$(git rev-parse --short HEAD)
+	dotnet publish -c Release /p:Version=1.0-$$(git rev-parse --short HEAD) -o publish $(project)
 
-clean-publish:
-	rm -rf bin/Release
-
+.PHONY: clean
 clean:
-	rm -rf bin
-	rm -rf obj
-	rm -rf node_modules
+	rm -rf publish
+	cd $(project) && rm -rf bin
+	cd $(project) && rm -rf obj
+	cd $(project) && rm -rf node_modules

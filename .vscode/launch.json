@@ -10,16 +10,16 @@
 			"request": "launch",
 			"preLaunchTask": "build (Debug)",
 			// If you have changed target frameworks, make sure to update the program path.
-			"program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/Notes.dll",
+			"program": "${workspaceFolder}/src/Notes/bin/Debug/netcoreapp3.1/Notes.dll",
 			"args": [],
-			"cwd": "${workspaceFolder}",
+			"cwd": "${workspaceFolder}/src/Notes",
 			"stopAtEntry": false,
 			"internalConsoleOptions": "openOnSessionStart",
 			"env": {
 				"ASPNETCORE_ENVIRONMENT": "Development"
 			},
 			"sourceFileMap": {
-				"/Views": "${workspaceFolder}/Views"
+				"/Views": "${workspaceFolder}/src/Notes/Views"
 			}
 		},
 		{
@@ -28,16 +28,16 @@
 			"request": "launch",
 			"preLaunchTask": "build (Release)",
 			// If you have changed target frameworks, make sure to update the program path.
-			"program": "${workspaceFolder}/bin/Release/netcoreapp3.1/Notes.dll",
+			"program": "${workspaceFolder}/src/Notes/bin/Release/netcoreapp3.1/Notes.dll",
 			"args": [],
-			"cwd": "${workspaceFolder}",
+			"cwd": "${workspaceFolder}/src/Notes",
 			"stopAtEntry": false,
 			"internalConsoleOptions": "openOnSessionStart",
 			"env": {
 				"ASPNETCORE_ENVIRONMENT": "Production"
 			},
 			"sourceFileMap": {
-				"/Views": "${workspaceFolder}/Views"
+				"/Views": "${workspaceFolder}/src/Notes/Views"
 			}
 		}
 	]

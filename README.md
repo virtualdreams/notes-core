@@ -30,7 +30,7 @@ You need the latest **.NET Core**, **ASP.NET Core** and **MariaDB** or **Postgre
 ```sh
 dotnet restore
 dotnet build
-dotnet run
+dotnet run --project src/Notes
 ```
 
 **Build and publish**
@@ -38,7 +38,7 @@ dotnet run
 Run in PowerShell or bash:
 
 ```sh
-dotnet publish -c Release /p:Version=1.0-$(git rev-parse --short HEAD)
+dotnet publish -c Release /p:Version=1.0-$(git rev-parse --short HEAD) -o publish src/Notes
 dotnet /path/to/Notes.dll
 ```
 
@@ -47,8 +47,8 @@ dotnet /path/to/Notes.dll
 use `make`.
 
 ```sh
-$ make publish
-$ dotnet /path/to/Notes.dll
+make publish
+dotnet /publish/Notes.dll
 ```
 
 ## Configuration

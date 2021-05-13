@@ -7,7 +7,7 @@
 			"type": "process",
 			"args": [
 				"build",
-				"${workspaceFolder}/Notes.csproj"
+				"${workspaceFolder}/src/Notes/Notes.csproj"
 			],
 			"problemMatcher": "$msCompile"
 		},
@@ -17,7 +17,7 @@
 			"type": "process",
 			"args": [
 				"build",
-				"${workspaceFolder}/Notes.csproj",
+				"${workspaceFolder}/src/Notes/Notes.csproj",
 				"-c",
 				"Release"
 			],
