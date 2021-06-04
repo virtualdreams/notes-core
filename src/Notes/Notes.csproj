@@ -5,7 +5,7 @@
     <Description>Notes</Description>
     <Copyright>stichelbiene.de © 2020</Copyright>
     <AssemblyTitle>Notes</AssemblyTitle>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <DebugType>portable</DebugType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>Notes</AssemblyName>
@@ -51,20 +51,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.10" />
-    <PackageReference Include="Microsoft.FeatureManagement" Version="2.2.0" />
-    <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Logging" Version="6.8.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.6" />
+    <PackageReference Include="Microsoft.FeatureManagement" Version="2.3.0" />
+    <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.3.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Logging" Version="6.11.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="DiffPlex" Version="1.6.3" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="9.3.0" />
-    <PackageReference Include="MailKit" Version="2.9.0" />
-    <PackageReference Include="Markdig" Version="0.22.0" />
-    <PackageReference Include="NLog" Version="4.7.5" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.3" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.4" />
+    <PackageReference Include="DiffPlex" Version="1.7.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.1.0" />
+    <PackageReference Include="MailKit" Version="2.12.0" />
+    <PackageReference Include="Markdig" Version="0.24.0" />
+    <PackageReference Include="NLog" Version="4.7.10" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.12.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.6" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0" />
   </ItemGroup>
 
   <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">

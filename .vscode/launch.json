@@ -10,7 +10,7 @@
 			"request": "launch",
 			"preLaunchTask": "build (Debug)",
 			// If you have changed target frameworks, make sure to update the program path.
-			"program": "${workspaceFolder}/src/Notes/bin/Debug/netcoreapp3.1/Notes.dll",
+			"program": "${workspaceFolder}/src/Notes/bin/Debug/net5.0/Notes.dll",
 			"args": [],
 			"cwd": "${workspaceFolder}/src/Notes",
 			"stopAtEntry": false,
@@ -28,7 +28,7 @@
 			"request": "launch",
 			"preLaunchTask": "build (Release)",
 			// If you have changed target frameworks, make sure to update the program path.
-			"program": "${workspaceFolder}/src/Notes/bin/Release/netcoreapp3.1/Notes.dll",
+			"program": "${workspaceFolder}/src/Notes/bin/Release/net5.0/Notes.dll",
 			"args": [],
 			"cwd": "${workspaceFolder}/src/Notes",
 			"stopAtEntry": false,
