@@ -72,19 +72,18 @@ Configure application in `appsettings.json` and copy this file to publish direct
         }
     },
     "ConnectionStrings": {
-		"Default": "Server=localhost;Database=notes;User=notes;Password=notes"
+        "Default": "Server=localhost;Database=notes;User=notes;Password=notes"
     },
     "Database": {
         "Provider": "MySql"
     },
     "FeatureManagement": {
-		"ModelStateDebug": false
-	},
+        "ModelStateDebug": false
+    },
     "Settings": {
         "KeyStore": "",
         "SiteName": "Notes!",
         "PageSize": 10
-        
     },
     "Mail": {
         "Enabled": false,
