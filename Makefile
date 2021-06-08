@@ -11,9 +11,13 @@ install-npm: clean-npm
 clean-npm:
 	cd $(project) && rm -rf node_modules
 
-.PHONY: gulp
-gulp:
-	cd $(project) && ./node_modules/gulp/bin/gulp.js
+.PHONY: grunt
+grunt:
+	@if [ -d "$(project)/node_modules" ]; then \
+		cd $(project) && ./node_modules/grunt/bin/grunt; \
+	else \
+		echo "'grunt' not installed. Please run 'make install-npm'."; \
+	fi 
 
 .PHONY: restore
 restore:
