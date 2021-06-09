@@ -1,7 +1,7 @@
 project = src/Notes
 
 .PHONY: all
-all: clean restore publish
+all: clean publish
 
 .PHONY: install-npm
 install-npm: clean-npm
@@ -20,20 +20,25 @@ grunt:
 	fi 
 
 .PHONY: restore
-restore:
+restore: clean-project
 	dotnet restore
 
 .PHONY: build
-build:
+build: clean-project
 	dotnet build -c Release
 
 .PHONY: publish
-publish:
+publish: clean-publish clean-project
 	dotnet publish -c Release /p:Version=1.0-$$(git rev-parse --short HEAD) -o publish $(project)
 
-.PHONY: clean
-clean:
-	rm -rf publish
+.PHONY: clean-project
+clean-project:
 	cd $(project) && rm -rf bin
 	cd $(project) && rm -rf obj
-	cd $(project) && rm -rf node_modules
+
+.PHONY: clean-publish
+clean-publish:
+	rm -rf publish
+
+.PHONY: clean
+clean: clean-publish clean-project clean-npm
