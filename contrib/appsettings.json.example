@@ -2,19 +2,27 @@
 	"Kestrel": {
 		"EndPoints": {
 			"Http": {
-				"Url": "http://127.0.0.1:5001"
+				"Url": "http://127.0.0.1:5000"
 			}
 		}
 	},
+	"ConnectionStrings": {
+		"Default": "Server=localhost;Database=notes;User=notes;Password=notes"
+	}
+	"Database": {
+		"Provider": "MySql"
+	},
+	"FeatureManagement": {
+		"ModelStateDebug": false
+	},
 	"Settings": {
-		"ConnectionString": "Server=localhost;Database=notes;User=notes;Password=notes",
-		"SiteName": "Notes! - Save your thoughts",
-		"PageSize": 20,
 		"KeyStore": "/foo/bar/key-ring/",
-		"Smtp": {
-			"Enabled": true,
-			"Server": "localhost",
-			"From": "noreply@foobar.com"
-		}
+		"SiteName": "Notes! - Save your thoughts",
+		"PageSize": 20
+	},
+	"Mail": {
+		"Enabled": false,
+		"Server": "localhost",
+		"Port": 25
 	}
 }
