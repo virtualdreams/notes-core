@@ -4,12 +4,6 @@
 	ViewBag.Title = "Accounts - ";
 }
 
-@functions{
-	public string FormatDate(DateTime dt) {
-		return String.Format(new System.Globalization.CultureInfo("en-US"), "{0:ddd, dd MMM yyyy}", dt);
-	}
-}
-
 <div class="row">
 	<div class="col-lg-12">
 		<div class="pb-2 mt-4 mb-2 border-bottom">
@@ -42,7 +36,7 @@
 					<tr>
 						<td><a href="@Url.Action("edit", "account", new { area = "admin", id = @user.Id })">@user.Username</a></td>
 						<td class="fit">@user.Role</td>
-						<td class="fit">@FormatDate(@user.Created)</td>
+						<td class="fit"><span data-toggle="tooltip" data-placement="top" title="@await Component.InvokeAsync("FormatDate", new { date = user.Created })">@await Component.InvokeAsync("FormatShortDate", new { date = user.Created })</span></td>
 						<td class="fit">@(@user.Enabled ? "Active" : "Disabled" )</td>
 					</tr>
 					}
