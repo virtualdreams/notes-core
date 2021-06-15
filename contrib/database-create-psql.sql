@@ -44,9 +44,9 @@ create table revision (
 );
 
 -- create indexes
-create index ix_trash on note(trash);
-create index ix_notebook on note(notebook);
-create index ix_noteid on tag(noteid);
+create index ix_note_trash on note(trash);
+create index ix_note_notebook on note(notebook);
+create index ix_tag_noteid on tag(noteid);
 
 -- create revision function
 create function create_revision()
@@ -84,37 +84,30 @@ before update on
 	note 
 for each row execute procedure create_revision();
 
--- create fulltext index for note
-create index 
-	ix_fts_note_title_content_notebook 
-on 
-	note 
-using gin ( to_tsvector('english', title || ' ' || content || ' ' || notebook ));
-
 -- create fulltext index for note.title
 create index 
-	ix_fts_note_title 
+	ft_note_title 
 on 
 	note 
 using gin ( to_tsvector('english', title ));
 
 -- create fulltext index for note.content
 create index 
-	ix_fts_note_content 
+	ft_note_content 
 on 
 	note 
 using gin ( to_tsvector('english', content));
 
 -- create fulltext index for note.notebook
 create index 
-	ix_fts_note_notebook 
+	ft_note_notebook 
 on 
 	note 
 using gin ( to_tsvector('english', notebook ));
 
 -- create fulltext index for tag.name
 create index 
-	ix_fts_tag_name 
+	ft_tag_name 
 on 
 	tag 
 using gin ( to_tsvector('english', name ));
