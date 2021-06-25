@@ -8,6 +8,15 @@ You need the latest **.NET**, **ASP.NET Core** and **MariaDB** or **PostgreSQL**
 
 **MariaDB**
 
+Create user.
+
+```sql
+# mysql
+
+create user 'notes'@'localhost' identified by 'password';
+grant all on notes.* to 'notes'@'localhost';
+```
+
 Create database.
 
 ```sql
@@ -19,10 +28,18 @@ create database notes;
 Import schema.
 
 ```sh
-mysql -u notes -p notes < contrib/database-create-mysql.sql
+mysql -u notes -p -D notes < contrib/database-create-mysql.sql
 ```
 
 **PostgreSQL**
+
+Create user.
+
+```sql
+# su - postgres -c psql
+
+create user notes with password 'password';
+```
 
 Create database.
 
@@ -30,6 +47,17 @@ Create database.
 # su - postgres -c psql
 
 create database notes with owner notes encoding 'UTF8' lc_collate = 'en_US.UTF-8' lc_ctype = 'en_US.UTF-8' template template0;
+```
+
+Remove create for public.
+
+```sql
+# su - postgres -c psql
+
+\c notes
+
+revoke create on schema public from public; 
+grant create on schema public to notes;
 ```
 
 Import schema.
