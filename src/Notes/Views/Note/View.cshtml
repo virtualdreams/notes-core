@@ -13,10 +13,10 @@
 					<button type="button" class="btn btn-outline-secondary" data-href="@Url.RouteUrl("edit", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })">
 						<i class="fa fa-fw fa-pencil"></i> Edit
 					</button>
-					
+
 					<div class="btn-group" role="group">
 						<button class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"></button>
-       					<div class="dropdown-menu">
+						<div class="dropdown-menu">
 							<a class="dropdown-item" href="@Url.RouteUrl("print", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })" target="_blank"><i class="fa fa-fw fa-print"></i> Print</a>
 							<div class="dropdown-divider"></div>
 							@if(!Model.Note.Trash) {
@@ -24,11 +24,11 @@
 							}
 							<a class="dropdown-item" href="#" data-toggle="modal" data-target="#info"><i class="fa fa-fw fa-info"></i> Info</a>
 							<a class="dropdown-item" href="@Url.RouteUrl("revisions", new { id = Model.Note.Id })"><i class="fa fa-fw fa-history"></i> Revisions</a>
-	  					</div>
+						</div>
 					</div>
-     			</div>
-   			</div>
-   			<h1>@Model.Note.Title
+				</div>
+			</div>
+			<h1>@Model.Note.Title
 				@if(Model.Note.Trash) {
 				<small class="text-muted">(deleted)</small>
 				}

@@ -13,8 +13,8 @@
 			<div class="btn-toolbar pull-right">
 				<div class="btn-group">
 					<button type="button" class="btn btn-outline-secondary" data-href="@Url.Action("restore", "revision", new { id = @Model.Revision.Id })"><i class="fa fa-fw fa-history"></i> Restore</button>
-     			</div>
-   			</div>
+				</div>
+			</div>
 			}
 			<h1>
 				Revision as of @await Component.InvokeAsync("FormatDate", new { date = Model.Revision.Dt })
