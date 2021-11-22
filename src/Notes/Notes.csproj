@@ -11,9 +11,6 @@
     <AssemblyName>Notes</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>notes-core</PackageId>
-    <!--
-    <RuntimeFrameworkVersion>2.0</RuntimeFrameworkVersion>
-    -->
   </PropertyGroup>
 
   <PropertyGroup>
@@ -68,7 +65,7 @@
   </ItemGroup>
 
   <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
-    <!-- <Exec Command="gulp" /> -->
+    <!-- <Exec Command="grunt" /> -->
   </Target>
 
 </Project>
