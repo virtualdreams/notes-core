@@ -5,8 +5,8 @@ create table note (
   content text not null,
   notebook varchar(50) default null,
   trash bool not null default false,
-  created timestamp,
-  modified timestamp 
+  created timestamptz not null,
+  modified timestamptz not null
 );
 
 -- tag table
@@ -24,8 +24,8 @@ create table "user" (
   displayname varchar(50) default null,
   role varchar(50) not null,
   enabled bool not null default false,
-  created timestamp not null,
-  modified timestamp not null,
+  created timestamptz not null,
+  modified timestamptz not null,
   version int not null default 0,
   items int not null default 10
 );
@@ -33,14 +33,14 @@ create table "user" (
 -- revision table
 create table revision (
   id serial primary key,
-  dt timestamp not null,
+  dt timestamptz not null,
   noteid int not null,
   title varchar(100) not null,
   content text not null,
   notebook varchar(50) default null,
   trash bool not null default false,
-  created timestamp not null,
-  modified timestamp not null
+  created timestamptz not null,
+  modified timestamptz not null
 );
 
 -- create indexes

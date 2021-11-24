@@ -23,6 +23,7 @@ namespace Notes.MappingProfiles
 				.ForMember(d => d.Modified, map => map.MapFrom(s => s.Modified.ToLocalTime()));
 
 			CreateMap<Revision, RevisionModel>()
+				.ForMember(d => d.Dt, map => map.MapFrom(s => s.Dt.ToLocalTime()))
 				.ForMember(d => d.Created, map => map.MapFrom(s => s.Created.ToLocalTime()))
 				.ForMember(d => d.Modified, map => map.MapFrom(s => s.Modified.ToLocalTime()));
 
