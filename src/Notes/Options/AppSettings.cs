@@ -9,7 +9,7 @@ namespace Notes.Options
 		/// <summary>
 		/// Path to keystore directory.
 		/// </summary>
-		public string KeyStore { get; set; } = "";
+		public string KeyStore { get; set; } = null;
 
 		/// <summary>
 		/// Site name.

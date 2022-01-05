@@ -50,7 +50,7 @@ namespace Notes
 
 			// get settings for local usage
 			var _settings = Configuration.GetSection(AppSettings.AppSettingsName).Get<AppSettings>();
-			var _provider = Configuration.GetSection("Database").GetValue<DatabaseProvider>("Provider");
+			var _provider = Configuration.GetSection("Database").GetValue<DatabaseProvider>("Provider", DatabaseProvider.PgSql);
 
 			// database context
 			services.AddDatabaseContext(Configuration.GetConnectionString("Default"), _provider);

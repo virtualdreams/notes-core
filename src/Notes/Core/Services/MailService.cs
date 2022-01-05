@@ -32,7 +32,7 @@ namespace Notes.Core.Services
 		public async Task SendResetPasswordMailAsync(string username, string mail, string origin, string token)
 		{
 			var message = new MimeMessage();
-			message.From.Add(MailboxAddress.Parse(MailSettings.From));
+			message.From.Add(MailboxAddress.Parse(MailSettings.MailFrom));
 			message.To.Add(MailboxAddress.Parse(mail));
 			message.Subject = $"[{AppSettings.SiteName}] - Reset Password";
 			message.Body = new TextPart("plain")
@@ -64,22 +64,28 @@ The {AppSettings.SiteName} Team
 			if (MailSettings.Enabled)
 			{
 				Log.LogInformation($"Send mail...");
-				// send e-mail
 				using (var client = new SmtpClient())
 				{
 					// accept all SSL certificates (in case the server supports STARTTLS)
-					if (MailSettings.SkipVerify)
+					if (MailSettings.DisableCertificateValidation)
+					{
+						Log.LogInformation($"Verify certificate disabled.");
 						client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+					}
 
 					// connect to given host and port
-					client.Connect(MailSettings.Server, MailSettings.Port, false);
+					client.Connect(MailSettings.Host, MailSettings.Port);
 
 					// disable authentication if username or password is empty
-					if (!String.IsNullOrEmpty(MailSettings.Username) && !String.IsNullOrEmpty(MailSettings.Passwd))
-						client.Authenticate(MailSettings.Username, MailSettings.Passwd);
+					if (!String.IsNullOrEmpty(MailSettings.Username) && !String.IsNullOrEmpty(MailSettings.Password))
+					{
+						Log.LogInformation($"Set authentication credentials.");
+						client.Authenticate(MailSettings.Username, MailSettings.Password);
+					}
 
 					await client.SendAsync(message);
 					await client.DisconnectAsync(true);
+					Log.LogInformation($"Mail sent.");
 				}
 			}
 			else

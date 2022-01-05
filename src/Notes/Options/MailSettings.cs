@@ -7,12 +7,12 @@ namespace Notes.Options
 		/// <summary>
 		/// Enable sending emails.
 		/// </summary>
-		public bool Enabled { get; set; }
+		public bool Enabled { get; set; } = false;
 
 		/// <summary>
 		/// Smtp server.
 		/// </summary>
-		public string Server { get; set; } = "localhost";
+		public string Host { get; set; } = "localhost";
 
 		/// <summary>
 		/// Smtp port.
@@ -22,21 +22,21 @@ namespace Notes.Options
 		/// <summary>
 		/// Smtp login username.
 		/// </summary>
-		public string Username { get; set; }
+		public string Username { get; set; } = null;
 
 		/// <summary>
 		/// Smtp login password.
 		/// </summary>
-		public string Passwd { get; set; }
+		public string Password { get; set; } = null;
 
 		/// <summary>
 		/// Smtp from mail.
 		/// </summary>
-		public string From { get; set; } = "admin@localhost";
+		public string MailFrom { get; set; } = "admin@localhost";
 
 		/// <summary>
 		/// Skip verify SSL certificates.
 		/// </summary>
-		public bool SkipVerify { get; set; }
+		public bool DisableCertificateValidation { get; set; } = false;
 	}
 }

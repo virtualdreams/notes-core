@@ -153,7 +153,7 @@ PosgreSQL connection string.
 **Section: Database**
 
 * **Provider**:  
-Set database provider. Default: `MySql`. Values: `MySql`, `PgSql`.
+Set database provider. Default: `PgSql`. Values: `MySql`, `PgSql`.
 
 **Section: FeatureManagement**
 
@@ -163,26 +163,26 @@ Enable ModelState filter when loglevel is set to Debug. Default: `false`.
 **Section: Settings**
 
 * **KeyStore**:  
-Directory to store encryption key files (leave empty to use in-memory).
+Directory to store encryption key files (leave empty to use in-memory). Default: `null`.
 * **SiteName**:  
-Site name. Default: `Notes!`.
+Site name. Default: `"Notes!"`.
 * **PageSize**:  
 Items per page to display. Default `10`.
 
 **Section: Mail**
 * **Enabled**:  
 Enable sending mails. Default: `false`.
-* **Server**:  
-Mail server. Default: `localhost`.
+* **Host**:  
+Mail host. Default: `"localhost"`.
 * **Port**:  
 Smtp port. Default `25`.
-* **From**:  
-From mail.
+* **MailFrom**:  
+Mail From. Default: `"admin@localhost"`.
 * **Username**:  
-Mail username (optional). Default: `admin@localhost`.
-* **Passwd**:  
-Mail password (optional).
-* **SkipVerify**:  
+Mail username (optional). Default: `null`.
+* **Password**:  
+Mail password (optional). Default: `null`.
+* **DisableCertificateValidation**:  
 Verify SSL certificates. Default: `false`.
 
 ## Logging
