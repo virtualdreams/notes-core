@@ -1,6 +1,6 @@
 # Notes!
 
-Notes! is an ASP.NET Core/MariaDB based webapp to create and manage text notes.
+Notes! is an ASP.NET Core based webapp to create and manage text notes.
 
 ## Features
 
@@ -10,8 +10,8 @@ Notes! is an ASP.NET Core/MariaDB based webapp to create and manage text notes.
 
 ## Technology
 
-* [.NET 5.0](https://dotnet.microsoft.com/)
-* [ASP.NET Core 5.0](https://dotnet.microsoft.com/)
+* [.NET 6.0](https://dotnet.microsoft.com/)
+* [ASP.NET Core 6.0](https://dotnet.microsoft.com/)
 * [MariaDB](https://mariadb.org/)
 * [PostgreSQL](https://www.postgresql.org/)
 * [bootstrap 4](http://getbootstrap.com/)

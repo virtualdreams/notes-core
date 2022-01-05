@@ -6,13 +6,11 @@ You need the latest **.NET**, **ASP.NET Core** and **MariaDB** or **PostgreSQL**
 
 ## Database
 
-**MariaDB**
+### MariaDB
 
 Create user.
 
 ```sql
-# mysql
-
 create user 'notes'@'localhost' identified by 'password';
 grant all on notes.* to 'notes'@'localhost';
 ```
@@ -20,8 +18,6 @@ grant all on notes.* to 'notes'@'localhost';
 Create database.
 
 ```sql
-# mysql
-
 create database notes;
 ```
 
@@ -31,29 +27,23 @@ Import schema.
 mysql -u notes -p -D notes < contrib/database-create-mysql.sql
 ```
 
-**PostgreSQL**
+### PostgreSQL
 
 Create user.
 
 ```sql
-# su - postgres -c psql
-
 create user notes with password 'password';
 ```
 
 Create database.
 
 ```sql
-# su - postgres -c psql
-
 create database notes with owner notes encoding 'UTF8' lc_collate = 'en_US.UTF-8' lc_ctype = 'en_US.UTF-8' template template0;
 ```
 
-Remove create for public.
+Remove create rights for public.
 
 ```sql
-# su - postgres -c psql
-
 \c notes
 
 revoke create on schema public from public; 
@@ -68,30 +58,28 @@ psql -U notes -h localhost -d notes < contrib/database-create-psql.sql
 
 ## Build
 
-**Build and run local**
+### Build and run
 
 ```sh
-dotnet restore
-dotnet build
-dotnet run --project src/Notes
+dotnet run --project src/Notes/Notes.csproj
 ```
 
-**Build and publish**
+### Build and publish
 
 Run in PowerShell or bash:
 
 ```sh
 dotnet publish -c Release /p:Version=1.0-$(git rev-parse --short HEAD) -o publish src/Notes
-dotnet /path/to/Notes.dll
+dotnet publish/Notes.dll
 ```
 
-*or*
+**or**
 
 use `make`.
 
 ```sh
 make publish
-dotnet /publish/Notes.dll
+dotnet publish/Notes.dll
 ```
 
 ## Configuration
@@ -107,6 +95,7 @@ Configure application in `appsettings.json` and copy this file to publish direct
             },
             "Https": {
                 "Url": "https://127.0.0.1:5001",
+                "SslProtocols": ["Tls12", "Tls13"],
                 "Certificate": {
                     "Path": "/foo/bar/cert.p12|pfx",
                     "Password": "cert_password"
