@@ -173,6 +173,8 @@ Mail username (optional). Default: `null`.
 Mail password (optional). Default: `null`.
 * **DisableCertificateValidation**:  
 Verify SSL certificates. Default: `false`.
+* **DisableCheckCertificateRevocation**:  
+Check certificate revocation. Default: `false`.
 
 ## Logging
 

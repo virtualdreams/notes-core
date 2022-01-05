@@ -38,5 +38,10 @@ namespace Notes.Options
 		/// Skip verify SSL certificates.
 		/// </summary>
 		public bool DisableCertificateValidation { get; set; } = false;
+
+		/// <summary>
+		/// Disable check certificate revocation.
+		/// </summary>
+		public bool DisableCheckCertificateRevocation { get; set; } = false;
 	}
 }

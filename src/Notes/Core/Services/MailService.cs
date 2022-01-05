@@ -73,6 +73,13 @@ The {AppSettings.SiteName} Team
 						client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 					}
 
+					// disable check certificate revocation 
+					if (MailSettings.DisableCheckCertificateRevocation)
+					{
+						Log.LogInformation($"Check certificate revocation disabled.");
+						client.CheckCertificateRevocation = false;
+					}
+
 					// connect to given host and port
 					client.Connect(MailSettings.Host, MailSettings.Port);
 
