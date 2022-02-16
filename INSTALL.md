@@ -104,10 +104,10 @@ Configure application in `appsettings.json` and copy this file to publish direct
         }
     },
     "ConnectionStrings": {
-        "Default": "Server=localhost;Database=notes;User=notes;Password=notes"
+        "Default": "Host=localhost;Database=notes;Username=notes;Password=notes"
     },
     "Database": {
-        "Provider": "MySql"
+        "Provider": "PgSql"
     },
     "FeatureManagement": {
         "ModelStateDebug": false
