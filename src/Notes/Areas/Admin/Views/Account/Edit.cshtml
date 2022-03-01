@@ -8,15 +8,15 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="pb-2 mt-4 mb-2 border-bottom">
-			<div class="btn-toolbar pull-right">
+			<div class="btn-toolbar float-end">
 				@if(Model.User.Id != 0) {
 				<div class="btn-group">
-					<button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#delAccount"><i class="fa fa-fw fa-user"></i> Delete</button>
+					<button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#delAccount"><i class="fa-solid fa-fw fa-user"></i> Delete</button>
 				</div>
 				}
 			</div>
 			<h1>
-				<i class="fa fa-fw fa-user"></i> 
+				<i class="fa-solid fa-fw fa-user"></i> 
 				@if(Model.User.Id != 0) {
 				@:Edit user
 				} else {
