@@ -16,7 +16,8 @@
 			"stopAtEntry": false,
 			"internalConsoleOptions": "openOnSessionStart",
 			"env": {
-				"ASPNETCORE_ENVIRONMENT": "Development"
+				"ASPNETCORE_ENVIRONMENT": "Development",
+				"ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation"
 			},
 			"sourceFileMap": {
 				"/Views": "${workspaceFolder}/src/Notes/Views"
