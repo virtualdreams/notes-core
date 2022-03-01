@@ -37,10 +37,17 @@ notes = (function ($) {
 			return false;
 		}
 	});
+	var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+	var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+		return new bootstrap.Popover(popoverTriggerEl)
+	})
+	//$('[data-toggle="popover"]').popover();
 
-	$('[data-toggle="popover"]').popover();
-
-	$('[data-toggle="tooltip"]').tooltip({ boundary: 'window' })
+	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new bootstrap.Tooltip(tooltipTriggerEl)
+	})
+	//$('[data-toggle="tooltip"]').tooltip({ boundary: 'window' })
 
 	$('[data-href]').click(function () {
 		var href = $(this).data('href');

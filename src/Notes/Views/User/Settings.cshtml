@@ -9,7 +9,7 @@
 		<div class="pb-2 mt-4 mb-2 border-bottom">
 			<div class="btn-toolbar pull-right">
 				<div class="btn-group">
-					<button type="button" class="btn btn-primary" data-href="@Url.Action("security", "user")"><i class="fa fa-fw fa-key"></i> Change Password</button>
+					<button class="btn btn-primary" type="button" data-href="@Url.Action("security", "user")"><i class="fa fa-fw fa-key"></i> Change Password</button>
 	 			</div>
 			</div>
 			<h1><i class="fa fa-fw fa-sliders"></i> Settings</h1>
@@ -22,16 +22,16 @@
 		<div class="row">
 			<div class="col-lg-4">
 				<form role="form" action="@Url.Action("settings", "user")" method="post" enctype="multipart/form-data" id="settings-form" >
-					<div class="form-group">
-						<label for="displayname">Display Name</label>
-						<input type="text" class="form-control" placeholder="Display Name" name="displayname" id="displayname" value="@Model.Settings.DisplayName" validation-for="displayname" />
+					<div class="mb-3">
+						<label class="form-label" for="displayname">Display Name</label>
+						<input class="form-control" type="text" name="displayname" id="displayname" placeholder="Display Name" value="@Model.Settings.DisplayName" validation-for="displayname" />
 					</div>
-					<div class="form-group">
-						<label for="items">Items per page</label>
-						<input type="number" class="form-control" name="items" id="items" value="@Model.Settings.Items" validation-for="items" />
+					<div class="mb-3">
+						<label class="form-label" for="items">Items per page</label>
+						<input class="form-control" type="number" name="items" id="items" placeholder="Items per page" value="@Model.Settings.Items" validation-for="items" />
 					</div>
-					<div class="form-group">
-						<button type="submit" class="btn btn-primary">Save</button>
+					<div class="mb-3">
+						<button class="btn btn-primary" type="submit">Save</button>
 					</div>
 				</form>
 			</div>

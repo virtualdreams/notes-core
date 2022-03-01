@@ -35,16 +35,16 @@
 							<tr>
 								<td><input type="checkbox" name="id" value="@note.Id" /></td>
 								<td><a href="@Url.RouteUrl("view", new { id = note.Id, slug = note.Title.ToSlug() })">@note.Title</a></td>
-								<td><span data-toggle="tooltip" data-placement="top" title="@await Component.InvokeAsync("FormatDate", new { date = note.Modified })" class="pull-right text-muted small"><em>@note.Modified.ToAge()</em></span></td>
+								<td><span data-bs-toggle="tooltip" data-bs-placement="top" title="@await Component.InvokeAsync("FormatDate", new { date = note.Modified })" class="pull-right text-muted small"><em>@note.Modified.ToAge()</em></span></td>
 							</tr>
 							}
 						</tbody>
 					</table>
 				</div>
 				@if((await AuthorizationService.AuthorizeAsync(User, "AdministratorOnly")).Succeeded) {
-				<button type="submit" class="btn btn-danger"><i class="fa fa-fw fa-check-square-o"></i> Delete</button>
+				<button class="btn btn-danger" type="submit"><i class="fa fa-fw fa-check-square-o"></i> Delete</button>
 				}
-				<button type="submit" formaction="@Url.Action("restore", "note")" class="btn btn-success"><i class="fa fa-fw fa-check-square-o"></i> Restore</button>
+				<button class="btn btn-success" type="submit" formaction="@Url.Action("restore", "note")"><i class="fa fa-fw fa-check-square-o"></i> Restore</button>
 			</form>
 		} else {
 			@:The trash is empty.

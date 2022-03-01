@@ -26,21 +26,21 @@
 				}
 
 				<form role="form" action="@Url.Action("security", "user")" method="post" enctype="multipart/form-data" id="security-form" >
-					<div class="form-group">
-						<label for="oldpassword">Old Password</label>
-						<input type="password" class="form-control" placeholder="Old password" name="oldpassword" id="oldpassword" value="" validation-for="oldpassword" />
+					<div class="mb-3">
+						<label class="form-label" for="oldpassword">Old Password</label>
+						<input class="form-control" type="password" name="oldpassword" id="oldpassword" placeholder="Old password" value="" validation-for="oldpassword" />
 					</div>
-					<div class="form-group">
-						<label for="newpassword">New Password</label>
-						<input type="password" class="form-control" placeholder="New password" name="newpassword" id="newpassword" value="" validation-for="newpassword" />
+					<div class="mb-3">
+						<label class="form-label" for="newpassword">New Password</label>
+						<input class="form-control" type="password" name="newpassword" id="newpassword" placeholder="New password" value="" validation-for="newpassword" />
 					</div>
-					<div class="form-group">
-						<label for="confirmpassword">Confirm new password</label>
-						<input type="password" class="form-control" placeholder="Confirm password" name="confirmpassword" id="confirmpassword" value="" validation-for="confirmpassword" />
+					<div class="mb-3">
+						<label class="form-label" for="confirmpassword">Confirm new password</label>
+						<input class="form-control" type="password" name="confirmpassword" id="confirmpassword" placeholder="Confirm password" value="" validation-for="confirmpassword" />
 					</div>
-					<div class="form-group">
-						<button type="submit" class="btn btn-primary">Change password</button>
-						<button type="button" class="btn btn-primary" data-href="@Url.Action("settings", "user", new { area = String.Empty })">Cancel</button>
+					<div class="mb-3">
+						<button class="btn btn-primary" type="submit">Change password</button>
+						<button class="btn btn-primary" type="button" data-href="@Url.Action("settings", "user", new { area = String.Empty })">Cancel</button>
 					</div>
 				</form>
 			</div>

@@ -33,15 +33,15 @@
 			</div>
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="form-group">
-						<label for="title">Title</label>
+					<div class="mb-3">
+						<label class="form-label" for="title">Title</label>
 						<input class="form-control" name="title" id="title" placeholder="Title your note" value="@Model.Note.Title" validation-for="title" />
 					</div>
-					<div class="form-group">
-						<label for="content">Content</label>
+					<div class="mb-3">
+						<label class="form-label" for="content">Content</label>
 						<div class="editor-toolbar">
-							<button type="button" class="btn btn-default" id="preview"><i class="fa fa-fw fa-eye"></i> Preview</button>
-							<button type="button" class="btn btn-default" id="help"><i class="fa fa-fw fa-question-circle"></i></button>
+							<button class="btn btn-default" type="button" id="preview"><i class="fa fa-fw fa-eye"></i> Preview</button>
+							<button class="btn btn-default" type="button" id="help"><i class="fa fa-fw fa-question-circle"></i></button>
 						</div>
 						<div class="editor-help" id="editor-help">
 							@await Html.PartialAsync("_PartialHelp")
@@ -61,26 +61,26 @@
 			</div>
 			<div class="row">
 				<div class="col-lg-6">
-					<div class="form-group">
-						<label for="notebook">Notebook</label>
-						<input class="form-control" name="notebook" id="notebook" placeholder="Notebook" value="@Model.Note.Notebook" validation-for="notebook" />
+					<div class="mb-3">
+						<label class="form-label" for="notebook">Notebook</label>
+						<input class="form-control" type="text" name="notebook" id="notebook" placeholder="Notebook" value="@Model.Note.Notebook" validation-for="notebook" />
 					</div>
 				</div>
 				<div class="col-lg-6">
-					<div class="form-group">
-						<label for="tags">Tags</label>
-						<input class="form-control" name="tags" id="tags" placeholder="Separate with spaces" value="@Model.Note.TagsString" validation-for="tags" />
+					<div class="mb-3">
+						<label class="form-label" for="tags">Tags</label>
+						<input class="form-control" type="text" name="tags" id="tags" placeholder="Separate with spaces" value="@Model.Note.TagsString" validation-for="tags" />
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="form-group">
+					<div class="mb-3">
 						<input type="hidden" name="id" id="id" value="@Model.Note.Id" />
-						<button type="submit" class="btn btn-primary">Save</button>
-						<button type="button" class="btn btn-primary" id="saveContinue">Save and continue</button>
+						<button class="btn btn-primary" type="submit">Save</button>
+						<button class="btn btn-primary" type="button" id="saveContinue">Save and continue</button>
 						@if(Model.Note.Id != 0) {
-						<button type="button" class="btn btn-primary" data-href="@Url.RouteUrl("view", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })">Cancel</button>
+						<button class="btn btn-primary" type="button" data-href="@Url.RouteUrl("view", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })">Cancel</button>
 						}
 					</div>
 				</div>
@@ -90,7 +90,7 @@
 </div>
 
 @section script {
-<script>
+<script type="text/javascript">
 	tabOverride
 		.tabSize(4)
 		.set(document.getElementsByTagName('textarea'));
