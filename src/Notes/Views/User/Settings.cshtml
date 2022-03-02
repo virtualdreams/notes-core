@@ -1,40 +1,22 @@
 @model Notes.Models.UserSettingsEditContainer
 
 @{
+	Layout = "~/Views/Shared/_LayoutSettings.cshtml";
 	ViewBag.Title = "Settings - ";
+	ViewBag.SubTitle = "Settings";
+	ViewBag.SubIcon = "fa-gear";
 }
 
-<div class="row">
-	<div class="col-lg-12">
-		<div class="pb-2 mt-4 mb-2 border-bottom">
-			<div class="btn-toolbar float-end">
-				<div class="btn-group">
-					<button class="btn btn-primary" type="button" data-href="@Url.Action("security", "user")"><i class="fa-solid fa-fw fa-shield"></i> Change Password</button>
-	 			</div>
-			</div>
-			<h1><i class="fa-solid fa-fw fa-sliders"></i> Settings</h1>
-		</div>
+<form role="form" action="@Url.Action("settings", "user")" method="post" enctype="multipart/form-data" id="settings-form" >
+	<div class="mb-3">
+		<label class="form-label" for="displayname">Display Name</label>
+		<input class="form-control" type="text" name="displayname" id="displayname" placeholder="Display Name" value="@Model.Settings.DisplayName" validation-for="displayname" />
 	</div>
-</div>
-
-<div class="row">
-	<div class="col-lg-12">
-		<div class="row">
-			<div class="col-lg-4">
-				<form role="form" action="@Url.Action("settings", "user")" method="post" enctype="multipart/form-data" id="settings-form" >
-					<div class="mb-3">
-						<label class="form-label" for="displayname">Display Name</label>
-						<input class="form-control" type="text" name="displayname" id="displayname" placeholder="Display Name" value="@Model.Settings.DisplayName" validation-for="displayname" />
-					</div>
-					<div class="mb-3">
-						<label class="form-label" for="items">Items per page</label>
-						<input class="form-control" type="number" name="items" id="items" placeholder="Items per page" value="@Model.Settings.Items" validation-for="items" />
-					</div>
-					<div class="mb-3">
-						<button class="btn btn-primary" type="submit">Save</button>
-					</div>
-				</form>
-			</div>
-		</div>
+	<div class="mb-3">
+		<label class="form-label" for="items">Items per page</label>
+		<input class="form-control" type="number" name="items" id="items" placeholder="Items per page" value="@Model.Settings.Items" validation-for="items" />
 	</div>
-</div>
+	<div class="mb-3">
+		<button class="btn btn-primary" type="submit">Save</button>
+	</div>
+</form>

@@ -1,49 +1,32 @@
 @using Notes.Extensions;
 
 @{
-	ViewBag.Title = "Change Password - ";
+	Layout = "~/Views/Shared/_LayoutSettings.cshtml";
+	ViewBag.Title = "Password - ";
+	ViewBag.SubTitle = "Password";
+	ViewBag.SubIcon = "fa-shield";
 }
 
-<div class="row">
-	<div class="col-lg-12">
-		<div class="pb-2 mt-4 mb-2 border-bottom">
-			<h1>
-				<i class="fa-solid fa-fw fa-shield"></i> Change Password
-			</h1>
-		</div>
+@if(Html.HasError("error")) {
+	<div class="alert alert-danger">
+		@Html.ErrorMessage("error")
 	</div>
-</div>
+}
 
-<div class="row">
-	<div class="col-lg-12">
-		<div class="row">
-			<div class="col-lg-4">
-
-				@if(Html.HasError("error")) {
-					<div class="alert alert-danger">
-						@Html.ErrorMessage("error")
-					</div>
-				}
-
-				<form role="form" action="@Url.Action("security", "user")" method="post" enctype="multipart/form-data" id="security-form" >
-					<div class="mb-3">
-						<label class="form-label" for="oldpassword">Old Password</label>
-						<input class="form-control" type="password" name="oldpassword" id="oldpassword" placeholder="Old password" value="" validation-for="oldpassword" />
-					</div>
-					<div class="mb-3">
-						<label class="form-label" for="newpassword">New Password</label>
-						<input class="form-control" type="password" name="newpassword" id="newpassword" placeholder="New password" value="" validation-for="newpassword" />
-					</div>
-					<div class="mb-3">
-						<label class="form-label" for="confirmpassword">Confirm new password</label>
-						<input class="form-control" type="password" name="confirmpassword" id="confirmpassword" placeholder="Confirm password" value="" validation-for="confirmpassword" />
-					</div>
-					<div class="mb-3">
-						<button class="btn btn-primary" type="submit">Change password</button>
-						<button class="btn btn-primary" type="button" data-href="@Url.Action("settings", "user", new { area = String.Empty })">Cancel</button>
-					</div>
-				</form>
-			</div>
-		</div>
+<form role="form" action="@Url.Action("security", "user")" method="post" enctype="multipart/form-data" id="security-form" >
+	<div class="mb-3">
+		<label class="form-label" for="oldpassword">Old Password</label>
+		<input class="form-control" type="password" name="oldpassword" id="oldpassword" placeholder="Old password" value="" validation-for="oldpassword" />
 	</div>
-</div>
+	<div class="mb-3">
+		<label class="form-label" for="newpassword">New Password</label>
+		<input class="form-control" type="password" name="newpassword" id="newpassword" placeholder="New password" value="" validation-for="newpassword" />
+	</div>
+	<div class="mb-3">
+		<label class="form-label" for="confirmpassword">Confirm new password</label>
+		<input class="form-control" type="password" name="confirmpassword" id="confirmpassword" placeholder="Confirm password" value="" validation-for="confirmpassword" />
+	</div>
+	<div class="mb-3">
+		<button class="btn btn-primary" type="submit">Change password</button>
+	</div>
+</form>
