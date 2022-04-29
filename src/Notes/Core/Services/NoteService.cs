@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Notes.Core.Data;
+using Notes.Core.Extensions;
 using Notes.Core.Interfaces;
 using Notes.Core.Models;
 using System.Collections.Generic;
@@ -33,14 +34,8 @@ namespace Notes.Core.Services
 
 			var _query = Context.Note
 				.AsNoTracking()
-				.Where(f => f.Trash == false);
-
-			if (next > 0)
-			{
-				_query = _query.Where(f => f.Id < next);
-			}
-
-			_query = _query
+				.Where(f => f.Trash == false)
+				.WhereIf(next > 0, f => f.Id < next)
 				.OrderByDescending(o => o.Id)
 				.Take(limit);
 
@@ -62,17 +57,10 @@ namespace Notes.Core.Services
 
 			var _query = Context.Note
 				.AsNoTracking()
-				.Where(f => f.Notebook == notebook && f.Trash == false);
-
-			if (next > 0)
-			{
-				_query = _query.Where(f => f.Id < next);
-			}
-
-			_query = _query
+				.Where(f => f.Notebook == notebook && f.Trash == false)
+				.WhereIf(next > 0, f => f.Id < next)
 				.OrderByDescending(o => o.Id)
 				.Take(limit);
-
 
 			return await _query.ToListAsync();
 		}
@@ -92,23 +80,12 @@ namespace Notes.Core.Services
 
 			var _query = Context.Note
 				.AsNoTracking()
-				.AsQueryable();
-
-			if (!String.IsNullOrEmpty(tag))
-			{
-				_query = _query.Where(f => f.Trash == false && f.Tags.Any(a => a.Name == tag));
-			}
-			else
-			{
-				_query = _query.Where(f => f.Trash == false && !f.Tags.Any());
-			}
-
-			if (next > 0)
-			{
-				_query = _query.Where(f => f.Id < next);
-			}
-
-			_query = _query
+				.AsQueryable()
+				.WhereIfElse(
+					!String.IsNullOrEmpty(tag),
+					f => f.Trash == false && f.Tags.Any(a => a.Name == tag),
+					f => f.Trash == false && !f.Tags.Any())
+				.WhereIf(next > 0, f => f.Id < next)
 				.OrderByDescending(o => o.Id)
 				.Take(limit);
 
@@ -127,14 +104,8 @@ namespace Notes.Core.Services
 
 			var _query = Context.Note
 				.AsNoTracking()
-				.Where(f => f.Trash == true);
-
-			if (next > 0)
-			{
-				_query = _query.Where(f => f.Id < next);
-			}
-
-			_query = _query
+				.Where(f => f.Trash == true)
+				.WhereIf(next > 0, f => f.Id < next)
 				.OrderByDescending(o => o.Id)
 				.Take(limit);
 

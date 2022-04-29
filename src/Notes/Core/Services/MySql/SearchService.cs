@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Notes.Core.Data;
+using Notes.Core.Extensions;
 using Notes.Core.Interfaces;
 using Notes.Core.Models;
 using System.Collections.Generic;
@@ -47,15 +48,8 @@ namespace Notes.Core.Services.MySql
 						EF.Functions.Match(f.Notebook, term, MySqlMatchSearchMode.NaturalLanguage) ||
 						f.Tags.Any(a => EF.Functions.Match(a.Name, term, MySqlMatchSearchMode.NaturalLanguage))
 					)
-				);
-
-			if (next > 0)
-			{
-				_query = _query
-					.Where(f => f.Id < next);
-			}
-
-			_query = _query
+				)
+				.WhereIf(next > 0, f => f.Id < next)
 				.OrderByDescending(o => o.Id)
 				.Take(limit);
 
