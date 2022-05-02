@@ -3,8 +3,6 @@
 @{
 	Layout = "~/Views/Shared/_LayoutSettings.cshtml";
 	ViewBag.Title = "Password - ";
-	ViewBag.SubTitle = "Password";
-	ViewBag.SubIcon = "fa-shield";
 }
 
 @if(Html.HasError("error")) {
@@ -13,20 +11,25 @@
 	</div>
 }
 
-<form role="form" action="@Url.Action("security", "user")" method="post" enctype="multipart/form-data" id="security-form" >
-	<div class="mb-3">
-		<label class="form-label" for="oldpassword">Old Password</label>
-		<input class="form-control" type="password" name="oldpassword" id="oldpassword" placeholder="Old password" value="" validation-for="oldpassword" />
+<div class="row">
+	<div class="col mb-4">
+		<h3>Change Password</h3>
+		<form role="form" action="@Url.Action("security", "user")" method="post" enctype="multipart/form-data" id="security-form" >
+			<div class="mb-3">
+				<label class="form-label" for="oldpassword">Old Password</label>
+				<input class="form-control" type="password" name="oldpassword" id="oldpassword" placeholder="Old password" value="" validation-for="oldpassword" />
+			</div>
+			<div class="mb-3">
+				<label class="form-label" for="newpassword">New Password</label>
+				<input class="form-control" type="password" name="newpassword" id="newpassword" placeholder="New password" value="" validation-for="newpassword" />
+			</div>
+			<div class="mb-3">
+				<label class="form-label" for="confirmpassword">Confirm new password</label>
+				<input class="form-control" type="password" name="confirmpassword" id="confirmpassword" placeholder="Confirm password" value="" validation-for="confirmpassword" />
+			</div>
+			<div class="mb-3">
+				<button class="btn btn-primary" type="submit">Change password</button>
+			</div>
+		</form>
 	</div>
-	<div class="mb-3">
-		<label class="form-label" for="newpassword">New Password</label>
-		<input class="form-control" type="password" name="newpassword" id="newpassword" placeholder="New password" value="" validation-for="newpassword" />
-	</div>
-	<div class="mb-3">
-		<label class="form-label" for="confirmpassword">Confirm new password</label>
-		<input class="form-control" type="password" name="confirmpassword" id="confirmpassword" placeholder="Confirm password" value="" validation-for="confirmpassword" />
-	</div>
-	<div class="mb-3">
-		<button class="btn btn-primary" type="submit">Change password</button>
-	</div>
-</form>
+</div>

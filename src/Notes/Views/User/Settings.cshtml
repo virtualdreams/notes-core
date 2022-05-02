@@ -3,20 +3,23 @@
 @{
 	Layout = "~/Views/Shared/_LayoutSettings.cshtml";
 	ViewBag.Title = "Settings - ";
-	ViewBag.SubTitle = "Settings";
-	ViewBag.SubIcon = "fa-gear";
 }
 
-<form role="form" action="@Url.Action("settings", "user")" method="post" enctype="multipart/form-data" id="settings-form" >
-	<div class="mb-3">
-		<label class="form-label" for="displayname">Display Name</label>
-		<input class="form-control" type="text" name="displayname" id="displayname" placeholder="Display Name" value="@Model.Settings.DisplayName" validation-for="displayname" />
+<div class="row">
+	<div class="col mb-4">
+		<h3>Account</h3>
+		<form role="form" action="@Url.Action("settings", "user")" method="post" enctype="multipart/form-data" id="settings-form" >
+			<div class="mb-3">
+				<label class="form-label" for="displayname">Display Name</label>
+				<input class="form-control" type="text" name="displayname" id="displayname" placeholder="Display Name" value="@Model.Settings.DisplayName" validation-for="displayname" />
+			</div>
+			<div class="mb-3">
+				<label class="form-label" for="items">Items per page</label>
+				<input class="form-control" type="number" name="items" id="items" placeholder="Items per page" value="@Model.Settings.Items" validation-for="items" />
+			</div>
+			<div class="mb-3">
+				<button class="btn btn-primary" type="submit">Save</button>
+			</div>
+		</form>
 	</div>
-	<div class="mb-3">
-		<label class="form-label" for="items">Items per page</label>
-		<input class="form-control" type="number" name="items" id="items" placeholder="Items per page" value="@Model.Settings.Items" validation-for="items" />
-	</div>
-	<div class="mb-3">
-		<button class="btn btn-primary" type="submit">Save</button>
-	</div>
-</form>
+</div>
