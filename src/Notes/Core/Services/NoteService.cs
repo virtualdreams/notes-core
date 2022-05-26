@@ -34,6 +34,7 @@ namespace Notes.Core.Services
 
 			var _query = Context.Note
 				.AsNoTracking()
+				.Include(i => i.Tags)
 				.Where(f => f.Trash == false)
 				.WhereIf(next > 0, f => f.Id < next)
 				.OrderByDescending(o => o.Id)
@@ -57,6 +58,7 @@ namespace Notes.Core.Services
 
 			var _query = Context.Note
 				.AsNoTracking()
+				.Include(i => i.Tags)
 				.Where(f => f.Notebook == notebook && f.Trash == false)
 				.WhereIf(next > 0, f => f.Id < next)
 				.OrderByDescending(o => o.Id)
@@ -80,7 +82,7 @@ namespace Notes.Core.Services
 
 			var _query = Context.Note
 				.AsNoTracking()
-				.AsQueryable()
+				.Include(i => i.Tags)
 				.WhereIfElse(
 					!String.IsNullOrEmpty(tag),
 					f => f.Trash == false && f.Tags.Any(a => a.Name == tag),
@@ -104,6 +106,7 @@ namespace Notes.Core.Services
 
 			var _query = Context.Note
 				.AsNoTracking()
+				.Include(i => i.Tags)
 				.Where(f => f.Trash == true)
 				.WhereIf(next > 0, f => f.Id < next)
 				.OrderByDescending(o => o.Id)

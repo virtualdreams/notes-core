@@ -13,9 +13,16 @@
 			@foreach(var note in Model) {
 			<tr>
 				<td>
-					<a href="@Url.RouteUrl("view", new { id = note.Id, slug = note.Title.ToSlug() })">@note.Title</a>
+					<a class="text-secondary" href="@Url.RouteUrl("view", new { id = note.Id, slug = note.Title.ToSlug() })">
+						<h4>@note.Title</h4>
+						@if(!String.IsNullOrEmpty(note.Notebook)) {
+							<span class="badge bg-secondary"><i class="fa-solid fa-fw fa-book"></i> @note.Notebook</span>
+						}
+					</a>
 				</td>
-				<td><span data-bs-toggle="tooltip" data-bs-placement="top" title="@await Component.InvokeAsync("FormatDate", new { date = note.Modified })" class="float-end text-muted small"><em>@note.Modified.ToAge()</em></span></td>
+				<td>
+					<span data-bs-toggle="tooltip" data-bs-placement="top" title="@await Component.InvokeAsync("FormatDate", new { date = note.Modified })" class="float-end text-muted small"><em>@note.Modified.ToAge()</em></span>
+				</td>
 			</tr>
 			}
 		</tbody>
