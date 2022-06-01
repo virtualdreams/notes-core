@@ -13,7 +13,7 @@
 			@foreach(var note in Model) {
 			<tr>
 				<td>
-					<a class="text-secondary" href="@Url.RouteUrl("view", new { id = note.Id, slug = note.Title.ToSlug() })">
+					<a class="text-secondary d-block" href="@Url.RouteUrl("view", new { id = note.Id, slug = note.Title.ToSlug() })">
 						<h4>@note.Title</h4>
 						@if(!String.IsNullOrEmpty(note.Notebook)) {
 							<span class="badge bg-secondary"><i class="fa-solid fa-fw fa-book"></i> @note.Notebook</span>
