@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
 using Notes.Core.Interfaces;
 using System.Security.Claims;
@@ -36,6 +37,22 @@ namespace Notes.Events
 				context.RejectPrincipal();
 				await context.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 			}
+		}
+
+		public override async Task RedirectToLogin(RedirectContext<CookieAuthenticationOptions> context)
+		{
+			// get the original uri
+			var uri = context.RedirectUri;
+			UriHelper.FromAbsolute(uri, out var scheme, out var host, out var path, out var query, out var fragment);
+
+			// build absolute uri or relative uri
+			//uri = UriHelper.BuildAbsolute(scheme, host, path);
+			uri = UriHelper.BuildRelative(path);
+
+			// redirect to the new uri
+			context.Response.Redirect(uri);
+
+			await Task.CompletedTask;
 		}
 	}
 }
