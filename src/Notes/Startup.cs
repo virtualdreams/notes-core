@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -82,12 +83,16 @@ namespace Notes
 			.AddNewtonsoftJson(options =>
 			{
 				options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-			})
-			.AddFluentValidation(options =>
-			{
-				options.RegisterValidatorsFromAssemblyContaining<Startup>();
-				options.DisableDataAnnotationsValidation = true;
 			});
+
+			// fluent validation
+			services.AddFluentValidationAutoValidation(options =>
+			{
+				options.DisableDataAnnotationsValidation = true;
+			})
+			.AddFluentValidationClientsideAdapters();
+
+			services.AddValidatorsFromAssemblyContaining<Startup>();
 
 			// add sessions
 			services.AddDistributedMemoryCache();
