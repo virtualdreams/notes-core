@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Notes.Core.Data;
@@ -23,6 +24,12 @@ namespace Notes.Extensions
 				}
 #if DEBUG
 				options.EnableSensitiveDataLogging(true);
+				options.ConfigureWarnings(w =>
+				{
+
+					w.Throw(RelationalEventId.MultipleCollectionIncludeWarning);
+
+				});
 #endif
 			},
 			ServiceLifetime.Scoped);
