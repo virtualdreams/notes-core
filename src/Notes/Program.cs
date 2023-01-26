@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
+using NLog;
 using System.IO;
 using System;
 
@@ -12,20 +13,21 @@ namespace Notes
 	{
 		public static void Main(string[] args)
 		{
-			var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
+			var _logger = LogManager.GetCurrentClassLogger();
 			try
 			{
-				logger.Info($"Application notes {ApplicationVersion.InfoVersion()} started.");
+				_logger.Info($"Application notes {ApplicationVersion.InfoVersion()} started.");
 				CreateHostBuilder(args).Build().Run();
 			}
 			catch (Exception e)
 			{
-				logger.Error(e, "Stopped program because of exception");
+				_logger.Error(e, "Stopped program because of exception");
 				throw;
 			}
 			finally
 			{
-				NLog.LogManager.Shutdown();
+				LogManager.Flush();
+				LogManager.Shutdown();
 			}
 		}
 
