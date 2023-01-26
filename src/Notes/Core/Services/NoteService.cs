@@ -15,11 +15,11 @@ namespace Notes.Core.Services
 	{
 		private readonly ILogger<NoteService> Log;
 
-		private readonly DataContext Context;
+		private readonly DatabaseContext Context;
 
 		public NoteService(
 			ILogger<NoteService> log,
-			DataContext context)
+			DatabaseContext context)
 		{
 			Log = log;
 			Context = context;

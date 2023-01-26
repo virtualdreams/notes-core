@@ -16,7 +16,7 @@ namespace Notes.Core.Services
 	{
 		private readonly ILogger<UserService> Log;
 
-		private readonly DataContext Context;
+		private readonly DatabaseContext Context;
 
 		private readonly IMailService MailService;
 
@@ -24,7 +24,7 @@ namespace Notes.Core.Services
 
 		public UserService(
 			ILogger<UserService> log,
-			DataContext context,
+			DatabaseContext context,
 			IMailService mail,
 			ITokenService token)
 		{

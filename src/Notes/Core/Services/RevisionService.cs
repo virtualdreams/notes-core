@@ -17,13 +17,13 @@ namespace Notes.Core.Services
 	{
 		private readonly ILogger<NoteService> Log;
 
-		private readonly DataContext Context;
+		private readonly DatabaseContext Context;
 
 		private readonly INoteService NoteService;
 
 		public RevisionService(
 			ILogger<NoteService> log,
-			DataContext context,
+			DatabaseContext context,
 			INoteService note)
 		{
 			Log = log;

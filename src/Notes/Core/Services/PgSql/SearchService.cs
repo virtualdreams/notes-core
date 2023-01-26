@@ -15,11 +15,11 @@ namespace Notes.Core.Services.PgSql
 	{
 		private readonly ILogger<SearchService> Log;
 
-		private readonly DataContext Context;
+		private readonly DatabaseContext Context;
 
 		public SearchService(
 			ILogger<SearchService> log,
-			DataContext context)
+			DatabaseContext context)
 		{
 			Log = log;
 			Context = context;
