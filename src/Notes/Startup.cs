@@ -58,8 +58,10 @@ namespace Notes
 
 			// dependency injection
 			services.AddAutoMapper();
-			services.AddNoteServices(_provider);
+
 			services.AddScoped<CustomCookieAuthenticationEvents>();
+
+			services.AddNoteServices(_provider);
 
 			// key ring
 			if (!String.IsNullOrEmpty(_settings.KeyStore))
