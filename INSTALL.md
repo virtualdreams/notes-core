@@ -109,7 +109,7 @@ Configure application in `appsettings.json` and copy this file to publish direct
     "Database": {
         "Provider": "PgSql"
     },
-    "FeatureManagement": {
+    "FeatureFlags": {
         "ModelStateDebug": false
     },
     "Settings": {
@@ -144,7 +144,7 @@ PosgreSQL connection string.
 * **Provider**:  
 Set database provider. Default: `PgSql`. Values: `MySql`, `PgSql`.
 
-**Section: FeatureManagement**
+**Section: FeatureFlags**
 
 * **ModelStateDebug**:  
 Enable ModelState filter when loglevel is set to Debug. Default: `false`.

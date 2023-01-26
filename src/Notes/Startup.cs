@@ -39,7 +39,7 @@ namespace Notes
 #endif
 
 			// features
-			services.AddFeatureManagement();
+			services.AddFeatureManagement(Configuration.GetSection("FeatureFlags"));
 
 			// add options to DI
 			services.AddOptions<AppSettings>()
