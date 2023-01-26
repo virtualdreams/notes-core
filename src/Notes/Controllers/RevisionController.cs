@@ -30,7 +30,7 @@ namespace Notes.Controllers
 		public RevisionController(
 			ILogger<RevisionController> log,
 			IMapper mapper,
-			IOptionsSnapshot<AppSettings> settings,
+			IOptionsSnapshot<AppSettings> appSettings,
 			IUserService user,
 			INoteService note,
 			IRevisionService revision)
@@ -38,7 +38,7 @@ namespace Notes.Controllers
 		{
 			Log = log;
 			Mapper = mapper;
-			AppSettings = settings.Value;
+			AppSettings = appSettings.Value;
 			UserService = user;
 			NoteService = note;
 			RevisionService = revision;

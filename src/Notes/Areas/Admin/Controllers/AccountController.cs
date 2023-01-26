@@ -21,20 +21,20 @@ namespace Notes.Areas.Admin.Controllers
 
 		private readonly IMapper Mapper;
 
-		private readonly AppSettings AppSetings;
+		private readonly AppSettings AppSettings;
 
 		private readonly IUserService UserService;
 
 		public AccountController(
 			ILogger<AccountController> log,
 			IMapper mapper,
-			IOptionsSnapshot<AppSettings> settings,
+			IOptionsSnapshot<AppSettings> appSettings,
 			IUserService user)
 			: base(user)
 		{
 			Log = log;
 			Mapper = mapper;
-			AppSetings = settings.Value;
+			AppSettings = appSettings.Value;
 			UserService = user;
 		}
 
@@ -90,7 +90,7 @@ namespace Notes.Areas.Admin.Controllers
 				{
 					if (model.Id == 0)
 					{
-						await UserService.CreateAsync(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled, AppSetings.PageSize);
+						await UserService.CreateAsync(model.Username, model.Password, model.DisplayName, model.Role, model.Enabled, AppSettings.PageSize);
 					}
 					else
 					{

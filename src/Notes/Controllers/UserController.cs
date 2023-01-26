@@ -30,13 +30,13 @@ namespace Notes.Controllers
 		public UserController(
 			ILogger<UserController> log,
 			IMapper mapper,
-			IOptionsSnapshot<AppSettings> settings,
+			IOptionsSnapshot<AppSettings> appSettings,
 			IUserService user)
 			: base(user)
 		{
 			Log = log;
 			Mapper = mapper;
-			AppSettings = settings.Value;
+			AppSettings = appSettings.Value;
 			UserService = user;
 		}
 

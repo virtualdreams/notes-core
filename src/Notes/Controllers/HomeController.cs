@@ -28,14 +28,14 @@ namespace Notes.Controllers
 		public HomeController(
 			ILogger<HomeController> log,
 			IMapper mapper,
-			IOptionsSnapshot<AppSettings> settings,
+			IOptionsSnapshot<AppSettings> appSettings,
 			IUserService user,
 			INoteService note)
 			: base(user)
 		{
 			Log = log;
 			Mapper = mapper;
-			AppSettings = settings.Value;
+			AppSettings = appSettings.Value;
 			UserService = user;
 			NoteService = note;
 		}

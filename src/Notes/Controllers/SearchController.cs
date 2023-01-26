@@ -29,14 +29,14 @@ namespace Notes.Controllers
 		public SearchController(
 			ILogger<SearchController> log,
 			IMapper mapper,
-			IOptionsSnapshot<AppSettings> settings,
+			IOptionsSnapshot<AppSettings> appSettings,
 			IUserService user,
 			ISearchService search)
 			: base(user)
 		{
 			Log = log;
 			Mapper = mapper;
-			AppSettings = settings.Value;
+			AppSettings = appSettings.Value;
 			UserService = user;
 			SearchService = search;
 		}

@@ -19,12 +19,12 @@ namespace Notes.Core.Services
 
 		public MailService(
 			ILogger<MailService> log,
-			IOptionsSnapshot<AppSettings> settings,
-			IOptionsSnapshot<MailSettings> mail)
+			IOptionsSnapshot<AppSettings> appSettings,
+			IOptionsSnapshot<MailSettings> mailSettings)
 		{
 			Log = log;
-			AppSettings = settings.Value;
-			MailSettings = mail.Value;
+			AppSettings = appSettings.Value;
+			MailSettings = mailSettings.Value;
 		}
 
 		/// <summary>
