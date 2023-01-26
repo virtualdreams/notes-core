@@ -4,16 +4,10 @@ using System;
 
 namespace Notes.ViewComponents
 {
-	public class FormatShortDateViewComponent : BaseViewComponent
+	public class FormatShortDateViewComponent : ViewComponent
 	{
-		private readonly IUserService UserService;
-
-		public FormatShortDateViewComponent(
-			IUserService user)
-			: base(user)
-		{
-			UserService = user;
-		}
+		public FormatShortDateViewComponent()
+		{ }
 
 		public IViewComponentResult Invoke(DateTime date)
 		{

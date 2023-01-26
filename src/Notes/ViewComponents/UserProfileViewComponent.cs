@@ -6,14 +6,10 @@ namespace Notes.ViewComponents
 {
 	public class DisplayNameViewComponent : BaseViewComponent
 	{
-		private readonly IUserService UserService;
-
 		public DisplayNameViewComponent(
 			IUserService user)
 			: base(user)
-		{
-			UserService = user;
-		}
+		{ }
 
 		public IViewComponentResult Invoke()
 		{

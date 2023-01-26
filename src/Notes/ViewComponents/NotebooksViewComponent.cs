@@ -7,23 +7,18 @@ using System.Threading.Tasks;
 
 namespace Notes.ViewComponents
 {
-	public class NotebooksViewComponent : BaseViewComponent
+	public class NotebooksViewComponent : ViewComponent
 	{
 		private IMapper Mapper;
 
 		private readonly INoteService NoteService;
 
-		private readonly IUserService UserService;
-
 		public NotebooksViewComponent(
 			IMapper mapper,
-			INoteService note,
-			IUserService user)
-			: base(user)
+			INoteService note)
 		{
 			Mapper = mapper;
 			NoteService = note;
-			UserService = user;
 		}
 
 		public async Task<IViewComponentResult> InvokeAsync()

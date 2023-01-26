@@ -3,16 +3,10 @@ using Notes.Core.Interfaces;
 
 namespace Notes.ViewComponents
 {
-	public class VersionViewComponent : BaseViewComponent
+	public class VersionViewComponent : ViewComponent
 	{
-		private readonly IUserService UserService;
-
-		public VersionViewComponent(
-			IUserService user)
-			: base(user)
-		{
-			UserService = user;
-		}
+		public VersionViewComponent()
+		{ }
 
 		public IViewComponentResult Invoke() => Content($"{ApplicationVersion.InfoVersion()}");
 	}
