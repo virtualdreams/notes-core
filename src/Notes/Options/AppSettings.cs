@@ -4,7 +4,7 @@ namespace Notes.Options
 {
 	public class AppSettings
 	{
-		public const string AppSettingsName = "Settings";
+		public const string SectionName = "Settings";
 
 		/// <summary>
 		/// Path to keystore directory.

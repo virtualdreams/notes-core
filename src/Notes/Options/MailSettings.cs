@@ -2,7 +2,7 @@ namespace Notes.Options
 {
 	public class MailSettings
 	{
-		public const string MailSettingsName = "Mail";
+		public const string SectionName = "Mail";
 
 		/// <summary>
 		/// Enable sending emails.

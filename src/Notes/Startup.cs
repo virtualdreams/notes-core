@@ -43,14 +43,14 @@ namespace Notes
 
 			// add options to DI
 			services.AddOptions<AppSettings>()
-				.Bind(Configuration.GetSection(AppSettings.AppSettingsName));
+				.Bind(Configuration.GetSection(AppSettings.SectionName));
 			//.ValidateDataAnnotations();
 			services.AddOptions<MailSettings>()
-				.Bind(Configuration.GetSection(MailSettings.MailSettingsName));
+				.Bind(Configuration.GetSection(MailSettings.SectionName));
 			//.ValidateDataAnnotations();
 
 			// get settings for local usage
-			var _settings = Configuration.GetSection(AppSettings.AppSettingsName).Get<AppSettings>();
+			var _settings = Configuration.GetSection(AppSettings.SectionName).Get<AppSettings>();
 			var _provider = Configuration.GetSection("Database").GetValue<DatabaseProvider>("Provider", DatabaseProvider.PgSql);
 
 			// database context
