@@ -20,7 +20,7 @@
 							<a class="dropdown-item" href="@Url.RouteUrl("print", new { id = Model.Note.Id, slug = Model.Note.Title.ToSlug() })" target="_blank"><i class="fa-solid fa-fw fa-print"></i> Print</a>
 							<div class="dropdown-divider"></div>
 							@if(!Model.Note.Trash) {
-							<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#trash"><i class="fa-solid fa-fw fa-trash-o"></i> Delete</a>
+							<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#trash"><i class="fa-solid fa-fw fa-trash"></i> Delete</a>
 							}
 							<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#info"><i class="fa-solid fa-fw fa-info"></i> Info</a>
 							<a class="dropdown-item" href="@Url.RouteUrl("revisions", new { id = Model.Note.Id })"><i class="fa-solid fa-fw fa-history"></i> Revisions</a>
