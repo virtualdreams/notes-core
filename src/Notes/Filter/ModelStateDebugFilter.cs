@@ -9,7 +9,8 @@ namespace Notes.Filter
 	{
 		private readonly ILogger<ModelStateDebugFilter> Logger;
 
-		public ModelStateDebugFilter(ILogger<ModelStateDebugFilter> logger)
+		public ModelStateDebugFilter(
+			ILogger<ModelStateDebugFilter> logger)
 		{
 			Logger = logger;
 		}

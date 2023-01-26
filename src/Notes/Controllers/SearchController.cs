@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Notes.Core.Interfaces;
 using Notes.Models;
@@ -15,14 +16,25 @@ namespace Notes.Controllers
 	[Authorize]
 	public class SearchController : BaseController
 	{
+		private readonly ILogger<SearchController> Log;
+
 		private readonly IMapper Mapper;
+
 		private readonly AppSettings AppSettings;
+
 		private readonly IUserService UserService;
+
 		private readonly ISearchService SearchService;
 
-		public SearchController(IMapper mapper, IOptionsSnapshot<AppSettings> settings, IUserService user, ISearchService search)
+		public SearchController(
+			ILogger<SearchController> log,
+			IMapper mapper,
+			IOptionsSnapshot<AppSettings> settings,
+			IUserService user,
+			ISearchService search)
 			: base(user)
 		{
+			Log = log;
 			Mapper = mapper;
 			AppSettings = settings.Value;
 			UserService = user;

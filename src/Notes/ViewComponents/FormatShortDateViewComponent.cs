@@ -8,7 +8,8 @@ namespace Notes.ViewComponents
 	{
 		private readonly IUserService UserService;
 
-		public FormatShortDateViewComponent(IUserService user)
+		public FormatShortDateViewComponent(
+			IUserService user)
 			: base(user)
 		{
 			UserService = user;

@@ -8,7 +8,8 @@ namespace Notes.Validators
 	{
 		private readonly IPasswordPolicy PasswordPolicy;
 
-		public PasswdChangePostModelValidator(IPasswordPolicy passwordPolicy)
+		public PasswdChangePostModelValidator(
+			IPasswordPolicy passwordPolicy)
 		{
 			PasswordPolicy = passwordPolicy;
 

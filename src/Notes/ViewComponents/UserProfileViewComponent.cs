@@ -8,7 +8,8 @@ namespace Notes.ViewComponents
 	{
 		private readonly IUserService UserService;
 
-		public DisplayNameViewComponent(IUserService user)
+		public DisplayNameViewComponent(
+			IUserService user)
 			: base(user)
 		{
 			UserService = user;

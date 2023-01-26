@@ -14,9 +14,12 @@ namespace Notes.Core.Services
 	public class NoteService : INoteService
 	{
 		private readonly ILogger<NoteService> Log;
+
 		private readonly DataContext Context;
 
-		public NoteService(ILogger<NoteService> log, DataContext context)
+		public NoteService(
+			ILogger<NoteService> log,
+			DataContext context)
 		{
 			Log = log;
 			Context = context;

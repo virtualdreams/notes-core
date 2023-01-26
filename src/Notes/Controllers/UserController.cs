@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Notes.Core.Interfaces;
 using Notes.Core;
@@ -18,13 +19,22 @@ namespace Notes.Controllers
 	[Authorize]
 	public class UserController : BaseController
 	{
+		private readonly ILogger<UserController> Log;
+
 		private readonly IMapper Mapper;
+
 		private readonly AppSettings AppSettings;
+
 		private readonly IUserService UserService;
 
-		public UserController(IMapper mapper, IOptionsSnapshot<AppSettings> settings, IUserService user)
+		public UserController(
+			ILogger<UserController> log,
+			IMapper mapper,
+			IOptionsSnapshot<AppSettings> settings,
+			IUserService user)
 			: base(user)
 		{
+			Log = log;
 			Mapper = mapper;
 			AppSettings = settings.Value;
 			UserService = user;

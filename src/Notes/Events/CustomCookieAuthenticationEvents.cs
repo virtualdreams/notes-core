@@ -11,9 +11,12 @@ namespace Notes.Events
 	public class CustomCookieAuthenticationEvents : CookieAuthenticationEvents
 	{
 		private readonly ILogger<CustomCookieAuthenticationEvents> Log;
+
 		private readonly IUserService UserService;
 
-		public CustomCookieAuthenticationEvents(ILogger<CustomCookieAuthenticationEvents> log, IUserService user)
+		public CustomCookieAuthenticationEvents(
+			ILogger<CustomCookieAuthenticationEvents> log,
+			IUserService user)
 		{
 			Log = log;
 			UserService = user;

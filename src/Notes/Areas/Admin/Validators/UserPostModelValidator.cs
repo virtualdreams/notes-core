@@ -8,7 +8,8 @@ namespace Notes.Areas.Admin.Validators
 	{
 		private readonly IPasswordPolicy PasswordPolicy;
 
-		public UserPostModelValidator(IPasswordPolicy passwordPolicy)
+		public UserPostModelValidator(
+			IPasswordPolicy passwordPolicy)
 		{
 			PasswordPolicy = passwordPolicy;
 

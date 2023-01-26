@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Notes.Areas.Admin.Models;
 using Notes.Controllers;
@@ -16,13 +17,22 @@ namespace Notes.Areas.Admin.Controllers
 	[Authorize(Policy = "AdministratorOnly")]
 	public class AccountController : BaseController
 	{
+		private readonly ILogger<AccountController> Log;
+
 		private readonly IMapper Mapper;
+
 		private readonly AppSettings AppSetings;
+
 		private readonly IUserService UserService;
 
-		public AccountController(IMapper mapper, IOptionsSnapshot<AppSettings> settings, IUserService user)
+		public AccountController(
+			ILogger<AccountController> log,
+			IMapper mapper,
+			IOptionsSnapshot<AppSettings> settings,
+			IUserService user)
 			: base(user)
 		{
+			Log = log;
 			Mapper = mapper;
 			AppSetings = settings.Value;
 			UserService = user;

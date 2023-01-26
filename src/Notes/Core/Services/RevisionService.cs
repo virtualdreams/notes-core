@@ -16,10 +16,15 @@ namespace Notes.Core.Services
 	public class RevisionService : IRevisionService
 	{
 		private readonly ILogger<NoteService> Log;
+
 		private readonly DataContext Context;
+
 		private readonly INoteService NoteService;
 
-		public RevisionService(ILogger<NoteService> log, DataContext context, INoteService note)
+		public RevisionService(
+			ILogger<NoteService> log,
+			DataContext context,
+			INoteService note)
 		{
 			Log = log;
 			Context = context;

@@ -11,15 +11,20 @@ namespace Notes.Core.Services
 {
 	public class MailService : IMailService
 	{
-		private readonly AppSettings AppSettings;
-		private readonly MailSettings MailSettings;
 		private readonly ILogger<MailService> Log;
 
-		public MailService(IOptionsSnapshot<AppSettings> settings, IOptionsSnapshot<MailSettings> mail, ILogger<MailService> log)
+		private readonly AppSettings AppSettings;
+
+		private readonly MailSettings MailSettings;
+
+		public MailService(
+			ILogger<MailService> log,
+			IOptionsSnapshot<AppSettings> settings,
+			IOptionsSnapshot<MailSettings> mail)
 		{
+			Log = log;
 			AppSettings = settings.Value;
 			MailSettings = mail.Value;
-			Log = log;
 		}
 
 		/// <summary>

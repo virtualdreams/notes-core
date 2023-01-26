@@ -15,11 +15,18 @@ namespace Notes.Core.Services
 	public class UserService : IUserService
 	{
 		private readonly ILogger<UserService> Log;
+
 		private readonly DataContext Context;
+
 		private readonly IMailService MailService;
+
 		private readonly ITokenService TokenService;
 
-		public UserService(ILogger<UserService> log, DataContext context, IMailService mail, ITokenService token)
+		public UserService(
+			ILogger<UserService> log,
+			DataContext context,
+			IMailService mail,
+			ITokenService token)
 		{
 			Log = log;
 			Context = context;

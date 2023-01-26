@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Notes.Core.Interfaces;
 using Notes.Models;
@@ -14,14 +15,25 @@ namespace Notes.Controllers
 	[Authorize]
 	public class HomeController : BaseController
 	{
+		private readonly ILogger<HomeController> Log;
+
 		private readonly IMapper Mapper;
+
 		private readonly AppSettings AppSettings;
+
 		private readonly IUserService UserService;
+
 		private readonly INoteService NoteService;
 
-		public HomeController(IMapper mapper, IOptionsSnapshot<AppSettings> settings, IUserService user, INoteService note)
+		public HomeController(
+			ILogger<HomeController> log,
+			IMapper mapper,
+			IOptionsSnapshot<AppSettings> settings,
+			IUserService user,
+			INoteService note)
 			: base(user)
 		{
+			Log = log;
 			Mapper = mapper;
 			AppSettings = settings.Value;
 			UserService = user;

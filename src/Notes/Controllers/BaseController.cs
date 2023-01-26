@@ -13,7 +13,8 @@ namespace Notes.Controllers
 
 		protected int PageSize => CurrentUser.Items;
 
-		public BaseController(IUserService userService)
+		public BaseController(
+			IUserService userService)
 		{
 			UserService = userService;
 		}

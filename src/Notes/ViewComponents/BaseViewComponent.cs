@@ -11,7 +11,8 @@ namespace Notes.ViewComponents
 
 		protected User CurrentUser => UserService.GetByNameAsync(UserClaimsPrincipal.GetUserName()).Result;
 
-		public BaseViewComponent(IUserService user)
+		public BaseViewComponent(
+			IUserService user)
 		{
 			UserService = user;
 		}

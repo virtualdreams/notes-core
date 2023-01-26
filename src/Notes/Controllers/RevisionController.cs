@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Notes.Core.Interfaces;
 using Notes.Extensions;
@@ -14,15 +15,28 @@ namespace Notes.Controllers
 	[Authorize]
 	public class RevisionController : BaseController
 	{
+		private readonly ILogger<RevisionController> Log;
+
 		private readonly IMapper Mapper;
+
 		private readonly AppSettings AppSettings;
+
 		private readonly IUserService UserService;
+
 		private readonly INoteService NoteService;
+
 		private readonly IRevisionService RevisionService;
 
-		public RevisionController(IMapper mapper, IOptionsSnapshot<AppSettings> settings, IUserService user, INoteService note, IRevisionService revision)
+		public RevisionController(
+			ILogger<RevisionController> log,
+			IMapper mapper,
+			IOptionsSnapshot<AppSettings> settings,
+			IUserService user,
+			INoteService note,
+			IRevisionService revision)
 			: base(user)
 		{
+			Log = log;
 			Mapper = mapper;
 			AppSettings = settings.Value;
 			UserService = user;
