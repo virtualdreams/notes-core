@@ -4,7 +4,7 @@ using System;
 
 namespace Notes.TagHelpers
 {
-	[HtmlTargetElement("markdown", Attributes = ContentAttributeName)]
+	[HtmlTargetElement("markdown", Attributes = ContentAttributeName, TagStructure = TagStructure.WithoutEndTag)]
 	public class MarkdownTagHelper : TagHelper
 	{
 		private const string ContentAttributeName = "content";

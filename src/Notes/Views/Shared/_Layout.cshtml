@@ -32,8 +32,8 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav me-auto">
 						<li class="nav-item dropdown">
-							<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-fw fa-book"></i> Notebooks</a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a href="#" id="navbarDropdownNotebooks" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-fw fa-book"></i> Notebooks</a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdownNotebooks">
 								<a class="dropdown-item" href="@Url.RouteUrl("notebooks")">All notebooks</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="@Url.RouteUrl("notebook", new { id = String.Empty} )">Without notebook</a>
@@ -42,8 +42,8 @@
 							</div>
 						</li>
 						<li class="nav-item dropdown">
-							<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-fw fa-tags"></i> Tags</a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a href="#" id="navbarDropdownTags" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-fw fa-tags"></i> Tags</a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdownTags">
 								<a class="dropdown-item" href="@Url.RouteUrl("tags")">All tags</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="@Url.RouteUrl("tag", new { id = String.Empty} )">Without tags</a>

@@ -20,12 +20,12 @@
 <div class="row">
 	<div class="col-lg-12">
 		@if(Model.Notes.Count() > 0) {
-			<form role="form" action="@Url.Action("delete", "note")" method="post" enctype="multipart/form-data" id="trash-form" >
+			<form action="@Url.Action("delete", "note")" method="post" enctype="multipart/form-data" id="trash-form" >
 				<div class="table-responsive">
 					<table class="table">
 						<thead>
 							<tr>
-								<th style="width: 30px;"><input class="form-check-input" type="checkbox" id="selectAll" /></th>
+								<th style="width: 30px;"><input class="form-check-input" type="checkbox" id="selectAll"></th>
 								<th>Title</th>
 								<th style="text-align: right; width: 170px;"><i class="fa fs-fw fa-clock-o"></i> Last modified</th>
 							</tr>
@@ -33,7 +33,7 @@
 						<tbody>
 							@foreach(var note in Model.Notes) {
 							<tr>
-								<td><input class="form-check-input" type="checkbox" name="id" value="@note.Id" /></td>
+								<td><input class="form-check-input" type="checkbox" name="id" value="@note.Id"></td>
 								<td><a href="@Url.RouteUrl("view", new { id = note.Id, slug = note.Title.ToSlug() })">@note.Title</a></td>
 								<td><span data-bs-toggle="tooltip" data-bs-placement="top" title="@await Component.InvokeAsync("FormatDate", new { date = note.Modified })" class="float-end text-muted small"><em>@note.Modified.ToAge()</em></span></td>
 							</tr>

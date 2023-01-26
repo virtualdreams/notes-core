@@ -8,7 +8,7 @@ using System;
 
 namespace Notes.TagHelpers
 {
-	[HtmlTargetElement("input", Attributes = ValidationForAttributeName)]
+	[HtmlTargetElement("input", Attributes = ValidationForAttributeName, TagStructure = TagStructure.WithoutEndTag)]
 	[HtmlTargetElement("textarea", Attributes = ValidationForAttributeName)]
 	[HtmlTargetElement("select", Attributes = ValidationForAttributeName)]
 	public class ValidationForTagHelper : TagHelper

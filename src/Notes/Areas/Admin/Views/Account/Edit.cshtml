@@ -38,19 +38,19 @@
 					</div>
 				}
 
-				<form role="form" action="@Url.Action("edit", "account", new { area = "admin" })" method="post" enctype="multipart/form-data" id="account-form" >
+				<form action="@Url.Action("edit", "account", new { area = "admin" })" method="post" enctype="multipart/form-data" id="account-form" >
 					<div class="mb-3">
 						<label class="form-label" for="username">Username</label>
-						<input class="form-control" type="email" name="username" id="username" placeholder="E-mail" value="@Model.User.Username" validation-for="username" />
+						<input class="form-control" type="email" name="username" id="username" placeholder="E-mail" value="@Model.User.Username" validation-for="username">
 					</div>
 					<div class="mb-3">
 						<label class="form-label" for="password">Password</label>
-						<input class="form-control" type="password" name="password" id="password" placeholder="Password" value="" validation-for="password" autocomplete="new-password" />
+						<input class="form-control" type="password" name="password" id="password" placeholder="Password" value="" validation-for="password" autocomplete="new-password">
 						<div class="form-text" id="passwordHelp">Leave this field blank if you don't want to change the password.</div>
 					</div>
 					<div class="mb-3">
 						<label class="form-label" for="displayname">Display Name</label>
-						<input class="form-control" type="text" name="displayname" id="displayname" placeholder="Display Name" value="@Model.User.DisplayName" validation-for="displayname" />
+						<input class="form-control" type="text" name="displayname" id="displayname" placeholder="Display Name" value="@Model.User.DisplayName" validation-for="displayname">
 					</div>
 					<div class="mb-3">
 						<label class="form-label" for="role">Role</label>
@@ -60,11 +60,11 @@
 						</select>
 					</div>
 					<div class="mb-3 form-check">
-						<input class="form-check-input" type="checkbox" name="enabled" id="enabled" value="true" @(Model.User.Enabled ? "checked" : "") />
+						<input class="form-check-input" type="checkbox" name="enabled" id="enabled" value="true" @(Model.User.Enabled ? "checked" : "")>
 						<label class="form-check-label" for="enabled">This account is activated</label>
 					</div>
 					<div class="mb-3">
-						<input type="hidden" name="id" value="@Model.User.Id" />
+						<input type="hidden" name="id" value="@Model.User.Id">
 						<button class="btn btn-primary" type="submit">Save</button>
 						<button class="btn btn-primary" type="button" data-href="@Url.Action("index", "account", new { area = "admin" })">Cancel</button>
 					</div>
