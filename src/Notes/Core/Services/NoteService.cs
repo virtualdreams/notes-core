@@ -31,7 +31,7 @@ namespace Notes.Core.Services
 		/// <param name="next">The next id.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns>List of notes.</returns>
-		public async Task<List<Note>> GetNotesAsync(int next, int limit)
+		public async Task<IList<Note>> GetNotesAsync(int next, int limit)
 		{
 			Log.LogInformation($"Get all notes.");
 
@@ -52,7 +52,7 @@ namespace Notes.Core.Services
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public async Task<List<Note>> GetByNotebookAsync(string notebook, int next, int limit)
+		public async Task<IList<Note>> GetByNotebookAsync(string notebook, int next, int limit)
 		{
 			notebook = notebook?.Trim();
 
@@ -75,7 +75,7 @@ namespace Notes.Core.Services
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public async Task<List<Note>> GetByTagAsync(string tag, int next, int limit)
+		public async Task<IList<Note>> GetByTagAsync(string tag, int next, int limit)
 		{
 			tag = tag?.Trim();
 
@@ -101,7 +101,7 @@ namespace Notes.Core.Services
 		/// <param name="next">The next id.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns>List of notes.</returns>
-		public async Task<List<Note>> GetDeletedNotes(int next, int limit)
+		public async Task<IList<Note>> GetDeletedNotes(int next, int limit)
 		{
 			Log.LogInformation($"Get all notes.");
 
@@ -136,7 +136,7 @@ namespace Notes.Core.Services
 		/// </summary>
 		/// <param name="limit">Limit result to n items.</param>
 		/// <returns>A list of notebook.</returns>
-		public async Task<List<DistinctAndCount>> GetMostUsedNotebooksAsync(int limit)
+		public async Task<IList<DistinctAndCount>> GetMostUsedNotebooksAsync(int limit)
 		{
 			Log.LogDebug($"Get the {limit} most used notebooks.");
 
@@ -159,7 +159,7 @@ namespace Notes.Core.Services
 		/// Get a list of all notebooks.
 		/// </summary>
 		/// <returns>A list of notebook.</returns>
-		public async Task<List<DistinctAndCount>> GetNotebooksAsync()
+		public async Task<IList<DistinctAndCount>> GetNotebooksAsync()
 		{
 			Log.LogInformation($"Get the full list of notebooks.");
 
@@ -182,7 +182,7 @@ namespace Notes.Core.Services
 		/// </summary>
 		/// <param name="limit">Limit result to n items.</param>
 		/// <returns>A list of tags.</returns>
-		public async Task<List<DistinctAndCount>> GetMostUsedTagsAsync(int limit)
+		public async Task<IList<DistinctAndCount>> GetMostUsedTagsAsync(int limit)
 		{
 			Log.LogDebug($"Get the {limit} most used tags.");
 
@@ -205,7 +205,7 @@ namespace Notes.Core.Services
 		/// Get a list of all tags,
 		/// </summary>
 		/// <returns>A list of tags.</returns>
-		public async Task<List<DistinctAndCount>> GetTagsAsync()
+		public async Task<IList<DistinctAndCount>> GetTagsAsync()
 		{
 			Log.LogInformation($"Get the full list of tags.");
 

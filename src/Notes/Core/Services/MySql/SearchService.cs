@@ -32,7 +32,7 @@ namespace Notes.Core.Services.MySql
 		/// <param name="next">The next cursor.</param>
 		/// <param name="limit">Limit the result.</param>
 		/// <returns></returns>
-		public async Task<List<Note>> SearchAsync(string term, int next, int limit)
+		public async Task<IList<Note>> SearchAsync(string term, int next, int limit)
 		{
 			term = term?.Trim();
 
@@ -64,7 +64,7 @@ namespace Notes.Core.Services.MySql
 		/// </summary>
 		/// <param name="term">The term to search for.</param>
 		/// <returns></returns>
-		public async Task<List<string>> NotebookSuggestionsAsync(string term)
+		public async Task<IList<string>> NotebookSuggestionsAsync(string term)
 		{
 			term = term?.Trim();
 
@@ -91,7 +91,7 @@ namespace Notes.Core.Services.MySql
 		/// </summary>
 		/// <param name="term">The term to search for.</param>
 		/// <returns></returns>
-		public async Task<List<string>> TagSuggestionsAsync(string term)
+		public async Task<IList<string>> TagSuggestionsAsync(string term)
 		{
 			term = term?.Trim();
 

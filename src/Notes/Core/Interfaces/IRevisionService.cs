@@ -6,7 +6,7 @@ namespace Notes.Core.Interfaces
 {
 	public interface IRevisionService
 	{
-		Task<List<Revision>> GetRevisionsAsync(int id);
+		Task<IList<Revision>> GetRevisionsAsync(int id);
 		Task<Revision> GetRevisionAsync(int id);
 		Task RestoreAsync(int id);
 		Task<string> GetDiffAsync(int id);

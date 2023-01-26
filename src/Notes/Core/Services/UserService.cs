@@ -38,7 +38,7 @@ namespace Notes.Core.Services
 		/// Get all available users.
 		/// </summary>
 		/// <returns>A list of users.</returns>
-		public async Task<List<User>> GetUsersAsync()
+		public async Task<IList<User>> GetUsersAsync()
 		{
 			Log.LogInformation("Get all users.");
 

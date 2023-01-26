@@ -6,7 +6,7 @@ namespace Notes.Core.Interfaces
 {
 	public interface IUserService
 	{
-		Task<List<User>> GetUsersAsync();
+		Task<IList<User>> GetUsersAsync();
 		Task<bool> HasUsersAsync();
 		Task<long> GetAdminCountAsync();
 		Task<bool> IsAdminAsync(int id);

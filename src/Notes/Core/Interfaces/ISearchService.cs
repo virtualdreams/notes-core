@@ -6,8 +6,8 @@ namespace Notes.Core.Interfaces
 {
 	public interface ISearchService
 	{
-		Task<List<Note>> SearchAsync(string term, int next, int limit);
-		Task<List<string>> NotebookSuggestionsAsync(string term);
-		Task<List<string>> TagSuggestionsAsync(string term);
+		Task<IList<Note>> SearchAsync(string term, int next, int limit);
+		Task<IList<string>> NotebookSuggestionsAsync(string term);
+		Task<IList<string>> TagSuggestionsAsync(string term);
 	}
 }

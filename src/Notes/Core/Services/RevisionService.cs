@@ -36,7 +36,7 @@ namespace Notes.Core.Services
 		/// </summary>
 		/// <param name="id">The note id.</param>
 		/// <returns>List of revisions.</returns>
-		public async Task<List<Revision>> GetRevisionsAsync(int id)
+		public async Task<IList<Revision>> GetRevisionsAsync(int id)
 		{
 			Log.LogInformation($"Get revisions for note {id}.");
 
