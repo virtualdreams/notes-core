@@ -124,7 +124,8 @@ Configure application in `appsettings.json` and copy this file to publish direct
         "From": "admin@localhost",
         "Username": "",
         "Passwd": "",
-        "SkipVerify": false
+        "DisableCertificateValidation": false,
+        "DisableCheckCertificateRevocation": false
     }
 }
 ```
@@ -142,43 +143,59 @@ PosgreSQL connection string.
 **Section: Database**
 
 * **Provider**:  
-Set database provider. Default: `PgSql`. Values: `MySql`, `PgSql`.
+Set database provider.  
+Values: `"PgSql"`, `"MySql"`  
+Default: `"PgSql"`
 
 **Section: FeatureFlags**
 
 * **ModelStateDebug**:  
-Enable ModelState filter when loglevel is set to Debug. Default: `false`.
+Enable ModelState filter when loglevel is set to Debug.  
+Default: `false`
 
 **Section: Settings**
 
 * **KeyStore**:  
-Directory to store encryption key files (leave empty to use in-memory). Default: `null`.
+Directory to store encryption key files (leave empty to use in-memory).  
+Default: `null`
 * **SiteName**:  
-Site name. Default: `"Notes!"`.
+Site name.  
+Default: `"Notes!"`
 * **PageSize**:  
-Items per page to display. Default `10`.
+Items per page to display.  
+Default `10`
 
 **Section: Mail**
 * **Enabled**:  
-Enable sending mails. Default: `false`.
+Enable sending mails.  
+Default: `false`
 * **Host**:  
-Mail host. Default: `"localhost"`.
+Mail host.  
+Default: `"localhost"`
 * **Port**:  
-Smtp port. Default `25`.
+Smtp port.  
+Default `25`
 * **MailFrom**:  
-Mail From. Default: `"admin@localhost"`.
+Mail From. Default:  
+`"admin@localhost"`
 * **Username**:  
-Mail username (optional). Default: `null`.
+Mail username (optional).  
+Default: `null`
 * **Password**:  
-Mail password (optional). Default: `null`.
+Mail password (optional).  
+Default: `null`
 * **DisableCertificateValidation**:  
-Verify SSL certificates. Default: `false`.
+Verify SSL certificates.  
+Default: `false`
 * **DisableCheckCertificateRevocation**:  
-Check certificate revocation. Default: `false`.
+Check certificate revocation.  
+Default: `false`
 
 ## Logging
 
 Configure logging in `NLog.config` and copy this file to publish directory. 
+
+Rules to filter out all unnecessary log messages.
 
 ```xml
 <nlog>
@@ -186,7 +203,7 @@ Configure logging in `NLog.config` and copy this file to publish directory.
     <logger name="System.*" finalMinLevel="Warn" />
     <logger name="Microsoft.*" finalMinLevel="Warn" />
     <logger name="Microsoft.Hosting.Lifetime*" finalMinLevel="Info" />
-    <logger name="*" minlevel="Info" writeTo="console,file" />
+    <logger name="*" minlevel="Info" writeTo="console, file" />
   </rules>
 </nlog>
 ```
