@@ -14,7 +14,7 @@ clean-npm:
 .PHONY: grunt
 grunt:
 	@if [ -d "$(project)/node_modules" ]; then \
-		cd $(project) && ./node_modules/grunt/bin/grunt; \
+		cd $(project) && ./node_modules/.bin/grunt -v; \
 	else \
 		echo "'grunt' not installed. Please run 'make install-npm'."; \
 	fi 
