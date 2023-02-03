@@ -12,7 +12,9 @@
 			@if((await AuthorizationService.AuthorizeAsync(User, "AdministratorOnly")).Succeeded) {
 			<div class="btn-toolbar float-end">
 				<div class="btn-group">
-					<button class="btn btn-outline-secondary" type="button" data-href="@Url.Action("restore", "revision", new { id = @Model.Revision.Id })"><i class="fa-solid fa-fw fa-history"></i> Restore</button>
+					<a class="btn btn-outline-secondary" type="button" asp-controller="revision" asp-action="restore" asp-route-id="@Model.Revision.Id">
+						<i class="fa-solid fa-fw fa-history"></i> Restore
+					</a>
 				</div>
 			</div>
 			}
@@ -22,7 +24,6 @@
 		</div>
 	</div>
 </div>
-
 
 <div class="row">
 	<div class="col-lg-12">
@@ -34,7 +35,6 @@
 		</div>
 	</div>
 </div>
-
 
 <div class="row">
 	<div class="col-lg-12">

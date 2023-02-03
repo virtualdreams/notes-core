@@ -9,8 +9,12 @@
 				<nav id="navbar-settings" class="navbar navbar-light bg-light flex-column align-items-stretch p-3">
 					<div class="navbar-brand">Settings</div>
 					<nav class="nav flex-column">
-						<a class="nav-link link-secondary" href="@Url.Action("settings", "user", new { area = String.Empty })"><i class="fa-solid fa-fw fa-gear"></i> Account</a>
-						<a class="nav-link link-secondary" href="@Url.Action("security", "user")"><i class="fa-solid fa-fw fa-shield"></i> Password</a>
+						<a class="nav-link link-secondary" asp-controller="user" asp-action="settings" asp-area="">
+							<i class="fa-solid fa-fw fa-gear"></i> Account
+						</a>
+						<a class="nav-link link-secondary" asp-controller="user" asp-action="security" asp-area="">
+							<i class="fa-solid fa-fw fa-shield"></i> Password
+						</a>
 					</nav>
 				</nav>
 			</div>

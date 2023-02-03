@@ -11,7 +11,9 @@
 			<div class="btn-toolbar float-end">
 				@if(Model.User.Id != 0) {
 				<div class="btn-group">
-					<button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#delAccount"><i class="fa-solid fa-fw fa-user"></i> Delete</button>
+					<button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#delAccount">
+						<i class="fa-solid fa-fw fa-user"></i> Delete
+					</button>
 				</div>
 				}
 			</div>
@@ -38,7 +40,7 @@
 					</div>
 				}
 
-				<form action="@Url.Action("edit", "account", new { area = "admin" })" method="post" enctype="multipart/form-data" id="account-form" >
+				<form asp-controller="account" asp-action="edit" asp-area="admin" method="post" enctype="multipart/form-data" id="account-form" >
 					<div class="mb-3">
 						<label class="form-label" for="username">Username</label>
 						<input class="form-control" type="email" name="username" id="username" placeholder="E-mail" value="@Model.User.Username" validation-for="username">
@@ -66,7 +68,7 @@
 					<div class="mb-3">
 						<input type="hidden" name="id" value="@Model.User.Id">
 						<button class="btn btn-primary" type="submit">Save</button>
-						<button class="btn btn-primary" type="button" data-href="@Url.Action("index", "account", new { area = "admin" })">Cancel</button>
+						<a class="btn btn-primary" type="button" asp-controller="account" asp-action="index" asp-area="admin">Cancel</a>
 					</div>
 				</form>
 			</div>

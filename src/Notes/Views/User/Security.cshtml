@@ -14,7 +14,7 @@
 <div class="row">
 	<div class="col mb-4">
 		<h3>Change Password</h3>
-		<form action="@Url.Action("security", "user")" method="post" enctype="multipart/form-data" id="security-form" >
+		<form asp-controller="user" asp-action="security" method="post" enctype="multipart/form-data" id="security-form" >
 			<div class="mb-3">
 				<label class="form-label" for="oldpassword">Old Password</label>
 				<input class="form-control" type="password" name="oldpassword" id="oldpassword" placeholder="Old password" value="" validation-for="oldpassword">

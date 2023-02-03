@@ -14,16 +14,16 @@
 
 		<title>@ViewBag.Title@AppSettings.Value.SiteName - Administration</title>
 
-		@await Html.PartialAsync("_PartialStyles")
+		<partial name="_PartialStyles">
 
-		@await Html.PartialAsync("_PartialIcons")
+		<partial name="_PartialIcons">
 	</head>
 	<body>
 		<!-- Navigation -->
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<div class="container">
 				<!-- brand -->
-				<a class="navbar-brand" href="/">Notes - Administration</a>
+				<a class="navbar-brand" asp-controller="home" asp-action="index" asp-area="">Notes - Administration</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
@@ -32,11 +32,13 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav me-auto">
 						<li class="nav-item">
-							<a class="nav-link" href="@Url.Action("index", "account", new { area = "admin" })"><i class="fa-solid fa-fw fa-users"></i> Accounts</a>
+							<a class="nav-link" asp-controller="account" asp-action="index" asp-area="admin">
+								<i class="fa-solid fa-fw fa-users"></i> Accounts
+							</a>
 						</li>
 					</ul>
 					<ul class="navbar-nav">
-						@await Html.PartialAsync("_PartialUser")
+						<partial name="_PartialUser">
 					</ul>
 				</div>
 			</div>
@@ -45,10 +47,10 @@
 		<div class="container">
 			@RenderBody()
 
-			@await Html.PartialAsync("_PartialFooter")
+			<partial name="_PartialFooter">
 		</div>
 
-		@await Html.PartialAsync("_PartialScripts")
+		<partial name="_PartialScripts">
 
 		@RenderSection("script", required: false)
 	</body>

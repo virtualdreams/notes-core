@@ -9,7 +9,9 @@
 		<div class="pb-2 mt-4 mb-2 border-bottom">
 			<div class="btn-toolbar float-end">
 				<div class="btn-group">
-					<button class="btn btn-outline-secondary" type="button" data-href="@Url.Action("create", "account", new { area = "admin" })"><i class="fa-solid fa-fw fa-user-plus"></i> Create</button>
+					<a class="btn btn-outline-secondary" type="button" asp-controller="account" asp-action="create" asp-area="admin">
+						<i class="fa-solid fa-fw fa-user-plus"></i> Create
+					</a>
 				</div>
 			</div>
 			<h1>
@@ -25,19 +27,35 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>Username</th>
-						<th class="fit">Role</th>
-						<th class="fit">Created</th>
-						<th class="fit">Status</th>
+						<th>
+							Username
+						</th>
+						<th class="fit">
+							Role
+						</th>
+						<th class="fit">
+							Created
+						</th>
+						<th class="fit">
+							Status
+						</th>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach(var user in Model.Users) {
 					<tr>
-						<td><a href="@Url.Action("edit", "account", new { area = "admin", id = @user.Id })">@user.Username</a></td>
-						<td class="fit">@user.Role</td>
-						<td class="fit"><span data-bs-toggle="tooltip" data-bs-placement="top" title="@await Component.InvokeAsync("FormatDate", new { date = user.Created })">@await Component.InvokeAsync("FormatShortDate", new { date = user.Created })</span></td>
-						<td class="fit">@(@user.Enabled ? "Active" : "Disabled" )</td>
+						<td>
+							<a asp-controller="account" asp-action="edit" asp-area="admin" asp-route-id="@user.Id">@user.Username</a>
+						</td>
+						<td class="fit">
+							@user.Role
+						</td>
+						<td class="fit">
+							<span data-bs-toggle="tooltip" data-bs-placement="top" title="@await Component.InvokeAsync("FormatDate", new { date = user.Created })">@await Component.InvokeAsync("FormatShortDate", new { date = user.Created })</span>
+						</td>
+						<td class="fit">
+							@(@user.Enabled ? "Active" : "Disabled" )
+						</td>
 					</tr>
 					}
 				</tbody>

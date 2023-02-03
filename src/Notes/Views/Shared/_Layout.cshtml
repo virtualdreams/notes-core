@@ -14,16 +14,16 @@
 
 		<title>@ViewBag.Title@AppSettings.Value.SiteName</title>
 
-		@await Html.PartialAsync("_PartialStyles")
+		<partial name="_PartialStyles">
 
-		@await Html.PartialAsync("_PartialIcons")
+		<partial name="_PartialIcons">
 	</head>
 	<body>
 		<!-- Navigation -->
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<div class="container">
 				<!-- brand -->
-				<a class="navbar-brand" href="/">Notes</a>
+				<a class="navbar-brand" asp-controller="home" asp-action="index">Notes</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
@@ -34,9 +34,13 @@
 						<li class="nav-item dropdown">
 							<a href="#" id="navbarDropdownNotebooks" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-fw fa-book"></i> Notebooks</a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdownNotebooks">
-								<a class="dropdown-item" href="@Url.RouteUrl("notebooks")">All notebooks</a>
+								<a class="dropdown-item" asp-route="notebooks">
+									All notebooks
+								</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="@Url.RouteUrl("notebook", new { id = String.Empty} )">Without notebook</a>
+								<a class="dropdown-item" asp-route="notebook" asp-route-id="">
+									Without notebook
+								</a>
 								<div class="dropdown-divider"></div>
 								@await Component.InvokeAsync("Notebooks")
 							</div>
@@ -44,20 +48,26 @@
 						<li class="nav-item dropdown">
 							<a href="#" id="navbarDropdownTags" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-fw fa-tags"></i> Tags</a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdownTags">
-								<a class="dropdown-item" href="@Url.RouteUrl("tags")">All tags</a>
+								<a class="dropdown-item" asp-route="tags">
+									All tags
+								</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="@Url.RouteUrl("tag", new { id = String.Empty} )">Without tags</a>
+								<a class="dropdown-item" asp-route="tag" asp-route-id="">
+									Without tags
+								</a>
 								<div class="dropdown-divider"></div>
 								@await Component.InvokeAsync("Tags")
 							</div>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="@Url.RouteUrl("create")"><i class="fa-solid fa-fw fa-plus"></i> Create</a>
+							<a class="nav-link" asp-route="create">
+								<i class="fa-solid fa-fw fa-plus"></i> Create
+							</a>
 						</li>
 					</ul>
 					<ul class="navbar-nav">
 						<li class="nav-item">
-							<form action="@Url.RouteUrl("search")" method="get" id="search-form">
+							<form asp-route="search" method="get" id="search-form">
 								<div class="input-group mb-0">
 									<input class="form-control border-right-0 border" type="text" name="q" placeholder="Search..." value="@ViewBag.Search" aria-label="Search">
 									<button class="btn btn-outline-secondary border-left-0 border" type="submit">
@@ -66,7 +76,7 @@
 								</div>
 							</form>
 						</li>
-						@await Html.PartialAsync("_PartialUser")
+						<partial name="_PartialUser">
 					</ul>
 				</div>
 			</div>
@@ -75,10 +85,10 @@
 		<div class="container">
 			@RenderBody()
 
-			@await Html.PartialAsync("_PartialFooter")
+			<partial name="_PartialFooter">
 		</div>
 
-		@await Html.PartialAsync("_PartialScripts")
+		<partial name="_PartialScripts">
 
 		@RenderSection("script", required: false)
 	</body>

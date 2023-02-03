@@ -17,7 +17,7 @@
 <div class="row">
 	<div class="col-lg-12">
 		@if(Model.Notes.Count() > 0) {
-			@await Html.PartialAsync("_PartialNotes", Model.Notes)
+			<partial name="_PartialNotes" model="Model.Notes" />
 		} else {
 			@:There are no more notes at the moment.
 		}
@@ -29,7 +29,9 @@
 	<div class="col-lg-12">
 		<nav>
 			<ul class="pagination justify-content-center">
-				<li class="page-item"><a class="page-link" href="@Url.RouteUrl("tag", new { id = Model.Tag, after = Model.Pager.NextPage })" rel="nofollow next">Older</a></li>
+				<li class="page-item">
+					<a class="page-link" asp-route="tag" asp-route-id="@Model.Tag" asp-route-after="@Model.Pager.NextPage" rel="nofollow next">Older</a>
+				</li>
 			</ul>
 		</nav>
 	</div>

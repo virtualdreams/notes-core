@@ -18,7 +18,7 @@
 <div class="row">
 	<div class="col-lg-12">
 		@if(Model.Notes.Count() > 0) {
-			@await Html.PartialAsync("_PartialNotes", Model.Notes)
+			<partial name="_PartialNotes" model="Model.Notes" />
 		} else {
 			@:There were no results matching the query.
 		}
@@ -30,7 +30,9 @@
 	<div class="col-lg-12">
 		<nav>
 			<ul class="pagination justify-content-center">
-				<li class="page-item"><a class="page-link" href="@Url.RouteUrl("search", new { q = Model.Term, after = Model.Pager.NextPage })" rel="nofollow next">Older</a></li>
+				<li class="page-item">
+					<a class="page-link" asp-route="search" asp-route-q="@Model.Term" asp-route-after="@Model.Pager.NextPage" rel="nofollow next">Older</a>
+				</li>
 			</ul>
 		</nav>
 	</div>

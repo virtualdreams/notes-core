@@ -5,17 +5,25 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<th>Title</th>
-				<th style="text-align: right; width: 170px;"><i class="fa fs-fw fa-clock-o"></i> Last modified</th>
+				<th>
+					Title
+				</th>
+				<th style="text-align: right; width: 170px;">
+					<i class="fa fs-fw fa-clock-o"></i> Last modified
+				</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach(var note in Model) {
 			<tr>
 				<td>
-					<a href="@Url.RouteUrl("view", new { id = note.Id, slug = note.Title.ToSlug() })">@note.Title</a>
+					<a asp-route="view" asp-route-id="@note.Id" asp-route-slug="@note.Title.ToSlug()">@note.Title</a>
 				</td>
-				<td><span data-bs-toggle="tooltip" data-bs-placement="top" title="@await Component.InvokeAsync("FormatDate", new { date = note.Modified })" class="float-end text-muted small"><em>@note.Modified.ToAge()</em></span></td>
+				<td>
+					<span data-bs-toggle="tooltip" data-bs-placement="top" title="@await Component.InvokeAsync("FormatDate", new { date = note.Modified })" class="float-end text-muted small">
+						<em>@note.Modified.ToAge()</em>
+					</span>
+				</td>
 			</tr>
 			}
 		</tbody>

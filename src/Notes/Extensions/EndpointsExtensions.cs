@@ -80,6 +80,12 @@ namespace Notes.Extensions
 				);
 
 				endpoints.MapControllerRoute(
+					name: "user",
+					pattern: "user",
+					defaults: new { controller = "user", action = "settings" }
+				);
+
+				endpoints.MapControllerRoute(
 					name: "login",
 					pattern: "login",
 					defaults: new { controller = "user", action = "login" }

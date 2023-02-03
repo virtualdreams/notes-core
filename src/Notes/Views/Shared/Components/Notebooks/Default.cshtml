@@ -2,5 +2,7 @@
 @using Notes.Models;
 
 @foreach(var notebook in Model) {
-<a class="dropdown-item" href="@Url.RouteUrl("notebook", new { id = notebook.Name })">@notebook.Name <span class="small text-muted">&times; @notebook.Count</span></a>
+<a class="dropdown-item" asp-route="notebook" asp-route-id="@notebook.Name">
+	@notebook.Name <span class="small text-muted">&times; @notebook.Count</span>
+</a>
 }

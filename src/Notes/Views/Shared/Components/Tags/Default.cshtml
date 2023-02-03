@@ -2,5 +2,7 @@
 @using Notes.Models;
 
 @foreach(var tag in Model) {
-<a class="dropdown-item" href="@Url.RouteUrl("tag", new { id = tag.Name })">@tag.Name <span class="small text-muted">&times; @tag.Count</span></a>
+<a class="dropdown-item" asp-route="tag" asp-route-id="@tag.Name">
+	@tag.Name <span class="small text-muted">&times; @tag.Count</span>
+</a>
 }

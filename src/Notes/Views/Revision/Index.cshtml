@@ -21,17 +21,23 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th style="width: 250px;">Date</th>
-						<th>Title</th>
+						<th style="width: 250px;">
+							Date
+						</th>
+						<th>
+							Title
+						</th>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach(var note in Model.Revisions) {
 					<tr>
 						<td>
-							<a href="@Url.Action("view", "revision", new { id = note.Id })">@await Component.InvokeAsync("FormatDate", new { date = note.Dt })</a>
+							<a asp-controller="revision" asp-action="view" asp-route-id="@note.Id">@await Component.InvokeAsync("FormatDate", new { date = note.Dt })</a>
 						</td>
-						<td>@note.Title</td>
+						<td>
+							@note.Title
+						</td>
 					</tr>
 					}
 				</tbody>
