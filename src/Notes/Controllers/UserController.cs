@@ -105,7 +105,7 @@ namespace Notes.Controllers
 		[AllowAnonymous]
 		public IActionResult ForgotPassword()
 		{
-			return View("Forgot_Password");
+			return View();
 		}
 
 		[HttpPost]
@@ -118,7 +118,7 @@ namespace Notes.Controllers
 				{
 					await UserService.ForgotPasswordAsync(model.Username, $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}");
 
-					return View("Forgot_Confirmation");
+					return View("ForgotConfirmation");
 				}
 				catch (NotesException ex)
 				{
@@ -126,7 +126,7 @@ namespace Notes.Controllers
 				}
 			}
 
-			return View("Forgot_Confirmation");
+			return View("ForgotConfirmation");
 		}
 
 		[HttpGet]
@@ -145,14 +145,14 @@ namespace Notes.Controllers
 					Token = id
 				};
 
-				return View("Reset_Password", view);
+				return View(view);
 			}
 			catch (NotesException ex)
 			{
 				ModelState.AddModelError("error", ex.Message);
 			}
 
-			return View("Forgot_Password");
+			return View("ForgotPassword");
 		}
 
 		[HttpPost]
@@ -176,7 +176,7 @@ namespace Notes.Controllers
 				{
 					ModelState.AddModelError("error", ex.Message);
 
-					return View("Forgot_Password");
+					return View("ForgotPassword");
 				}
 				catch (NotesException ex)
 				{
@@ -189,7 +189,7 @@ namespace Notes.Controllers
 				Token = id
 			};
 
-			return View("Reset_Password", view);
+			return View(view);
 		}
 
 		#region User
@@ -266,7 +266,6 @@ namespace Notes.Controllers
 				};
 
 				return View(view);
-				// return RedirectToAction("settings");
 			}
 
 			await UserService.UpdateSettingsAsync(CurrentUser.Id, model.DisplayName, model.Items);
