@@ -18,7 +18,7 @@ namespace Notes.Core.Internal
 			if (String.IsNullOrEmpty(password))
 				throw new ArgumentNullException("password");
 
-			using (var bytes = new Rfc2898DeriveBytes(password, SaltByteSize, HashingIterationsCount))
+			using (var bytes = new Rfc2898DeriveBytes(password, SaltByteSize, HashingIterationsCount, HashAlgorithmName.SHA1))
 			{
 				salt = bytes.Salt;
 				buffer2 = bytes.GetBytes(HashByteSize);
@@ -52,7 +52,7 @@ namespace Notes.Core.Internal
 			byte[] _currentHashBytes = new byte[HashByteSize];
 			Buffer.BlockCopy(src, SaltByteSize + 1, _currentHashBytes, 0, HashByteSize);
 
-			using (var bytes = new Rfc2898DeriveBytes(password, _currentSaltBytes, HashingIterationsCount))
+			using (var bytes = new Rfc2898DeriveBytes(password, _currentSaltBytes, HashingIterationsCount, HashAlgorithmName.SHA1))
 			{
 				_passwordHashBytes = bytes.GetBytes(SaltByteSize);
 			}
