@@ -75,7 +75,7 @@ namespace Notes.Core.Services
 		{
 			var _tokenHandler = new JwtSecurityTokenHandler();
 			var _token = _tokenHandler.ReadJwtToken(token);
-			var _username = _token.Claims.First(claim => claim.Type == "name").Value;
+			var _username = _token.Claims.First(claim => claim.Type == "unique_name").Value;
 
 			return _username;
 		}
