@@ -1,0 +1,190 @@
+@using Notes.Options
+@using Microsoft.Extensions.Options
+@inject IOptionsSnapshot<AppSettings> AppSettings
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="@AppSettings.Value.SiteName">
+		<meta name="author" content="">
+		<meta name="version" content="@await Component.InvokeAsync("Version")">
+
+		<title>@ViewBag.Title@AppSettings.Value.SiteName</title>
+
+		@await Html.PartialAsync("_PartialStyles")
+
+		@await Html.PartialAsync("_PartialIcons")
+
+		<style>
+			body {
+				font-size: .875rem;
+			}
+
+			/*
+			* Sidebar
+			*/
+
+			.sidebar {
+				position: fixed;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				z-index: 100;
+				padding: 48px 0 0;
+				box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+			}
+
+			@@media (max-width: 767.98px) {
+				.sidebar {
+					top: 5rem;
+				}
+			}
+
+			.sidebar-sticky {
+				position: relative;
+				top: 0;
+				height: calc(100vh - 48px);
+				padding-top: .5rem;
+				overflow-x: hidden;
+				overflow-y: auto;
+			}
+
+			.sidebar .nav-link {
+				font-weight: 500;
+				color: #333;
+			}
+
+			.sidebar .btn {
+				margin: .5rem 1rem;
+				color: #fff;
+			}
+
+			.sidebar .nav-link.active {
+				@* color: #2470dc; *@
+			}
+
+			.sidebar .nav-link:hover .feather,
+			.sidebar .nav-link.active .feather {
+				color: inherit;
+			}
+
+			.sidebar-heading {
+				font-size: .75rem;
+				text-transform: uppercase;
+			}
+
+			/*
+			* Navbar
+			*/
+
+			.navbar-brand {
+				padding-top: .75rem;
+				padding-bottom: .75rem;
+				font-size: 1rem;
+				background-color: rgba(0, 0, 0, .25);
+				box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+			}
+
+			.navbar .navbar-toggler {
+				top: .25rem;
+				right: 1rem;
+			}
+
+			.navbar .form-control {
+				padding: .75rem 1rem;
+				border-width: 0;
+				border-radius: 0;
+			}
+
+			.form-control-dark {
+				color: #fff;
+				background-color: rgba(255, 255, 255, .1);
+				border-color: rgba(255, 255, 255, .1);
+			}
+
+			.form-control-dark:focus {
+				border-color: transparent;
+				box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+			}
+
+			@* .edit input {
+				border: 0 none;
+			}
+
+			.edit textarea {
+				border: 0 none;
+			} *@
+
+			@* .edit .input-group-text {
+				border: 0 none;
+				background-color: #fff;
+			} *@
+		</style>
+	</head>
+	<body>
+		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  			<a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/">Notes!</a>
+  			<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    			<span class="navbar-toggler-icon"></span>
+  			</button>
+  			<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+  			@* <div class="navbar-nav">
+    			<div class="nav-item text-nowrap">
+      			<a class="nav-link px-3" href="#">Sign out</a>
+    			</div>
+  			</div> *@
+		</header>
+
+		<div class="container-fluid">
+  			<div class="row">
+				<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+					<div class="position-sticky pt-3">
+						<div class="dropdown" style="margin: .5rem 1rem;">
+							<a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="fa-solid fa-fw fa-user"></i>
+								<strong class="d-sm-inline mx-1 text-truncate">Thomas Kindler (Admin)</strong>
+							</a>
+							<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+								<li><a class="dropdown-item" href="#">New project...</a></li>
+								<li><a class="dropdown-item" href="#">Settings</a></li>
+								<li><a class="dropdown-item" href="#">Profile</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item" href="#">Sign out</a></li>
+							</ul>
+						</div>
+
+						<ul class="nav flex-column">
+							<li class="nav-item">
+								<a href="#" class="nav-link btn btn-dark">
+									Create
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link active" aria-current="page" href="#">
+									<i class="fa-solid fa-fw fa-book"></i> Notebooks
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" aria-current="page" href="#">
+									<i class="fa-solid fa-fw fa-tags"></i>
+									Tags
+								</a>
+							</li>
+						</ul>						
+					</div>
+				</nav>
+
+				<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+					@RenderBody()
+				</main>
+			</div>
+		</div>
+
+		@await Html.PartialAsync("_PartialScripts")
+
+		@RenderSection("script", required: false)
+	</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Description">
+		<meta name="author" content="Author">
+		<meta name="version" content="Version">
+
+		<title>Notes</title>
+
+		@await Html.PartialAsync("_PartialStyles")
+
+		@await Html.PartialAsync("_PartialIcons")
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row flex-nowrap" style="overflow-x: auto; overflow-y: hidden; height: 100vh;">
+
+				<!-- menu area -->
+				<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-light">
+
+					<div class="d-flex flex-column align-items-sm-start px-3 pt-2 text-white min-vh-100">
+						<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+							<img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+							<span class="fs-4 d-none d-sm-inline">Notes!</span>
+						</a>
+
+						<hr>
+
+						<ul class="nav nav-pills flex-column mb-auto mb-sm-auto mb-0 align-items-center align-items-sm-start">
+							<li class="nav-item">
+								<a href="#" class="nav-link align-middle px-0 active" aria-current="page">
+									<i class="fa-solid fa-fw fa-plus"></i>
+									<span class="ms-1 d-none d-sm-inline">Create</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link align-middle px-0">
+									<i class="fa-solid fa-fw fa-book"></i>
+									<span class="ms-1 d-none d-sm-inline">Notebooks</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link align-middle px-0">
+									<i class="fa-solid fa-fw fa-tags"></i>
+									<span class="ms-1 d-none d-sm-inline">Tags</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link align-middle px-0">
+									<i class="fa-solid fa-fw fa-trash"></i>
+									<span class="ms-1 d-none d-sm-inline">Bin</span>
+								</a>
+							</li>
+						</ul>
+
+						<hr>
+
+						<div class="dropdown pb-4">
+							<a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle text-truncate" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="fa-solid fa-fw fa-user"></i>
+								<strong class="d-none d-sm-inline mx-1">Thomas Kindler (Admin)</strong>
+							</a>
+							<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+								<li><a class="dropdown-item" href="#">New project...</a></li>
+								<li><a class="dropdown-item" href="#">Settings</a></li>
+								<li><a class="dropdown-item" href="#">Profile</a></li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a class="dropdown-item" href="#">Sign out</a></li>
+							</ul>
+						</div>
+					</div>
+
+				</div>
+
+				<!-- content area -->
+				<div class="col">
+					
+					<!-- search -->
+					<div class="row">
+						<div class="col bg-light p-3">
+							<form action="@Url.RouteUrl("search")" method="get" id="search-form">
+								<div class="input-group mb-0">
+									<input class="form-control border-right-0 border" type="text" name="q" placeholder="Search..." value="@ViewBag.Search" aria-label="Search">
+									<button class="btn btn-outline-secondary border-left-0 border" type="submit">
+										<i class="fa-solid fa-fw fa-search"></i>
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<!-- content -->
+					<div class="row" style="overflow-y: auto; height: 100vh;">
+						<div class="col">
+							@for(int i = 0; i < 20; i++) {
+							<div class="card">
+								<div class="card-body">
+									<h5 class="card-title">Card title</h5>
+									<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+									<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+									<a href="#" class="card-link">Card link</a>
+									<a href="#" class="card-link">Another link</a>
+								</div>
+							</div>
+							}
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		@await Html.PartialAsync("_PartialScripts")
+	</body>
+</html>
