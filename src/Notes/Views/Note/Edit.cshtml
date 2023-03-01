@@ -101,24 +101,37 @@
 		autoDownloadFontAwesome: false,
 		spellChecker: false,
 		tabSize: 4,
-		//toolbar: [
-		//	'bold', 'italic', 'strikethrough', '|',
-		//	'heading-1', 'heading-2', 'heading-3', 'heading-bigger', 'heading-smaller', '|',
-		//	'code', 'quote', '|',
-		//	'ordered-list', 'unordered-list', '|',
-		//	'link', 'image', 'horizontal-rule', '|',
-		//	'clean-block', 'preview', 'fullscreen', 'side-by-side'
-		//],
+		toolbar: [
+			'bold', 'italic', 'strikethrough', '|',
+			'heading-1', 'heading-2', 'heading-3', 'heading-bigger', 'heading-smaller', '|',
+			'code', 'quote', '|',
+			'ordered-list', 'unordered-list', '|',
+			'link', 'image', 'horizontal-rule', '|',
+			'preview', 'fullscreen', 'side-by-side'
+		],
 		previewRender: (plainText, preview) => {
 			setTimeout(() => {
             	//console.log(preview)
-				preview.innerHTML = "<h1>Buhaha</h1>";
+				//preview.innerHTML = "<h1>Buhaha</h1>";
+				$.ajax({
+					type: "POST",
+					url: '/note/preview/',
+					dataType: 'json',
+					data: {
+						content: plainText
+					}
+				}).done(function (d) {
+					preview.innerHTML = d.content;
+				}).fail(function () {
+					//error();
+				});
 				
         	}, 250);
 			return "Loading...";
 		},
 		forceSync: true,
 		status: false,
+		lineNumbers: true,
 		renderingConfig: {
 			codeSyntaxHighlighting: true
 		}

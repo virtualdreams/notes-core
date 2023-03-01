@@ -162,6 +162,7 @@ namespace Notes.Controllers
 		}
 
 		[HttpPost]
+		[SkipStatusCodePages]
 		public async Task<IActionResult> Preview(NotePostModel model)
 		{
 			// remove some error messages, because they are not needed for preview mode
