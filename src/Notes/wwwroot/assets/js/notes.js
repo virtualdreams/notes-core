@@ -115,16 +115,16 @@ notes = (function ($) {
 				if (data != null && data.success) {
 					$('#id').val(data.id);
 
-					$('#result').html('<div class="alert alert-success"><button type="button" class="close">×</button>Note has been successfully saved.</div>');
-					window.setTimeout(function () {
-						$(".alert").fadeTo(500, 0).slideUp(500, function () {
-							$(this).remove();
-						});
-					}, 5000);
+					$('#result').html('<div class="alert alert-success alert-dismissible fade show">Note has been successfully saved.<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+					// window.setTimeout(function () {
+					// 	$(".alert").fadeTo(500, 0).slideUp(500, function () {
+					// 		$(this).remove();
+					// 	});
+					// }, 5000);
 
-					$('.alert .close').on("click", function (e) {
-						$(this).parent().fadeTo(500, 0).slideUp(500);
-					});
+					// $('.alert .close').on("click", function (e) {
+					// 	$(this).parent().fadeTo(500, 0).slideUp(500);
+					// });
 
 				} else {
 					error();
@@ -135,11 +135,11 @@ notes = (function ($) {
 		}
 
 		var error = function () {
-			$('#result').html('<div class="alert alert-danger"><button type="button" class="close">×</button>Failed to save note!</div>');
+			$('#result').html('<div class="alert alert-danger alert-dismissible fade show">Failed to save note!<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
 
-			$('.alert .close').on("click", function (e) {
-				$(this).parent().fadeTo(500, 0).slideUp(500);
-			});
+			// $('.alert .close').on("click", function (e) {
+			// 	$(this).parent().fadeTo(500, 0).slideUp(500);
+			// });
 		}
 	});
 
@@ -166,11 +166,11 @@ notes = (function ($) {
 			});
 
 			var error = function () {
-				$('#result').html('<div class="alert alert-danger"><button type="button" class="close">×</button>Failed to generate preview!</div>');
+				$('#result').html('<div class="alert alert-danger alert-dismissible fade show">Failed to generate preview!<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
 
-				$('.alert .close').on("click", function (e) {
-					$(this).parent().fadeTo(500, 0).slideUp(500);
-				});
+				// $('.alert .close').on("click", function (e) {
+				// 	$(this).parent().fadeTo(500, 0).slideUp(500);
+				// });
 			}
 		}
 		else {
