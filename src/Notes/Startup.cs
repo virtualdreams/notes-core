@@ -64,7 +64,7 @@ namespace Notes
 			services.AddNoteServices(_provider);
 
 			// key ring
-			if (!String.IsNullOrEmpty(_settings.KeyStore))
+			if (!String.IsNullOrEmpty(_settings?.KeyStore))
 			{
 				services.AddDataProtection(options =>
 				{
