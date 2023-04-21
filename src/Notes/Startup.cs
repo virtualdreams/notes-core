@@ -50,7 +50,7 @@ namespace Notes
 			//.ValidateDataAnnotations();
 
 			// get settings for local usage
-			var _settings = Configuration.GetSection(AppSettings.SectionName).Get<AppSettings>();
+			var _keyStore = Configuration.GetSection(AppSettings.SectionName).GetValue<string>("KeyStore", null);
 			var _provider = Configuration.GetSection("Database").GetValue<DatabaseProvider>("Provider", DatabaseProvider.PgSql);
 
 			// database context
@@ -64,12 +64,12 @@ namespace Notes
 			services.AddNoteServices(_provider);
 
 			// key ring
-			if (!String.IsNullOrEmpty(_settings?.KeyStore))
+			if (!String.IsNullOrEmpty(_keyStore))
 			{
 				services.AddDataProtection(options =>
 				{
 					options.ApplicationDiscriminator = "notes";
-				}).PersistKeysToFileSystem(new DirectoryInfo(_settings.KeyStore));
+				}).PersistKeysToFileSystem(new DirectoryInfo(_keyStore));
 			}
 
 			// IIS integration
