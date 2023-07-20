@@ -4,3 +4,4 @@
 /wwwroot/images
 /node_modules
 *.log
+appsettings*.json
