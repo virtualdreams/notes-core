@@ -10,11 +10,11 @@ Notes! is an ASP.NET Core based webapp to create and manage text notes.
 
 ## Technology
 
-* [.NET 6.0](https://dotnet.microsoft.com/)
-* [ASP.NET Core 6.0](https://dotnet.microsoft.com/)
+* [.NET 8.0](https://dotnet.microsoft.com/)
+* [ASP.NET Core 8.0](https://dotnet.microsoft.com/)
 * [MariaDB](https://mariadb.org/)
 * [PostgreSQL](https://www.postgresql.org/)
-* [bootstrap 4](http://getbootstrap.com/)
-* [fontawesome 4](https://fontawesome.com/)
+* [bootstrap](http://getbootstrap.com/)
+* [fontawesome](https://fontawesome.com/)
 * [nodejs](https://nodejs.org/)
 * [grunt](https://gruntjs.com/)
