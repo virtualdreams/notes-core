@@ -10,7 +10,7 @@
 			"request": "launch",
 			"preLaunchTask": "build (Debug)",
 			// If you have changed target frameworks, make sure to update the program path.
-			"program": "${workspaceFolder}/src/Notes/bin/Debug/net7.0/Notes.dll",
+			"program": "${workspaceFolder}/src/Notes/bin/Debug/net8.0/Notes.dll",
 			"args": [],
 			"cwd": "${workspaceFolder}/src/Notes",
 			"stopAtEntry": false,
@@ -29,7 +29,7 @@
 			"request": "launch",
 			"preLaunchTask": "build (Release)",
 			// If you have changed target frameworks, make sure to update the program path.
-			"program": "${workspaceFolder}/src/Notes/bin/Release/net7.0/Notes.dll",
+			"program": "${workspaceFolder}/src/Notes/bin/Release/net8.0/Notes.dll",
 			"args": [],
 			"cwd": "${workspaceFolder}/src/Notes",
 			"stopAtEntry": false,
