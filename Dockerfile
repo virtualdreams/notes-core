@@ -1,20 +1,38 @@
 # build
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine-amd64 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+
+ENV DOTNET_EnableDiagnostics=0
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
+# RUN apk add --no-cache \
+# 	icu-libs \
+# 	&& rm -rf /var/cache/apk/*
+
 WORKDIR /source
+
 COPY notes-core.sln .
 COPY src ./src
-RUN apk add --no-cache icu-libs
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
 RUN dotnet restore
 RUN dotnet publish -c Release -o publish --no-restore src/Notes
 
+
 # final
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine-amd64
-WORKDIR /app
-COPY --from=build /source/publish .
-COPY src/Notes/appsettings.json .
-COPY NLog.docker.config ./NLog.config
-RUN apk add --no-cache icu-libs
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
+
+ENV DOTNET_EnableDiagnostics=0
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
-EXPOSE 80
+
+RUN apk add --no-cache \
+	icu-libs \
+	&& rm -rf /var/cache/apk/*
+
+WORKDIR /app
+
+COPY --from=build /source/publish .
+COPY docker/appsettings.json .
+COPY docker/NLog.config .
+
+EXPOSE 5000
+
 ENTRYPOINT ["dotnet", "Notes.dll"]
