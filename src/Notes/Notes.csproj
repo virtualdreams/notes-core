@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <Version>1.0.0</Version>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <Description>Notes</Description>
     <Copyright>stichelbiene.de © 2020</Copyright>
     <AssemblyTitle>Notes</AssemblyTitle>
