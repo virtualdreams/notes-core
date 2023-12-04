@@ -67,7 +67,7 @@
 					</ul>
 					<ul class="navbar-nav">
 						<li class="nav-item">
-							<form asp-route="search" method="get" id="search-form">
+							<form asp-route="search" method="get" id="search-form" asp-antiforgery="false">
 								<div class="input-group mb-0">
 									<input class="form-control border-right-0 border" type="text" name="q" placeholder="Search..." value="@ViewBag.Search" aria-label="Search">
 									<button class="btn btn-outline-secondary border-left-0 border" type="submit">

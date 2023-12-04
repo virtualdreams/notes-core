@@ -40,7 +40,7 @@
 					</div>
 				}
 
-				<form asp-controller="account" asp-action="edit" asp-area="admin" method="post" enctype="multipart/form-data" id="account-form" >
+				<form asp-controller="account" asp-action="edit" asp-area="admin" method="post" enctype="multipart/form-data" id="account-form" asp-antiforgery="false">
 					<div class="mb-3">
 						<label class="form-label" for="username">Username</label>
 						<input class="form-control" type="email" name="username" id="username" placeholder="E-mail" value="@Model.User.Username" validation-for="username">
