@@ -64,14 +64,20 @@ namespace Notes
 
 			services.AddNoteServices(_provider);
 
-			// key ring
-			if (!String.IsNullOrEmpty(_keyStore))
+			// set keystore
+			if (String.IsNullOrEmpty(_keyStore))
 			{
-				services.AddDataProtection(options =>
-				{
-					options.ApplicationDiscriminator = "notes";
-				}).PersistKeysToFileSystem(new DirectoryInfo(_keyStore));
+				_keyStore = "keystore";
 			}
+
+			// key ring
+			services.AddDataProtection(options =>
+			{
+				options.ApplicationDiscriminator = "notes";
+			})
+			.PersistKeysToFileSystem(
+				new DirectoryInfo(_keyStore)
+			);
 
 			// IIS integration
 			services.Configure<IISOptions>(options => { });
