@@ -29,3 +29,34 @@ use `make`.
 make publish
 dotnet publish/Notes.dll
 ```
+
+## Docker
+
+### Build docker image
+
+Builder docker image.
+
+```sh
+docker build --no-cache -t notes-core .
+```
+
+### Run docker image
+
+Run image with host mount.
+
+```sh
+docker run -d \
+    -p 5000:5000 \
+    -e NOTES__ConnectionString__PgSql=Host=hostname;Database=notes;Username=notes;Password=notes \
+    -v /path/to/data:/data notes-core
+```
+
+Run image with named volume.
+
+```sh
+docker volume create notes
+docker run -d \
+    -p 5000:5000 \
+    -e NOTES__ConnectionString__PgSql=Host=hostname;Database=notes;Username=notes;Password=notes \
+    -v notes:/data notes-core
+```
