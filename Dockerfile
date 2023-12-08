@@ -27,6 +27,8 @@ RUN apk add --no-cache \
 	icu-libs \
 	&& rm -rf /var/cache/apk/*
 
+VOLUME ["/data"]
+
 WORKDIR /app
 
 COPY --from=build /source/publish .
