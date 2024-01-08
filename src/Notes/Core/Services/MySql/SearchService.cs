@@ -46,10 +46,10 @@ namespace Notes.Core.Services.MySql
 				.Where(f =>
 					f.Trash == false &&
 					(
-						EF.Functions.Match(f.Title, term, MySqlMatchSearchMode.NaturalLanguage) ||
-						EF.Functions.Match(f.Content, term, MySqlMatchSearchMode.NaturalLanguage) ||
-						EF.Functions.Match(f.Notebook, term, MySqlMatchSearchMode.NaturalLanguage) ||
-						f.Tags.Any(a => EF.Functions.Match(a.Name, term, MySqlMatchSearchMode.NaturalLanguage))
+						EF.Functions.IsMatch(f.Title, term, MySqlMatchSearchMode.NaturalLanguage) ||
+						EF.Functions.IsMatch(f.Content, term, MySqlMatchSearchMode.NaturalLanguage) ||
+						EF.Functions.IsMatch(f.Notebook, term, MySqlMatchSearchMode.NaturalLanguage) ||
+						f.Tags.Any(a => EF.Functions.IsMatch(a.Name, term, MySqlMatchSearchMode.NaturalLanguage))
 					)
 				)
 				.WhereIf(next > 0, f => f.Id < next)
