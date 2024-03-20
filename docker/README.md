@@ -16,6 +16,7 @@ docker run \
 	--rm \
 	-p 5000:5000 \
 	-e NOTES__ConnectionStrings__PgSql='Host=<PostgresServer>;Database=notes;Username=notes;Password=notes' \
+	-e NOTES__Database__Provider=PgSql \
 	# -v $(pwd)/storage/key-store:/app/key-store \
 	notes-core
 ```
