@@ -1,0 +1,33 @@
+@model IEnumerable<Notes.Models.NoteModel>
+@using Notes.Extensions
+
+<div class="row mt-4 row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+	@foreach (var note in Model) {
+	<div class="col">
+		<div class="card">
+			<div class="card-body" style="position: relative;">
+				<h5 class="card-title text-dark">
+					@note.Title
+				</h5>
+				<h6 class="card-subtitle mb-2 text-muted">
+					<span data-bs-toggle="tooltip" data-bs-placement="top" title="@await Component.InvokeAsync("FormatDate", new { date = note.Modified })">
+						@note.Modified.ToAge()
+					</span>
+				</h6>
+				<div class="card-text">
+					<markdown content="@note.Content" plain="true">
+				</div>
+				<a class="link-secondary stretched-link text-decoration-none" asp-route="view" asp-route-id="@note.Id" asp-route-slug="@note.Title.ToSlug()">
+					...
+				</a>
+			</div>
+			<div class="card-footer">
+				<a class="cloud" href="#" data-bs-toggle="modal" data-bs-target="#trash"><i class="fa-solid fa-fw fa-trash"></i></a>
+				@if(!String.IsNullOrEmpty(note.Notebook)) {
+					<a class="cloud" style="" asp-route="notebook" asp-route-id="@note.Notebook"><i class="fa-solid fa-fw fa-book"></i> @note.Notebook</a>
+				}
+			</div>
+		</div>
+	</div>
+	}
+</div>

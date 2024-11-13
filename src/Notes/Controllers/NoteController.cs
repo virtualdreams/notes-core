@@ -183,7 +183,7 @@ namespace Notes.Controllers
 					}
 				};
 
-				var _content = await Task.Run(() => view.Note.Content.ToMarkdown());
+				var _content = await Task.Run(() => view.Note.Content.ToMarkdownHtml());
 
 				return Json(new { Success = true, Content = _content });
 			}

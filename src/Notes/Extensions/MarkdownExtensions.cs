@@ -9,7 +9,7 @@ namespace Notes.Extensions
 		/// </summary>
 		/// <param name="source">The markdown source.</param>
 		/// <returns>The render output.</returns>
-		public static string ToMarkdown(this string source)
+		public static string ToMarkdownHtml(this string source)
 		{
 			var _pipeline = new MarkdownPipelineBuilder()
 				.UseReferralLinks("nofollow")
@@ -21,9 +21,33 @@ namespace Notes.Extensions
 				.UseBootstrap()
 				.UsePipeTables()
 				.Build();
+
 			var _markdown = Markdown.ToHtml(source, _pipeline);
 
 			return _markdown;
+		}
+
+		/// <summary>
+		/// Render markdown to plain text.
+		/// </summary>
+		/// <param name="source">The markdown source.</param>
+		/// <returns>The render output.</returns>
+		public static string ToMarkdownPlain(this string source)
+		{
+			var _pipeline = new MarkdownPipelineBuilder()
+				.UseReferralLinks("nofollow")
+				.UseAbbreviations()
+				.UseEmphasisExtras()
+				.UseTaskLists()
+				.UseAutoLinks()
+				.UseMediaLinks()
+				.UseBootstrap()
+				.UsePipeTables()
+				.Build();
+
+			var _plain = Markdown.ToPlainText(source, _pipeline);
+
+			return _plain;
 		}
 	}
 }

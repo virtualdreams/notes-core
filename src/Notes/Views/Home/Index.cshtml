@@ -13,7 +13,12 @@
 <div class="row">
 	<div class="col-lg-12">
 		@if(Model.Notes.Count() > 0) {
-			<partial name="_PartialNotes" model="Model.Notes" />
+			<feature name="Cards">
+				<partial name="_PartialNotesSheets" model="Model.Notes" />
+			</feature>
+			<feature name="Cards" negate="true">
+				<partial name="_PartialNotes" model="Model.Notes" />
+			</feature>
 		} else {
 			@:There are no more notes at the moment.
 		}
@@ -21,7 +26,7 @@
 </div>
 
 @if(Model.Pager.HasNext) {
-<div class="row">
+<div class="row mt-4">
 	<div class="col-lg-12">
 		<nav>
 			<ul class="pagination justify-content-center">
