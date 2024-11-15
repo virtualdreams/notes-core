@@ -316,7 +316,7 @@ namespace Notes.Core.Services
 				.Where(f => f.Username == username)
 				.SingleOrDefaultAsync();
 
-			if (_user != null && PasswordHasher.VerifyHashedPassword(_user.Password, password))
+			if (_user != null && PasswordHasher.VerifyPassword(password, _user.Password))
 			{
 				Log.LogInformation($"User '{_user.Username}' has been authenticated.");
 				return _user;

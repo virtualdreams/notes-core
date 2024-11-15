@@ -5,59 +5,132 @@ namespace Notes.Core.Internal
 {
 	public static class PasswordHasher
 	{
-		private const int SaltByteSize = 24;
-		private const int HashByteSize = 24;
-		private const int HashingIterationsCount = 10101;
+		// http://stackoverflow.com/questions/19957176/asp-net-identity-password-hashing
 
-		public static string HashPassword(string password)
+		public static string HashPassword(string password, int iterations = 600000)
 		{
-			// http://stackoverflow.com/questions/19957176/asp-net-identity-password-hashing
-
-			byte[] salt;
-			byte[] buffer2;
 			if (String.IsNullOrEmpty(password))
-				throw new ArgumentNullException("password");
+				throw new ArgumentNullException(nameof(password));
 
-			using (var bytes = new Rfc2898DeriveBytes(password, SaltByteSize, HashingIterationsCount, HashAlgorithmName.SHA1))
-			{
-				salt = bytes.Salt;
-				buffer2 = bytes.GetBytes(HashByteSize);
-			}
-			byte[] dst = new byte[(SaltByteSize + HashByteSize) + 1];
-			Buffer.BlockCopy(salt, 0, dst, 1, SaltByteSize);
-			Buffer.BlockCopy(buffer2, 0, dst, SaltByteSize + 1, HashByteSize);
-
-			return Convert.ToBase64String(dst);
+			return Convert.ToBase64String(HashPasswordV2(password, iterations));
 		}
 
-		public static bool VerifyHashedPassword(string hashedPassword, string password)
+		public static byte[] HashPasswordV2(string password, int iterations)
 		{
-			byte[] _passwordHashBytes;
-			int _arrayLen = (SaltByteSize + HashByteSize) + 1;
+			const int _saltSize = 128 / 8; // 128 bits / 16 bytes
+			const int _hashSize = 256 / 8; // 256 bits / 32 bytes
+			const int _iterSize = 32 / 8;  // 32 bits  / 4 bytes
 
-			if (String.IsNullOrEmpty(hashedPassword))
-				return false;
+			byte[] _saltBytes;
+			byte[] _hashBytes;
+			byte[] _iterBytes = BitConverter.GetBytes(iterations);
+			byte[] _hashedPasswordBytes = new byte[_saltSize + _hashSize + _iterSize + 1];
 
-			if (String.IsNullOrEmpty(password))
-				throw new ArgumentNullException("password");
+			if (BitConverter.IsLittleEndian)
+				Array.Reverse(_iterBytes);
 
-			byte[] src = Convert.FromBase64String(hashedPassword);
-
-			if ((src.Length != _arrayLen) || (src[0] != 0))
-				return false;
-
-			byte[] _currentSaltBytes = new byte[SaltByteSize];
-			Buffer.BlockCopy(src, 1, _currentSaltBytes, 0, SaltByteSize);
-
-			byte[] _currentHashBytes = new byte[HashByteSize];
-			Buffer.BlockCopy(src, SaltByteSize + 1, _currentHashBytes, 0, HashByteSize);
-
-			using (var bytes = new Rfc2898DeriveBytes(password, _currentSaltBytes, HashingIterationsCount, HashAlgorithmName.SHA1))
+			using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltSize, iterations, HashAlgorithmName.SHA256))
 			{
-				_passwordHashBytes = bytes.GetBytes(SaltByteSize);
+				_saltBytes = _derivedBytes.Salt;
+				_hashBytes = _derivedBytes.GetBytes(_hashSize);
 			}
 
-			return AreHashesEqual(_currentHashBytes, _passwordHashBytes);
+			_hashedPasswordBytes[0] = 0x01;
+			Buffer.BlockCopy(_saltBytes, 0, _hashedPasswordBytes, 1, _saltSize);
+			Buffer.BlockCopy(_hashBytes, 0, _hashedPasswordBytes, 1 + _saltSize, _hashSize);
+			Buffer.BlockCopy(_iterBytes, 0, _hashedPasswordBytes, 1 + _saltSize + _hashSize, _iterSize);
+
+			// Console.WriteLine($"> Salt {ByteArrayToString(_saltBytes)}");
+			// Console.WriteLine($"> Hash {ByteArrayToString(_hashBytes)}");
+
+			return _hashedPasswordBytes;
+		}
+
+		public static bool VerifyPassword(string password, string hashedPassword)
+		{
+			if (String.IsNullOrEmpty(hashedPassword))
+				throw new ArgumentNullException(nameof(password));
+
+			if (String.IsNullOrEmpty(password))
+				throw new ArgumentNullException(nameof(hashedPassword));
+
+			byte[] _hashedPassword = Convert.FromBase64String(hashedPassword);
+
+			var _version = _hashedPassword[0];
+
+			return _version switch
+			{
+				0x00 => VerifyPasswordV1(password, _hashedPassword),
+				0x01 => VerifyPasswordV2(password, _hashedPassword),
+				_ => throw new Exception("Unknown hash version."),
+			};
+		}
+
+		private static bool VerifyPasswordV1(string password, byte[] hashedPassword)
+		{
+			const int _saltSize = 192 / 8; // 192 bits / 24 bytes
+			const int _hashSize = 192 / 8; // 192 bits / 24 bytes
+			const int _iterations = 10101;
+
+			byte[] _hashedPasswordBytes;
+			byte[] _saltBytes = new byte[_saltSize];
+			byte[] _hashBytes = new byte[_hashSize];
+			int _arrayLen = _saltSize + _hashSize + 1;
+
+			if (hashedPassword.Length != _arrayLen)
+				return false;
+
+			Buffer.BlockCopy(hashedPassword, 1, _saltBytes, 0, _saltSize);
+			Buffer.BlockCopy(hashedPassword, _saltSize + 1, _hashBytes, 0, _hashSize);
+
+			// Console.WriteLine($"< Salt {ByteArrayToString(_saltBytes)}");
+			// Console.WriteLine($"< Hash {ByteArrayToString(_hashBytes)}");
+
+			using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltBytes, _iterations, HashAlgorithmName.SHA1))
+			{
+				_hashedPasswordBytes = _derivedBytes.GetBytes(_saltSize);
+			}
+
+			// Console.WriteLine($"< Gen  {ByteArrayToString(_hashedPasswordBytes)}");
+
+			return AreHashesEqual(_hashBytes, _hashedPasswordBytes);
+		}
+
+		private static bool VerifyPasswordV2(string password, byte[] hashedPassword)
+		{
+			const int _saltSize = 128 / 8; // 128 bits / 16 bytes
+			const int _hashSize = 256 / 8; // 256 bits / 32 bytes
+			const int _iterSize = 32 / 8;  // 32 bits  / 4 bytes
+
+			byte[] _hashedPasswordBytes;
+			byte[] _saltBytes = new byte[_saltSize];
+			byte[] _hashBytes = new byte[_hashSize];
+			byte[] _iterBytes = new byte[_iterSize];
+			int _arrayLen = _saltSize + _hashSize + _iterSize + 1;
+
+			if (hashedPassword.Length != _arrayLen)
+				return false;
+
+			Buffer.BlockCopy(hashedPassword, 1, _saltBytes, 0, _saltSize);
+			Buffer.BlockCopy(hashedPassword, 1 + _saltSize, _hashBytes, 0, _hashSize);
+			Buffer.BlockCopy(hashedPassword, 1 + _saltSize + _hashSize, _iterBytes, 0, _iterSize);
+
+			if (BitConverter.IsLittleEndian)
+				Array.Reverse(_iterBytes);
+
+			int _iterations = BitConverter.ToInt32(_iterBytes);
+
+			// Console.WriteLine($"< Salt {ByteArrayToString(_saltBytes)}");
+			// Console.WriteLine($"< Hash {ByteArrayToString(_hashBytes)}");
+
+			using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltBytes, _iterations, HashAlgorithmName.SHA256))
+			{
+				_hashedPasswordBytes = _derivedBytes.GetBytes(_hashSize);
+			}
+
+			// Console.WriteLine($"< Gen  {ByteArrayToString(_hashedPasswordBytes)}");
+
+			return AreHashesEqual(_hashBytes, _hashedPasswordBytes);
 		}
 
 		private static bool AreHashesEqual(byte[] firstHash, byte[] secondHash)
@@ -68,5 +141,10 @@ namespace Notes.Core.Internal
 				xor |= firstHash[i] ^ secondHash[i];
 			return 0 == xor;
 		}
+
+		// private static string ByteArrayToString(byte[] array)
+		// {
+		// 	return BitConverter.ToString(array);
+		// }
 	}
 }
