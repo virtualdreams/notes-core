@@ -1,11 +1,3 @@
--- schema table
-CREATE TABLE `schema` (
-  `version` BIGINT(20) NOT NULL,
-  `applied_on` DATETIME NOT NULL,
-  `description` VARCHAR(1024) COLLATE utf8mb4_unicode_ci NOT NULL,
-  KEY `ix_version` (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 -- note table
 CREATE TABLE `note` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -88,8 +80,3 @@ INSERT INTO revision (
     old.created,
     old.modified
 );
-
--- insert schema version
-INSERT INTO `schema` 
-  (`version`, `applied_on`, `description`)
-  VALUES(1, NOW(), 'Schema create.');

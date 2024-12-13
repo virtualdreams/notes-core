@@ -1,0 +1,77 @@
+services:
+  notes-core:
+    image: notes-core
+    build: ./
+    hostname: notes-core
+    depends_on:
+      postgres:
+        condition: service_healthy
+      # mysql:
+      #   condition: service_healthy
+    environment:
+      - NOTES__ConnectionStrings__PgSql=Host=postgres;Database=notes;Username=notes;Password=notes
+      # - LTBDB__ConnectionStrings__MySql=Server=mysql;Database=notes;User=notes;Password=notes
+      - NOTES__Database__Provider=PgSql
+      - NOTES__Settings__SiteName=Notes!
+      - NOTES__Settings__PageSize=10
+      - NOTES__Mail__Enabled=false
+      - NOTES__Mail__Server=localhost
+      - NOTES__Mail__Port=25
+      - NOTES__Mail__From=admin@localhost
+      - NOTES__Mail__Username=demo
+      - NOTES__Mail__Password=demo
+      - NOTES__Mail__DisableCertificateValidation=false
+      - NOTES__Mail__DisableCheckCertificateRevocation=false
+    # volumes:
+    #   - notes:/data
+    ports:
+      - 5000:5000
+    networks:
+      - notes
+
+  postgres:
+    image: postgres
+    hostname: postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER" ]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    environment:
+      - POSTGRES_PASSWORD=notes
+      - POSTGRES_USER=notes
+      - POSTGRES_DB=notes
+    # volumes:
+    #   - postgres:/var/lib/postgresql/data
+    networks:
+      - notes
+  # mysql:
+  #   image: mariadb
+  #   hostname: mysql
+  #   healthcheck:
+  #     test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 10
+  #     start_period: 10s
+  #   environment:
+  #     - MARIADB_ROOT_PASSWORD=root
+  #     - MARIADB_USER=notes
+  #     - MARIADB_PASSWORD=notes
+  #     - MARIADB_DATABASE=notes
+  #  # volumes:
+  #  #   - mysql:/var/lib/mysql
+  #   networks:
+  #     - notes
+
+  # volumes:
+  #   notes:
+  #     external: false
+  #   postgres:
+  #     external: false
+  #   mysql:
+  #     external: false
+
+networks:
+  notes:
+    name: notes

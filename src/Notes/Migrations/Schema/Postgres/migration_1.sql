@@ -1,10 +1,3 @@
--- schema table
-create table schema (
-  version bigint not null,
-  applied_on timestamptz not null, 
-  description varchar(1024) not null
-);
-
 -- note table
 create table note (
   id serial primary key,
@@ -51,7 +44,6 @@ create table revision (
 );
 
 -- create indexes
-create index ix_schema_version on schema(version);
 create index ix_note_trash on note(trash);
 create index ix_note_notebook on note(notebook);
 create index ix_tag_noteid on tag(noteid);
@@ -119,8 +111,3 @@ create index
 on 
 	tag 
 using gin ( to_tsvector('english', name ));
-
--- insert schema version
-insert into schema
-  (version, applied_on, description)
-  values (1, NOW(), 'Schema create.')

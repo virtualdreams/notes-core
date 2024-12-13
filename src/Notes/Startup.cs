@@ -16,6 +16,7 @@ using Notes.Events;
 using Notes.Extensions;
 using Notes.Features;
 using Notes.Filter;
+using Notes.Migrations;
 using Notes.Options;
 using Notes.Provider;
 using System.IO;
@@ -53,6 +54,9 @@ namespace Notes
 			var _keyStore = Configuration.GetSection(AppSettings.SectionName).GetValue<string>("KeyStore", null);
 			var _provider = Configuration.GetSection("Database").GetValue<DatabaseProvider>("Provider", DatabaseProvider.PgSql);
 			var _connectionString = Configuration.GetConnectionString(_provider.ToString());
+
+			// migrations
+			services.AddFluentMigrator(_connectionString, _provider);
 
 			// database context
 			services.AddDatabaseContext(_connectionString, _provider);
@@ -133,6 +137,8 @@ namespace Notes
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
+			app.MigrateDatabase();
+
 			app.UseForwardedHeaders(new ForwardedHeadersOptions
 			{
 				ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
