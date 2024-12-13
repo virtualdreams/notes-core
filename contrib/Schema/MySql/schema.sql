@@ -8,7 +8,7 @@ CREATE TABLE `schema` (
 
 -- note table
 CREATE TABLE `note` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `content` MEDIUMTEXT COLLATE utf8mb4_unicode_ci NOT NULL,
   `notebook` VARCHAR(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -92,4 +92,4 @@ INSERT INTO revision (
 -- insert schema version
 INSERT INTO `schema` 
   (`version`, `applied_on`, `description`)
-  VALUES(1, NOW(), 'Schema create.');
+  VALUES(1, NOW(), 'Create schema.');
