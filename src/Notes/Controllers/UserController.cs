@@ -42,9 +42,16 @@ namespace Notes.Controllers
 
 		[AllowAnonymous]
 		[HttpGet]
-		public IActionResult Login()
+		public async Task<IActionResult> Login()
 		{
 			var view = new LoginModel();
+
+			// This shows a warning if no administrative account exists.
+			// HACK!
+			if (!(await UserService.HasUsersAsync()))
+			{
+				ModelState.AddModelError("warning", "The first user is automatically created as an administrative account.");
+			}
 
 			return View(view);
 		}
@@ -57,7 +64,7 @@ namespace Notes.Controllers
 			{
 				try
 				{
-					// if no accounts exists, create the first user as administrator.
+					// If there are no administrative accounts yet, the first user is created as an administrative account.
 					// HACK!
 					if (!(await UserService.HasUsersAsync()))
 					{

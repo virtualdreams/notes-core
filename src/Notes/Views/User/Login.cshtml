@@ -19,6 +19,12 @@
 					</div>
 				}
 
+				@if(Html.HasError("warning")) {
+					<div class="alert alert-warning" role="alert">
+						@Html.ErrorMessage("warning")
+					</div>
+				}
+
 				<form asp-route="login" method="post" enctype="multipart/form-data" id="login-form" asp-antiforgery="false">
 					<div class="mb-3">
 						<label class="form-label" for="username">E-mail address</label>
