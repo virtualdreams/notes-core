@@ -22,6 +22,7 @@ services:
       - NOTES__Mail__Password=demo
       - NOTES__Mail__DisableCertificateValidation=false
       - NOTES__Mail__DisableCheckCertificateRevocation=false
+      - TZ=Europe/Berlin
     # volumes:
     #   - notes:/data
     ports:
