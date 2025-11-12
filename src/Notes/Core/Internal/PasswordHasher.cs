@@ -26,14 +26,17 @@ namespace Notes.Core.Internal
 			byte[] _iterBytes = BitConverter.GetBytes(iterations);
 			byte[] _hashedPasswordBytes = new byte[_saltSize + _hashSize + _iterSize + 1];
 
+			_saltBytes = RandomNumberGenerator.GetBytes(_saltSize);
+
 			if (BitConverter.IsLittleEndian)
 				Array.Reverse(_iterBytes);
 
-			using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltSize, iterations, HashAlgorithmName.SHA256))
-			{
-				_saltBytes = _derivedBytes.Salt;
-				_hashBytes = _derivedBytes.GetBytes(_hashSize);
-			}
+			_hashBytes = Rfc2898DeriveBytes.Pbkdf2(password, _saltBytes, iterations, HashAlgorithmName.SHA256, _hashSize);
+			// using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltSize, iterations, HashAlgorithmName.SHA256))
+			// {
+			// 	_saltBytes = _derivedBytes.Salt;
+			// 	_hashBytes = _derivedBytes.GetBytes(_hashSize);
+			// }
 
 			_hashedPasswordBytes[0] = 0x01;
 			Buffer.BlockCopy(_saltBytes, 0, _hashedPasswordBytes, 1, _saltSize);
@@ -86,10 +89,11 @@ namespace Notes.Core.Internal
 			// Console.WriteLine($"< Salt {ByteArrayToString(_saltBytes)}");
 			// Console.WriteLine($"< Hash {ByteArrayToString(_hashBytes)}");
 
-			using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltBytes, _iterations, HashAlgorithmName.SHA1))
-			{
-				_hashedPasswordBytes = _derivedBytes.GetBytes(_saltSize);
-			}
+			_hashedPasswordBytes = Rfc2898DeriveBytes.Pbkdf2(password, _saltBytes, _iterations, HashAlgorithmName.SHA256, _hashSize);
+			// using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltBytes, _iterations, HashAlgorithmName.SHA1))
+			// {
+			// 	_hashedPasswordBytes = _derivedBytes.GetBytes(_saltSize);
+			// }
 
 			// Console.WriteLine($"< Gen  {ByteArrayToString(_hashedPasswordBytes)}");
 
@@ -123,10 +127,11 @@ namespace Notes.Core.Internal
 			// Console.WriteLine($"< Salt {ByteArrayToString(_saltBytes)}");
 			// Console.WriteLine($"< Hash {ByteArrayToString(_hashBytes)}");
 
-			using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltBytes, _iterations, HashAlgorithmName.SHA256))
-			{
-				_hashedPasswordBytes = _derivedBytes.GetBytes(_hashSize);
-			}
+			_hashedPasswordBytes = Rfc2898DeriveBytes.Pbkdf2(password, _saltBytes, _iterations, HashAlgorithmName.SHA256, _hashSize);
+			// using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltBytes, _iterations, HashAlgorithmName.SHA256))
+			// {
+			// 	_hashedPasswordBytes = _derivedBytes.GetBytes(_hashSize);
+			// }
 
 			// Console.WriteLine($"< Gen  {ByteArrayToString(_hashedPasswordBytes)}");
 
