@@ -1,5 +1,5 @@
 # build
-FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 
 ENV DOTNET_EnableDiagnostics=0
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
@@ -10,7 +10,7 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
 WORKDIR /source
 
-COPY notes-core.sln .
+COPY notes-core.slnx .
 COPY src ./src
 
 RUN dotnet restore
@@ -18,7 +18,7 @@ RUN dotnet publish -c Release -o publish --no-restore src/Notes
 
 
 # final
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
 
 ENV DOTNET_EnableDiagnostics=0
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
