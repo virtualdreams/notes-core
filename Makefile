@@ -31,7 +31,7 @@ run:
 
 .PHONY: publish
 publish: clean-publish clean-project
-	dotnet publish -c Release /p:Version=1.0.0-$$(git rev-parse --short HEAD) -o publish $(project)
+	dotnet publish -c Release /p:Version=$$(git log -1 --date=format:"%Y.%m.%d" --format="%ad")+git-$$(git rev-parse --short HEAD) -o publish $(project)
 
 # npm
 
