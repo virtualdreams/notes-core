@@ -24,16 +24,6 @@ namespace Notes.Migrations
 								.For.Migrations()
 								.For.EmbeddedResources();
 						break;
-
-					case DatabaseProvider.MySql:
-						config
-							.AddMySql8()
-							.WithVersionTable(new VersionInfo())
-							.WithGlobalConnectionString(connectionString)
-							.ScanIn(Assembly.GetExecutingAssembly())
-								.For.Migrations()
-								.For.EmbeddedResources();
-						break;
 				}
 			});
 

@@ -14,10 +14,6 @@ namespace Notes.Extensions
 			{
 				switch (provider)
 				{
-					case DatabaseProvider.MySql:
-						options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), mySqlOptions => { });
-						break;
-
 					case DatabaseProvider.PgSql:
 						options.UseNpgsql(connectionString, npgSqlOptions => { });
 						break;

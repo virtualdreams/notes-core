@@ -1,7 +1,7 @@
 [Unit]
 Description=dotnet notes-core
 After=network.target
-After=mariadb.service
+After=postgresql.service
 
 [Service]
 Environment=COMPlus_EnableDiagnostics=0

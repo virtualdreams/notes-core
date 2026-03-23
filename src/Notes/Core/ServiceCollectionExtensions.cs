@@ -26,10 +26,6 @@ namespace Notes.Core
 		{
 			switch (provider)
 			{
-				case DatabaseProvider.MySql:
-					services.AddTransient<ISearchService, Core.Services.MySql.SearchService>();
-					break;
-
 				case DatabaseProvider.PgSql:
 					services.AddTransient<ISearchService, Core.Services.PgSql.SearchService>();
 					break;

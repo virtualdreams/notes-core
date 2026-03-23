@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-You need the latest **.NET Core**, **ASP.NET Core** and **PostgreSQL** or **MariaDB** to run this application.
+You need the latest **.NET Core**, **ASP.NET Core** and **PostgreSQL** to run this application.
 
 ## From source
 
