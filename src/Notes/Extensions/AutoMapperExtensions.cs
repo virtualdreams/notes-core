@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Notes.Extensions
 {
@@ -13,7 +14,7 @@ namespace Notes.Extensions
 
 				config.AddMaps(typeof(Startup));
 				// config.AddProfile<MappingProfile>();
-			});
+			}, NullLoggerFactory.Instance);
 
 			mappingConfiguration.AssertConfigurationIsValid();
 
