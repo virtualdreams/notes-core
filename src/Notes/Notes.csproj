@@ -30,6 +30,10 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <NuGetAudit>true</NuGetAudit>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Update="wwwroot\**\*;Views\**\*.cshtml;Areas\**\*.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
