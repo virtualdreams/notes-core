@@ -12,6 +12,8 @@
     <AssemblyName>Notes</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>notes-core</PackageId>
+    <NuGetAudit>true</NuGetAudit>
+    <CompressionEnabled>false</CompressionEnabled>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -28,10 +30,6 @@
     <DefineConstants>$(DefineConstants);RELEASE;TRACE</DefineConstants>
     <DebugType>None</DebugType>
     <Optimize>true</Optimize>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <NuGetAudit>true</NuGetAudit>
   </PropertyGroup>
 
   <ItemGroup>
