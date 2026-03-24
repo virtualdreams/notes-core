@@ -33,6 +33,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Suppress AutoMapper advisory, set the max depth for mappings as a remediation -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-rvv3-g6hj-g44x" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\**\*;Views\**\*.cshtml;Areas\**\*.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

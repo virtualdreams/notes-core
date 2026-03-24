@@ -1,3 +1,4 @@
+using AutoMapper.Internal;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +10,7 @@ namespace Notes.Extensions
 		{
 			var mappingConfiguration = new MapperConfiguration(config =>
 			{
+				config.Internal().ForAllMaps((_, mapping) => mapping.MaxDepth(64));
 				config.AllowNullCollections = false;
 
 				config.AddMaps(typeof(Startup));
