@@ -17,6 +17,8 @@ namespace Notes.Filter
 
 		public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
 		{
+			await next();
+
 			if (!context.ModelState.IsValid)
 			{
 				var _errorsInModelState = context.ModelState
@@ -35,8 +37,6 @@ namespace Notes.Filter
 				}
 				Logger.LogDebug("======================");
 			}
-
-			await next();
 		}
 	}
 }

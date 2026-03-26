@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Notes.Core.Interfaces;
 using Notes.Core;
 using Notes.Extensions;
+using Notes.FluentValidation;
 using Notes.Models;
 using Notes.Options;
 using System.Collections.Generic;
@@ -27,17 +29,37 @@ namespace Notes.Controllers
 
 		private readonly IUserService UserService;
 
+		private readonly IValidator<LoginModel> LoginModelValidator;
+
+		private readonly IValidator<PasswdForgotPostModel> PasswdForgotPostModelValidator;
+
+		private readonly IValidator<PasswdResetPostModel> PasswdResetPostModelValidator;
+
+		private readonly IValidator<PasswdChangePostModel> PasswdChangePostModelValidator;
+
+		private readonly IValidator<UserSettingsPostModel> UserSettingsPostModelValidator;
+
 		public UserController(
 			ILogger<UserController> log,
 			IMapper mapper,
 			IOptionsSnapshot<AppSettings> appSettings,
-			IUserService user)
+			IUserService user,
+			IValidator<LoginModel> loginModelValidator,
+			IValidator<PasswdForgotPostModel> passwdForgotPostModelValidator,
+			IValidator<PasswdResetPostModel> passwdResetPostModelValidator,
+			IValidator<PasswdChangePostModel> passwdChangePostModelValidator,
+			IValidator<UserSettingsPostModel> userSettingsPostModelValidator)
 			: base(user)
 		{
 			Log = log;
 			Mapper = mapper;
 			AppSettings = appSettings.Value;
 			UserService = user;
+			LoginModelValidator = loginModelValidator;
+			PasswdForgotPostModelValidator = passwdForgotPostModelValidator;
+			PasswdResetPostModelValidator = passwdResetPostModelValidator;
+			PasswdChangePostModelValidator = passwdChangePostModelValidator;
+			UserSettingsPostModelValidator = userSettingsPostModelValidator;
 		}
 
 		[AllowAnonymous]
@@ -60,7 +82,8 @@ namespace Notes.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Login(LoginModel model, string returnUrl)
 		{
-			if (ModelState.IsValid)
+			var _result = await LoginModelValidator.ValidateAsync(model);
+			if (_result.IsValid)
 			{
 				try
 				{
@@ -105,6 +128,7 @@ namespace Notes.Controllers
 				}
 			}
 
+			_result.AddToModelState(ModelState);
 			return View("Login", model);
 		}
 
@@ -119,7 +143,8 @@ namespace Notes.Controllers
 		[AllowAnonymous]
 		public async Task<IActionResult> ForgotPassword(PasswdForgotPostModel model)
 		{
-			if (ModelState.IsValid)
+			var _result = await PasswdForgotPostModelValidator.ValidateAsync(model);
+			if (_result.IsValid)
 			{
 				try
 				{
@@ -133,6 +158,7 @@ namespace Notes.Controllers
 				}
 			}
 
+			_result.AddToModelState(ModelState);
 			return View("ForgotConfirmation");
 		}
 
@@ -166,7 +192,8 @@ namespace Notes.Controllers
 		[AllowAnonymous]
 		public async Task<IActionResult> ResetPassword(string id, PasswdResetPostModel model)
 		{
-			if (ModelState.IsValid)
+			var _result = await PasswdResetPostModelValidator.ValidateAsync(model);
+			if (_result.IsValid)
 			{
 				try
 				{
@@ -196,6 +223,7 @@ namespace Notes.Controllers
 				Token = id
 			};
 
+			_result.AddToModelState(ModelState);
 			return View(view);
 		}
 
@@ -220,7 +248,8 @@ namespace Notes.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Security(PasswdChangePostModel model)
 		{
-			if (ModelState.IsValid)
+			var _result = await PasswdChangePostModelValidator.ValidateAsync(model);
+			if (_result.IsValid)
 			{
 				try
 				{
@@ -239,6 +268,7 @@ namespace Notes.Controllers
 				}
 			}
 
+			_result.AddToModelState(ModelState);
 			return View();
 		}
 
@@ -261,23 +291,25 @@ namespace Notes.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Settings(UserSettingsPostModel model)
 		{
-			if (!ModelState.IsValid)
+			var _result = await UserSettingsPostModelValidator.ValidateAsync(model);
+			if (_result.IsValid)
 			{
-				var view = new UserSettingsEditContainer
-				{
-					Settings = new UserSettingsModel
-					{
-						DisplayName = model.DisplayName,
-						Items = model.Items
-					}
-				};
+				await UserService.UpdateSettingsAsync(CurrentUser.Id, model.DisplayName, model.Items);
 
-				return View(view);
+				return RedirectToAction("settings", "user");
 			}
 
-			await UserService.UpdateSettingsAsync(CurrentUser.Id, model.DisplayName, model.Items);
+			var view = new UserSettingsEditContainer
+			{
+				Settings = new UserSettingsModel
+				{
+					DisplayName = model.DisplayName,
+					Items = model.Items
+				}
+			};
 
-			return RedirectToAction("settings", "user");
+			_result.AddToModelState(ModelState);
+			return View(view);
 		}
 		#endregion
 	}

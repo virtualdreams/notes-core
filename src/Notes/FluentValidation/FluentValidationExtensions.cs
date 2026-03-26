@@ -1,4 +1,6 @@
+using FluentValidation.Results;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 
 namespace Notes.FluentValidation
@@ -36,6 +38,14 @@ namespace Notes.FluentValidation
 					return policy.IsValid(str);
 				})
 				.WithMessage("The '{PropertyName}' does not meet the password policy requirements.");
+		}
+
+		public static void AddToModelState(this ValidationResult result, ModelStateDictionary modelState)
+		{
+			foreach (var error in result.Errors)
+			{
+				modelState.AddModelError(error.PropertyName, error.ErrorMessage);
+			}
 		}
 	}
 }

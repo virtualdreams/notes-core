@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,7 @@ using Notes.Areas.Admin.Models;
 using Notes.Controllers;
 using Notes.Core.Interfaces;
 using Notes.Core;
+using Notes.FluentValidation;
 using Notes.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,17 +27,21 @@ namespace Notes.Areas.Admin.Controllers
 
 		private readonly IUserService UserService;
 
+		private readonly IValidator<UserPostModel> UserPostModelValidator;
+
 		public AccountController(
 			ILogger<AccountController> log,
 			IMapper mapper,
 			IOptionsSnapshot<AppSettings> appSettings,
-			IUserService user)
+			IUserService user,
+			IValidator<UserPostModel> userPostModelValidator)
 			: base(user)
 		{
 			Log = log;
 			Mapper = mapper;
 			AppSettings = appSettings.Value;
 			UserService = user;
+			UserPostModelValidator = userPostModelValidator;
 		}
 
 		[HttpGet]
@@ -84,7 +90,8 @@ namespace Notes.Areas.Admin.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Edit(UserPostModel model)
 		{
-			if (ModelState.IsValid)
+			var _result = await UserPostModelValidator.ValidateAsync(model);
+			if (_result.IsValid)
 			{
 				try
 				{
@@ -118,6 +125,7 @@ namespace Notes.Areas.Admin.Controllers
 				}
 			};
 
+			_result.AddToModelState(ModelState);
 			return View(view);
 		}
 

@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Notes.Core.Interfaces;
 using Notes.Core;
 using Notes.Extensions;
+using Notes.FluentValidation;
 using Notes.Models;
 using Notes.Options;
 using System.Collections.Generic;
@@ -27,12 +29,21 @@ namespace Notes.Controllers
 
 		private readonly INoteService NoteService;
 
+		private readonly IValidator<NotePostModel> NotePostModelValidator;
+
+		private readonly IValidator<NotePreviewPostModel> NotePreviewPostModelValidator;
+
+		private readonly IValidator<NoteTrashPostModel> NoteTrashPostModelValidator;
+
 		public NoteController(
 			ILogger<NoteController> log,
 			IMapper mapper,
 			IOptionsSnapshot<AppSettings> appSettings,
 			IUserService user,
-			INoteService note)
+			INoteService note,
+			IValidator<NotePostModel> notePostModelValidator,
+			IValidator<NotePreviewPostModel> notePreviewPostModelValidator,
+			IValidator<NoteTrashPostModel> noteTrashPostModelValidator)
 			: base(user)
 		{
 			Log = log;
@@ -40,6 +51,9 @@ namespace Notes.Controllers
 			AppSettings = appSettings.Value;
 			UserService = user;
 			NoteService = note;
+			NotePostModelValidator = notePostModelValidator;
+			NotePreviewPostModelValidator = notePreviewPostModelValidator;
+			NoteTrashPostModelValidator = noteTrashPostModelValidator;
 		}
 
 		[HttpGet]
@@ -107,7 +121,8 @@ namespace Notes.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Edit(NotePostModel model)
 		{
-			if (ModelState.IsValid)
+			var _result = await NotePostModelValidator.ValidateAsync(model);
+			if (_result.IsValid)
 			{
 				try
 				{
@@ -157,29 +172,22 @@ namespace Notes.Controllers
 					}
 				};
 
+				_result.AddToModelState(ModelState);
 				return View(view);
 			}
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Preview(NotePostModel model)
+		public async Task<IActionResult> Preview(NotePreviewPostModel model)
 		{
-			// remove some error messages, because they are not needed for preview mode
-			ModelState.Remove("title");
-			ModelState.Remove("notebook");
-			ModelState.Remove("tags");
-
-			if (ModelState.IsValid)
+			var _result = await NotePreviewPostModelValidator.ValidateAsync(model);
+			if (_result.IsValid)
 			{
 				var view = new NoteViewContainer
 				{
 					Note = new NoteModel
 					{
-						Id = model.Id,
-						Title = model.Title,
 						Content = model.Content,
-						Notebook = model.Notebook,
-						TagsString = model.Tags
 					}
 				};
 
@@ -281,7 +289,8 @@ namespace Notes.Controllers
 		[Authorize(Policy = "AdministratorOnly")]
 		public async Task<IActionResult> Delete(NoteTrashPostModel model)
 		{
-			if (ModelState.IsValid)
+			var _result = await NoteTrashPostModelValidator.ValidateAsync(model);
+			if (_result.IsValid)
 			{
 				foreach (var note in model.Id)
 				{
@@ -289,13 +298,15 @@ namespace Notes.Controllers
 				}
 			}
 
+			_result.AddToModelState(ModelState);
 			return RedirectToAction("trash");
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> Restore(NoteTrashPostModel model)
 		{
-			if (ModelState.IsValid)
+			var _result = await NoteTrashPostModelValidator.ValidateAsync(model);
+			if (_result.IsValid)
 			{
 				foreach (var note in model.Id)
 				{
@@ -307,6 +318,7 @@ namespace Notes.Controllers
 				}
 			}
 
+			_result.AddToModelState(ModelState);
 			return RedirectToAction("trash");
 		}
 	}

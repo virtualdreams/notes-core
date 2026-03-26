@@ -1,4 +1,3 @@
-using FluentValidation.AspNetCore;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -99,12 +98,6 @@ namespace Notes
 			});
 
 			// fluent validation
-			services.AddFluentValidationAutoValidation(options =>
-			{
-				options.DisableDataAnnotationsValidation = true;
-			})
-			.AddFluentValidationClientsideAdapters();
-
 			services.AddValidatorsFromAssemblyContaining<Startup>();
 
 			// add sessions
