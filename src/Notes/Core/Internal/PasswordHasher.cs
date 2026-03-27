@@ -1,13 +1,21 @@
+using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 using System;
 
 namespace Notes.Core.Internal
 {
-	public static class PasswordHasher
+	// http://stackoverflow.com/questions/19957176/asp-net-identity-password-hashing
+	public class PasswordHasher
 	{
-		// http://stackoverflow.com/questions/19957176/asp-net-identity-password-hashing
+		private readonly ILogger<PasswordHasher> Log;
 
-		public static string HashPassword(string password, int iterations = 600000)
+		public PasswordHasher(
+			ILogger<PasswordHasher> log)
+		{
+			Log = log;
+		}
+
+		public string HashPassword(string password, int iterations = 600000)
 		{
 			if (String.IsNullOrEmpty(password))
 				throw new ArgumentNullException(nameof(password));
@@ -15,7 +23,7 @@ namespace Notes.Core.Internal
 			return Convert.ToBase64String(HashPasswordV2(password, iterations));
 		}
 
-		public static byte[] HashPasswordV2(string password, int iterations)
+		public byte[] HashPasswordV2(string password, int iterations)
 		{
 			const int _saltSize = 128 / 8; // 128 bits / 16 bytes
 			const int _hashSize = 256 / 8; // 256 bits / 32 bytes
@@ -45,11 +53,14 @@ namespace Notes.Core.Internal
 
 			// Console.WriteLine($"> Salt {ByteArrayToString(_saltBytes)}");
 			// Console.WriteLine($"> Hash {ByteArrayToString(_hashBytes)}");
+			Log.LogDebug($"HashV2 Iter {iterations}");
+			Log.LogDebug($"HashV2 Salt {ByteArrayToString(_saltBytes)}");
+			Log.LogDebug($"HashV2 Hash {ByteArrayToString(_hashBytes)}");
 
 			return _hashedPasswordBytes;
 		}
 
-		public static bool VerifyPassword(string password, string hashedPassword)
+		public bool VerifyPassword(string password, string hashedPassword)
 		{
 			if (String.IsNullOrEmpty(hashedPassword))
 				throw new ArgumentNullException(nameof(password));
@@ -60,6 +71,7 @@ namespace Notes.Core.Internal
 			byte[] _hashedPassword = Convert.FromBase64String(hashedPassword);
 
 			var _version = _hashedPassword[0];
+			Log.LogDebug($"Verify Vers {_version + 1}");
 
 			return _version switch
 			{
@@ -69,7 +81,7 @@ namespace Notes.Core.Internal
 			};
 		}
 
-		private static bool VerifyPasswordV1(string password, byte[] hashedPassword)
+		private bool VerifyPasswordV1(string password, byte[] hashedPassword)
 		{
 			const int _saltSize = 192 / 8; // 192 bits / 24 bytes
 			const int _hashSize = 192 / 8; // 192 bits / 24 bytes
@@ -88,6 +100,8 @@ namespace Notes.Core.Internal
 
 			// Console.WriteLine($"< Salt {ByteArrayToString(_saltBytes)}");
 			// Console.WriteLine($"< Hash {ByteArrayToString(_hashBytes)}");
+			Log.LogDebug($"VerifyV1 Salt {ByteArrayToString(_saltBytes)}");
+			Log.LogDebug($"VerifyV1 Hash {ByteArrayToString(_hashBytes)}");
 
 			_hashedPasswordBytes = Rfc2898DeriveBytes.Pbkdf2(password, _saltBytes, _iterations, HashAlgorithmName.SHA256, _hashSize);
 			// using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltBytes, _iterations, HashAlgorithmName.SHA1))
@@ -96,11 +110,12 @@ namespace Notes.Core.Internal
 			// }
 
 			// Console.WriteLine($"< Gen  {ByteArrayToString(_hashedPasswordBytes)}");
+			Log.LogDebug($"VerifyV1 Gen  {ByteArrayToString(_hashedPasswordBytes)}");
 
 			return AreHashesEqual(_hashBytes, _hashedPasswordBytes);
 		}
 
-		private static bool VerifyPasswordV2(string password, byte[] hashedPassword)
+		private bool VerifyPasswordV2(string password, byte[] hashedPassword)
 		{
 			const int _saltSize = 128 / 8; // 128 bits / 16 bytes
 			const int _hashSize = 256 / 8; // 256 bits / 32 bytes
@@ -126,6 +141,9 @@ namespace Notes.Core.Internal
 
 			// Console.WriteLine($"< Salt {ByteArrayToString(_saltBytes)}");
 			// Console.WriteLine($"< Hash {ByteArrayToString(_hashBytes)}");
+			Log.LogDebug($"VerifyV2 Iter {_iterations}");
+			Log.LogDebug($"VerifyV2 Salt {ByteArrayToString(_saltBytes)}");
+			Log.LogDebug($"VerifyV2 Hash {ByteArrayToString(_hashBytes)}");
 
 			_hashedPasswordBytes = Rfc2898DeriveBytes.Pbkdf2(password, _saltBytes, _iterations, HashAlgorithmName.SHA256, _hashSize);
 			// using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltBytes, _iterations, HashAlgorithmName.SHA256))
@@ -134,11 +152,12 @@ namespace Notes.Core.Internal
 			// }
 
 			// Console.WriteLine($"< Gen  {ByteArrayToString(_hashedPasswordBytes)}");
+			Log.LogDebug($"VerifyV2 Gen  {ByteArrayToString(_hashedPasswordBytes)}");
 
 			return AreHashesEqual(_hashBytes, _hashedPasswordBytes);
 		}
 
-		private static bool AreHashesEqual(byte[] firstHash, byte[] secondHash)
+		private bool AreHashesEqual(byte[] firstHash, byte[] secondHash)
 		{
 			int _minHashLength = firstHash.Length <= secondHash.Length ? firstHash.Length : secondHash.Length;
 			var xor = firstHash.Length ^ secondHash.Length;
@@ -147,9 +166,9 @@ namespace Notes.Core.Internal
 			return 0 == xor;
 		}
 
-		// private static string ByteArrayToString(byte[] array)
-		// {
-		// 	return BitConverter.ToString(array);
-		// }
+		private string ByteArrayToString(byte[] array)
+		{
+			return BitConverter.ToString(array);
+		}
 	}
 }

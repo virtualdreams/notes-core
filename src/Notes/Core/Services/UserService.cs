@@ -22,16 +22,20 @@ namespace Notes.Core.Services
 
 		private readonly ITokenService TokenService;
 
+		private readonly PasswordHasher PasswordHasher;
+
 		public UserService(
 			ILogger<UserService> log,
 			DatabaseContext context,
 			IMailService mail,
-			ITokenService token)
+			ITokenService token,
+			PasswordHasher passwordHasher)
 		{
 			Log = log;
 			Context = context;
 			MailService = mail;
 			TokenService = token;
+			PasswordHasher = passwordHasher;
 		}
 
 		/// <summary>

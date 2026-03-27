@@ -18,6 +18,7 @@ namespace Notes.Core
 			services.AddTransient<IMailService, MailService>();
 			services.AddTransient<ITokenService, TokenService>();
 			services.AddSingleton<IPasswordPolicy>(new PasswordPolicy { MinimumNonAlphaCharacters = 0, MinimumUpperCaseCharacters = 0 });
+			services.AddTransient<PasswordHasher>();
 
 			return services;
 		}
