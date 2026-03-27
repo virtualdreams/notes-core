@@ -103,7 +103,7 @@ namespace Notes.Core.Internal
 			Log.LogDebug($"VerifyV1 Salt {ByteArrayToString(_saltBytes)}");
 			Log.LogDebug($"VerifyV1 Hash {ByteArrayToString(_hashBytes)}");
 
-			_hashedPasswordBytes = Rfc2898DeriveBytes.Pbkdf2(password, _saltBytes, _iterations, HashAlgorithmName.SHA256, _hashSize);
+			_hashedPasswordBytes = Rfc2898DeriveBytes.Pbkdf2(password, _saltBytes, _iterations, HashAlgorithmName.SHA1, _hashSize);
 			// using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltBytes, _iterations, HashAlgorithmName.SHA1))
 			// {
 			// 	_hashedPasswordBytes = _derivedBytes.GetBytes(_saltSize);
