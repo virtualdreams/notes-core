@@ -4,7 +4,6 @@ using System;
 
 namespace Notes.Core.Internal
 {
-	// http://stackoverflow.com/questions/19957176/asp-net-identity-password-hashing
 	public class PasswordHasher
 	{
 		private readonly ILogger<PasswordHasher> Log;
@@ -40,19 +39,12 @@ namespace Notes.Core.Internal
 				Array.Reverse(_iterBytes);
 
 			_hashBytes = Rfc2898DeriveBytes.Pbkdf2(password, _saltBytes, iterations, HashAlgorithmName.SHA256, _hashSize);
-			// using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltSize, iterations, HashAlgorithmName.SHA256))
-			// {
-			// 	_saltBytes = _derivedBytes.Salt;
-			// 	_hashBytes = _derivedBytes.GetBytes(_hashSize);
-			// }
 
 			_hashedPasswordBytes[0] = 0x01;
 			Buffer.BlockCopy(_saltBytes, 0, _hashedPasswordBytes, 1, _saltSize);
 			Buffer.BlockCopy(_hashBytes, 0, _hashedPasswordBytes, 1 + _saltSize, _hashSize);
 			Buffer.BlockCopy(_iterBytes, 0, _hashedPasswordBytes, 1 + _saltSize + _hashSize, _iterSize);
 
-			// Console.WriteLine($"> Salt {ByteArrayToString(_saltBytes)}");
-			// Console.WriteLine($"> Hash {ByteArrayToString(_hashBytes)}");
 			Log.LogDebug($"HashV2 Iter {iterations}");
 			Log.LogDebug($"HashV2 Salt {ByteArrayToString(_saltBytes)}");
 			Log.LogDebug($"HashV2 Hash {ByteArrayToString(_hashBytes)}");
@@ -98,18 +90,12 @@ namespace Notes.Core.Internal
 			Buffer.BlockCopy(hashedPassword, 1, _saltBytes, 0, _saltSize);
 			Buffer.BlockCopy(hashedPassword, _saltSize + 1, _hashBytes, 0, _hashSize);
 
-			// Console.WriteLine($"< Salt {ByteArrayToString(_saltBytes)}");
-			// Console.WriteLine($"< Hash {ByteArrayToString(_hashBytes)}");
+			Log.LogDebug($"VerifyV1 Iter {_iterations}");
 			Log.LogDebug($"VerifyV1 Salt {ByteArrayToString(_saltBytes)}");
 			Log.LogDebug($"VerifyV1 Hash {ByteArrayToString(_hashBytes)}");
 
 			_hashedPasswordBytes = Rfc2898DeriveBytes.Pbkdf2(password, _saltBytes, _iterations, HashAlgorithmName.SHA1, _hashSize);
-			// using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltBytes, _iterations, HashAlgorithmName.SHA1))
-			// {
-			// 	_hashedPasswordBytes = _derivedBytes.GetBytes(_saltSize);
-			// }
 
-			// Console.WriteLine($"< Gen  {ByteArrayToString(_hashedPasswordBytes)}");
 			Log.LogDebug($"VerifyV1 Gen  {ByteArrayToString(_hashedPasswordBytes)}");
 
 			return AreHashesEqual(_hashBytes, _hashedPasswordBytes);
@@ -139,19 +125,12 @@ namespace Notes.Core.Internal
 
 			int _iterations = BitConverter.ToInt32(_iterBytes);
 
-			// Console.WriteLine($"< Salt {ByteArrayToString(_saltBytes)}");
-			// Console.WriteLine($"< Hash {ByteArrayToString(_hashBytes)}");
 			Log.LogDebug($"VerifyV2 Iter {_iterations}");
 			Log.LogDebug($"VerifyV2 Salt {ByteArrayToString(_saltBytes)}");
 			Log.LogDebug($"VerifyV2 Hash {ByteArrayToString(_hashBytes)}");
 
 			_hashedPasswordBytes = Rfc2898DeriveBytes.Pbkdf2(password, _saltBytes, _iterations, HashAlgorithmName.SHA256, _hashSize);
-			// using (var _derivedBytes = new Rfc2898DeriveBytes(password, _saltBytes, _iterations, HashAlgorithmName.SHA256))
-			// {
-			// 	_hashedPasswordBytes = _derivedBytes.GetBytes(_hashSize);
-			// }
 
-			// Console.WriteLine($"< Gen  {ByteArrayToString(_hashedPasswordBytes)}");
 			Log.LogDebug($"VerifyV2 Gen  {ByteArrayToString(_hashedPasswordBytes)}");
 
 			return AreHashesEqual(_hashBytes, _hashedPasswordBytes);
