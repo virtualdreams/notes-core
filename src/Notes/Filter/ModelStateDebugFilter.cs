@@ -19,23 +19,27 @@ namespace Notes.Filter
 		{
 			await next();
 
-			if (!context.ModelState.IsValid)
+			if (Logger.IsEnabled(LogLevel.Debug))
 			{
-				var _errorsInModelState = context.ModelState
-					.Where(w => w.Value.Errors.Count > 0)
-					.ToDictionary(d => d.Key, d => d.Value.Errors.Select(s => s.ErrorMessage)).ToArray();
-
-				Logger.LogDebug("===== ModelState =====");
-				Logger.LogDebug($"Path: {context.HttpContext.Request.Path}");
-				foreach (var key in _errorsInModelState)
+				if (!context.ModelState.IsValid)
 				{
-					Logger.LogDebug($"Key: {key.Key}");
-					foreach (var value in key.Value)
+
+					var _errorsInModelState = context.ModelState
+						.Where(w => w.Value.Errors.Count > 0)
+						.ToDictionary(d => d.Key, d => d.Value.Errors.Select(s => s.ErrorMessage)).ToArray();
+
+					Logger.LogDebug("===== ModelState =====");
+					Logger.LogDebug($"Path: {context.HttpContext.Request.Path}");
+					foreach (var key in _errorsInModelState)
 					{
-						Logger.LogDebug($"     {value}");
+						Logger.LogDebug($"Key: {key.Key}");
+						foreach (var value in key.Value)
+						{
+							Logger.LogDebug($"     {value}");
+						}
 					}
+					Logger.LogDebug("======================");
 				}
-				Logger.LogDebug("======================");
 			}
 		}
 	}
