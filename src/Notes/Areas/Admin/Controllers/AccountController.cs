@@ -90,8 +90,8 @@ namespace Notes.Areas.Admin.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Edit(UserPostModel model)
 		{
-			var _result = await UserPostModelValidator.ValidateAsync(model);
-			if (_result.IsValid)
+			var _validation = await UserPostModelValidator.ValidateAsync(model);
+			if (_validation.IsValid)
 			{
 				try
 				{
@@ -125,7 +125,7 @@ namespace Notes.Areas.Admin.Controllers
 				}
 			};
 
-			_result.AddToModelState(ModelState);
+			_validation.AddToModelState(ModelState);
 			return View(view);
 		}
 

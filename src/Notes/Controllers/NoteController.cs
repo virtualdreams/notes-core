@@ -121,8 +121,8 @@ namespace Notes.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Edit(NotePostModel model)
 		{
-			var _result = await NotePostModelValidator.ValidateAsync(model);
-			if (_result.IsValid)
+			var _validation = await NotePostModelValidator.ValidateAsync(model);
+			if (_validation.IsValid)
 			{
 				try
 				{
@@ -172,7 +172,7 @@ namespace Notes.Controllers
 					}
 				};
 
-				_result.AddToModelState(ModelState);
+				_validation.AddToModelState(ModelState);
 				return View(view);
 			}
 		}
@@ -180,8 +180,8 @@ namespace Notes.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Preview(NotePreviewPostModel model)
 		{
-			var _result = await NotePreviewPostModelValidator.ValidateAsync(model);
-			if (_result.IsValid)
+			var _validation = await NotePreviewPostModelValidator.ValidateAsync(model);
+			if (_validation.IsValid)
 			{
 				var view = new NoteViewContainer
 				{
@@ -289,8 +289,8 @@ namespace Notes.Controllers
 		[Authorize(Policy = "AdministratorOnly")]
 		public async Task<IActionResult> Delete(NoteTrashPostModel model)
 		{
-			var _result = await NoteTrashPostModelValidator.ValidateAsync(model);
-			if (_result.IsValid)
+			var _validation = await NoteTrashPostModelValidator.ValidateAsync(model);
+			if (_validation.IsValid)
 			{
 				foreach (var note in model.Id)
 				{
@@ -298,15 +298,15 @@ namespace Notes.Controllers
 				}
 			}
 
-			_result.AddToModelState(ModelState);
+			_validation.AddToModelState(ModelState);
 			return RedirectToAction("trash");
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> Restore(NoteTrashPostModel model)
 		{
-			var _result = await NoteTrashPostModelValidator.ValidateAsync(model);
-			if (_result.IsValid)
+			var _validation = await NoteTrashPostModelValidator.ValidateAsync(model);
+			if (_validation.IsValid)
 			{
 				foreach (var note in model.Id)
 				{
@@ -318,7 +318,7 @@ namespace Notes.Controllers
 				}
 			}
 
-			_result.AddToModelState(ModelState);
+			_validation.AddToModelState(ModelState);
 			return RedirectToAction("trash");
 		}
 	}

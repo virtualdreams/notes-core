@@ -82,8 +82,8 @@ namespace Notes.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Login(LoginModel model, string returnUrl)
 		{
-			var _result = await LoginModelValidator.ValidateAsync(model);
-			if (_result.IsValid)
+			var _validation = await LoginModelValidator.ValidateAsync(model);
+			if (_validation.IsValid)
 			{
 				try
 				{
@@ -128,7 +128,7 @@ namespace Notes.Controllers
 				}
 			}
 
-			_result.AddToModelState(ModelState);
+			_validation.AddToModelState(ModelState);
 			return View("Login", model);
 		}
 
@@ -143,8 +143,8 @@ namespace Notes.Controllers
 		[AllowAnonymous]
 		public async Task<IActionResult> ForgotPassword(PasswdForgotPostModel model)
 		{
-			var _result = await PasswdForgotPostModelValidator.ValidateAsync(model);
-			if (_result.IsValid)
+			var _validation = await PasswdForgotPostModelValidator.ValidateAsync(model);
+			if (_validation.IsValid)
 			{
 				try
 				{
@@ -158,7 +158,7 @@ namespace Notes.Controllers
 				}
 			}
 
-			_result.AddToModelState(ModelState);
+			_validation.AddToModelState(ModelState);
 			return View("ForgotConfirmation");
 		}
 
@@ -192,8 +192,8 @@ namespace Notes.Controllers
 		[AllowAnonymous]
 		public async Task<IActionResult> ResetPassword(string id, PasswdResetPostModel model)
 		{
-			var _result = await PasswdResetPostModelValidator.ValidateAsync(model);
-			if (_result.IsValid)
+			var _validation = await PasswdResetPostModelValidator.ValidateAsync(model);
+			if (_validation.IsValid)
 			{
 				try
 				{
@@ -223,7 +223,7 @@ namespace Notes.Controllers
 				Token = id
 			};
 
-			_result.AddToModelState(ModelState);
+			_validation.AddToModelState(ModelState);
 			return View(view);
 		}
 
@@ -248,8 +248,8 @@ namespace Notes.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Security(PasswdChangePostModel model)
 		{
-			var _result = await PasswdChangePostModelValidator.ValidateAsync(model);
-			if (_result.IsValid)
+			var _validation = await PasswdChangePostModelValidator.ValidateAsync(model);
+			if (_validation.IsValid)
 			{
 				try
 				{
@@ -268,7 +268,7 @@ namespace Notes.Controllers
 				}
 			}
 
-			_result.AddToModelState(ModelState);
+			_validation.AddToModelState(ModelState);
 			return View();
 		}
 
@@ -291,8 +291,8 @@ namespace Notes.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Settings(UserSettingsPostModel model)
 		{
-			var _result = await UserSettingsPostModelValidator.ValidateAsync(model);
-			if (_result.IsValid)
+			var _validation = await UserSettingsPostModelValidator.ValidateAsync(model);
+			if (_validation.IsValid)
 			{
 				await UserService.UpdateSettingsAsync(CurrentUser.Id, model.DisplayName, model.Items);
 
@@ -308,7 +308,7 @@ namespace Notes.Controllers
 				}
 			};
 
-			_result.AddToModelState(ModelState);
+			_validation.AddToModelState(ModelState);
 			return View(view);
 		}
 		#endregion
